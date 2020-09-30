@@ -1,0 +1,366 @@
+/* proposition de style pour div.fig-article-body */
+div.fig-adgps {
+	margin-top:2em;
+	padding-top: 22px;
+}
+div.fig-article-body {
+	position:relative;
+}
+
+.hide,
+*[data-id=model] {
+	display:none !important;
+}
+.live-messages {
+	padding:0 !important;
+	border:0 !important;
+}
+.live-messages .live-message {
+	position:relative;
+	border-top:1px solid #CCC;
+	padding-top:1em;
+	padding-bottom:1em;
+	zoom:1;
+}
+.live-messages .live-message::after {
+	content:"";
+	display:block;
+	clear:both;
+}
+.live-messages .live-message:first-child {
+	border-top:0px;
+	clear:left;
+}
+.live-messages .live-article {
+	padding-left:21px;
+	margin-left:12px;
+	border-left:dashed 2px #ccc;
+}
+.live-messages .live-icons {
+	float:left;
+	clear:left;
+	width:25px;
+	/* height:100%; disable for now */
+	background:inherit; /* hides dashes from article */
+}
+.live-messages .live-icons img {
+	display:block;
+	max-width:100%;
+	margin:0 auto;
+	padding-bottom:3px;
+	background:inherit; /* hides dashes from article */
+}
+.live-messages .live-time {
+	display:inline-block;
+	padding:3px 5px;
+	font-size:11px;
+	color:#323232;
+	background-color:#f1f1f1;
+	border:1px solid #cecece;
+	text-decoration:none;
+	border-radius:3px;
+	text-shadow:0px 0px 1px #ccc;
+	margin-right:12px;
+	margin-bottom:3px;
+}
+.live-messages.essentiel .live-message:not(.essentiel) {
+	display:none;
+}
+.live-messages .essentiel .live-time {
+	color:#fff;
+	background-color:#b90b04;
+	border-color:#a40c00;
+}
+.live-messages .live-title {
+	display:block;
+	font-weight:bold;
+	font-size:20px;
+	line-height:25px;
+	margin-top:0;
+	margin-bottom:12px;
+	font-family:"MuseoSlab500", "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+.live-messages .pinned .live-title {
+	display:block;
+	margin-left:0;
+}
+.live-messages .essentiel .live-title {
+	display:block;
+	color:#b80000;
+}
+
+.live-messages .live-message.pinned {
+	background:#F7F7F7;
+	padding-top:0.5em;
+	padding-left:1.5em;
+	padding-right:1.5em;
+}
+.live-messages .pinned:before {
+	display:block;
+	position:absolute;
+	top:0;
+	right:0;
+	width:30px;
+	height:44px;
+	font-size:20px;
+	font-size:2rem;
+	line-height:1;
+	color:#FFF;
+	background: url('https://a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -1406px;
+	text-indent:-999em;
+	content:"\2729";
+}
+
+.live-messages .pinned .live-time {
+	display:none;
+}
+
+.live-messages .pinned.no-live-icons .live-icons {
+	display:none;
+}
+
+.live-messages .pinned.no-live-icons .live-article {
+	border-left:0px;
+	padding-left:0px;
+	margin-left:0px;
+}
+
+.live-messages .live-article > img,
+.live-messages .live-article > figure,
+.live-messages .live-article > object,
+.live-messages .live-article > embed,
+.live-messages .live-article > iframe {
+	display:block;
+	max-width:100%;
+	margin:0.25em auto;
+}
+#page_article .live-messages .live-article > figure {
+	float:none; /* if page has set float:left, is effectively hides that element */
+}
+.live-messages .live-article img,
+.live-messages .live-article object,
+.live-messages .live-article embed,
+.live-messages .live-article iframe {
+	transition: opacity 2s;
+}
+.live-messages figure > :first-child {
+	display:block;
+}
+.live-messages figure > figcaption {
+	font-size:0.8em;
+	line-height:1;
+	color:#666;
+}
+.live-messages figure > figcaption > em {
+	color:#999;
+}
+.live-messages figure > div > * {
+	max-width:100%;
+}
+.live-messages figure > div.ratio-16-9 {
+	padding-bottom:56.25%;
+}
+.live-messages figure > div.ratio-4-3 {
+	padding-bottom:75%;
+}
+.live-messages figure > div[class^="ratio-"] {
+	position:relative;
+	height:0;
+}
+.live-messages figure > div[class^="ratio-"] > * {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.live-messages figure > div > iframe {
+	border:0;
+}
+.live-messages .live-article > .float-left {
+	float:left;
+	margin-right:1em;
+	margin-bottom:0.5em;
+	width:30%;
+	text-align:left;
+}
+.live-messages .live-article > .float-right {
+	float:right;
+	margin-left:1em;
+	margin-bottom:0.5em;
+	width:30%;
+	text-align:right;
+}
+.live-messages .live-article img {
+	max-width:100%;
+}
+.live-messages .live-article strong {
+	font-weight:bold;
+}
+.live-messages .live-article em {
+	font-style:italic;
+}
+
+/* HEADER */
+.live-messages > header {
+	position:relative;
+	margin-bottom:10px;
+	/*overflow:hidden;*/
+}
+
+/* STATUS BAR */
+.live-messages .live-status {
+	overflow:hidden; /* trick to fill remaining width */
+	clear:left;
+}
+.live-messages .live-status > p {
+	display:none;
+	margin:0;
+	padding:0 8px !important;
+	color:#323232;
+	border:1px solid #b9b9b9;
+	border-radius:3px;
+	font-size:inherit; /* override page style */
+}
+.live-messages .live-status > p.enabled {
+	display:block;
+}
+.live-messages .live-status > .before {
+	color:#555;
+	background-color:#f7f7f7;
+	border:1px solid #999999;
+}
+.live-messages .live-status > .during {
+	color:#fff;
+	background-color:#b80000;
+	border:1px solid #b80000;
+}
+.live-messages .live-status > .after {
+	color:#555;
+	background-color:#999999;
+	border:1px solid #999999;
+}
+
+/* CONTROLS */
+.live-messages .live-controls {
+	float:left;
+}
+.live-messages .live-controls div {
+	float:left;
+	margin-bottom:5px;
+	margin-right:10px;
+	border:1px solid #999999;
+	border-radius:2px;
+	background: #ffffff;
+	background: linear-gradient(to bottom, #ffffff 1%, #e8e8e8 100%);
+}
+.live-messages .live-controls label > input {
+	display:none;
+}
+.live-messages .live-controls label {
+	display:inline-block;
+	float:left;
+	padding-left:8px;
+	color:#999;
+	margin-right:8px;
+	cursor: pointer;
+}
+.live-messages .live-controls label input:checked + span {
+	color:#444;
+}
+.live-messages .live-controls .filter span:after {
+	display:inline-block;
+	content:'';
+	width:12px;
+	height:12px;
+	margin-left:8px;
+	background: url('https://a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -336px;
+}
+.live-messages .live-controls .sort label {
+	color:#444;
+}
+.live-messages .live-controls .sort span:after {
+	display:inline-block;
+	content:'';
+	width:0;
+	height:0;
+	margin-left:6px;
+	border-left:6px solid transparent;
+	border-right:6px solid transparent;
+	border-top:6px solid #666;
+	margin-bottom: 2px;
+}
+.live-messages .live-controls .sort input:checked + span:after {
+	content:' ';
+	border-top:0px;
+	border-bottom:6px solid #666;
+}
+
+.live-messages figure > div > .lazy {
+	overflow:hidden;
+}
+.live-messages > .live-list {
+	display:flex;
+	flex-direction:column;
+}
+.live-messages.reverse > .live-list {
+	flex-direction:column-reverse;
+}
+.live-messages .lazy {
+	display:block;
+	width:1px;
+	height:1px;
+	opacity:0;
+}
+/* stylelint-disable-next-line selector-type-no-unknown */
+.live-messages opta {
+	display:none;
+}
+
+.live-messages .BeOpWidget {
+	display:block;
+}
+
+/* DESKTOP */
+@media screen and (min-width: 800px) {
+	.live-messages .live-message {
+		padding-top:2em;
+		padding-bottom:1.5em;
+	}
+
+	.live-messages .live-time {
+		display:block;
+		padding: 3px 3px;
+		float:left;
+		width: 79px;
+		text-align:center;
+		margin-bottom:12px;
+		line-height:2;
+	}
+
+	.live-messages .live-title {
+		margin-left:97px;
+		padding-top:2px;
+		font-size:23px; /* strong */
+		line-height:28px; /* strong */
+	}
+
+	.live-messages .live-icons {
+		width:85px;
+	}
+
+	#page_article .live-messages .live-icons img {
+		max-width:50px;
+	}
+
+	.live-messages .live-article {
+		margin-left:97px;
+		padding-left:0;
+		border:none;
+		overflow:hidden; /* floats */
+	}
+	.live-messages div.live-controls div {
+		width:auto;
+	}
+}
