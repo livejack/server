@@ -54,9 +54,10 @@ function control(node, root) {
 }
 
 matchdom.check = function(node, iter) {
-	if (node.nodeType == Node.TEXT_NODE && node.template) {
-		node.parentNode.insertBefore(node.template.cloneNode(true), node.nextSibling);
-		iter.nextNode();
+	if (node.templates) {
+		node.templates.forEach(({ content, index }) => {
+			node.insertBefore(content.cloneNode(true), node.children[index]);
+		});
 		return false;
 	} else {
 		return true;
@@ -92,12 +93,15 @@ ready.then(async () => {
 		params[meta.name.substring(prefix.length + 1)] = meta.content;
 	});
 	const live = new LiveJack(params);
+	await live.init();
 	document.querySelectorAll('[data-live]').forEach((root) => {
 		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
 			const tmpl = fromScript(script);
-			const textNode = tmpl.ownerDocument.createTextNode('\u200b');
-			textNode.template = tmpl.content;
-			tmpl.replaceWith(textNode);
+			const parent = tmpl.parentNode;
+			const index = parent.children.indexOf(tmpl);
+			if (!parent.templates) parent.templates = [];
+			parent.templates.push({ content: tmpl.content, index });
+			parent.removeChild(tmpl);
 		});
 		root.dataset.live.split(' ').forEach((name) => {
 			if (!channels[name]) channels[name] = live.subscribe(name);
