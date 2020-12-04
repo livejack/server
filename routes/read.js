@@ -14,7 +14,7 @@ exports.GET.default = exports.GET.html = async function(req, res, next) {
 		view: req.domain.view
 	});
 
-	prerender(`${page.view}-read`)(req, res, next);
+	prerender(`live-read`)(req, res, next);
 };
 
 exports.GET.json = async function(req, res, next) {

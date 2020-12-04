@@ -1,5 +1,4 @@
-import ready from './ready.js';
-import * as live from './live.js';
+import Live from './live.js';
 
 export const editor = {
 	assetType: {
@@ -14,7 +13,7 @@ export const editor = {
 	}
 };
 
-Object.assign(live.filters, {
+Object.assign(Live.filters, {
 	store: function(asset, what) {
 		if (!asset.type) asset.type = "none";
 		if (!asset.origin) asset.origin = "internal";
@@ -34,7 +33,7 @@ Object.assign(live.filters, {
 	},
 	src: function(asset) {
 		if (asset.type != "picto" && asset.url) {
-			return editor.thumbnailer.replace('%s', asset.url);
+			return live.vars.thumbnailer.replace('%s', asset.url);
 		} else {
 			return asset.url;
 		}
@@ -44,10 +43,10 @@ Object.assign(live.filters, {
 		else return "";
 	}
 });
+const live = new Live({});
 
-ready.then(async () => {
-	editor.thumbnailer = document.getElementById('thumbnailer').content;
-	const data = await live.build();
+live.init().then(async () => {
+	
 
 });
 

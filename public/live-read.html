@@ -4,8 +4,8 @@
 	<link rel="shortcut icon" href="img/[view].ico" type="image/x-icon">
 
 	<link rel="stylesheet" href='css/live-read.css'>
-	<script src="https://platform.twitter.com/widgets.js"></script>
-	<script type="module" src="js/live-prerender.js"></script>
+	<script type="module" src="js/live-build.js"></script>
+	<script type="module" src="js/live-setup.js"></script>
 
 	<title>[page.title]</title>
 </head>
@@ -31,9 +31,9 @@
 				</div>
 			</div>
 			<div class="live-status">
-				<p class="before [page|when:before]">A VENIR : Début du direct : <time class="stamp" bind-datetime="page.start|isoDate" bind-text="page.start|date">non précisé</time></p>
-				<p class="during [page|when:during]">EN COURS : Mis à jour <time class="stamp" bind data-update="[page.update]" data-datetime="[page.update|isoDate]" data-text="[page.update|calendar|fill]">Date relative</time></p>
-				<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" bind-itemprop="[page|coverageAfter]" bind-datetime="page.stop|isoDate" bind-text="page.stop|date">non précisé</time></p>
+				<p class="before [page|when:before]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|isoDate]">[page.start|calendar|or:non précisé]</time></p>
+				<p class="during [page|when:during]">EN COURS : Mis à jour <time class="stamp" datetime="[page.update|isoDate]">[page.update|calendar]</time></p>
+				<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|calendar|or:non précisé]</time></p>
 			</div>
 			<div class="hide">
 				<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">

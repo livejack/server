@@ -1,68 +1,110 @@
-import * as live from './live.js';
-import ready from './ready.js';
-import createObserver from './observer.js';
+import Live from './live.js';
+import { visible } from './doc-events.js';
 import { fromScript } from "./template.js";
-import matchdom from "../modules/matchdom";
+import parseHTML from './fragment-parser.js';
 import { LiveJack } from "../modules/@livejack/client";
 
-
-const observer = createObserver(function(node) {
-	if (node.matches('.tweet')) {
-		node.classList.remove('lazy');
-		node.classList.remove('tweet');
-		node.classList.add('twitter-tweet');
-		if (window.twttr) window.twttr.widgets.load(node);
-		return;
+class LiveSetup extends Live {
+	constructor() {
+		super();
+		this.observer = this.createObserver();
 	}
 
-	const src = node.dataset.src;
-	if (src) {
-		node.setAttribute('src', src);
-		node.removeAttribute('data-src');
-		node.removeAttribute('title');
-		node.classList.remove('lazy');
-		return;
+	nodeFilter(node, iter) {
+		if (node.templates) {
+			node.templates.forEach(({ content, index }) => {
+				node.insertBefore(content.cloneNode(true), node.children[index]);
+			});
+			return false;
+		} else {
+			return true;
+		}
 	}
-	const html = node.dataset.html;
-	if (html) {
-		const frag = live.parse(html);
-		var withoutScript = frag.querySelectorAll('script').length == 0;
-		if (withoutScript) frag.classList.add('lazy');
-		node.parentNode.replaceChild(frag, node);
-		if (withoutScript) setTimeout(function() {
-			frag.classList.remove('lazy');
-		}, 20);
-	}
-});
 
-function uiNode(node) {
-	node.querySelectorAll('.lazy').forEach((node) => {
-		observer.observe(node);
-	});
-	const time = node.querySelector('time');
-	if (time) {
-		// time.textContent = live.moment(time.dataset.datetime).fromNow();
-	}
-}
-
-function control(node, root) {
-	if (node.name == "filter") {
-		root.classList.toggle("essentiel", node.value == "essentiel");
-	} else if (node.name == "reverse") {
-		root.classList.toggle("reverse", node.checked);
-	}
-}
-
-matchdom.check = function(node, iter) {
-	if (node.templates) {
-		node.templates.forEach(({ content, index }) => {
-			node.insertBefore(content.cloneNode(true), node.children[index]);
+	connect(root, jack) {
+		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
+			const tmpl = fromScript(script);
+			const parent = tmpl.parentNode;
+			const index = parent.children.indexOf(tmpl);
+			if (!parent.templates) parent.templates = [];
+			parent.templates.push({ content: tmpl.content, index });
+			parent.removeChild(tmpl);
 		});
-		return false;
-	} else {
-		return true;
+
+		root.querySelectorAll('article').forEach((node) => this.trackUi(node));
+		root.querySelectorAll('.live-controls').forEach((node) => {
+			node.addEventListener('change', this, false);
+		});
+		root.dataset.live.split(' ').forEach((name) => {
+			// TODO mtime
+			jack.join(name, 0, (e) => {
+				if (e.detail) this.merge(root, e.detail);
+			});
+		});
 	}
-};
+
+	handleEvent(e) {
+		const node = e.target;
+		const root = node.closest('[data-live]');
+		if (node.name == "filter") {
+			root.classList.toggle("essentiel", node.value == "essentiel");
+		} else if (node.name == "reverse") {
+			root.classList.toggle("reverse", node.checked);
+		}
+	}
+
+	createObserver() {
+		return new IntersectionObserver((entries, observer) => {
+			entries.forEach((entry) => {
+				var target = entry.target;
+				var ratio = entry.intersectionRatio || 0;
+				if (ratio <= 0) return;
+				observer.unobserve(target);
+				this.reveal(target);
+			});
+		}, {
+			threshold: [0.0001, 0.2],
+			rootMargin: "30px"
+		});
+	}
+	reveal(node) {
+		if (node.matches('.tweet')) {
+			node.classList.remove('lazy');
+			node.classList.remove('tweet');
+			node.classList.add('twitter-tweet');
+			if (window.twttr) window.twttr.widgets.load(node);
+			return;
+		}
+
+		const src = node.dataset.src;
+		if (src) {
+			node.setAttribute('src', src);
+			node.removeAttribute('data-src');
+			node.removeAttribute('title');
+			node.classList.remove('lazy');
+			return;
+		}
+		const html = node.dataset.html;
+		if (html) {
+			const frag = parseHTML(html);
+			var withoutScript = frag.querySelectorAll('script').length == 0;
+			if (withoutScript) frag.classList.add('lazy');
+			node.parentNode.replaceChild(frag, node);
+			if (withoutScript) setTimeout(function () {
+				frag.classList.remove('lazy');
+			}, 20);
+		}
+	}
+	trackUi(node) {
+		node.querySelectorAll('.lazy').forEach((node) => {
+			this.observer.observe(node);
+		});
+		const time = node.querySelector('time');
+		if (time) {
+			// time.textContent = live.moment(time.dataset.datetime).fromNow();
+		}
+	}
+}
 
 // const live = {
 // 	subscribe: (channel, stamp) => {
@@ -82,40 +124,12 @@ matchdom.check = function(node, iter) {
 // 	}
 // };
 
-function dataHandler(root, data) {
-	matchdom(root, data, live.filters);
-}
-
-ready.then(async () => {
-	const params = {};
-	const prefix = "live";
-	document.querySelectorAll(`meta[name^="${prefix}-"]`).forEach((meta) => {
-		params[meta.name.substring(prefix.length + 1)] = meta.content;
-	});
-	const live = new LiveJack(params);
-	await live.init();
+visible.then(async () => {
+	const live = new LiveSetup();
+	const jack = new LiveJack(live.vars);
+	await jack.init();
 	document.querySelectorAll('[data-live]').forEach((root) => {
-		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
-			const tmpl = fromScript(script);
-			const parent = tmpl.parentNode;
-			const index = parent.children.indexOf(tmpl);
-			if (!parent.templates) parent.templates = [];
-			parent.templates.push({ content: tmpl.content, index });
-			parent.removeChild(tmpl);
-		});
-		root.dataset.live.split(' ').forEach((name) => {
-			if (!channels[name]) channels[name] = live.subscribe(name);
-			root.addEventListener(name, function(e) {
-				if (e.detail) dataHandler(e.target, e.detail);
-			}, false);
-		});
-
-		root.querySelectorAll('article').forEach((node) => uiNode(node));
-		root.querySelectorAll('.live-controls').forEach((node) => {
-			node.addEventListener('change', (e) => {
-				control(e.target, root);
-			}, false);
-		});
+		live.connect(root, jack);
 	});
 }).catch((err) => {
 	console.error(err); // eslint-disable-line

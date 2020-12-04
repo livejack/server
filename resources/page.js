@@ -1,15 +1,12 @@
 const {Models} = require('objection');
 const {Page} = Models;
 
-exports.GET = async (req, res, next) => {
+exports.GET = async (req) => {
 	const {domain, key} = req.params;
-	const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
-	res.json(page);
+	return await Page.query().findOne({ domain, key }).throwIfNotFound();
 };
 
-exports.PUT = async (req, res, next) => {
+exports.PUT = async (req) => {
 	const {domain, key} = req.params;
-	await Page.query().findOne({domain, key}).patch(req.body);
-	res.sendStatus(204);
+	return await Page.query().findOne({domain, key}).patch(req.body);
 };
-

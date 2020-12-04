@@ -6,7 +6,7 @@ exports.GET = async function(req, res, next) {
 	const {domain, key} = req.params;
 
 	const page = await Models.Page.query().findOne({domain, key}).throwIfNotFound();
-	prerender(`${page.view}-write`)(req, res, next);
+	prerender(`live-write`)(req, res, next);
 };
 
 // TODO: move this to pages collection resource

@@ -41,15 +41,10 @@ const prerender = require('./lib/prerender');
 prerender.configure(config);
 
 const objection = require('./models')(app);
-
-const auth = require('./lib/auth');
-const domainLock = auth.lock('write-:domain');
-auth.init(app);
-
 const resources = require('./resources/*');
 const routes = require('./routes/*');
 
-app.use((req, res, next) => {
+app.use((req, res) => {
 	res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 	res.setHeader('X-XSS-Protection','1;mode=block');
 	res.setHeader('X-Frame-Options', 'sameorigin');
@@ -60,15 +55,18 @@ app.use((req, res, next) => {
 		// "font-src 'self' data:",
 		// "img-src 'self' data:"
 	].join('; '));
-	next();
 });
 
-app.route("/robots.txt").get(function(req, res, next) {
+const auth = require('./lib/auth');
+const domainLock = auth.lock('write-:domain');
+auth.init(app);
+
+app.route("/robots.txt").get(function(req, res) {
 	res.type('text/plain');
 	res.send("User-agent: *\nDisallow: /\n");
 });
 
-app.route("/favicon.ico").get(function(req, res, next) {
+app.route("/favicon.ico").get(function(req, res) {
 	res.sendStatus(404);
 });
 
@@ -113,8 +111,6 @@ app.get('/:domain/:key', function(req, res, next) {
 		next('route');
 	}
 });
-
-app.get('/opta-widget', prerender('opta-widget'));
 
 // envoi des notifications de mise à jour vers BO-site qui en retour appelle Front-Live
 app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
@@ -172,7 +168,7 @@ app.route('/:domain/:key/write')
 
 app.get('/:domain', domainLock, prerender('domain'));
 
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
 	let code = objection.errorStatus(err);
 	if (typeof code != 'number' || code == 500) {
 		console.error(err); // eslint-disable-line
