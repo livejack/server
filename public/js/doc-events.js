@@ -1,28 +1,41 @@
-class DocReady {
+class ThenEvent {
 	constructor() {
-		this.promise = new Promise((resolve) => {
-			this.resolve = resolve;
+		this.p = new Promise((resolve) => {
+			this.go = resolve;
 		});
+		this.q = this.q.bind(this);
+		this.init();
+	}
+	init() {}
+	destroy() {}
+	handleEvent() {
+		this.destroy();
+		this.go();
+	}
+	q(fn) {
+		if (fn != null) this.p = this.p.then(fn);
+		return this.p;
+	}
+}
+
+class DocReady extends ThenEvent {
+	init() {
 		if (document.readyState == "complete") {
-			this.resolve();
+			this.go();
 		} else {
 			document.addEventListener('DOMContentLoaded', this, false);
 			window.addEventListener('load', this, false);
 		}
 	}
-	handleEvent() {
+	destroy() {
 		document.removeEventListener('DOMContentLoaded', this, false);
 		window.removeEventListener('load', this, false);
-		this.resolve();
 	}
 }
-const ready = new DocReady().promise;
+const ready = new DocReady().q;
 
-class DocVisible {
-	constructor() {
-		this.promise = new Promise((resolve) => {
-			this.resolve = resolve;
-		});
+class DocVisible extends ThenEvent {
+	init() {
 		let hidden;
 		if (typeof document.hidden !== "undefined") {
 			hidden = "hidden";
@@ -35,17 +48,16 @@ class DocVisible {
 			this.evt = "webkitvisibilitychange";
 		}
 		if (!hidden || !document[hidden]) {
-			this.resolve();
+			this.go();
 		} else {
 			document.addEventListener(this.evt, this, false);
 		}
 	}
-	handleEvent() {
+	destroy() {
 		document.removeEventListener(this.evt, this, false);
-		this.resolve();
 	}
 }
 
-const visible = ready.then(() => new DocVisible().promise);
+const visible = new DocVisible().q;
 
 export { ready, visible };

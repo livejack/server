@@ -77,14 +77,28 @@ export default class Live {
 			filters: this.constructor.filters
 		});
 		const vars = {};
-		const prefix = "live";
-		document.querySelectorAll(`meta[name^="${prefix}-"]`).forEach((meta) => {
-			vars[meta.name.substring(prefix.length + 1)] = meta.content;
+		const pre = "live";
+		document.querySelectorAll(`meta[name^="${pre}-"]`).forEach((meta) => {
+			vars[meta.name.substring(pre.length + 1)] = meta.content;
 		});
 		this.vars = vars;
 	}
 
-	merge(root, data) {
-		return this.matchdom.merge(root, data);
+	findAll() {
+		const rooms = {};
+		const roots = document.querySelectorAll('[data-live]').map((node) => {
+			const names = node.dataset.live.split(' ').map((pair) => {
+				let [name, mtime] = pair.split(':');
+				mtime = parseInt(mtime) || 0;
+				rooms[name] = Math.min(rooms[name] || Infinity, mtime);
+				return name;
+			});
+			return { node, names };
+		});
+		return {rooms, roots};
+	}
+
+	merge(node, data) {
+		return this.matchdom.merge(node, data);
 	}
 }

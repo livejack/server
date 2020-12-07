@@ -1,14 +1,12 @@
 // always resolve paths relative to app.js directory
 process.chdir(__dirname);
-
-(async() => {
-
 const cors = require('cors');
 const morgan = require('morgan');
 const rewrite = require('express-urlrewrite');
 const URL = require('url');
 const Path = require('path');
 const serveStatic = require('serve-static');
+const LiveJack = require('@livejack/client/node');
 
 const ini = require('./lib/express-ini');
 const serveModules = require('./lib/serve-modules');
@@ -25,6 +23,8 @@ const config = ini(app);
 
 config.live.version = require('@livejack/client/package.json').version;
 
+(async() => {
+
 process.title = config.name + '-' + config.version;
 process.on('uncaughtException', function(err) {
 	console.error(err); // eslint-disable-line
@@ -36,6 +36,12 @@ app.set('statics', Path.resolve('public'));
 config.site = URL.parse(config.site);
 config.site.port = config.site.port || 80;
 config.listen = config.listen || config.site.port;
+
+app.livejack = new LiveJack({
+	servers: config.live.servers.split(' '),
+	namespace: config.live.namespace,
+	token: config.live.token
+});
 
 const prerender = require('./lib/prerender');
 prerender.configure(config);

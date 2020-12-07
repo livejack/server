@@ -1,5 +1,5 @@
 import Live from './live.js';
-import { visible } from './doc-events.js';
+import { ready, visible } from './doc-events.js';
 import { fromScript } from "./template.js";
 import parseHTML from './fragment-parser.js';
 import { LiveJack } from "../modules/@livejack/client";
@@ -20,8 +20,24 @@ class LiveSetup extends Live {
 			return true;
 		}
 	}
+	async setup() {
+		const jack = new LiveJack(this.vars);
+		await jack.init();
+		const { rooms, roots } = this.findAll();
+		roots.forEach((root) => this.setupRoot(root.node));
+		Object.keys(rooms).forEach((room) => {
+			jack.join(this.vars.base + '/' + room, rooms[room], (e) => {
+				if (!e.detail) return; // ignore
+				roots.forEach(({ node, names }) => {
+					if (names.includes(room)) {
+						this.merge(node, { [room]: e.detail });
+					}
+				});
+			});
+		});
+	}
 
-	connect(root, jack) {
+	setupRoot(root) {
 		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
 			const tmpl = fromScript(script);
 			const parent = tmpl.parentNode;
@@ -34,12 +50,6 @@ class LiveSetup extends Live {
 		root.querySelectorAll('article').forEach((node) => this.trackUi(node));
 		root.querySelectorAll('.live-controls').forEach((node) => {
 			node.addEventListener('change', this, false);
-		});
-		root.dataset.live.split(' ').forEach((name) => {
-			// TODO mtime
-			jack.join(name, 0, (e) => {
-				if (e.detail) this.merge(root, e.detail);
-			});
 		});
 	}
 
@@ -123,14 +133,10 @@ class LiveSetup extends Live {
 // 		}, 1000);
 // 	}
 // };
-
-visible.then(async () => {
+ready(async () => {
+	await visible();
 	const live = new LiveSetup();
-	const jack = new LiveJack(live.vars);
-	await jack.init();
-	document.querySelectorAll('[data-live]').forEach((root) => {
-		live.connect(root, jack);
-	});
+	await live.setup();
 }).catch((err) => {
 	console.error(err); // eslint-disable-line
 });

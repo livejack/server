@@ -33,7 +33,7 @@
 			<div class="live-status">
 				<p class="before [page|when:before]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|isoDate]">[page.start|calendar|or:non précisé]</time></p>
 				<p class="during [page|when:during]">EN COURS : Mis à jour <time class="stamp" datetime="[page.update|isoDate]">[page.update|calendar]</time></p>
-				<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|calendar|or:non précisé]</time></p>
+				<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|timeAgo|or:non précisé]</time></p>
 			</div>
 			<div class="hide">
 				<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">

@@ -1,5 +1,5 @@
 const {Models} = require('objection');
-const {Page} = Models;
+const { Page } = Models;
 
 exports.GET = async (req, res, next) => {
 	const {domain, key} = req.params;
@@ -23,9 +23,10 @@ exports.GET = async (req, res, next) => {
 
 exports.POST = async (req, res, next) => {
 	const {domain, key} = req.params;
-	return await Page.relatedQuery('messages').for(
+	const msg = await Page.relatedQuery('messages').for(
 		Page.query().findOne({ domain, key }).throwIfNotFound()
 	).insertAndFetch(req.body);
+	return msg;
 };
 
 exports.PUT = async (req, res, next) => {

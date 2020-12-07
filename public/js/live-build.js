@@ -22,45 +22,41 @@ class LiveBuild extends Live {
 	async fetch(name) {
 		let chan = this.channels[name];
 		if (!chan) {
-			chan = this.channels[name] = fetch('./' + name + '.json')
-				.then(async (res) => {
-					const data = await res.json();
-					const mtime = Date.parse(res.headers.get('date'));
-					return { data, mtime };
-				});
+			chan = this.channels[name] = (async () => {
+				const res = await fetch('./' + name + '.json');
+				const mtime = Date.parse(res.headers.get('date'));
+				const data = await res.json();
+				return { mtime, data };
+			})(name);
 		}
 		return chan;
 	}
 
 	async build() {
-		const roots = document.querySelectorAll('[data-live]');
-		await Promise.all(roots.map(async (root) => {
-			const data = {};
+		const { rooms, roots } = this.findAll();
+		await Promise.all(roots.map(async ({ node, names }) => {
+			const datas = {};
 			const mtimes = {};
-			const lives = [];
-			root.dataset.live.split(' ').forEach((pair) => {
-				let [name, mtime] = pair.split(':');
-				if (mtime != null) {
+			await Promise.all(names.map(async (name) => {
+				if (!rooms[name]) {
+					const {mtime, data} = await this.fetch(name);
+					datas[name] = data;
 					mtimes[name] = mtime;
-					return;
 				}
-				lives.push(this.fetch(name).then((obj) => {
-					mtimes[name] = obj.mtime;
-					data[name] = obj.data;
-				}));
-			});
-			if (lives.length) {
-				await Promise.all(lives);
-				root.setAttribute('data-live', Object.entries(mtimes)
-					.map(([key, val]) => `${key}:${val}`)
+			}));
+			const keys = Object.keys(mtimes);
+			if (keys.length > 0) {
+				node.setAttribute('data-live', keys
+					.map((name) => `${name}:${mtimes[name]}`)
 					.join(' '));
-				this.merge(root, data);
+				this.merge(node, datas);
 			}
+			return node;
 		}));
 	}
 }
 
-ready.then(async () => {
+ready(async () => {
 	const live = new LiveBuild();
 	await live.build();
 });
