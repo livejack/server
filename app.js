@@ -138,7 +138,7 @@ app.get('/:domain/:key/synchro', domainLock, resources.synchro.GET);
 app.get('/:domain/:key', function(req, res, next) {
 	var mw;
 	if (req.query.maxresults != undefined) {
-		var indir = '/:domain/:key/read?limit=:maxresults';
+		var indir = '/:domain/:key/page?limit=:maxresults';
 		if (!req.query.text || req.query.text == "false" || req.query.text == "0") {
 			indir += '&omit=text';
 		}
@@ -152,9 +152,11 @@ app.get('/:domain/:key', function(req, res, next) {
 });
 
 app.put('/:domain/:key', rewrite('/:domain/:key/write'));
-app.get('/:domain/:key/status', rewrite('/:domain/:key/page'));
 app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
+
 app.get('/:domain/:key/read', routes.read.GET);
+
+app.get('/:domain/:key/status', resources.status.GET);
 
 app.route('/:domain/:key/page')
 	.get(resources.page.GET)
