@@ -1,8 +1,6 @@
 import { Matchdom } from "../modules/matchdom";
 import "./array-like.js";
-import moment from '../modules/moment';
-import momentFr from '../modules/moment/locale/fr';
-moment.locale('fr', momentFr._config);
+import { DateTime, Interval } from '../modules/luxon';
 
 const filters = {
 	iconclass(val, what) {
@@ -11,11 +9,22 @@ const filters = {
 	},
 	isoDate(val, what) {
 		if (!val) return val;
-		return new Date(val).toISOString();
+		return DateTime.fromISO(val).toISO();
 	},
-	timeAgo(val, what) {
-		// TODO mettre à jour les dates relativement à la date du dernier message.
-		return moment(val || new Date()).format("ll [à] LT");
+	datetime(val, what) {
+		const dt = val ? DateTime.fromISO(val) : DateTime.local();
+		return dt.setLocale("fr").toFormat("DDD 'à' T");
+	},
+	reldatetime(val, what) {
+		const dt = DateTime.fromISO(val).setLocale("fr");
+		let inter = 1;
+		const live = what.scope.live;
+		if (live && live.rooms && live.rooms.page) {
+			const ref = DateTime.fromISO(live.rooms.page);
+			inter = Interval.fromDateTimes(dt, ref).length('days');
+		}
+		if (inter == 0) return dt.toFormat('T');
+		else return dt.toFormat("D '\nà' T");
 	},
 	sandbox(val, what) {
 		if (val && val.nodeType == Node.ELEMENT_NODE) {
@@ -56,13 +65,16 @@ const filters = {
 	},
 	when(page, what, param) {
 		const now = Date.now();
-		const start = page.start && (new Date(page.start)).getTime();
-		const stop = page.stop && (new Date(page.stop)).getTime();
+		const start = page.start && Date.parse(page.start);
+		const stop = page.stop && Date.parse(page.stop);
 		let when = '';
 		if (!start || now < start) when = 'before';
 		else if (!stop || now <= stop) when = 'during';
 		else when = 'after';
-		return when == param ? 'enabled' : '';
+		return when == param;
+	},
+	sort(id, what) {
+
 	}
 };
 
@@ -85,20 +97,18 @@ export default class Live {
 	}
 
 	findAll() {
-		const rooms = {};
+		this.rooms = {};
 		const roots = document.querySelectorAll('[data-live]').map((node) => {
-			const names = node.dataset.live.split(' ').map((pair) => {
-				let [name, mtime] = pair.split(':');
-				mtime = parseInt(mtime) || 0;
-				rooms[name] = Math.min(rooms[name] || Infinity, mtime);
-				return name;
+			const names = node.dataset.live.split(' ');
+			names.forEach((name) => {
+				this.rooms[name] = this.vars[`update-${name}`];
 			});
 			return { node, names };
 		});
-		return {rooms, roots};
+		return roots;
 	}
 
 	merge(node, data) {
-		return this.matchdom.merge(node, data);
+		return this.matchdom.merge(node, data, {live: this});
 	}
 }

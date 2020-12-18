@@ -24,35 +24,37 @@ class LiveBuild extends Live {
 		if (!chan) {
 			chan = this.channels[name] = (async () => {
 				const res = await fetch('./' + name + '.json');
-				const mtime = Date.parse(res.headers.get('date'));
-				const data = await res.json();
-				return { mtime, data };
+				return await res.json();
 			})(name);
 		}
 		return chan;
 	}
 
 	async build() {
-		const { rooms, roots } = this.findAll();
+		const roots = this.findAll();
+		let first = false;
 		await Promise.all(roots.map(async ({ node, names }) => {
 			const datas = {};
 			const mtimes = {};
 			await Promise.all(names.map(async (name) => {
-				if (!rooms[name]) {
-					const {mtime, data} = await this.fetch(name);
+				if (!this.rooms[name]) {
+					const data = await this.fetch(name);
 					datas[name] = data;
-					mtimes[name] = mtime;
+					mtimes[name] = this.rooms[name] = data.update;
 				}
 			}));
 			const keys = Object.keys(mtimes);
 			if (keys.length > 0) {
-				node.setAttribute('data-live', keys
-					.map((name) => `${name}:${mtimes[name]}`)
-					.join(' '));
 				this.merge(node, datas);
+				first = true;
 			}
 			return node;
 		}));
+		if (first) document.head.insertAdjacentHTML(
+			'beforeEnd',
+			'	<meta name="live-update-[rooms+.key|repeat:*]" content="[rooms.val]">\n'
+		);
+		this.merge(document.head, { rooms: this.rooms });
 	}
 }
 

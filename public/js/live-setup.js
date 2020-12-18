@@ -10,10 +10,14 @@ class LiveSetup extends Live {
 		this.observer = this.createObserver();
 	}
 
-	nodeFilter(node, iter) {
+	nodeFilter(node, iter, data, scope) {
 		if (node.templates) {
-			node.templates.forEach(({ content, index }) => {
-				node.insertBefore(content.cloneNode(true), node.children[index]);
+			node.templates.forEach(({ mode, content, index }) => {
+				if (mode == "replace") {
+					node.replaceChild(content.cloneNode(true), node.children[index]);
+				} else {
+					node.insertBefore(content.cloneNode(true), node.children[index]);
+				}
 			});
 			return false;
 		} else {
@@ -23,14 +27,16 @@ class LiveSetup extends Live {
 	async setup() {
 		const jack = new LiveJack(this.vars);
 		await jack.init();
-		const { rooms, roots } = this.findAll();
+		const roots = this.findAll();
 		roots.forEach((root) => this.setupRoot(root.node));
-		Object.keys(rooms).forEach((room) => {
-			jack.join(this.vars.base + '/' + room, rooms[room], (e) => {
+		Object.keys(this.rooms).forEach((room) => {
+			jack.join(this.vars.base + '/' + room, this.rooms[room], (e) => {
 				if (!e.detail) return; // ignore
+				const data = e.detail.data;
+				this.rooms[room] = data.update;
 				roots.forEach(({ node, names }) => {
 					if (names.includes(room)) {
-						this.merge(node, { [room]: e.detail });
+						this.merge(node, { [room]: data });
 					}
 				});
 			});
@@ -43,14 +49,13 @@ class LiveSetup extends Live {
 			const parent = tmpl.parentNode;
 			const index = parent.children.indexOf(tmpl);
 			if (!parent.templates) parent.templates = [];
-			parent.templates.push({ content: tmpl.content, index });
+			parent.templates.push({ mode: tmpl.dataset.mode, content: tmpl.content, index });
 			parent.removeChild(tmpl);
 		});
-
-		root.querySelectorAll('article').forEach((node) => this.trackUi(node));
 		root.querySelectorAll('.live-controls').forEach((node) => {
 			node.addEventListener('change', this, false);
 		});
+		root.querySelectorAll('article').forEach((node) => this.trackUi(node));
 	}
 
 	handleEvent(e) {
@@ -113,29 +118,31 @@ class LiveSetup extends Live {
 		if (time) {
 			// time.textContent = live.moment(time.dataset.datetime).fromNow();
 		}
+		return 'hidden';
+	}
+	position(id, node) {
+		const prev = document.getElementById(id);
+		if (prev) prev.parentNode.replaceChild(node, prev);
 	}
 }
 
-// const live = {
-// 	subscribe: (channel, stamp) => {
-// 		if (channel == "messages") setTimeout(function() {
-// 			listener({
-// 				messages: [{
-// 					date: "2016-01-14T05:59:44.021Z",
-// 					id: 711225,
-// 					mark: null,
-// 					style: null,
-// 					text: "Test update",
-// 					title: "Où ont eu lieu les attaques ?" + gGa++,
-// 					update: "2016-01-14T10:03:54.208Z"
-// 				}]
-// 			});
-// 		}, 1000);
-// 	}
-// };
 ready(async () => {
 	await visible();
+	LiveSetup.filters.position = (val, what) => {
+		setTimeout(() => {
+			live.position(val, what.parent);
+		});
+		return val;
+	};
+	LiveSetup.filters.trackUi = (val, what) => {
+		live.trackUi(what.parent);
+		setTimeout(() => {
+			what.parent.classList.remove('hidden');
+		});
+		return `${val || ''} hidden`;
+	};
 	const live = new LiveSetup();
+
 	await live.setup();
 }).catch((err) => {
 	console.error(err); // eslint-disable-line

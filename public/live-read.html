@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head data-live="page">
+<head>
 	<link rel="shortcut icon" href="img/[view].ico" type="image/x-icon">
 
 	<link rel="stylesheet" href='css/live-read.css'>
 	<script type="module" src="js/live-build.js"></script>
 	<script type="module" src="js/live-setup.js"></script>
 
-	<title>[page.title]</title>
+	<title data-live="page">[page.title]</title>
 </head>
 <body>
-	<div id="live-messages" class="live-messages" data-stamp="[page.stamp]" data-live="page messages">
+	<div id="live-messages" class="live-messages" data-live="page">
 		<header>
 			<div class="live-controls">
 				<div class="filter">
@@ -31,9 +31,11 @@
 				</div>
 			</div>
 			<div class="live-status">
-				<p class="before [page|when:before]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|isoDate]">[page.start|calendar|or:non précisé]</time></p>
-				<p class="during [page|when:during]">EN COURS : Mis à jour <time class="stamp" datetime="[page.update|isoDate]">[page.update|calendar]</time></p>
-				<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|timeAgo|or:non précisé]</time></p>
+				<template data-mode="replace">
+					<p class="before [page|when:before|bmagnet:*]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|isoDate]">[page.start|datetime]</time></p>
+					<p class="during [page|when:during|bmagnet:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.update|isoDate]">[page.update|datetime]</time></p>
+					<p class="after [page|when:after|bmagnet:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|datetime]</time></p>
+				</template>
 			</div>
 			<div class="hide">
 				<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">
@@ -48,18 +50,19 @@
 		</header>
 		<div class="live-list">
 			<template>
-				<article repeat="messages|procrastify|rest|order" id="[messages.id|repeat:*:message]" class="live-message [message.style]" data-date="[messages.date|isoDate]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-					<meta itemprop="url" content="[page.backtrack|or:]#[messages.id]" />
-					<meta itemprop="dateModified" content="[messages.update|isoDate]" />
+				<article id="[page.messages.id|repeat:*:message:-1|position]" class="live-message [message.style|trackUi]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+					<meta itemprop="url" content="[page.backtrack|or:]#[message.id]" />
+					<meta itemprop="dateModified" content="[message.update|isoDate]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
-					<time itemprop="datePublished" class="live-time" data-datetime="[message.date|isoDate]">[message.date|calendar]</time>
-					<h2 itemprop="headline" class="live-title" bind-text="messages.title">[message.title]</h2>
-					<div class="live-icons">[message.mark|iconclass]</div>
+					<time itemprop="datePublished" class="live-time" datetime="[message.date|isoDate]">[message.date|reldatetime]</time>
+					<h2 itemprop="headline" class="live-title">[message.title]</h2>
+					<div class="live-icons">[message.mark|html|iconclass]</div>
 					<div class="live-article" itemprop="articleBody">
 						[message.text|html|sandbox|procrastify]
 					</div>
 				</article>
 			</template>
 		</div>
+	</div>
 </body>
 </html>

@@ -1,66 +1,60 @@
 <!DOCTYPE html>
 <html>
-<head data-nsocket="page">
+
+<head>
 	<link rel="shortcut icon" href="img/[view].ico" type="image/x-icon">
 
-	<link rel="stylesheet" href='css/live-write.css' />
 	<link rel="stylesheet" href='css/live-read.css' />
+	<link rel="stylesheet" href='css/live-write.css' />
 
+	<script type="module" src="js/live-build.js"></script>
+	<script type="module" src="js/live-setup.js"></script>
 	<script type="module" src="js/live-write.js"></script>
 
-	<title>[page.title]</title>
+	<title data-live="page">[page.title]</title>
 </head>
+
 <body>
-	<header id="page" data-nsocket="page">
-		<h1>
-			<img bind-src="shortcut-icon" />
-			<a bind-text="page.title" bind-href="page.backtrack" target="_blank">Lien vers front</a>
-		</h1>
-		<form>
-			<label>Activer le live</label>
-			<label class="switch-light switch-material" onclick="" id="toggle-live-status">
-				<input type="checkbox" name="status" value="on" bind bind-checked="page|checkedToggle" />
-				<span>
-					<span>Arrêté</span>
-					<span>En cours</span>
-					<a></a>
-				</span>
-			</label>
-			<br>
-			<label bind bind-class="page|hideBefore"><span>Ouvert le</span><input readonly type="text" name="start" value="" bind-value="page.start|date|resetPicker" size="18" /></label><br />
-			<label bind bind-class="page|hideBefore"><span>Fermé le</span><input readonly type="text" name="stop" value="" bind-value="page.stop|date|resetPicker" size="18" placeholder="En cours" /></label>
-		</form>
+	<header id="page" data-live="page">
+		<template>
+			<h1>
+				<img src="[shortcut-icon]" />
+				<a href="[page.backtrack]" target="_blank">[page.title]</a>
+			</h1>
+			<form>
+				<label>Activer le live</label>
+				<label class="switch-light switch-material" onclick="" id="toggle-live-status">
+					<input type="checkbox" name="status" value="on" checked="[page|checkedToggle]" />
+					<span>
+						<span>Arrêté</span>
+						<span>En cours</span>
+						<a></a>
+					</span>
+				</label>
+				<br>
+				<label class="[page|hideBefore]"><span>Ouvert le</span><input readonly type="text" name="start"
+						value="[page.start|date|resetPicker]" size="18" /></label><br />
+				<label class="[page|hideBefore]"><span>Fermé le</span><input readonly type="text" name="stop"
+						value="[page.stop|date|resetPicker]" size="18" placeholder="En cours" /></label>
+			</form>
+		</template>
 	</header>
 	<div class="center">
 		<div class="column-live">
 			<div id="gui">
 				<div class="toolbar article">
-					<button type="button" disabled name="delete" class="btn" title="Supprimer le message"><i class="icon-trash"></i> Supprimer</button>
+					<button type="button" name="del" class="btn" title="Supprimer le message">Supprimer</button>
 					<select name="style">
 						<option value="">Commentaire</option>
 						<option value="essentiel">Essentiel</option>
 						<option value="pinned">Épinglé</option>
 					</select>
-					<button type="button" disabled name="cancel" class="btn" title="Annuler les modifications en cours"><i class="icon-remove"></i> Annuler</button>
-					<button type="button" disabled name="publish" class="btn" title="Publier le message"><i class="icon-ok"></i> Valider</button>
-				</div>
-				<div class="toolbar editor">
-					<button type="button" data-wysihtml5-command="createLink" class="btn"><i class="icon-link"></i></button>
-					<div data-wysihtml5-dialog="createLink" data-obj-type="link">
-						<input data-wysihtml5-dialog-field="href" />
-						<input data-wysihtml5-dialog-field="target" />
-						<button data-wysihtml5-dialog-action="save"></button>
-					</div>
-					<button type="button" data-wysihtml5-command="bold" class="btn"><i class="icon-bold"></i></button>
-					<button type="button" data-wysihtml5-command="italic" class="btn"><i class="icon-italic"></i></button>
-					<button type="button" data-wysihtml5-command="justifyLeft" class="btn"><i class="icon-align-left"></i></button>
-					<button type="button" data-wysihtml5-command="justifyRight" class="btn"><i class="icon-align-right"></i></button>
+					<button type="button" name="cancel" class="btn" title="Annuler les modifications en cours">Annuler</button>
+					<button type="button" name="save" class="btn" title="Publier le message">Valider</button>
 				</div>
 			</div>
-			<div class="live" data-nsocket="page messages">
-				<div id="live-messages" class="live-messages">
-					<meta id="opta-customer-id" content="" />
-					<meta id="beop-customer-id" content="" />
+			<div class="live">
+				<div id="live-messages" class="live-messages" data-live="page">
 					<header>
 						<div class="live-controls">
 							<div class="filter">
@@ -81,9 +75,14 @@
 							</div>
 						</div>
 						<div class="live-status">
-							<p class="before [page|when:before]">A VENIR : Début du direct : <time class="stamp" bind-datetime="page.start|isoDate" bind-text="page.start|date">non précisé</time></p>
-							<p class="during [page|when:during]">EN COURS : Mis à jour <time class="stamp" bind data-update="[page.update]" data-datetime="[page.update|isoDate]" data-text="[page.update|calendar|fill]">Date relative</time></p>
-							<p class="after [page|when:after]">TERMINE : Fin du direct : <time class="stamp" bind-itemprop="[page|coverageAfter]" bind-datetime="page.stop|isoDate" bind-text="page.stop|date">non précisé</time></p>
+							<template data-mode="replace">
+								<p class="before [page|when:before|bmagnet:*]">A VENIR : Début du direct : <time class="stamp"
+										datetime="[page.start|isoDate]">[page.start|datetime]</time></p>
+								<p class="during [page|when:during|bmagnet:*]">EN COURS : Mis à jour <time class="stamp"
+										datetime="[page.update|isoDate]">[page.update|datetime]</time></p>
+								<p class="after [page|when:after|bmagnet:*]">TERMINE : Fin du direct : <time class="stamp"
+										itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|datetime]</time></p>
+							</template>
 						</div>
 						<div class="hide">
 							<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">
@@ -98,14 +97,17 @@
 					</header>
 					<div class="live-list">
 						<template>
-							<article repeat="messages|procrastify|rest|order" id="[messages.id|repeat:*:message]" class="live-message [message.style]" data-date="[messages.date|isoDate]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-								<meta itemprop="url" content="[page.backtrack|or:]#[messages.id]" />
-								<meta itemprop="dateModified" content="[messages.update|isoDate]" />
+							<article is="edit-article" id="[page.messages.id|repeat:*:message:-1|position]"
+								class="live-message [message.style|trackUi]" itemprop="liveBlogUpdate" itemscope
+								itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+								<meta itemprop="url" content="[page.backtrack|or:]#[message.id]" />
+								<meta itemprop="dateModified" content="[message.update|isoDate]" />
 								<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
-								<time itemprop="datePublished" class="live-time" data-datetime="[message.date|isoDate]">[message.date|calendar]</time>
-								<h2 itemprop="headline" class="live-title" bind-text="messages.title">[message.title]</h2>
-								<div class="live-icons">[message.mark|iconclass]</div>
-								<div class="live-article" itemprop="articleBody">
+								<time is="edit-time" itemprop="datePublished" class="live-time"
+									datetime="[message.date|isoDate]">[message.date|reldatetime]</time>
+								<h2 is="edit-text" itemprop="headline" class="live-title">[message.title]</h2>
+								<div is="edit-html" class="live-icons">[message.mark|html|iconclass]</div>
+								<div is="edit-html" class="live-article" itemprop="articleBody">
 									[message.text|html|sandbox|procrastify]
 								</div>
 							</article>
@@ -114,19 +116,23 @@
 				</div>
 			</div>
 		</div>
-		<div data-nsocket="assets" class="ressources">
+		<div data-live="assets" class="ressources">
 			<input class="filter" placeholder="tous" />
 			<section>
 				<div>
-					<div class="upload">Upload<p></p></div>
+					<div class="upload">Upload<p></p>
+					</div>
 					<form class="post" method="post" enctype="multipart/form-data" hidden action="assets">
 						<input type="file" name="file" />
 					</form>
 					<a class="new">
-						<textarea placeholder="coller ici URL, &lt;iframe&gt;, ou &lt;blockquote.tweet&gt;"></textarea><i class="icon-refresh icon-spin"></i>
+						<textarea placeholder="coller ici URL, &lt;iframe&gt;, ou &lt;blockquote.tweet&gt;"></textarea><i
+							class="fas fa-refresh fas fa-spin"></i>
 					</a>
 					<template>
-						<a repeat="assets|store|procrastify|rest|invert" id="[assets.id|repeat:*:asset]" href="[asset.url]" class="[asset.type|className]" class="icon-external-link" data-title="[asset.title]" data-description="[asset.description]" data-thumbnail="[asset.thumbnail]">
+						<a repeat="assets|store|procrastify|rest|invert" id="[assets.assets.id|repeat:*:asset]" href="[asset.url]"
+							class="[asset.type|className]" class="fas fa-external-link" data-title="[asset.title]"
+							data-description="[asset.description]" data-thumbnail="[asset.thumbnail]">
 							<img src="[asset|src]" />
 							<span>[asset|caption]</span>
 						</a>
@@ -141,20 +147,20 @@
 				</div>
 				<fieldset class="image">
 					<label>Légende<br />
-					<input name="legende" placeholder="pas de légende" /></label>
+						<input name="legende" placeholder="pas de légende" /></label>
 					<label>Crédits<br />
-					<input name="credits" placeholder="pas d'auteur" /></label>
+						<input name="credits" placeholder="pas d'auteur" /></label>
 				</fieldset>
 				<fieldset class="link">
 					<label>URL<br />
-					<input name="url" placeholder="http://" /></label>
+						<input name="url" placeholder="http://" /></label>
 					<label>Légende<br />
-					<input name="legende" placeholder="pas de légende - affiche l'url" /></label>
+						<input name="legende" placeholder="pas de légende - affiche l'url" /></label>
 				</fieldset>
 				<fieldset class="link">
 					<label>Target<br />
-					<label><input name="style" type="radio" value="_blank" checked /><span>Blank</span></label>
-					<label><input name="style" type="radio" value="_self" /><span>Self</span></label>
+						<label><input name="style" type="radio" value="_blank" checked /><span>Blank</span></label>
+						<label><input name="style" type="radio" value="_self" /><span>Self</span></label>
 				</fieldset>
 				<fieldset class="iframe video">
 					<legend>Ratio</legend>
@@ -164,24 +170,29 @@
 				</fieldset>
 				<div class="content live-article"></div>
 				<div class="toolbar">
-					<button type="button" disabled name="delete" class="btn" title="Supprimer la ressource"><i class="icon-trash"></i> Supprimer</button>
-					<button type="button" name="cancel" class="btn" title="Annuler les modifications en cours"><i class="icon-remove"></i> Annuler</button>
-					<button type="button" disabled name="publish" class="btn" title="Enregistrer la ressource"><i class="icon-ok"></i> Valider</button>
+					<button type="button" disabled name="delete" class="btn" title="Supprimer la ressource"><i
+							class="fas fa-trash"></i> Supprimer</button>
+					<button type="button" name="cancel" class="btn" title="Annuler les modifications en cours"><i
+							class="fas fa-remove"></i> Annuler</button>
+					<button type="button" disabled name="publish" class="btn" title="Enregistrer la ressource"><i
+							class="fas fa-ok"></i> Valider</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="notification" id="errors" data-strings='{"transport":"Erreur de connexion","join":"Connecté","server":"Erreur serveur %d","client":"Echec de la requête","auth":"Permission refusée - rouvrir la page depuis le BO site","unknown":"Erreur - veuillez recharger la page"}'>
+	<div class="notification" id="errors"
+		data-strings='{"transport":"Erreur de connexion","join":"Connecté","server":"Erreur serveur %d","client":"Echec de la requête","auth":"Permission refusée - rouvrir la page depuis le BO site","unknown":"Erreur - veuillez recharger la page"}'>
 		<div class="btn icon">
-			<i class=" btn icon-warning-sign"></i>
+			<i class=" btn fas fa-warning-sign"></i>
 		</div>
 		<div class="btn icon close">
-			<i class="btn icon-remove"></i>
+			<i class="btn fas fa-remove"></i>
 		</div>
 		<div class="content">
-			<p repeat="errors|invert" bind-text class="message">[errors.message]</p>
+			<p repeat="[errors|invert]" class="message">[errors.message]</p>
 		</div>
 	</div>
 	<a href="http://nsocket.com" class="nsocket">nsocket</a>
 </body>
+
 </html>

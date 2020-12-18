@@ -12,6 +12,7 @@ export function toScript(node) {
 	}).join('');
 	node.textContent = helper.innerHTML;
 	node.content = tmpl.content;
+	Object.assign(node.dataset, tmpl.dataset);
 	tmpl.replaceWith(node);
 	return node;
 }
@@ -29,6 +30,7 @@ export function fromScript(node) {
 	} else {
 		tmpl.innerHTML = helper.textContent;
 	}
+	Object.assign(tmpl.dataset, node.dataset);
 	node.replaceWith(tmpl);
 	node.textContent = helper.textContent = '';
 	return tmpl;

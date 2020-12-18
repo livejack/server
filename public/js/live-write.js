@@ -1,5 +1,13 @@
 import Live from './live.js';
 
+import { ready, visible } from './doc-events.js';
+import registerEditElements from "./edit-elements.js";
+import "../modules/flatpickr/dist/flatpickr.js"; // window.flatpickr
+import "../modules/flatpickr/dist/l10n/fr.js"; // window.flatpickr
+window.flatpickr.localize(window.flatpickr.l10ns.fr);
+import "../modules/slim-select/dist/slimselect.js"; // window.SlimSelect
+
+
 export const editor = {
 	assetType: {
 		none: "icon-plus",
@@ -31,9 +39,9 @@ Object.assign(Live.filters, {
 	className: function(type) {
 		return editor.assetType[type];
 	},
-	src: function(asset) {
+	src: function(asset, what) {
 		if (asset.type != "picto" && asset.url) {
-			return live.vars.thumbnailer.replace('%s', asset.url);
+			return what.scope.live.vars.thumbnailer.replace('%s', asset.url);
 		} else {
 			return asset.url;
 		}
@@ -43,10 +51,9 @@ Object.assign(Live.filters, {
 		else return "";
 	}
 });
-const live = new Live({});
 
-live.init().then(async () => {
-	
 
+ready(async () => {
+	await visible();
+	registerEditElements();
 });
-
