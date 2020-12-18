@@ -63,6 +63,10 @@ app.use((req, res) => {
 	].join('; '));
 });
 
+app.get('/.well-known/status', (req) => {
+	return 204;
+});
+
 const auth = require('./lib/auth');
 const domainLock = auth.lock('write-:domain');
 auth.init(app);
