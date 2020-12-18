@@ -21,6 +21,7 @@ div.fig-article-body {
 	padding-top:1em;
 	padding-bottom:1em;
 	zoom:1;
+	transition:opacity 1s;
 }
 .live-messages .live-message::after {
 	content:"";
@@ -30,6 +31,9 @@ div.fig-article-body {
 .live-messages .live-message:first-child {
 	border-top:0px;
 	clear:left;
+}
+.live-messages .live-message.hidden {
+	opacity:0;
 }
 .live-messages .live-article {
 	padding-left:21px;
@@ -215,7 +219,6 @@ div.fig-article-body {
 	clear:left;
 }
 .live-messages .live-status > p {
-	display:none;
 	margin:0;
 	padding:0 8px !important;
 	color:#323232;
@@ -223,9 +226,7 @@ div.fig-article-body {
 	border-radius:3px;
 	font-size:inherit; /* override page style */
 }
-.live-messages .live-status > p.enabled {
-	display:block;
-}
+
 .live-messages .live-status > .before {
 	color:#555;
 	background-color:#f7f7f7;
