@@ -37,7 +37,7 @@ config.site = URL.parse(config.site);
 config.site.port = config.site.port || 80;
 config.listen = config.listen || config.site.port;
 
-app.livejack = new LiveJack({
+global.livejack = new LiveJack({
 	servers: config.live.servers.split(' '),
 	namespace: config.live.namespace,
 	token: config.live.token

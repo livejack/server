@@ -18,21 +18,10 @@ class Message extends BaseModel {
 		};
 	}
 
-	static get modifiers() {
-		return {
-			select(builder) {
-				builder.select();
-			},
-			order(builder) {
-				builder.orderBy('date');
-			}
-		};
-	}
-
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['url'],
+			required: ['title'],
 			properties: {
 				id: {
 					type: 'integer'
@@ -65,24 +54,11 @@ class Message extends BaseModel {
 	}
 	$beforeUpdate() {
 		this.update = new Date().toISOString();
-		if (this.date == null) this.date = this.update;
+		if (this.date == null) {
+			// fix bad record
+			this.date = this.update;
+		}
 	}
-	async $afterUpdate(opt, queryContext) {
-		await super.$afterUpdate(opt, queryContext);
-		await this.updatePage(queryContext);
-	}
-	async $afterRemove(opt, queryContext) {
-		await super.$afterUpdate(opt, queryContext);
-		await this.updatePage(queryContext);
-	}
-
-	async updatePage(queryContext) {
-		const page = await this.$relatedQuery('page', queryContext.transaction);
-		if (page) await page.patch({
-			update: this.update
-		});
-	}
-
 }
 
 module.exports = Message;

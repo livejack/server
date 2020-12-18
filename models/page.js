@@ -41,21 +41,25 @@ class Page extends BaseModel {
 				},
 				start: {
 					type: 'string',
-					format: 'date-time'
+					format: 'date-time',
+					nullable: true
 				},
 				stop: {
 					type: 'string',
-					format: 'date-time'
+					format: 'date-time',
+					nullable: true
 				},
 				title: {
-					type: 'string'
+					type: 'string',
+					nullable: true
 				},
 				view: {
 					type: 'string'
 				},
 				backtrack: {
 					type: 'string',
-					format: 'uri-reference'
+					format: 'uri-reference',
+					nullable: true
 				},
 				domain: {
 					type: 'string'

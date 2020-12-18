@@ -1,3 +1,17 @@
+const pg = require('pg');
+const { DateTime } = require('luxon');
+
+// parse timestamps without timezone
+pg.types.setTypeParser(
+	pg.types.builtins.TIMESTAMP,
+	val => {
+		if (val === null) return val;
+		else return DateTime.fromSQL(val, {
+			zone: "UTC"
+		}).toISO();
+	}
+);
+
 const objection = require('objection');
 objection.Models = {};
 const {
@@ -93,8 +107,11 @@ class BaseModel extends Model {
 	}
 	static get modifiers() {
 		return {
-			columns: (query) => {
-				query.select();
+			select(builder) {
+				builder.select();
+			},
+			order(builder) {
+				builder.orderBy('date');
 			}
 		};
 	}

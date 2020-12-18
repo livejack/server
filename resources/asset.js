@@ -1,27 +1,24 @@
 const {Models} = require('objection');
-const {Page, Asset} = Models;
+const {Page} = Models;
 const got = require('got');
 const {promisify} = require('util');
 const pipeline = promisify(require('stream').pipeline);
 const inspector = promisify(require('url-inspector'));
 
-exports.GET = async (req, res, next) => {
+exports.GET = async (req) => {
 	const {domain, key} = req.params;
 	if (req.params.id) {
-		const asset = await Page.relatedQuery('assets')
+		return await Page.relatedQuery('assets')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.findById(req.params.id)
 			.throwIfNotFound()
 			.select();
-		res.json(asset);
 	} else {
-		const assets = await Page.relatedQuery('assets')
-			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
-			.select()
-			.sortBy(req.query.sort || 'date')
-			.limit(parseInt(req.query.limit) || Infinity)
-			.offset(parseInt(req.query.offset) || 0);
-		res.json(assets);
+		const { domain, key } = req.params;
+		return await Page.query()
+			.findOne({ domain, key }).select()
+			.throwIfNotFound()
+			.withGraphFetched('assets(select,order)');
 	}
 };
 
