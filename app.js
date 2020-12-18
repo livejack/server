@@ -198,9 +198,11 @@ if (config.cron) require('./lib/cron')(config.cron);
 if (config.autoExpire) require('./lib/expiration')(config);
 
 await ini.async(config);
-await objection.Models.User.populate(Object.entries(config.domains).map(([domain, obj]) => {
-	return {domain, token: obj.password};
-}));
+await objection.Models.User.populate(
+	Object.entries(config.domains).map(([domain, obj]) => {
+		return {domain, token: obj.password};
+	})
+);
 await auth.keygen(config);
 require('http').createServer(app).listen(config.listen, () => {
 	console.info("Listening on port", config.listen); // eslint-disable-line
