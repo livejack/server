@@ -1,8 +1,10 @@
-@import "normalize.css";
-@import "icons/fontawesome.css";
-@import "jquery.datetimepicker.css";
-@import "toggle-switch.css";
-@import "select2.css";
+@import "../modules/modern-normalize/modern-normalize.css";
+
+@import "../modules/flatpickr/dist/flatpickr.css";
+
+@import "../modules/toggle-switch-css/build/toggle-switch.css";
+
+@import "../modules/slim-select/dist/slimselect.css";
 
 body {
 	font-family:"Trebuchet MS", "Verdana", sans-serif;
@@ -63,22 +65,13 @@ header > h2.selected {
 div.toolbar {
 	overflow:hidden;
 	line-height:normal;
-	position:absolute;
-	right:0;
-	bottom:0;
-	left:0;
-	z-index:1;
 	text-align:right;
 	background:inherit;
-	margin:0.1em 0.2em;
+	padding-top: 1em;
+	clear: left;
 }
 div.toolbar > button,
 div.toolbar > label {
-	border:0;
-	font-size:0.9em;
-	background:none;
-	padding:0;
-	margin-left:0.5em;
 	cursor:pointer;
 }
 div.toolbar > button > i,
@@ -106,10 +99,11 @@ div.toolbar.article label {
 	display:inline-block; /* fix horizontal whitespace */
 }
 div.toolbar button[name="delete"] {
-	position:absolute;
-	height:100%;
-	left:0;
-	margin-left:0;
+	/* position:absolute; */
+	/* height:100%; */
+	/* left:0; */
+	/* margin-left:0; */
+	float: left;
 }
 
 .wysihtml5-command-active {
@@ -516,3 +510,8 @@ div.ui-datepicker {
 	display:none;
 }
 
+
+
+.flatpickr-calendar.hasTime.noCalendar {
+	width: 79px;
+}
