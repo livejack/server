@@ -81,9 +81,14 @@ app.route("/favicon.ico").get(function(req, res) {
 });
 
 app.use(await serveModules('/modules', [
+	'@webreflection/custom-elements',
 	'matchdom',
-	'moment',
-	'@livejack/client'
+	'luxon',
+	'@livejack/client',
+	'flatpickr',
+	'slim-select',
+	'modern-normalize',
+	'toggle-switch-css'
 ]));
 
 app.route(/\/js|css|img\//).get(
