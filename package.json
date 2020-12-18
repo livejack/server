@@ -49,7 +49,7 @@
     "postinstall": "^0.7.0"
   },
   "prepare": {
-    "@webreflection/custom-elements/index.js": "link public/js/custom-elements.js"
+    "@webreflection/custom-elements/index.js": "link public/lib/custom-elements.js"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
