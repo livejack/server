@@ -521,3 +521,5 @@ div.ui-datepicker {
 .flatpickr-calendar.hasTime.noCalendar {
 	width: 79px;
 }
+
+.live-message.unsaved {position: sticky;top: 0;background: #EEE;z-index: 10000;bottom: 0;}
