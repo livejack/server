@@ -103,11 +103,11 @@
 								<meta itemprop="url" content="[page.backtrack|or:]#[message.id]" />
 								<meta itemprop="dateModified" content="[message.update|isoDate]" />
 								<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
-								<time is="edit-time" itemprop="datePublished" class="live-time"
+								<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
 									datetime="[message.date|isoDate]">[message.date|reldatetime]</time>
-								<h2 is="edit-text" itemprop="headline" class="live-title">[message.title]</h2>
-								<div is="edit-html" class="live-icons">[message.mark|html|iconclass]</div>
-								<div is="edit-html" class="live-article" itemprop="articleBody">
+								<h2 name="title" is="edit-text" itemprop="headline" class="live-title">[message.title]</h2>
+								<div name="mark" is="edit-html" class="live-icons">[message.mark|html|iconclass]</div>
+								<div name="text" is="edit-html" class="live-article" itemprop="articleBody">
 									[message.text|html|sandbox|procrastify]
 								</div>
 							</article>
