@@ -6,10 +6,11 @@ const rewrite = require('express-urlrewrite');
 const URL = require('url');
 const Path = require('path');
 const serveStatic = require('serve-static');
+const serveModule = require("./lib/serve-module");
+
 const LiveJack = require('@livejack/client/node');
 
 const ini = require('./lib/express-ini');
-const serveModules = require('./lib/serve-modules');
 
 const jsonParser = require('body-parser').json({
 	limit: "100kb"
@@ -80,18 +81,9 @@ app.route("/favicon.ico").get(function(req, res) {
 	res.sendStatus(404);
 });
 
-app.use(await serveModules('/modules', [
-	'@webreflection/custom-elements',
-	'matchdom',
-	'luxon',
-	'@livejack/client',
-	'flatpickr',
-	'slim-select',
-	'modern-normalize',
-	'toggle-switch-css'
-]));
+app.use(serveModule("/modules"));
 
-app.route(/\/js|css|img\//).get(
+app.route(/\/js|css|img|lib\//).get(
 	serveStatic(app.get('statics'), {
 		index: false,
 		redirect: false,
