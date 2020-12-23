@@ -69,6 +69,8 @@ div.toolbar {
 	background:inherit;
 	padding-top: 1em;
 	clear: left;
+	position: absolute;
+	width: 100%;
 }
 div.toolbar > button,
 div.toolbar > label {
