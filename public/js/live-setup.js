@@ -126,23 +126,26 @@ class LiveSetup extends Live {
 	}
 }
 
+LiveSetup.filters.position = (val, what) => {
+	setTimeout(() => {
+		live.position(val, what.parent);
+	});
+	return val;
+};
+LiveSetup.filters.trackUi = (val, what) => {
+	live.trackUi(what.parent);
+	setTimeout(() => {
+		what.parent.classList.remove('hidden');
+	});
+	return `${val || ''} hidden`;
+};
+const live = new LiveSetup();
+
+export default live;
+
 ready(async () => {
 	await visible();
-	LiveSetup.filters.position = (val, what) => {
-		setTimeout(() => {
-			live.position(val, what.parent);
-		});
-		return val;
-	};
-	LiveSetup.filters.trackUi = (val, what) => {
-		live.trackUi(what.parent);
-		setTimeout(() => {
-			what.parent.classList.remove('hidden');
-		});
-		return `${val || ''} hidden`;
-	};
-	const live = new LiveSetup();
-
+	live.init();
 	await live.setup();
 }).catch((err) => {
 	console.error(err); // eslint-disable-line

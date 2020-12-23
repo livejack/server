@@ -60,5 +60,6 @@ class LiveBuild extends Live {
 
 ready(async () => {
 	const live = new LiveBuild();
+	live.init();
 	await live.build();
 });

@@ -1,4 +1,4 @@
-import Live from './live.js';
+import live from './live-setup.js';
 
 import { ready, visible } from './doc-events.js';
 import registerEditElements from "./edit-elements.js";
@@ -21,7 +21,7 @@ export const editor = {
 	}
 };
 
-Object.assign(Live.filters, {
+Object.assign(live.constructor.filters, {
 	store: function(asset, what) {
 		if (!asset.type) asset.type = "none";
 		if (!asset.origin) asset.origin = "internal";

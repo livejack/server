@@ -88,6 +88,9 @@ export default class Live {
 			nodeFilter: this.nodeFilter,
 			filters: this.constructor.filters
 		});
+	}
+
+	init() {
 		const vars = {};
 		const pre = "live";
 		document.querySelectorAll(`meta[name^="${pre}-"]`).forEach((meta) => {
