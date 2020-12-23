@@ -6,6 +6,10 @@
 
 @import "../modules/slim-select/dist/slimselect.css";
 
+@import "../modules/prosemirror-view/style/prosemirror.css";
+
+@import "../modules/prosemirror-menu/style/menu.css";
+
 body {
 	font-family:"Trebuchet MS", "Verdana", sans-serif;
 }
