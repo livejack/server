@@ -55,5 +55,5 @@ Object.assign(Live.filters, {
 
 ready(async () => {
 	await visible();
-	registerEditElements();
+	registerEditElements(live);
 });
