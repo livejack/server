@@ -2,11 +2,13 @@ import live from './live-setup.js';
 
 import { ready, visible } from './doc-events.js';
 import registerEditElements from "./edit-elements.js";
-import "../modules/flatpickr/dist/flatpickr.js"; // window.flatpickr
-import "../modules/flatpickr/dist/l10n/fr.js"; // window.flatpickr
-window.flatpickr.localize(window.flatpickr.l10ns.fr);
-import "../modules/slim-select/dist/slimselect.js"; // window.SlimSelect
 
+import flatpickr from "../modules/flatpickr";
+import { French } from "../modules/flatpickr/dist/esm/l10n/fr.js";
+flatpickr.localize(French);
+
+// window.SlimSelect until https://github.com/brianvoe/slim-select/issues/252
+import "../modules/slim-select";
 
 export const editor = {
 	assetType: {
