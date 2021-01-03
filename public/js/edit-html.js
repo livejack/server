@@ -1,52 +1,67 @@
-import { EditorState } from "../modules/prosemirror-state";
-import { EditorView } from "../modules/prosemirror-view";
-import { Schema, DOMParser } from "../modules/prosemirror-model";
-import { schema } from "../modules/prosemirror-schema-basic";
-import { addListNodes } from "../modules/prosemirror-schema-list";
-import { exampleSetup } from "../modules/prosemirror-example-setup";
-
-const mySchema = new Schema({
-	nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
-	marks: schema.spec.marks
-});
+import { CustomEditorView } from './editor/view.js';
+import * as schema from './edit-schema.js';
 
 export default class EditHtml extends HTMLDivElement {
+	#defaultValue
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-html');
 		this.tabIndex = 12;
 	}
 	connectedCallback() {
+		this.#defaultValue = this.value;
 		this.addEventListener('focusin', this, true);
-		this.addEventListener('focusout', this, true);
 	}
 	disconnectedCallback() {
 		this.removeEventListener('focusin', this, true);
-		this.removeEventListener('focusout', this, true);
+		this.stop();
 	}
-	get articleProp() {
+	get article() {
+		return this.closest('[is="edit-article"]');
+	}
+	get name() {
 		return this.getAttribute('name');
 	}
-	get articleValue() {
-		return this.innerHTML.trim(); // well actually will call prosemirror serializer
+	get value() {
+		let parent;
+		if (this.view) {
+			const frag = this.view.toDOM();
+			parent = frag.ownerDocument.createElement("div");
+			parent.appendChild(frag);
+		} else {
+			parent = this;
+		}
+		const val = parent.innerHTML.trim();
+		if (val == "<p></p>") return "";
+		else return val;
+	}
+	set value(val) {
+		this.innerHTML = val;
+	}
+	get defaultValue() {
+		return this.#defaultValue;
+	}
+	set defaultValue(val) {
+		this.#defaultValue = val;
 	}
 	handleEvent(e) {
 		if (e.type == "focusin") {
-			this.start();
-		} else if (e.type == "focusout") {
-			this.stop();
+			if (this.article.active) this.start();
 		}
 	}
 	start() {
-		this.view = new EditorView(this.parentNode, {
-			state: EditorState.create({
-				doc: DOMParser.fromSchema(mySchema).parse(this),
-				plugins: exampleSetup({ schema: mySchema })
-			})
+		if (this.view) return;
+		this.view = new CustomEditorView(this, schema, () => {
+			this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 		});
+		this.view.focus();
 	}
 	stop() {
+		if (!this.view) return;
+		const fragment = this.view.toDOM();
 		this.view.destroy();
 		delete this.view;
+		this.textContent = '';
+		this.appendChild(fragment);
 	}
 }
