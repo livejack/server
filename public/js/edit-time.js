@@ -1,16 +1,33 @@
 export default class EditTime extends HTMLTimeElement {
+	#defaultValue
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-time');
 		this.tabIndex = 10;
 	}
-	get articleProp() {
+	get name() {
 		return this.getAttribute('name');
 	}
-	get articleValue() {
+	get value() {
 		return this.dateTime;
 	}
+	set value(val) {
+		this.dateTime = val;
+		this.textContent = this.constructor.matchdom.merge('[date|reldatetime]', {
+			date: val
+		});
+	}
+	get defaultValue() {
+		return this.#defaultValue;
+	}
+	set defaultValue(val) {
+		this.#defaultValue = val;
+	}
+	get article() {
+		return this.closest('[is="edit-article"]');
+	}
 	connectedCallback() {
+		this.#defaultValue = this.value;
 		this.addEventListener('click', this);
 	}
 	disconnectedCallback() {
@@ -19,32 +36,28 @@ export default class EditTime extends HTMLTimeElement {
 	handleEvent(e) {
 		switch (e.type) {
 			case "click":
-				this.start();
+				if (this.article.active) this.start();
 				break;
 		}
 	}
 	start() {
 		if (this.helperInput) return this.stop();
 		this.helperInput = document.createElement('input');
-		this.helperInput.setAttribute('data-input', '');
 		this.helperInput.style.display = 'none';
 		this.insertAdjacentElement('afterEnd', this.helperInput);
 		this.picker = window.flatpickr(this, {
-			clickOpens: false,
+			clickOpens: true,
 			noCalendar: true,
 			enableTime: true,
 			position: "above",
 			dateFormat: "Z",
 			time_24hr: true,
-			defaultDate: this.dateTime || new Date().toISOString(),
+			defaultDate: this.value || new Date().toISOString(),
 			onClose: () => {
 				this.stop();
 			},
 			onChange: (sel, dateStr) => {
-				this.dateTime = dateStr;
-				this.textContent = this.constructor.matchdom.merge('[message.date|reldatetime]', {
-					message: { date: dateStr }
-				});
+				this.value = dateStr;
 				this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 			}
 		});

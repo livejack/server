@@ -1,4 +1,5 @@
 export default class EditArticle extends HTMLElement {
+	#active
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-article');
@@ -15,6 +16,9 @@ export default class EditArticle extends HTMLElement {
 		this.removeEventListener('change', this);
 		this.removeEventListener('article:update', this);
 	}
+	get active() {
+		return this.#active;
+	}
 	handleEvent(e) {
 		switch (e.type) {
 			case "focusin":
@@ -24,7 +28,7 @@ export default class EditArticle extends HTMLElement {
 				if (!this.toolbar) {
 					e.stopPropagation();
 				} else if (e.target.closest('.toolbar') == this.toolbar && e.target.matches('button')) {
-					this[e.target.name]();
+					this[e.target.type]();
 				}
 
 				break;
@@ -36,62 +40,70 @@ export default class EditArticle extends HTMLElement {
 				}
 				break;
 			case "article:update":
-				this.update();
+				this.update(e.target);
 				break;
 		}
 	}
-	cancel() {
+	reset() {
 		this.unsaved = false;
-		this.changes = null;
 		this.stop();
+		this.editables.forEach((node) => {
+			node.value = node.defaultValue;
+		});
 	}
 	del() {
 
 	}
-	save() {
+	submit() {
 		// collect changes in time, icons, title, html and fetch({method: 'put'}) or post
 		const data = {
 			id: this.id
 		};
-		this.children.forEach((node) => {
-			if (node.articleProp) data[node.articleProp] = node.articleValue;
+		this.editables.forEach((node) => {
+			data[node.name] = node.value;
 		});
+		// await fetch put/post then node.defaultValue = node.value;
+
 		console.log(data);
+		this.unsaved = false;
+		this.stop();
 	}
 	start() {
 		const prev = this.constructor.current;
 		if (prev && prev != this) {
 			if (prev.unsaved) {
 				return;
-			} else {
+			} else if (prev.active) {
 				prev.stop();
 			}
 		}
 		this.constructor.current = this;
-		if (this.toolbar) return;
+		if (this.active) return;
+		this.#active = true;
 		this.toolbar = document.querySelector('#gui > .article.toolbar').cloneNode(true);
 		this.unsaved = false;
 		this.appendChild(this.toolbar);
 	}
 	stop() {
-		this.classList.remove('unsaved');
-		if (this.toolbar) {
-			this.removeChild(this.toolbar);
-			delete this.toolbar;
-		}
+		this.unsaved = false;
+		this.removeChild(this.toolbar);
+		delete this.toolbar;
+		this.#active = false;
+		this.editables.forEach((node) => node.stop());
 	}
-	update() {
+	update(node) {
 		this.unsaved = true;
-		this.changes = {
-
-		};
-		console.log("check changed");
+	}
+	get editables() {
+		return this.querySelectorAll('[name][is^="edit-"]');
 	}
 	set unsaved(val) {
-		if (this.toolbar) this.toolbar.querySelector('[name="save"]').disabled = !val;
+		if (this.toolbar) this.toolbar.querySelector('[type="submit"]').disabled = !val;
 		this.classList.toggle('unsaved', val);
 	}
 	get unsaved() {
-		return !!this.changes;
+		return this.editables.some((node) => {
+			return node.value != node.defaultValue;
+		});
 	}
 }
