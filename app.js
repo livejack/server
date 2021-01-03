@@ -6,7 +6,7 @@ const rewrite = require('express-urlrewrite');
 const URL = require('url');
 const Path = require('path');
 const serveStatic = require('serve-static');
-const serveModule = require("./lib/serve-module");
+const serveModule = require("@livejack/moduleserver");
 
 const LiveJack = require('@livejack/client/node');
 
