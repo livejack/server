@@ -65,7 +65,7 @@
     "overrides": [
       {
         "files": [
-          "public/js/*"
+          "public/js/**"
         ],
         "env": {
           "browser": true
