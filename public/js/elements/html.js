@@ -1,4 +1,4 @@
-import { CustomEditorView } from '../editor/view.js';
+import { CustomEditorView } from '../editor/index.js';
 
 export default class EditHtml extends HTMLDivElement {
 	#defaultValue
