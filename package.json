@@ -48,7 +48,8 @@
     "expect.js": "^0.3.1",
     "jsondiffpatch": "^0.4.1",
     "mocha": "^8.0.1",
-    "postinstall": "^0.7.0"
+    "postinstall": "^0.7.0",
+    "stylelint-config-standard": "^20.0.0"
   },
   "prepare": {
     "@webreflection/custom-elements/index.js": "link public/lib/custom-elements.js"
@@ -87,6 +88,60 @@
           ]
         ]
       }
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "block-closing-brace-empty-line-before": [
+        "never",
+        {
+          "severity": "warning"
+        }
+      ],
+      "at-rule-empty-line-before": [
+        "always",
+        {
+          "severity": "warning"
+        }
+      ],
+      "number-leading-zero": [
+        "always",
+        {
+          "severity": "warning"
+        }
+      ],
+      "selector-descendant-combinator-no-non-space": [
+        true,
+        {
+          "severity": "warning"
+        }
+      ],
+      "length-zero-no-unit": null,
+      "color-hex-length": null,
+      "color-hex-case": null,
+      "selector-list-comma-newline-after": null,
+      "selector-pseudo-element-colon-notation": null,
+      "max-empty-lines": null,
+      "comment-whitespace-inside": null,
+      "no-descending-specificity": null,
+      "indentation": [
+        "tab",
+        {
+          "severity": "warning"
+        }
+      ],
+      "rule-empty-line-before": null,
+      "comment-empty-line-before": null,
+      "declaration-colon-space-after": null,
+      "selector-type-no-unknown": [
+        true,
+        {
+          "ignore": [
+            "custom-elements"
+          ]
+        }
+      ]
     }
   },
   "scripts": {
