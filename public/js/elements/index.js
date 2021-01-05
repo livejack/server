@@ -1,10 +1,10 @@
-import cePolyfill from '../modules/@webreflection/custom-elements';
+import cePolyfill from '../../modules/@webreflection/custom-elements';
 cePolyfill(window);
 
-import EditArticle from './edit-article.js';
-import EditTime from './edit-time.js';
-import EditTitle from './edit-title.js';
-import EditHtml from './edit-html.js';
+import EditArticle from './article.js';
+import EditTime from './time.js';
+import EditTitle from './title.js';
+import EditHtml from './html.js';
 
 export default function register(live) {
 	const ce = window.customElements;

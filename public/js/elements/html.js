@@ -1,5 +1,4 @@
-import { CustomEditorView } from './editor/view.js';
-import * as schema from './edit-schema.js';
+import { CustomEditorView } from '../editor/view.js';
 
 export default class EditHtml extends HTMLDivElement {
 	#defaultValue
@@ -51,7 +50,7 @@ export default class EditHtml extends HTMLDivElement {
 	}
 	start() {
 		if (this.view) return;
-		this.view = new CustomEditorView(this, schema, () => {
+		this.view = new CustomEditorView(this, () => {
 			this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 		});
 		this.view.focus();

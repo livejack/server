@@ -373,6 +373,10 @@ export const icons = {
 	blockquote: {
 		width: 640, height: 896,
 		path: "M0 448v256h256v-256h-128c0 0 0-128 128-128v-128c0 0-256 0-256 256zM640 320v-128c0 0-256 0-256 256v256h256v-256h-128c0 0 0-128 128-128z"
+	},
+	asset: {
+		width: 16, height: 16,
+		path: "M14 16v-11l-1 1v9h-12v-12h9l1-1h-11v14z M16 1.4l-1.4-1.4-6.8 6.8-1.8-1.8v5h5l-1.8-1.8z"
 	}
 };
 

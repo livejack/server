@@ -1,7 +1,7 @@
 import live from './live-setup.js';
 
 import { ready, visible } from './doc-events.js';
-import registerEditElements from "./edit-elements.js";
+import registerEditElements from "./elements/index.js";
 
 import flatpickr from "../modules/flatpickr";
 import { French } from "../modules/flatpickr/dist/esm/l10n/fr.js";

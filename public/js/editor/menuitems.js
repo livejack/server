@@ -1,14 +1,11 @@
 import {
-	NodeSelection,
 	toggleMark,
 	wrapInList
 } from "../../modules/@livejack/prosemirror";
 
 import {
-	wrapItem, blockTypeItem, icons, MenuItem
+	wrapItem, blockTypeItem, icons, MenuItem, liftItem
 } from "./menu.js";
-
-import { TextField, openPrompt } from "./prompt.js";
 
 // Helpers to create specific types of items
 
@@ -21,29 +18,19 @@ function canInsert(state, nodeType) {
 	return false;
 }
 
-function insertImageItem(nodeType) {
+function insertAssetItem(nodeType, promptUrl) {
 	return new MenuItem({
-		title: "Insert image",
-		label: "Image",
+		title: "Insert asset",
+		icon: icons.asset,
 		enable(state) { return canInsert(state, nodeType); },
 		run(state, _, view) {
-			let { from, to } = state.selection, attrs = null;
-			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType)
-				attrs = state.selection.node.attrs;
-			openPrompt({
-				title: "Insert image",
-				fields: {
-					src: new TextField({ label: "Location", required: true, value: attrs && attrs.src }),
-					title: new TextField({ label: "Title", value: attrs && attrs.title }),
-					alt: new TextField({
-						label: "Description",
-						value: attrs ? attrs.alt : state.doc.textBetween(from, to, " ")
-					})
-				},
-				callback(attrs) {
-					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill(attrs)));
-					view.focus();
-				}
+			promptUrl('asset', (meta) => {
+				// nodeType depends on meta.type
+				const node = nodeType.createAndFill({
+					url: meta.href
+				});
+				view.dispatch(view.state.tr.replaceSelectionWith(node));
+				view.focus();
 			});
 		}
 	});
@@ -76,7 +63,7 @@ function markItem(markType, options) {
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
-function linkItem(markType) {
+function linkItem(markType, promptUrl) {
 	return new MenuItem({
 		title: "Add or remove link",
 		icon: icons.link,
@@ -87,19 +74,11 @@ function linkItem(markType) {
 				toggleMark(markType)(state, dispatch);
 				return true;
 			}
-			openPrompt({
-				title: "Create a link",
-				fields: {
-					href: new TextField({
-						label: "Link target",
-						required: true
-					}),
-					title: new TextField({ label: "Title" })
-				},
-				callback(attrs) {
-					toggleMark(markType, attrs)(view.state, view.dispatch);
-					view.focus();
-				}
+			promptUrl('link', (meta) => {
+				toggleMark(markType, {
+					url: meta.href
+				})(view.state, view.dispatch);
+				view.focus();
 			});
 		}
 	});
@@ -167,7 +146,7 @@ function wrapListItem(nodeType, options) {
 // **`fullMenu`**`: [[MenuElement]]`
 //   : An array of arrays of menu elements for use as the full menu
 //     for, for example the [menu bar](https://github.com/prosemirror/prosemirror-menu#user-content-menubar).
-export function buildMenuItems(schema) {
+export function buildMenuItems(schema, promptUrl) {
 	let r = {}, type;
 	if ((type = schema.marks.strong)) {
 		r.toggleStrong = markItem(type, { title: "Toggle strong style", icon: icons.strong });
@@ -176,11 +155,11 @@ export function buildMenuItems(schema) {
 		r.toggleEm = markItem(type, { title: "Toggle emphasis", icon: icons.em });
 	}
 	if ((type = schema.marks.link)) {
-		r.toggleLink = linkItem(type);
+		r.toggleLink = linkItem(type, promptUrl);
 	}
 
-	if ((type = schema.nodes.image)) {
-		r.insertImage = insertImageItem(type);
+	if ((type = schema.nodes.asset)) {
+		r.insertAsset = insertAssetItem(type, promptUrl);
 	}
 	if ((type = schema.nodes.bullet_list)) {
 		r.wrapBulletList = wrapListItem(type, {
@@ -209,8 +188,8 @@ export function buildMenuItems(schema) {
 
 	let cut = arr => arr.filter(x => x);
 	r.inlineMenu = [cut([r.toggleStrong, r.toggleEm, r.toggleCode, r.toggleLink])];
-	r.blockMenu = [cut([r.insertImage, r.wrapBulletList, r.wrapOrderedList, r.wrapBlockQuote])];
-	r.fullMenu = r.inlineMenu.concat([[r.insertMenu]], r.blockMenu);
+	r.blockMenu = [cut([r.insertAsset, r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
+	r.fullMenu = r.inlineMenu.concat(r.blockMenu);
 
 	return r;
 }

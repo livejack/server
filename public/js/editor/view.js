@@ -6,13 +6,16 @@ import {
 	dropCursor,
 	gapCursor,
 	EditorView,
-	Schema, DOMParser, DOMSerializer
+	Schema, DOMParser, DOMSerializer,
+	addListNodes
 } from "../../modules/@livejack/prosemirror";
 
 import { menuBar } from "./menubar.js";
 import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
+
+import * as BaseSpec from './schema.js';
 
 function getPlugins(options) {
 	let plugins = [
@@ -35,10 +38,11 @@ function getPlugins(options) {
 
 export class CustomEditorView extends EditorView {
 	#serializer
-	#schema
-	constructor(place, { nodes, marks }, callback) {
+	constructor(place, callback) {
+		const baseSchema = new Schema(BaseSpec);
 		const schema = new Schema({
-			nodes: nodes, // addListNodes(nodes, "paragraph block*", "block"),			marks: marks
+			nodes: addListNodes(baseSchema.spec.nodes, "paragraph block*", "block"),
+			marks: baseSchema.spec.marks
 		});
 		const parser = DOMParser.fromSchema(schema);
 		const copy = place.cloneNode(true);
@@ -57,7 +61,7 @@ export class CustomEditorView extends EditorView {
 			},
 			domParser: parser
 		});
-		this.#serializer = DOMSerializer.fromSchema(this.#schema);
+		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
 	toDOM() {
 		return this.#serializer.serializeFragment(this.state.doc.content);

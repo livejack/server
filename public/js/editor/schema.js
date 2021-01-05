@@ -46,6 +46,34 @@ export const nodes = {
 		}
 	},
 
+	asset: {
+		group: "block",
+		defining: true,
+		draggable: true,
+		attrs: {
+			url: {},
+			ratio: {
+				default: null
+			},
+			title: {
+				default: null
+			}
+		},
+		parseDOM: [{ // TODO add more logic for various asset types
+			tag: "live-asset",
+			getAttrs(dom) {
+				return {
+					url: dom.getAttribute("url"),
+					title: dom.getAttribute("title"),
+					ratio: dom.getAttribute("ratio")
+				};
+			}
+		}],
+		toDOM(node) {
+			return ["live-asset", node.attrs];
+		}
+	},
+
 	hard_break: {
 		inline: true,
 		group: "inline",
