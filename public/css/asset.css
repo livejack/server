@@ -1,0 +1,140 @@
+a[is="edit-asset"] {
+	position:relative;
+	max-width:100%;
+	overflow:hidden;
+	box-shadow: 2px 2px 3px #CCC;
+	background: white;
+	margin-bottom: 4px;
+}
+
+a[is="edit-asset"] > .header {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	background-color: #4165A0;
+	color:white;
+	display:block;
+	padding: 0.2em 0.5em;
+	padding-top:0.32em;
+	margin:0;
+}
+
+a[is="edit-asset"] > .meta {
+	padding-top: 0.15em;
+	padding-bottom: 0.15em;
+	padding-left:0.5em;
+	/* let div.meta grow with its content */
+	position:relative;
+	overflow:hidden;
+	padding-right:75px;
+	background-color: white;
+	margin: 0;
+}
+a[is="edit-asset"] > .meta > .line {
+	display:inline-block;
+	font-family:sans-serif;
+	font-size:0.7em;
+	line-height:1em;
+	margin-top:0.15em;
+}
+
+a[is="edit-asset"] > .thumbnail {
+	position:absolute;
+	bottom: 0;
+	max-width: 33%;
+	overflow:hidden;
+	top: 1.6em;
+	right: 0;
+}
+
+a[is="edit-asset"] img {
+	height: auto;
+	width: auto;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+
+#asset-editor {
+	display:none;
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index:1;
+	background-color:#CCC;
+}
+
+#asset-editor > .content {
+	width:100%;
+	max-height:65%;
+	margin:0;
+	word-wrap:break-word;
+	background:#EEE;
+	padding:0.8em;
+	box-sizing:border-box;
+}
+
+#asset-editor > .content * {
+	max-width:100%;
+	max-height:100%;
+}
+
+#asset-editor > .content[data-type="link"] > a {
+	display:block;
+}
+#asset-editor > .content[data-type="iframe"] > iframe {
+	border:0;
+	max-width:100%;
+}
+#asset-editor div.title {
+	padding-bottom:0.5em;
+	position:relative;
+	overflow:hidden;
+	min-height:1.5em;
+}
+#asset-editor div.title > p {
+	margin:1em;
+	text-align:left;
+	word-wrap: break-word;
+}
+#asset-editor div.title > p:first-line {
+	font-size:1.6em;
+}
+#asset-editor div.title > p.error {
+	display:none;
+}
+#asset-editor div.title > i {
+	position:absolute;
+	right:0.3em;
+	top:0.7em;
+	font-size:1.6em;
+	width:1.3em;
+	height:1.3em;
+	text-align:center;
+}
+#asset-editor fieldset {
+	display:block;
+	text-align:left;
+	padding:0.8em;
+	margin:0;
+	border:0;
+	margin-bottom:2em;
+}
+#asset-editor fieldset.iframe label {
+	display:inline-block;
+	width:31%;
+	margin-left:1%;
+	line-height:1;
+}
+#asset-editor fieldset input {
+	padding:0;
+	border:0;
+	text-indent: 0.2em;
+	width:100%;
+}
+#asset-editor fieldset input[type="radio"] {
+	width:auto;
+	margin:0 0.3em;
+}

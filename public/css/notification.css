@@ -1,0 +1,46 @@
+/* notifications d'erreurs */
+.notification {
+	display:none;
+	position:fixed;
+	bottom:0;
+	right:30%;
+	background-color:#D60;
+	border-radius:3px;
+	padding-right:16px;
+	padding-left:40px;
+	z-index:99;
+	color:white;
+	min-width:20%;
+	max-width:65%;
+}
+.notification.closed,.notification.opened {
+	display:block;
+}
+.notification .content {
+	font-size:14px;
+	max-height:40px;
+	transition:max-height 1s ease;
+}
+.notification.opened .content {
+	max-height:800px;
+}
+.notification .content > p {
+	margin:0;
+	padding:12px 0;
+}
+.notification .icon {
+	font-size:24px;
+	position:absolute;
+	left:8px;
+	top:8px;
+	cursor:pointer;
+}
+.notification .icon.close {
+	display:none;
+}
+.notification.opened .icon.close {
+	display:block;
+}
+.notification.opened .icon {
+	display:none;
+}

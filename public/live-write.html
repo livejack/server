@@ -15,113 +15,110 @@
 </head>
 
 <body>
-	<header id="page" data-live="page">
-		<template>
-			<h1>
-				<img src="[shortcut-icon]" />
-				<a href="[page.backtrack]" target="_blank">[page.title]</a>
-			</h1>
-			<form>
-				<label>Activer le live</label>
-				<label class="switch-light switch-material" onclick="" id="toggle-live-status">
-					<input type="checkbox" name="status" value="on" checked="[page|checkedToggle]" />
-					<span>
-						<span>Arrêté</span>
-						<span>En cours</span>
-						<a></a>
-					</span>
-				</label>
-				<br>
-				<label class="[page|hideBefore]"><span>Ouvert le</span><input readonly type="text" name="start"
-						value="[page.start|date|resetPicker]" size="18" /></label><br />
-				<label class="[page|hideBefore]"><span>Fermé le</span><input readonly type="text" name="stop"
-						value="[page.stop|date|resetPicker]" size="18" placeholder="En cours" /></label>
-			</form>
-		</template>
-	</header>
-	<div class="center">
-		<div class="column-live">
-			<div id="gui">
-				<div class="toolbar article">
-					<button type="button" name="del" class="btn" title="Supprimer le message">Supprimer</button>
-					<select name="style">
-						<option value="">Commentaire</option>
-						<option value="essentiel">Essentiel</option>
-						<option value="pinned">Épinglé</option>
-					</select>
-					<button type="reset" class="btn" title="Annuler les modifications en cours">Annuler</button>
-					<button type="submit" class="btn" title="Publier le message">Valider</button>
-				</div>
-			</div>
-			<div class="live">
-				<div id="live-messages" class="live-messages" data-live="page">
-					<header>
-						<div class="live-controls">
-							<div class="filter">
-								<label>
-									<input type="radio" name="filter" value="all" checked="checked" />
-									<span>TOUT LE LIVE</span>
-								</label>
-								<label>
-									<input type="radio" name="filter" value="essentiel" />
-									<span>LES ESSENTIELS</span>
-								</label>
-							</div>
-							<div class="sort">
-								<label>
-									<input type="checkbox" name="reverse" value="yes" />
-									<span>ORDRE DES POSTS</span>
-								</label>
-							</div>
-						</div>
-						<div class="live-status">
-							<template data-mode="replace">
-								<p class="before [page|when:before|bmagnet:*]">A VENIR : Début du direct : <time class="stamp"
-										datetime="[page.start|isoDate]">[page.start|datetime]</time></p>
-								<p class="during [page|when:during|bmagnet:*]">EN COURS : Mis à jour <time class="stamp"
-										datetime="[page.update|isoDate]">[page.update|datetime]</time></p>
-								<p class="after [page|when:after|bmagnet:*]">TERMINE : Fin du direct : <time class="stamp"
-										itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|datetime]</time></p>
-							</template>
-						</div>
-						<div class="hide">
-							<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">
-								<meta itemprop="name" content="Le Figaro">
-								<div itemscope="" itemprop="logo" itemtype="https://schema.org/ImageObject">
-									<meta itemprop="url" content="https://a.f1g.fr/assets-img/i/f/m150.png">
-									<meta itemprop="width" content="150">
-									<meta itemprop="height" content="150">
-								</div>
-							</div>
-						</div>
-					</header>
-					<div class="live-list">
-						<template>
-							<article is="edit-article" id="[page.messages.id|repeat:*:message:-1|position]"
-								class="live-message [message.style|trackUi]" itemprop="liveBlogUpdate" itemscope
-								itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-								<meta itemprop="url" content="[page.backtrack|or:]#[message.id]" />
-								<meta itemprop="dateModified" content="[message.update|isoDate]" />
-								<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
-								<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
-									datetime="[message.date|isoDate]">[message.date|reldatetime]</time>
-								<h2 name="title" is="edit-text" itemprop="headline" class="live-title">[message.title]</h2>
-								<div name="mark" is="edit-html" class="live-icons">[message.mark|html|iconclass]</div>
-								<div name="text" is="edit-html" class="live-article" itemprop="articleBody">
-									[message.text|html|sandbox|procrastify]
-								</div>
-							</article>
-						</template>
+	<div id="gui">
+		<div class="toolbar article">
+			<button type="button" name="del" class="btn" title="Supprimer le message">Supprimer</button>
+			<select name="style">
+				<option value="">Commentaire</option>
+				<option value="essentiel">Essentiel</option>
+				<option value="pinned">Épinglé</option>
+			</select>
+			<button type="reset" class="btn" title="Annuler les modifications en cours">Annuler</button>
+			<button type="submit" class="btn" title="Publier le message">Valider</button>
+		</div>
+	</div>
+	<div id="live">
+		<div id="live-messages" class="live-messages" data-live="page">
+			<header>
+				<div class="live-controls">
+					<div class="filter">
+						<label>
+							<input type="radio" name="filter" value="all" checked="checked" />
+							<span>TOUT LE LIVE</span>
+						</label>
+						<label>
+							<input type="radio" name="filter" value="essentiel" />
+							<span>LES ESSENTIELS</span>
+						</label>
+					</div>
+					<div class="sort">
+						<label>
+							<input type="checkbox" name="reverse" value="yes" />
+							<span>ORDRE DES POSTS</span>
+						</label>
 					</div>
 				</div>
+				<div class="live-status">
+					<template data-mode="replace">
+						<p class="before [page|when:before|bmagnet:*]">A VENIR : Début du direct : <time class="stamp"
+								datetime="[page.start|isoDate]">[page.start|datetime]</time></p>
+						<p class="during [page|when:during|bmagnet:*]">EN COURS : Mis à jour <time class="stamp"
+								datetime="[page.update|isoDate]">[page.update|datetime]</time></p>
+						<p class="after [page|when:after|bmagnet:*]">TERMINE : Fin du direct : <time class="stamp"
+								itemprop="[page|coverageAfter]" datetime="[page.stop|isoDate]">[page.stop|datetime]</time></p>
+					</template>
+				</div>
+				<div class="hide">
+					<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">
+						<meta itemprop="name" content="Le Figaro">
+						<div itemscope="" itemprop="logo" itemtype="https://schema.org/ImageObject">
+							<meta itemprop="url" content="https://a.f1g.fr/assets-img/i/f/m150.png">
+							<meta itemprop="width" content="150">
+							<meta itemprop="height" content="150">
+						</div>
+					</div>
+				</div>
+			</header>
+			<div class="live-list">
+				<template>
+					<article is="edit-article" id="[page.messages.id|repeat:*:message:-1|position]"
+						class="live-message [message.style|trackUi]" itemprop="liveBlogUpdate" itemscope
+						itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+						<meta itemprop="url" content="[page.backtrack|or:]#[message.id]" />
+						<meta itemprop="dateModified" content="[message.update|isoDate]" />
+						<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
+						<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
+							datetime="[message.date|isoDate]">[message.date|reldatetime]</time>
+						<h2 name="title" is="edit-text" itemprop="headline" class="live-title">[message.title]</h2>
+						<div name="mark" is="edit-html" class="live-icons">[message.mark|html|iconclass]</div>
+						<div name="text" is="edit-html" class="live-article" itemprop="articleBody">
+							[message.text|html|sandbox|procrastify]
+						</div>
+					</article>
+				</template>
 			</div>
 		</div>
+	</div>
+	<div id="control">
+		<header data-live="page">
+			<template>
+				<h1>
+					<img src="[shortcut-icon]" />
+					<a href="[page.backtrack]" target="_blank">[page.title]</a>
+				</h1>
+				<form>
+					<label>Activer le live</label>
+					<label class="switch-light switch-material" onclick="" id="toggle-live-status">
+						<input type="checkbox" name="status" value="on" checked="[page|checkedToggle]" />
+						<span>
+							<span>Arrêté</span>
+							<span>En cours</span>
+							<a></a>
+						</span>
+					</label>
+					<br>
+					<label class="[page|hideBefore]"><span>Ouvert le</span><input readonly type="text" name="start"
+							value="[page.start|date|resetPicker]" size="18" /></label><br />
+					<label class="[page|hideBefore]"><span>Fermé le</span><input readonly type="text" name="stop"
+							value="[page.stop|date|resetPicker]" size="18" placeholder="En cours" /></label>
+				</form>
+			</template>
+		</header>
 		<div data-live="assets" class="ressources">
 			<input class="filter" placeholder="tous" />
 			<section>
 				<div>
-					<div class="upload">Upload<p></p>
-					</div>
+					<div class="upload">Upload</div>
 					<form class="post" method="post" enctype="multipart/form-data" hidden action="assets">
 						<input type="file" name="file" />
 					</form>
@@ -130,11 +127,26 @@
 							class="fas fa-refresh fas fa-spin"></i>
 					</a>
 					<template>
-						<a repeat="assets|store|procrastify|rest|invert" id="[assets.assets.id|repeat:*:asset]" href="[asset.url]"
-							class="[asset.type|className]" class="fas fa-external-link" data-title="[asset.title]"
-							data-description="[asset.description]" data-thumbnail="[asset.thumbnail]">
-							<img src="[asset|src]" />
-							<span>[asset|caption]</span>
+						<a is="edit-asset"
+							id="[assets.assets.id|repeat:*:asset]"
+							href="[asset.url]"
+							class="[asset.meta.type|className]"
+							data-title="[asset.meta.title]"
+							data-description="[asset.meta.description]"
+							data-html="[asset.meta.html]"
+						>
+							<div class="header">
+								<img src="[asset.meta.icon]" class="favicon" />
+								[asset.title]
+							</div>
+							<div class="meta">
+								[asset.meta.mime]<em> ([asset.meta.size|magnet:em|units])</em><br>
+								[asset.meta.width|pre:width |post:px] [asset.meta.height|pre:height |post:px]<br>
+								[asset.date|reldatetime]
+							</div>
+							<div class="thumbnail">
+								<img src="[asset.meta.thumbnail]" />
+							</div>
 						</a>
 					</template>
 				</div>

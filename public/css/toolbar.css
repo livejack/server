@@ -1,0 +1,39 @@
+div.toolbar {
+	overflow:hidden;
+	line-height:normal;
+	text-align:right;
+	background:inherit;
+	padding-top: 1em;
+	clear: left;
+	position: absolute;
+	width: 100%;
+}
+div.toolbar > button,
+div.toolbar > label {
+	cursor:pointer;
+}
+div.toolbar > button > i,
+div.toolbar > label > span {
+	font-size:1.4em;
+}
+div.toolbar [disabled] {
+	opacity:0.25 !important;
+	border-color:#CCC;
+}
+
+div.toolbar.editor {
+	left:97px;
+	right:auto;
+	text-align:left;
+	z-index:2;
+}
+div.toolbar.article label {
+	display:inline-block; /* fix horizontal whitespace */
+}
+div.toolbar button[name="delete"] {
+	/* position:absolute; */
+	/* height:100%; */
+	/* left:0; */
+	/* margin-left:0; */
+	float: left;
+}
