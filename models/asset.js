@@ -42,11 +42,43 @@ class Asset extends BaseModel {
 					type: 'string',
 					format: 'uri-reference'
 				},
-				type: {
-					type: 'string'
-				},
-				title: {
-					type: 'string'
+				meta: {
+					type: 'object',
+					properties: {
+						type: {
+							type: 'string'
+						},
+						title: {
+							type: 'string'
+						},
+						description: {
+							type: 'string'
+						},
+						html: {
+							type: 'string'
+						},
+						icon: {
+							type: 'string'
+						},
+						mime: {
+							type: 'string'
+						},
+						width: {
+							type: 'string'
+						},
+						height: {
+							type: 'string'
+						},
+						duration: {
+							type: 'string'
+						},
+						thumbnail: {
+							type: 'string'
+						},
+						size: {
+							type: 'string'
+						}
+					}
 				},
 				legende: {
 					type: 'string'
@@ -54,26 +86,11 @@ class Asset extends BaseModel {
 				credits: {
 					type: 'string'
 				},
-				description: {
-					type: 'string'
-				},
-				thumbnail: {
-					type: 'string'
-				},
 				tags: {
 					type: 'object'
 				},
-				width: {
-					type: 'string'
-				},
-				height: {
-					type: 'string'
-				},
 				style: {
 					type: 'string'
-				},
-				allowfullscreen: {
-					type: 'boolean'
 				}
 			}
 		};

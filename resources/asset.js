@@ -1,7 +1,7 @@
 const {Models} = require('objection');
-const {Page} = Models;
+const {Page, Asset} = Models;
 const got = require('got');
-const {promisify} = require('util');
+const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 const inspector = promisify(require('url-inspector'));
 
@@ -22,7 +22,7 @@ exports.GET = async (req) => {
 	}
 };
 
-exports.POST = async (req, res, next) => {
+exports.POST = async (req) => {
 	const {domain, key} = req.params;
 	const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
 	let assetBody = req.body;
@@ -47,25 +47,29 @@ exports.POST = async (req, res, next) => {
 		}));
 	}
 	const asset = await createAsset(page, assetBody);
-	res.send(asset);
+	global.livejack.send({
+		room: `/${domain}/${key}/assets`,
+		mtime: asset.date,
+		data: {
+			assets: [asset]
+		}
+	});
+	return asset;
 };
 
 async function createAsset(page, body = {}) {
 	const item = Object.assign({}, body);
 	if (item.id !== undefined) delete item.id;
-	try {
-		const meta = await inspector(item.url, {
-			nofavicon: true,
-			nosource: true,
-			file: false
-		});
-		if (meta.title) item.title = meta.title;
-		if (meta.description) item.description = meta.description;
-		if (meta.thumbnail) item.thumbnail = meta.thumbnail;
-	} catch(err) {
-		console.error("inspector fail", item.url, err);
-	}
-	return await page.$relatedQuery('assets').insertAndFetch(item);
+	const meta = await inspector(item.url, {
+		nofavicon: false,
+		nosource: true,
+		file: false
+	});
+	if (!item.meta) item.meta = {};
+	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
+		if (meta[name] != null) item.meta[name] = meta[name];
+	});
+	return page.$relatedQuery('assets').insertAndFetch(item);
 }
 
 exports.PUT = async (req, res, next) => {
@@ -80,4 +84,11 @@ exports.DELETE = async (req, res, next) => {
 	const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
 	const id = req.params.id || req.body.id;
 	await page.$relatedQuery('assets').deleteById(id).throwIfNotFound();
+	global.livejack.send({
+		room: `/${domain}/${key}/assets`,
+		mtime: new Date(),
+		data: {
+			assets: [{ id: id }]
+		}
+	});
 };
