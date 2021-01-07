@@ -24,7 +24,7 @@ function insertAssetItem(nodeType, promptUrl) {
 		icon: icons.asset,
 		enable(state) { return canInsert(state, nodeType); },
 		run(state, _, view) {
-			promptUrl('asset', (meta) => {
+			promptUrl('asset').then((meta) => {
 				// nodeType depends on meta.type
 				const node = nodeType.createAndFill({
 					url: meta.href
@@ -74,7 +74,7 @@ function linkItem(markType, promptUrl) {
 				toggleMark(markType)(state, dispatch);
 				return true;
 			}
-			promptUrl('link', (meta) => {
+			promptUrl('link').then((meta) => {
 				toggleMark(markType, {
 					url: meta.href
 				})(view.state, view.dispatch);

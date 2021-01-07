@@ -35,6 +35,7 @@
     "toml": "^3.0.0",
     "upcache": "^2.1.0",
     "url-inspector": "^2.4.3",
+    "xbytes": "^1.6.2",
     "xdg-basedir": "^4.0.0"
   },
   "devDependencies": {

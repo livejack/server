@@ -15,33 +15,32 @@ import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
 
-import * as BaseSpec from './schema.js';
-
-function getPlugins(options) {
+function getPlugins({schema, menu, prompt}) {
 	let plugins = [
-		buildInputRules(options.schema),
-		keymap(buildKeymap(options.schema)),
+		buildInputRules(schema),
+		keymap(buildKeymap(schema)),
 		keymap(baseKeymap),
 		dropCursor(),
 		gapCursor()
 	];
-	if (options.menuBar !== false)
+	if (menu !== false)
 		plugins.push(menuBar({
-			floating: options.floatingMenu !== false,
-			content: options.menuContent || buildMenuItems(options.schema).fullMenu
+			content: buildMenuItems(schema, prompt).fullMenu
 		}));
-	if (options.history !== false)
+	if (history !== false)
 		plugins.push(history());
 
 	return plugins;
 }
 
-export class CustomEditorView extends EditorView {
+export class Editor extends EditorView {
 	#serializer
-	constructor(place, callback) {
-		const baseSchema = new Schema(BaseSpec);
+	constructor(place, { nodes, marks, list }) {
+		const baseSchema = new Schema({ nodes, marks });
+		let specNodes = baseSchema.spec.nodes;
+		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
 		const schema = new Schema({
-			nodes: addListNodes(baseSchema.spec.nodes, "paragraph block*", "block"),
+			nodes: specNodes,
 			marks: baseSchema.spec.marks
 		});
 		const parser = DOMParser.fromSchema(schema);
@@ -51,17 +50,23 @@ export class CustomEditorView extends EditorView {
 		super(place, {
 			state: EditorState.create({
 				doc: parser.parse(copy),
-				plugins: getPlugins({ schema })
+				plugins: getPlugins({
+					schema,
+					async prompt(url) { return await this.prompt(url); }
+				})
 			}),
 			dispatchTransaction: (tr) => {
 				if (tr.docChanged) {
-					callback(this);
+					this.changed();
 				}
 				this.updateState(this.state.apply(tr));
 			},
 			domParser: parser
 		});
 		this.#serializer = DOMSerializer.fromSchema(schema);
+	}
+	async prompt(url) {
+		// virtual
 	}
 	toDOM() {
 		return this.#serializer.serializeFragment(this.state.doc.content);

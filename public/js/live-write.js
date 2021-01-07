@@ -7,8 +7,10 @@ import flatpickr from "../modules/flatpickr";
 import { French } from "../modules/flatpickr/dist/esm/l10n/fr.js";
 flatpickr.localize(French);
 
-// window.SlimSelect until https://github.com/brianvoe/slim-select/issues/252
-import "../modules/slim-select";
+import xbytes from '../modules/xbytes';
+import SlimSelect from "../modules/slim-select";
+
+import AssetManager from "./editor/asset-manager.js";
 
 export const editor = {
 	assetType: {
@@ -24,6 +26,12 @@ export const editor = {
 };
 
 Object.assign(live.constructor.filters, {
+	units: function (val) {
+		if (!val) return val;
+		val = parseInt(val);
+		if (Number.isNaN(val)) return null;
+		return xbytes(val);
+	},
 	store: function(asset, what) {
 		if (!asset.type) asset.type = "none";
 		if (!asset.origin) asset.origin = "internal";
@@ -57,5 +65,6 @@ Object.assign(live.constructor.filters, {
 
 ready(async () => {
 	await visible();
+	live.assetManager = new AssetManager();
 	registerEditElements(live);
 });

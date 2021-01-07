@@ -1,5 +1,19 @@
-import { CustomEditorView } from '../editor/index.js';
+import { Editor } from '../editor/index.js';
 
+import * as BaseSpec from './schema.js';
+
+class HtmlEditor extends Editor {
+	constructor(place, opts, assetManager) {
+		super(place, opts);
+		this.assetManager = assetManager;
+	}
+	changed() {
+		this.dispatchEvent(new Event("article:update", { "bubbles": true }));
+	}
+	async prompt(url) {
+		return await this.assetManager.choose(url);
+	}
+}
 export default class EditHtml extends HTMLDivElement {
 	#defaultValue
 	constructor() {
@@ -50,8 +64,10 @@ export default class EditHtml extends HTMLDivElement {
 	}
 	start() {
 		if (this.view) return;
-		this.view = new CustomEditorView(this, () => {
-			this.dispatchEvent(new Event("article:update", { "bubbles": true }));
+		this.view = new HtmlEditor(this, {
+			nodes: BaseSpec.nodes,
+			marks: BaseSpec.marks,
+			list: true
 		});
 		this.view.focus();
 	}
