@@ -15,7 +15,7 @@ import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
 
-function getPlugins({schema, menu, prompt}) {
+function getPlugins({schema, menu}) {
 	let plugins = [
 		buildInputRules(schema),
 		keymap(buildKeymap(schema)),
@@ -25,7 +25,7 @@ function getPlugins({schema, menu, prompt}) {
 	];
 	if (menu !== false)
 		plugins.push(menuBar({
-			content: buildMenuItems(schema, prompt).fullMenu
+			content: buildMenuItems(schema).fullMenu
 		}));
 	if (history !== false)
 		plugins.push(history());
@@ -50,10 +50,7 @@ export class Editor extends EditorView {
 		super(place, {
 			state: EditorState.create({
 				doc: parser.parse(copy),
-				plugins: getPlugins({
-					schema,
-					async prompt(url) { return await this.prompt(url); }
-				})
+				plugins: getPlugins({ schema })
 			}),
 			dispatchTransaction: (tr) => {
 				if (tr.docChanged) {

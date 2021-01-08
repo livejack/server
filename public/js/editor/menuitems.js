@@ -18,13 +18,13 @@ function canInsert(state, nodeType) {
 	return false;
 }
 
-function insertAssetItem(nodeType, promptUrl) {
+function insertAssetItem(nodeType) {
 	return new MenuItem({
 		title: "Insert asset",
 		icon: icons.asset,
 		enable(state) { return canInsert(state, nodeType); },
 		run(state, _, view) {
-			promptUrl('asset').then((meta) => {
+			view.prompt().then((meta) => {
 				// nodeType depends on meta.type
 				const node = nodeType.createAndFill({
 					url: meta.href
@@ -63,7 +63,7 @@ function markItem(markType, options) {
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
-function linkItem(markType, promptUrl) {
+function linkItem(markType) {
 	return new MenuItem({
 		title: "Add or remove link",
 		icon: icons.link,
@@ -74,7 +74,7 @@ function linkItem(markType, promptUrl) {
 				toggleMark(markType)(state, dispatch);
 				return true;
 			}
-			promptUrl('link').then((meta) => {
+			view.prompt().then((meta) => {
 				toggleMark(markType, {
 					url: meta.href
 				})(view.state, view.dispatch);
