@@ -1,3 +1,6 @@
+select.filter[name="type"] {
+	display:none;
+}
 a[is="edit-asset"] {
 	position:relative;
 	max-width:100%;
