@@ -1,9 +1,15 @@
+import SlimSelect from "../../modules/slim-select";
 export default class AssetManager {
 	constructor() {
 		this.root = document.body.querySelector('[data-live="assets"]');
 		this.root.addEventListener('click', this);
 		this.zone = this.root.querySelector('textarea');
 		this.zone.addEventListener('paste', this);
+		this.select = new SlimSelect({
+			select: this.root.querySelector('.filter[name="type"]'),
+			allowDeselect: true,
+			showSearch: false
+		});
 	}
 	async handleEvent(e) {
 		if (e.type == "click") {

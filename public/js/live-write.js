@@ -8,7 +8,6 @@ import { French } from "../modules/flatpickr/dist/esm/l10n/fr.js";
 flatpickr.localize(French);
 
 import xbytes from '../modules/xbytes';
-import SlimSelect from "../modules/slim-select";
 
 import AssetManager from "./editor/asset-manager.js";
 

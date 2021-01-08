@@ -115,7 +115,6 @@
 			</template>
 		</header>
 		<div data-live="assets" class="ressources">
-			<input class="filter" placeholder="tous" />
 			<section>
 				<div>
 					<div class="upload">Upload</div>
@@ -126,6 +125,15 @@
 						<textarea placeholder="coller ici URL, &lt;iframe&gt;, ou &lt;blockquote.tweet&gt;"></textarea><i
 							class="fas fa-refresh fas fa-spin"></i>
 					</a>
+
+					<select class="filter" name="type" multiple>
+						<option data-placeholder="true">filtrer par...</option>
+						<option value="image">image</option>
+						<option value="video">vidéo</option>
+						<option value="embed">embed</option>
+						<option value="link">lien</option>
+						<option value="icon">icônes</option>
+					</select>
 					<template>
 						<a is="edit-asset"
 							id="[assets.assets.id|repeat:*:asset]"
