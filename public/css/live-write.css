@@ -163,7 +163,7 @@ div.ressources > section a {
 	border:1px solid black;
 	text-decoration: none;
 	color: black;
-	font-size: 0.9em;
+	font-size: 0.8em;
 }
 div.ressources > section a > img {
 	display:block;
@@ -200,7 +200,7 @@ div.ressources > section a[data-type="picto"] {
 	top:1px; /* workaround for procrastify bug strict comparing to 0 */
 }
 div.ressources > section a.new {
-	height:100px;
+	height: 4em;
 	border:1px dashed black;
 	background:white;
 }
