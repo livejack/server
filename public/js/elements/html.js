@@ -64,11 +64,19 @@ export default class EditHtml extends HTMLDivElement {
 	}
 	start() {
 		if (this.view) return;
-		this.view = new HtmlEditor(this, {
+		const spec = this.name == "mark" ? {
+			nodes: {
+				doc: { content: "inline*" },
+				image: BaseSpec.nodes.image,
+				hard_break: BaseSpec.nodes.hard_break,
+				text: BaseSpec.nodes.text
+			}
+		} : {
 			nodes: BaseSpec.nodes,
 			marks: BaseSpec.marks,
 			list: true
-		});
+		};
+		this.view = new HtmlEditor(this, spec);
 		this.view.focus();
 	}
 	stop() {
