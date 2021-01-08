@@ -132,31 +132,20 @@ div.ressources {
 	padding-left: 0.8%;
 	padding-right: 0.8%;
 }
-div.ressources > section {
-	top:3em;
-	bottom:0;
-	left: 0.7em;
-	right: 0.7em;
-	overflow:auto;
+
+div.ressources > .filter {
+	margin-bottom:2px;
+	border:1px solid black;
 }
-div.ressources > section .lazy {
-	width:1px;
-	height:1px;
-}
-div.ressources > section > div {
-	height:100%;
-	/* column-count:2; */
-	/* column-fill:auto; */
-	/* column-gap:2px; */
-}
-div.ressources > section.picto > div {
+
+div.ressources.icon {
 	column-count:6;
 }
-div.ressources > section.picto .upload {
+div.ressources.icon > .upload {
 	display:none;
 }
 
-div.ressources > section a {
+div.ressources > a {
 	display:block;
 	position:relative;
 	margin-bottom:2px;
@@ -165,46 +154,13 @@ div.ressources > section a {
 	color: black;
 	font-size: 0.8em;
 }
-div.ressources > section a > img {
-	display:block;
-	max-width:100%;
-	max-height:12em;
-	margin:0 auto;
-	min-height:2em;
-}
-div.ressources > section a > span {
-	position:absolute;
-	bottom:0;
-	color:white;
-	background:rgba(0, 0, 0, 0.7);
-	font-size:0.6em;
-	padding-bottom:0.1em;
-	padding-top:0.4em;
-}
-div.ressources > section a[class^="icon-"]:before,
-div.ressources > section a[class*=" icon-"]:before,
-#asset-editor > i[class^="icon-"]:before {
-	position:absolute;
-	color:black;
-	font-size:1.2em;
-	background-color:rgba(255, 255, 255, 0.5);
-	padding:4px;
-	padding-bottom:3px;
-	right:0;
-}
-div.ressources > section a[data-type="picto"] {
-	display:none;
-	padding:2px;
-	background:white;
-	border:0;
-	top:1px; /* workaround for procrastify bug strict comparing to 0 */
-}
-div.ressources > section a.new {
+
+div.ressources > a.new {
 	height: 4em;
 	border:1px dashed black;
 	background:white;
 }
-div.ressources > section a.new > textarea {
+div.ressources > a.new > textarea {
 	display:block;
 	border:0;
 	position:absolute;
@@ -220,10 +176,10 @@ div.ressources > section a.new > textarea {
 	width:100%;
 	box-sizing:border-box;
 }
-div.ressources > section a.new > textarea[disabled] {
+div.ressources > a.new > textarea[disabled] {
 	opacity:0.5;
 }
-div.ressources > section a.new > i {
+div.ressources > a.new > i {
 	display:none;
 	position:absolute;
 	left:50%;
@@ -231,13 +187,13 @@ div.ressources > section a.new > i {
 	font-size:1.6em;
 	bottom:0;
 }
-div.ressources .upload {
+div.ressources > .upload {
 	text-align: center;
 	background-color: #aaa;
 	padding: 1em;
 	cursor: pointer;
 }
-div.ressources .upload.negative {
+div.ressources > .upload.negative {
 	background-color:#faa;
 }
 
