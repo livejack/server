@@ -1,6 +1,7 @@
 select.filter[name="type"] {
 	display:none;
 }
+
 a[is="edit-asset"] {
 	position:relative;
 	max-width:100%;
@@ -17,9 +18,13 @@ a[is="edit-asset"] > .header {
 	background-color: #4165A0;
 	color:white;
 	display:block;
-	padding: 0.2em 0.5em;
-	padding-top:0.32em;
+	padding: 0.4em 0.5em;
 	margin:0;
+	width: 100%;
+}
+
+a[is="edit-asset"] > .header > img {
+	vertical-align: middle;
 }
 
 a[is="edit-asset"] > .meta {
@@ -28,10 +33,10 @@ a[is="edit-asset"] > .meta {
 	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
-	overflow:hidden;
-	padding-right:75px;
 	background-color: white;
 	margin: 0;
+	flex: 1 0 auto;
+	max-width: 70%;
 }
 a[is="edit-asset"] > .meta > .line {
 	display:inline-block;
@@ -42,19 +47,17 @@ a[is="edit-asset"] > .meta > .line {
 }
 
 a[is="edit-asset"] > .thumbnail {
-	position:absolute;
-	bottom: 0;
-	max-width: 33%;
+	flex: 1 0 auto;
+	max-width: 30%;
 	overflow:hidden;
-	top: 1.6em;
-	right: 0;
 }
 
-a[is="edit-asset"] img {
+a[is="edit-asset"] > .thumbnail > img {
 	height: auto;
 	width: auto;
 	max-height: 100%;
 	max-width: 100%;
+	display: block;
 }
 
 

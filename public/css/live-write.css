@@ -22,17 +22,17 @@ body {
 	font-family: "Open Sans", sans-serif;
 }
 #live {
-	flex: 1 1 auto;
+	flex: 2 768px;
 	height: 100vh;
 	overflow-y: auto;
 	padding-left:1em;
 	padding-right:1em;
 }
 #control {
-	flex: 1 0 auto;
+	flex: 1 256px;
 	height: 100vh;
 	overflow-y: auto;
-	width: 320px;
+	width: 300px;
 }
 #control > header {
 	padding:0.8em;
@@ -146,46 +146,25 @@ div.ressources.icon > .upload {
 }
 
 div.ressources > a {
-	display:block;
-	position:relative;
+	display: flex;
+	flex-direction: row;
 	margin-bottom:2px;
 	border:1px solid black;
 	text-decoration: none;
 	color: black;
 	font-size: 0.8em;
+	flex-wrap: wrap;
 }
 
-div.ressources > a.new {
-	height: 4em;
+div.ressources > .new {
 	border:1px dashed black;
 	background:white;
-}
-div.ressources > a.new > textarea {
-	display:block;
-	border:0;
-	position:absolute;
-	overflow:hidden;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	padding:0.2em;
 	text-align:center;
-	outline:0;
-	resize:none;
+	cursor:pointer;
+	color:gray;
 	width:100%;
-	box-sizing:border-box;
-}
-div.ressources > a.new > textarea[disabled] {
-	opacity:0.5;
-}
-div.ressources > a.new > i {
-	display:none;
-	position:absolute;
-	left:50%;
-	margin-left:-0.5em;
-	font-size:1.6em;
-	bottom:0;
+	display:block;
+	padding: 1em;
 }
 div.ressources > .upload {
 	text-align: center;
