@@ -1,8 +1,8 @@
 import Live from './live.js';
 import { ready, visible } from './doc-events.js';
 import { fromScript } from "./template.js";
-import parseHTML from './fragment-parser.js';
 import { LiveJack } from "../modules/@livejack/client";
+import { HTML as parseHTML } from "../modules/matchdom";
 
 class LiveSetup extends Live {
 	constructor() {
@@ -10,7 +10,7 @@ class LiveSetup extends Live {
 		this.observer = this.createObserver();
 	}
 
-	nodeFilter(node, iter, data, scope) {
+	visitor(node, iter, data, scope) {
 		if (node.templates) {
 			node.templates.forEach(({ mode, content, index }) => {
 				if (mode == "replace") {
@@ -49,7 +49,11 @@ class LiveSetup extends Live {
 			const parent = tmpl.parentNode;
 			const index = parent.children.indexOf(tmpl);
 			if (!parent.templates) parent.templates = [];
-			parent.templates.push({ mode: tmpl.dataset.mode, content: tmpl.content, index });
+			parent.templates.push({
+				mode: tmpl.dataset.mode,
+				content: tmpl.content,
+				index
+			});
 			parent.removeChild(tmpl);
 		});
 		root.querySelectorAll('.live-controls').forEach((node) => {
@@ -120,25 +124,29 @@ class LiveSetup extends Live {
 		}
 		return 'hidden';
 	}
-	position(id, node) {
+	place(id, node) {
 		const prev = document.getElementById(id);
-		if (prev) prev.parentNode.replaceChild(node, prev);
+		if (prev) {
+			prev.parentNode.replaceChild(node, prev);
+		}
 	}
 }
 
-LiveSetup.filters.position = (val, what) => {
-	setTimeout(() => {
-		live.position(val, what.parent);
-	});
-	return val;
-};
-LiveSetup.filters.trackUi = (val, what) => {
-	live.trackUi(what.parent);
-	setTimeout(() => {
-		what.parent.classList.remove('hidden');
-	});
-	return `${val || ''} hidden`;
-};
+Object.assign(Live.plugins.filters, {
+	place(ctx, item) {
+		live.place(item.id, ctx.dest.node);
+		return item;
+	},
+	trackUi(ctx, val) {
+		const node = ctx.dest.node;
+		live.trackUi(node);
+		setTimeout(() => {
+			node.classList.remove('hidden');
+		});
+		return 'hidden';
+	}
+});
+
 const live = new LiveSetup();
 
 export default live;

@@ -7,12 +7,14 @@ class LiveBuild extends Live {
 		super();
 		this.channels = {};
 	}
-	nodeFilter(node, iter) {
+	visitor(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE" && node.content) {
-			node.after(node.content.cloneNode(true));
-			toScript(node);
-			iter.nextNode(); // jump above script and its content
+			// jump to next node so we can insert before
 			iter.nextNode();
+			let sub = node.content.cloneNode(true);
+			sub = scope.live.merge(sub, data, scope);
+			node.parentNode.insertBefore(sub, node.nextSibling);
+			toScript(node);
 			return false;
 		} else {
 			return true;
@@ -50,11 +52,13 @@ class LiveBuild extends Live {
 			}
 			return node;
 		}));
-		if (first) document.head.insertAdjacentHTML(
-			'beforeEnd',
-			'	<meta name="live-update-[rooms+.key|repeat:*]" content="[rooms.val]">\n'
-		);
-		this.merge(document.head, { rooms: this.rooms });
+		if (first) {
+			document.head.insertAdjacentHTML(
+				'beforeEnd',
+				'	<meta name="live-update-[rooms|as:entries|repeat:*|key]" content="[value]">\n'
+			);
+			this.merge(document.head, { rooms: this.rooms });
+		}
 	}
 }
 

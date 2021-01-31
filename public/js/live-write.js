@@ -24,40 +24,28 @@ export const editor = {
 	}
 };
 
-Object.assign(live.constructor.filters, {
-	units: function (val) {
-		if (!val) return val;
-		val = parseInt(val);
-		if (Number.isNaN(val)) return null;
+Object.assign(live.constructor.plugins.filters, {
+	units: ['num?', (ctx, val) => {
+		if (val == null) return null;
 		return xbytes(val);
-	},
-	store: function(asset, what) {
+	}],
+	store(ctx, asset) {
 		if (!asset.type) asset.type = "none";
 		if (!asset.origin) asset.origin = "internal";
+		const node = ctx.dest.node;
 		for (let key in asset) {
-			if (typeof asset[key] != "object") what.node.setAttribute(`data-${key}`, asset[key]);
+			if (typeof asset[key] != "object") node.setAttribute(`data-${key}`, asset[key]);
 		}
 		if (asset.tags) {
-			what.node.dataset.tags = asset.tags
+			node.dataset.tags = asset.tags
 				.map((tag) => tag.toLowerCase().replace(/ /g, '\u00A0'))
 				.join(' ');
 		} else {
-			what.node.removeAttribute('data-tags');
+			node.removeAttribute('data-tags');
 		}
 	},
-	className: function(type) {
+	classIcon(ctx, type) {
 		return editor.assetType[type];
-	},
-	src: function(asset, what) {
-		if (asset.type != "picto" && asset.url) {
-			return what.scope.live.vars.thumbnailer.replace('%s', asset.url);
-		} else {
-			return asset.url;
-		}
-	},
-	caption: function(asset) {
-		if (asset.type == "video") return asset.url || "";
-		else return "";
 	}
 });
 

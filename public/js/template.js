@@ -1,10 +1,9 @@
-import parseHTML from "./fragment-parser.js";
-
 export function toScript(node) {
 	const doc = node.ownerDocument;
 	let tmpl = node;
 	let helper;
-	node = parseHTML(`<script type="text/html"></script>`, {doc});
+	node = doc.createElement('script');
+	node.setAttribute('type', 'text/html');
 	if (!helper) helper = doc.createElement('div');
 	helper.textContent = tmpl.content.childNodes.map(child => {
 		if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
@@ -24,12 +23,7 @@ export function fromScript(node) {
 	helper = doc.createElement('div');
 	helper.innerHTML = node.textContent;
 	tmpl = doc.createElement('template');
-	if (!tmpl.content) {
-		tmpl.content = doc.createDocumentFragment();
-		tmpl.content.appendChild(parseHTML(helper.textContent, {doc}));
-	} else {
-		tmpl.innerHTML = helper.textContent;
-	}
+	tmpl.innerHTML = helper.textContent;
 	Object.assign(tmpl.dataset, node.dataset);
 	node.replaceWith(tmpl);
 	node.textContent = helper.textContent = '';

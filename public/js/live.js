@@ -2,41 +2,37 @@ import { Matchdom } from "../modules/matchdom";
 import "./array-like.js";
 import { DateTime, Interval } from '../modules/luxon';
 
+const types = {
+	date(ctx, val) {
+		if (val == null) return val;
+		if (val === "") val = DateTime.local();
+		else val = DateTime.fromISO(val);
+		if (val.invalid) return null;
+		else return val.setLocale("fr");
+	}
+};
+
 const filters = {
-	iconclass(val, what) {
-		what.parent.closest('.live-message').classList.toggle('no-live-icons', !val);
-		return val;
-	},
-	isoDate(val, what) {
-		if (!val) return val;
-		return DateTime.fromISO(val).toISO();
-	},
-	datetime(val, what) {
-		const dt = val ? DateTime.fromISO(val) : DateTime.local();
-		return dt.setLocale("fr").toFormat("DDD 'à' T");
-	},
-	reldatetime(val, what) {
-		const dt = DateTime.fromISO(val).setLocale("fr");
-		let inter = 1;
-		const live = what.scope.live;
-		if (live && live.rooms && live.rooms.page) {
-			const ref = DateTime.fromISO(live.rooms.page);
-			inter = Interval.fromDateTimes(dt, ref).length('days');
+	date: ['date?', (ctx, date, fmt) => {
+		if (fmt == "iso") {
+			return date.toISO();
+		} else if (fmt == "cal") {
+			return date.toFormat("DDD 'à' T");
+		} else if (fmt == "rel") {
+			let inter = 1;
+			const live = ctx.scope.live;
+			if (live && live.rooms && live.rooms.page) {
+				const ref = DateTime.fromISO(live.rooms.page);
+				inter = Interval.fromDateTimes(date, ref).length('days');
+			}
+			if (inter == 0) return date.toFormat('T');
+			else return date.toFormat("D '\nà' T");
 		}
-		if (inter == 0) return dt.toFormat('T');
-		else return dt.toFormat("D '\nà' T");
-	},
-	sandbox(val, what) {
-		if (val && val.nodeType == Node.ELEMENT_NODE) {
-			val.querySelectorAll('iframe').forEach((node) => {
-				node.setAttribute('sandbox', '');
-			});
-		}
-	},
-	procrastify(node, what) {
-		if (!node || node.nodeType != Node.ELEMENT_NODE) return node;
+	}],
+	procrastify(ctx, frag) {
+		if (!frag || !frag.querySelector) return frag;
 		const objects = ['object', 'iframe', 'embed', 'opta', '.dugout-video'];
-		const list = node.querySelectorAll([
+		const list = frag.querySelectorAll([
 			'img', 'be-op', '.twitter-tweet'
 		].concat(objects).join(','));
 		list.forEach((node) => {
@@ -61,9 +57,9 @@ const filters = {
 			if (url) frag.setAttribute('title', url);
 			node.parentNode.replaceChild(frag, node);
 		});
-		return node;
+		return frag;
 	},
-	when(page, what, param) {
+	when(ctx, page, param) {
 		const now = Date.now();
 		const start = page.start && Date.parse(page.start);
 		const stop = page.stop && Date.parse(page.stop);
@@ -72,22 +68,18 @@ const filters = {
 		else if (!stop || now <= stop) when = 'during';
 		else when = 'after';
 		return when == param;
-	},
-	sort(id, what) {
-
 	}
 };
 
 export default class Live {
-	static get filters() {
-		return filters;
+	static get plugins() {
+		return { filters, types };
 	}
 
 	constructor() {
-		this.matchdom = new Matchdom({
-			nodeFilter: this.nodeFilter,
-			filters: this.constructor.filters
-		});
+		const { filters, types } = this.constructor.plugins;
+		const visitor = this.visitor;
+		this.matchdom = new Matchdom({ visitor, filters, types });
 	}
 
 	init() {
