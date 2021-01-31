@@ -28,7 +28,7 @@ div.fig-article-body {
 	display:block;
 	clear:both;
 }
-.live-messages .live-message:first-child {
+.live-messages .live-message:first-of-type {
 	border-top:0px;
 	clear:left;
 }
