@@ -23,7 +23,7 @@
 			"type": "chrome",
 			"request": "launch",
 			"name": "Launch Chrome against localhost",
-			"url": "http://localhost:3000/test/test1/read?develop",
+			"url": "https://test.localhost.localdomain:18443/test/test/read?develop",
 			"webRoot": "${workspaceFolder}/public",
 			"userDataDir": true,
 			"runtimeExecutable": "/usr/bin/google-chrome"
