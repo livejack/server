@@ -128,19 +128,9 @@ class LiveSetup extends Live {
 		}
 		return 'hidden';
 	}
-	place(id, node) {
-		const prev = document.getElementById(id);
-		if (prev) {
-			prev.parentNode.replaceChild(node, prev);
-		}
-	}
 }
 
 Object.assign(Live.plugins.filters, {
-	place(ctx, item) {
-		live.place(item.id, ctx.dest.node);
-		return item;
-	},
 	trackUi(ctx, val) {
 		const node = ctx.dest.node;
 		live.trackUi(node);
