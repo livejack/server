@@ -20,6 +20,8 @@ body {
 	display:flex;
 	flex-direction: row;
 	font-family: "Open Sans", sans-serif;
+	max-width: 1600px;
+	margin: 0 auto;
 }
 #live {
 	flex: 2 768px;
