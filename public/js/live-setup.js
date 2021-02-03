@@ -14,7 +14,8 @@ class LiveSetup extends Live {
 		if (node.templates) {
 			node.templates.forEach(({ mode, content, index }) => {
 				if (mode == "replace") {
-					node.replaceChild(content.cloneNode(true), node.children[index]);
+					node.textContent = '';
+					node.appendChild(content.cloneNode(true));
 				} else {
 					node.insertBefore(content.cloneNode(true), node.children[index]);
 				}
