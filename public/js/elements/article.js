@@ -28,7 +28,8 @@ export default class EditArticle extends HTMLElement {
 				if (!this.toolbar) {
 					e.stopPropagation();
 				} else if (e.target.closest('.toolbar') == this.toolbar && e.target.matches('button')) {
-					this[e.target.type]();
+					if (e.target.name) this[e.target.name]();
+					else this[e.target.type]();
 				}
 
 				break;
@@ -52,7 +53,8 @@ export default class EditArticle extends HTMLElement {
 		});
 	}
 	del() {
-
+		this.stop();
+		return req("./messages/" + this.id, "delete");
 	}
 	submit() {
 		// collect changes in time, icons, title, html and fetch({method: 'put'}) or post
