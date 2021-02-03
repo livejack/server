@@ -33,6 +33,10 @@ class LiveSetup extends Live {
 			jack.join(this.vars.base + '/' + room, this.rooms[room], (e) => {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
+				if (!data) {
+					console.warn("ignoring message without data", e.detail);
+					return;
+				}
 				this.rooms[room] = data.update;
 				roots.forEach(({ node, names }) => {
 					if (names.includes(room)) {
