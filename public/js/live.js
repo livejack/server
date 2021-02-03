@@ -11,8 +11,32 @@ const types = {
 		else return val.setLocale("fr");
 	}
 };
-
 const filters = {
+	place(ctx, item, pos) {
+		const node = ctx.dest.node;
+		const parent = node.parentNode;
+		const old = ctx.src.node.parentNode.querySelector(`[id="${item.id}"]`);
+
+		if (old) {
+			if (item.date) {
+				old.parentNode.replaceChild(node, old);
+			} else {
+				ctx.dest.node = null;
+				ctx.dest.attr = null;
+				old.parentNode.removeChild(old);
+			}
+		} else {
+		// insertion
+			const first = parent.querySelector('[id]');
+			const last = parent.querySelector('[id] + :not([id])');
+			if (pos == "before") {
+				parent.insertBefore(node, first);
+			} else if (pos == "after") {
+				parent.insertBefore(node, last);
+			}
+		}
+		return item;
+	},
 	date: ['date?', (ctx, date, fmt) => {
 		if (fmt == "iso") {
 			return date.toISO();
