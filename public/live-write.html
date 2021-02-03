@@ -70,8 +70,8 @@
 				</div>
 			</header>
 			<div class="live-list">
-				<template>
-					<article is="edit-article" id="[page.messages|reverse:|repeat:*:msg|place:|msg.id]"
+				<template data-mode="insert">
+					<article is="edit-article" id="[page.messages|repeat:*:msg|place:before|id]"
 						class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 						itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#[msg.id]" />
@@ -91,7 +91,7 @@
 	</div>
 	<div id="control">
 		<header data-live="page">
-			<template>
+			<template data-mode="replace">
 				<h1>
 					<img src="[shortcut-icon]" />
 					<a href="[page.backtrack]" target="_blank">[page.title]</a>
@@ -135,9 +135,9 @@
 				<option value="link">lien</option>
 				<option value="icon">icônes</option>
 			</select>
-			<template>
+			<template data-mode="insert">
 				<a is="edit-asset"
-					id="[assets.assets|repeat:*:it|it.id]"
+					id="[assets.assets|repeat:*:it|place:before|id]"
 					href="[it.url]"
 					class="[it.meta.type|classIcon:]"
 					data-title="[it.meta.title]"

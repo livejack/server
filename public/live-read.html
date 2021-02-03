@@ -50,8 +50,8 @@
 			</div>
 		</header>
 		<div class="live-list">
-			<template>
-				<article id="[page.messages|reverse:|repeat:*:msg|place:|msg.id]" class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+			<template data-mode="insert">
+				<article id="[page.messages|repeat:*:msg|place:before|id]" class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 					<meta itemprop="url" content="[page.backtrack|or:]#[msg.id]" />
 					<meta itemprop="dateModified" content="[msg.update|date:iso]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack|with:*]" />
