@@ -1,6 +1,7 @@
 import Live from './live.js';
 import {ready} from './doc-events.js';
-import {toScript} from "./template.js";
+import { toScript } from "./template.js";
+import req from "./req.js";
 
 class LiveBuild extends Live {
 	constructor() {
