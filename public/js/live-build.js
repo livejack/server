@@ -25,8 +25,7 @@ class LiveBuild extends Live {
 		let chan = this.channels[name];
 		if (!chan) {
 			chan = this.channels[name] = (async () => {
-				const res = await fetch('./' + name + '.json');
-				return await res.json();
+				return req('./' + name + '.json');
 			})(name);
 		}
 		return chan;

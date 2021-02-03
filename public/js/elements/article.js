@@ -1,3 +1,4 @@
+import req from "../req.js";
 export default class EditArticle extends HTMLElement {
 	#active
 	constructor() {
