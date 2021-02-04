@@ -58,6 +58,6 @@ liveSetup.matchdom.extend(assetPlugin);
 
 ready(async () => {
 	await visible();
-	live.assetManager = new AssetManager();
-	registerEditElements(live);
+	liveSetup.assetManager = new AssetManager();
+	registerEditElements(liveSetup);
 });

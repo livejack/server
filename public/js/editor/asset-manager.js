@@ -27,7 +27,7 @@ export default class AssetManager {
 			const asset = e.target.closest('a[href]');
 			if (asset) {
 				if (this.resolve) this.resolve(asset.dataset);
-				this.open(asset);
+				else this.open(asset);
 			}
 		} else if (e.type == "paste") {
 			e.preventDefault();
@@ -69,9 +69,6 @@ export default class AssetManager {
 	}
 	close() {
 		delete this.asset;
-	}
-	del() {
-
 	}
 	async add(str) {
 		this.zone.textContent = str;

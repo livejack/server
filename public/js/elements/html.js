@@ -3,15 +3,14 @@ import { Editor } from '../editor/index.js';
 import * as BaseSpec from './schema.js';
 
 class HtmlEditor extends Editor {
-	constructor(place, opts, assetManager) {
+	constructor(place, opts) {
 		super(place, opts);
-		this.assetManager = assetManager;
 	}
 	changed() {
 		this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 	}
 	async prompt(url) {
-		return await this.assetManager.choose(url);
+		return await EditHtml.assetManager.choose(url);
 	}
 }
 export default class EditHtml extends HTMLDivElement {
