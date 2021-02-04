@@ -11,15 +11,15 @@ class LiveSetup extends Live {
 	}
 
 	visitor(node, iter, data, scope) {
-		if (node.templates) {
-			node.templates.forEach(({ mode, content, index }) => {
-				if (mode == "replace") {
-					node.textContent = '';
-					node.appendChild(content.cloneNode(true));
-				} else {
-					node.insertBefore(content.cloneNode(true), node.children[index]);
-				}
-			});
+		if (node.nodeName == "TEMPLATE") {
+			let mode = node.dataset.mode;
+			let parent = node.parentNode;
+			if (mode == "replace") {
+				while (node.nextSibling) parent.removeChild(node.nextSibling);
+				parent.appendChild(node.content.cloneNode(true));
+			} else if (mode == "insert") {
+				parent.insertBefore(node.content.cloneNode(true), node.nextSibling);
+			}
 			return false;
 		} else {
 			return true;
