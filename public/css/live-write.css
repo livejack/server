@@ -79,16 +79,16 @@ body {
 	color: black !important;
 	background:white !important;
 }
-.live-messages > .live-message.live-new,
-.live-messages > .live-message.focus,
-.live-messages > .live-message.live-new.focus,
-#live-messages > .live-message.live-new,
-#live-messages > .live-message.focus,
-#live-messages > .live-message.live-new.focus {
+.live-list > .live-message.live-new,
+.live-list > .live-message.active,
+.live-list > .live-message.live-new.active,
+#live-list > .live-message.live-new,
+#live-list > .live-message.active,
+#live-list > .live-message.live-new.active {
 	background:#DDD;
-	box-shadow:11px 0 0px 0px #DDD, -10px 0 0px 0px #DDD;
-	padding-top: 13px;
-	margin-top: 22px;
+	box-shadow: 1em 0px 0 0 #ddd, -1em 0 0 0 #ddd;
+	padding-top: 1em;
+	margin-top: 1em;
 	border-top: 1px solid transparent;
 }
 .live-messages > .live-message.live-new,
@@ -96,16 +96,16 @@ body {
 	background:#EEE;
 	box-shadow:11px 0 0px 0px #EEE, -10px 0 0px 0px #EEE;
 }
-.live-messages > .live-message.focus + .live-message,
+.live-messages > .live-message.active + .live-message,
 .live-messages > .live-message.live-new + .live-message,
-#live-messages > .live-message.focus + .live-message,
+#live-messages > .live-message.active + .live-message,
 #live-messages > .live-message.live-new + .live-message {
 	border-top:1px solid transparent;
 }
-.live-message.focus > .focus {
+.live-message.active > .focus {
 	background:white !important;
 }
-.live-message.focus [class^="live-"] {
+.live-message.active [class^="live-"] {
 	background:#F9F9F9;
 }
 .live-message .live-article,
@@ -258,3 +258,5 @@ div.ressources > .upload.negative {
 	background-color: #4165A0;
 	color: white;
 }
+
+.prosemirror-menu {text-align: right;}
