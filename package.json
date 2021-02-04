@@ -2,7 +2,7 @@
   "name": "@livejack/server",
   "version": "0.1.0",
   "dependencies": {
-    "@livejack/client": "^1.0.0",
+    "@livejack/client": "^1.0.1",
     "@livejack/moduleserver": "^1.2.0",
     "@livejack/prosemirror": "^1.0.2",
     "@webreflection/custom-elements": "^0.2.10",
