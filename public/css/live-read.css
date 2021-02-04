@@ -364,3 +364,10 @@ div.fig-article-body {
 		width:auto;
 	}
 }
+
+live-asset {
+	display:block;
+	position:relative;
+	width:100%;
+	aspect-ratio: 16 / 9;
+}
