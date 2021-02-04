@@ -323,6 +323,7 @@ div.fig-article-body {
 }
 
 /* DESKTOP */
+
 @media screen and (min-width: 800px) {
 	.live-messages .live-message {
 		padding-top:2em;
