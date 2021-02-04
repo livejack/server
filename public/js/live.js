@@ -16,28 +16,28 @@ const filters = {
 		const node = ctx.dest.node;
 		const parent = node.parentNode;
 		const old = ctx.src.node.parentNode.querySelector(`[id="${item.id}"]`);
+		if (!item.date) {
+			ctx.dest.node = null;
+			ctx.dest.attr = null;
+		}
 
 		if (old) {
 			if (item.date) {
 				old.parentNode.replaceChild(node, old);
 			} else {
-				ctx.dest.node = null;
-				ctx.dest.attr = null;
 				old.parentNode.removeChild(old);
 			}
 		} else {
-		// insertion
-			const first = parent.querySelector('[id]');
-			const last = parent.querySelector('[id] + :not([id])');
+			// insertion
 			if (pos == "before") {
-				parent.insertBefore(node, first);
+				parent.insertBefore(node, parent.querySelector('[id]'));
 			} else if (pos == "after") {
-				parent.insertBefore(node, last);
+				parent.insertBefore(node, parent.querySelector('[id] + :not([id])'));
 			}
 		}
 		return item;
 	},
-	date: ['date?', (ctx, date, fmt) => {
+	date: ['date?', 'string', (ctx, date, fmt) => {
 		if (fmt == "iso") {
 			return date.toISO();
 		} else if (fmt == "cal") {
@@ -101,9 +101,9 @@ export default class Live {
 	}
 
 	constructor() {
-		const { filters, types } = this.constructor.plugins;
-		const visitor = this.visitor;
-		this.matchdom = new Matchdom({ visitor, filters, types });
+		this.matchdom = new Matchdom({
+			visitor: this.visitor
+		}).extend(this.constructor.plugins);
 	}
 
 	init() {
