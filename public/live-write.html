@@ -51,11 +51,11 @@
 				</div>
 				<div class="live-status">
 					<template data-mode="replace">
-						<p class="before [page|when:before|without:*]">A VENIR : Début du direct : <time class="stamp"
+						<p class="before [page|when:before|ifAt:*]">A VENIR : Début du direct : <time class="stamp"
 								datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
-						<p class="during [page|when:during|without:*]">EN COURS : Mis à jour <time class="stamp"
+						<p class="during [page|when:during|ifAt:*]">EN COURS : Mis à jour <time class="stamp"
 								datetime="[page.update|date:iso]">[page.update|datetime]</time></p>
-						<p class="after [page|when:after|without:*]">TERMINE : Fin du direct : <time class="stamp"
+						<p class="after [page|when:after|ifAt:*]">TERMINE : Fin du direct : <time class="stamp"
 								itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
 					</template>
 				</div>
@@ -108,12 +108,12 @@
 						</span>
 					</label>
 					<br>
-					<label class="[page|when:before|and:hide:or:]">
+					<label class="[page|when:before|and:hide|or:]">
 						<span>Ouvert le</span>
 						<input readonly type="text" name="start"
 							value="[page.start|date:iso]" size="18" />
 					</label><br />
-					<label class="[page|when:before|and:hide:or:]">
+					<label class="[page|when:before|and:hide|or:]">
 						<span>Fermé le</span>
 						<input readonly type="text" name="stop"
 							value="[page.stop|date:iso]" size="18" placeholder="En cours" />
@@ -146,16 +146,17 @@
 					data-html="[it.meta.html]"
 				>
 					<div class="header">
-						<img src="[it.meta.icon|without:*]" class="favicon" />
 						[it.meta.title]
+						<img src="[it.meta.icon|orAt:*]" class="favicon" />
 					</div>
 					<div class="meta">
-						[it.meta.mime]<em> ([it.meta.size|without:em|units:])</em><br>
-						[it.meta.width|pre:width |post:px] [it.meta.height|pre:height |post:px]<br>
+						[it.meta.mime]
+						<em>([it.meta.size|orAt:*|units:])</em>
+						<span>[it.meta.width|orAt:*][it.meta.height|pre:x]px</span><br>
 						[it.date|date:rel]
 					</div>
 					<div class="thumbnail">
-						<img src="[it.meta.thumbnail|without:**]" />
+						<img src="[it.meta.thumbnail|orAt:*]" />
 					</div>
 				</a>
 			</template>

@@ -20,7 +20,7 @@
     "http-errors": "^1.8.0",
     "knex": "^0.21.2",
     "luxon": "^1.24.1",
-    "matchdom": "^7.0.0-beta.6",
+    "matchdom": "^7.0.0-beta.7",
     "method-override": "^3.0.0",
     "modern-normalize": "^1.0.0",
     "morgan": "^1.10.0",
