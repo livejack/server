@@ -13,7 +13,7 @@ export default class EditTime extends HTMLTimeElement {
 	}
 	set value(val) {
 		this.dateTime = val;
-		this.textContent = this.constructor.matchdom.merge('[date|reldatetime]', {
+		this.textContent = this.constructor.matchdom.merge('[date|date:rel]', {
 			date: val
 		});
 	}
