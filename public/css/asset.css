@@ -12,19 +12,28 @@ a[is="edit-asset"] {
 }
 
 a[is="edit-asset"] > .header {
+	background-color: #4165A0;
+	color:white;
+	display: flex;
+	width: 100%;
+	height: 2.3em;
+	align-items: flex-start;
+}
+a[is="edit-asset"] > .header > span {
+	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background-color: #4165A0;
-	color:white;
-	display:block;
-	padding: 0.4em 0.5em;
-	margin:0;
-	width: 100%;
+	flex: 1 1 auto;
+	line-height: 2.3em;
+	padding-left: 0.5em;
 }
 
 a[is="edit-asset"] > .header > img {
-	vertical-align: middle;
+	padding: 0.4em;
+	max-width: 100%;
+	align-self: center;
+	max-height: 100%;
 }
 
 a[is="edit-asset"] > .meta {
@@ -50,14 +59,14 @@ a[is="edit-asset"] > .thumbnail {
 	flex: 1 0 auto;
 	max-width: 30%;
 	overflow:hidden;
+	aspect-ratio: 16 / 9;
 }
 
 a[is="edit-asset"] > .thumbnail > img {
-	height: auto;
-	width: auto;
-	max-height: 100%;
-	max-width: 100%;
+	height: 100%;
+	width: 100%;
 	display: block;
+	object-fit: cover;
 }
 
 
@@ -143,4 +152,28 @@ a[is="edit-asset"] > .thumbnail > img {
 #asset-editor fieldset input[type="radio"] {
 	width:auto;
 	margin:0 0.3em;
+}
+
+
+a[is="edit-asset"] button {
+	all:unset;
+	padding: 0.4em;
+	display:inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	text-align:center;
+	flex: 0 0 auto;
+}
+a[is="edit-asset"] button:hover {
+	background:#DDD;
+	color:#333;
+}
+
+
+
+[is="edit-asset"] > .meta > p {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 0;
 }
