@@ -1,4 +1,5 @@
-import live from './live-setup.js';
+import liveBuild from './live-build.js';
+import liveSetup from './live-setup.js';
 
 import { ready, visible } from './doc-events.js';
 import registerEditElements from "./elements/index.js";
@@ -24,30 +25,35 @@ export const editor = {
 	}
 };
 
-Object.assign(live.constructor.plugins.filters, {
-	units: ['num?', (ctx, val) => {
-		if (val == null) return null;
-		return xbytes(val);
-	}],
-	store(ctx, asset) {
-		if (!asset.type) asset.type = "none";
-		if (!asset.origin) asset.origin = "internal";
-		const node = ctx.dest.node;
-		for (let key in asset) {
-			if (typeof asset[key] != "object") node.setAttribute(`data-${key}`, asset[key]);
+const assetPlugin = {
+	filters: {
+		units: ['num?', (ctx, val) => {
+			if (val == null) return null;
+			return xbytes(val);
+		}],
+		store(ctx, asset) {
+			if (!asset.type) asset.type = "none";
+			if (!asset.origin) asset.origin = "internal";
+			const node = ctx.dest.node;
+			for (let key in asset) {
+				if (typeof asset[key] != "object") node.setAttribute(`data-${key}`, asset[key]);
+			}
+			if (asset.tags) {
+				node.dataset.tags = asset.tags
+					.map((tag) => tag.toLowerCase().replace(/ /g, '\u00A0'))
+					.join(' ');
+			} else {
+				node.removeAttribute('data-tags');
+			}
+		},
+		classIcon(ctx, type) {
+			return editor.assetType[type];
 		}
-		if (asset.tags) {
-			node.dataset.tags = asset.tags
-				.map((tag) => tag.toLowerCase().replace(/ /g, '\u00A0'))
-				.join(' ');
-		} else {
-			node.removeAttribute('data-tags');
-		}
-	},
-	classIcon(ctx, type) {
-		return editor.assetType[type];
 	}
-});
+};
+
+liveBuild.matchdom.extend(assetPlugin);
+liveSetup.matchdom.extend(assetPlugin);
 
 
 ready(async () => {

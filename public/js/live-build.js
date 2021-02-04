@@ -61,9 +61,15 @@ class LiveBuild extends Live {
 		}
 	}
 }
+const live = new LiveBuild();
+live.matchdom.extend({
+	filters: {
+		trackUi: (c, v) => v
+	}
+});
+export default live;
 
 ready(async () => {
-	const live = new LiveBuild();
 	live.init();
 	await live.build();
 });

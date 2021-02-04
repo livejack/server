@@ -50,16 +50,7 @@ class LiveSetup extends Live {
 
 	setupRoot(root) {
 		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
-			const tmpl = fromScript(script);
-			const parent = tmpl.parentNode;
-			const index = parent.children.indexOf(tmpl);
-			if (!parent.templates) parent.templates = [];
-			parent.templates.push({
-				mode: tmpl.dataset.mode,
-				content: tmpl.content,
-				index
-			});
-			parent.removeChild(tmpl);
+			fromScript(script);
 		});
 		root.querySelectorAll('.live-controls').forEach((node) => {
 			node.addEventListener('change', this, false);
@@ -131,18 +122,19 @@ class LiveSetup extends Live {
 	}
 }
 
-Object.assign(Live.plugins.filters, {
-	trackUi(ctx, val) {
-		const node = ctx.dest.node;
-		live.trackUi(node);
-		setTimeout(() => {
-			node.classList.remove('hidden');
-		});
-		return 'hidden';
+const live = new LiveSetup();
+live.matchdom.extend({
+	filters: {
+		trackUi(ctx, val) {
+			const node = ctx.dest.node;
+			live.trackUi(node);
+			setTimeout(() => {
+				node.classList.remove('hidden');
+			});
+			return 'hidden';
+		}
 	}
 });
-
-const live = new LiveSetup();
 
 export default live;
 
