@@ -69,11 +69,13 @@ export default class EditHtml extends HTMLDivElement {
 				image: BaseSpec.nodes.image,
 				hard_break: BaseSpec.nodes.hard_break,
 				text: BaseSpec.nodes.text
-			}
+			},
+			menu: false
 		} : {
 			nodes: BaseSpec.nodes,
 			marks: BaseSpec.marks,
-			list: true
+			list: true,
+			menu: true
 		};
 		this.view = new HtmlEditor(this, spec);
 		this.view.focus();

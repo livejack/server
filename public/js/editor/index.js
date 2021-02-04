@@ -35,7 +35,7 @@ function getPlugins({schema, menu}) {
 
 export class Editor extends EditorView {
 	#serializer
-	constructor(place, { nodes, marks, list }) {
+	constructor(place, { nodes, marks, list, menu }) {
 		const baseSchema = new Schema({ nodes, marks });
 		let specNodes = baseSchema.spec.nodes;
 		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
@@ -50,7 +50,7 @@ export class Editor extends EditorView {
 		super(place, {
 			state: EditorState.create({
 				doc: parser.parse(copy),
-				plugins: getPlugins({ schema })
+				plugins: getPlugins({ schema, menu })
 			}),
 			dispatchTransaction: (tr) => {
 				if (tr.docChanged) {
