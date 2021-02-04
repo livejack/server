@@ -79,16 +79,26 @@ exports.PUT = async (req, res, next) => {
 	return await page.$relatedQuery('assets').patchAndFetchById(id, req.body).throwIfNotFound();
 };
 
-exports.DELETE = async (req, res, next) => {
-	const {domain, key} = req.params;
-	const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
+exports.DELETE = (req) => {
+	const { domain, key } = req.params;
 	const id = req.params.id || req.body.id;
-	await page.$relatedQuery('assets').deleteById(id).throwIfNotFound();
-	global.livejack.send({
-		room: `/${domain}/${key}/assets`,
-		mtime: new Date(),
-		data: {
-			assets: [{ id: id }]
-		}
+
+	return Page.transaction(async trx => {
+		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
+		await page.$relatedQuery('assets', trx).deleteById(id).throwIfNotFound();
+		await page.$query(trx).patch({
+			update: new Date().toISOString()
+		});
+		global.livejack.send({
+			room: `/${domain}/${key}/assets`,
+			mtime: page.update,
+			data: {
+				start: page.start,
+				stop: page.stop,
+				update: page.update,
+				assets: [{ id }]
+			}
+		});
+		return { id };
 	});
 };
