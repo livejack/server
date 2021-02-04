@@ -1,29 +1,27 @@
 const { Models } = require('objection');
 const { Page } = Models;
 
-exports.GET = async (req, res, next) => {
-	const {domain, key} = req.params;
+exports.GET = async (req) => {
+	const { domain, key } = req.params;
 	if (req.params.id) {
-		const message = await Page.relatedQuery('messages')
+		return Page.relatedQuery('messages')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.findById(req.params.id)
 			.throwIfNotFound()
 			.select();
-		res.json(message);
 	} else {
-		const messages = await Page.relatedQuery('messages')
+		return Page.relatedQuery('messages')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.select()
 			.sortBy(req.query.sort || 'date')
 			.limit(parseInt(req.query.limit) || Infinity)
 			.offset(parseInt(req.query.offset) || 0);
-		res.json(messages);
 	}
 };
 
-exports.POST = async (req) => {
+exports.POST = (req) => {
 	const { domain, key } = req.params;
-	return await Page.transaction(async trx => {
+	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		const msg = await page.$relatedQuery('messages', trx).insertAndFetch(req.body);
 		await page.$query(trx).patch({
@@ -44,10 +42,10 @@ exports.POST = async (req) => {
 	});
 };
 
-exports.PUT = async (req) => {
-	const {domain, key} = req.params;
+exports.PUT = (req) => {
+	const { domain, key } = req.params;
 	const id = req.params.id || req.body.id;
-	return await Page.transaction(async trx => {
+	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		const msg = await page.$relatedQuery('messages', trx)
 			.patchAndFetchById(id, req.body)
@@ -69,11 +67,11 @@ exports.PUT = async (req) => {
 	});
 };
 
-exports.DELETE = async (req) => {
-	const {domain, key} = req.params;
+exports.DELETE = (req) => {
+	const { domain, key } = req.params;
 	const id = req.params.id || req.body.id;
 
-	return await Page.transaction(async trx => {
+	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		await page.$relatedQuery('messages', trx).deleteById(id).throwIfNotFound();
 		await page.$query(trx).patch({
@@ -86,9 +84,10 @@ exports.DELETE = async (req) => {
 				start: page.start,
 				stop: page.stop,
 				update: page.update,
-				messages: [{id: id}]
+				messages: [{ id: id }]
 			}
 		});
+		return { id };
 	});
 };
 
