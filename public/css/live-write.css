@@ -247,3 +247,14 @@ div.ressources > .upload.negative {
 [contenteditable="true"] *:focus {
 	outline: none;
 }
+
+
+.ressources.active > [is="edit-asset"] > .header {
+	background-color: #EFEFEF;
+	color: black;
+}
+
+.ressources.active > [is="edit-asset"] > .header:hover {
+	background-color: #4165A0;
+	color: white;
+}

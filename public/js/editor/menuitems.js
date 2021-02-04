@@ -22,12 +22,17 @@ function insertAssetItem(nodeType) {
 	return new MenuItem({
 		title: "Insert asset",
 		icon: icons.asset,
+		active(state) {
+
+		},
 		enable(state) { return canInsert(state, nodeType); },
 		run(state, _, view) {
 			view.prompt().then((meta) => {
 				// nodeType depends on meta.type
 				const node = nodeType.createAndFill({
-					url: meta.href
+					url: meta.url,
+					title: meta.title,
+					html: meta.html
 				});
 				view.dispatch(view.state.tr.replaceSelectionWith(node));
 				view.focus();
@@ -158,9 +163,6 @@ export function buildMenuItems(schema, promptUrl) {
 		r.toggleLink = linkItem(type, promptUrl);
 	}
 
-	if ((type = schema.nodes.asset)) {
-		r.insertAsset = insertAssetItem(type, promptUrl);
-	}
 	if ((type = schema.nodes.bullet_list)) {
 		r.wrapBulletList = wrapListItem(type, {
 			title: "Wrap in bullet list",
@@ -185,11 +187,15 @@ export function buildMenuItems(schema, promptUrl) {
 			label: "Plain"
 		});
 	}
+	if ((type = schema.nodes.asset)) {
+		r.insertAsset = insertAssetItem(type, promptUrl);
+	}
 
 	let cut = arr => arr.filter(x => x);
 	r.inlineMenu = [cut([r.toggleStrong, r.toggleEm, r.toggleCode, r.toggleLink])];
-	r.blockMenu = [cut([r.insertAsset, r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
-	r.fullMenu = r.inlineMenu.concat(r.blockMenu);
+	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
+	r.specialMenu = [cut([r.insertAsset])];
+	r.fullMenu = r.inlineMenu.concat(r.blockMenu).concat(r.specialMenu);
 
 	return r;
 }

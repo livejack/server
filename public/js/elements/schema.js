@@ -51,11 +51,16 @@ export const nodes = {
 		defining: true,
 		draggable: true,
 		attrs: {
-			url: {},
+			url: {
+				default: null
+			},
 			ratio: {
 				default: null
 			},
 			title: {
+				default: null
+			},
+			html: {
 				default: null
 			}
 		},
@@ -63,14 +68,17 @@ export const nodes = {
 			tag: "live-asset",
 			getAttrs(dom) {
 				return {
-					url: dom.getAttribute("url"),
-					title: dom.getAttribute("title"),
-					ratio: dom.getAttribute("ratio")
+					url: dom.dataset.url,
+					title: dom.dataset.title,
+					ratio: dom.dataset.ratio,
+					html: dom.dataset.html
 				};
 			}
 		}],
 		toDOM(node) {
-			return ["live-asset", node.attrs];
+			const data = {};
+			for (let key in node.attrs) data['data-' + key] = node.attrs[key];
+			return ["live-asset", data];
 		}
 	},
 

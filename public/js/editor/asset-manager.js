@@ -26,8 +26,13 @@ export default class AssetManager {
 			}
 			const asset = e.target.closest('a[href]');
 			if (asset) {
-				if (this.resolve) this.resolve(asset.dataset);
-				else this.open(asset);
+				if (this.resolve) {
+					const meta = Object.assign({}, asset.dataset);
+					meta.url = asset.href;
+					this.resolve(meta);
+				} else {
+					this.open(asset);
+				}
 			}
 		} else if (e.type == "paste") {
 			e.preventDefault();
@@ -58,9 +63,11 @@ export default class AssetManager {
 		} else {
 			this.resolve = (data) => {
 				delete this.resolve;
+				this.root.classList.remove('active');
 				resolve(data);
 			};
 		}
+		this.root.classList.add('active');
 		return p;
 	}
 	async open(asset, data = {}) {
