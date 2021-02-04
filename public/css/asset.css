@@ -177,3 +177,8 @@ a[is="edit-asset"] button:hover {
 	white-space: nowrap;
 	margin-bottom: 0;
 }
+
+
+.ProseMirror live-asset > * {
+	pointer-events: none;
+}
