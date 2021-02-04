@@ -21,15 +21,14 @@ function getPlugins({schema, menu}) {
 		keymap(buildKeymap(schema)),
 		keymap(baseKeymap),
 		dropCursor(),
-		gapCursor()
+		gapCursor(),
+		history()
 	];
-	if (menu !== false)
+	if (menu !== false) {
 		plugins.push(menuBar({
 			content: buildMenuItems(schema).fullMenu
 		}));
-	if (history !== false)
-		plugins.push(history());
-
+	}
 	return plugins;
 }
 
@@ -47,7 +46,7 @@ export class Editor extends EditorView {
 		const copy = place.cloneNode(true);
 		place.textContent = '';
 
-		super(place, {
+		super({ mount: place }, {
 			state: EditorState.create({
 				doc: parser.parse(copy),
 				plugins: getPlugins({ schema, menu })
