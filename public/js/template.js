@@ -1,31 +1,27 @@
-export function toScript(node) {
-	const doc = node.ownerDocument;
-	let tmpl = node;
-	let helper;
-	node = doc.createElement('script');
+export function toScript(tpl) {
+	const doc = tpl.ownerDocument;
+	const node = doc.createElement('script');
 	node.setAttribute('type', 'text/html');
-	if (!helper) helper = doc.createElement('div');
-	helper.textContent = tmpl.content.childNodes.map(child => {
+	let helper = doc.createElement('div');
+	helper.textContent = tpl.content.childNodes.map(child => {
 		if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
 		else return child.outerHTML;
 	}).join('');
 	node.textContent = helper.innerHTML;
-	node.content = tmpl.content;
-	Object.assign(node.dataset, tmpl.dataset);
-	tmpl.replaceWith(node);
+	node.content = tpl.content; // keep it around
+	Object.assign(node.dataset, tpl.dataset);
+	tpl.parentNode.replaceChild(node, tpl);
 	return node;
 }
 
 export function fromScript(node) {
 	const doc = node.ownerDocument;
-	let tmpl = node;
-	let helper;
-	helper = doc.createElement('div');
+	let helper = doc.createElement('div');
 	helper.innerHTML = node.textContent;
-	tmpl = doc.createElement('template');
-	tmpl.innerHTML = helper.textContent;
-	Object.assign(tmpl.dataset, node.dataset);
-	node.replaceWith(tmpl);
+	let tpl = doc.createElement('template');
+	tpl.innerHTML = helper.textContent;
+	Object.assign(tpl.dataset, node.dataset);
+	node.parentNode.replaceChild(tpl, node);
 	node.textContent = helper.textContent = '';
-	return tmpl;
+	return tpl;
 }
