@@ -35,6 +35,7 @@ class LiveSetup extends Live {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
 				if (!data) {
+					// eslint-disable-next-line no-console
 					console.warn("ignoring message without data", e.detail);
 					return;
 				}
