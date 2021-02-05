@@ -64,8 +64,6 @@ div.fig-article-body {
 	text-decoration:none;
 	border-radius:3px;
 	text-shadow:0px 0px 1px #ccc;
-	margin-right:12px;
-	margin-bottom:3px;
 }
 .live-messages.essentiel .live-message:not(.essentiel) {
 	display:none;
@@ -81,7 +79,7 @@ div.fig-article-body {
 	font-size:20px;
 	line-height:25px;
 	margin-top:0;
-	margin-bottom:12px;
+	margin-bottom: 1rem;
 	font-family:"MuseoSlab500", "Trebuchet MS", Arial, Helvetica, sans-serif;
 }
 
@@ -332,17 +330,19 @@ div.fig-article-body {
 
 	.live-messages .live-time {
 		display:block;
-		padding: 3px 3px;
+		padding: 0.6em 0;
 		float:left;
-		width: 79px;
+		width: 87px;
 		text-align:center;
-		margin-bottom:12px;
-		line-height:2;
+		margin-bottom: 1rem;
+		line-height: 1.8em;
+		position: relative;
+		margin-top: -1px;
 	}
 
 	.live-messages .live-title {
-		margin-left:97px;
-		padding-top:2px;
+		margin-left: calc(87px + 1rem);
+		padding: 2px;
 		font-size:23px; /* strong */
 		line-height:28px; /* strong */
 	}
@@ -356,7 +356,7 @@ div.fig-article-body {
 	}
 
 	.live-messages .live-article {
-		margin-left:97px;
+		margin-left: calc(87px + 1rem);
 		padding-left:0;
 		border:none;
 		overflow:hidden; /* floats */
