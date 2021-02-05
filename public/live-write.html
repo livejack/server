@@ -120,14 +120,15 @@
 			</template>
 		</header>
 		<div data-live="assets" class="ressources">
-			<div class="upload">Charger une image</div>
-			<form class="post" method="post" enctype="multipart/form-data" hidden action="assets">
-				<input type="file" name="file" />
+			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets">
+				<input placeholder="Charger une image" type="file" name="file" />
 			</form>
-			<a class="new" placeholder="Coller une adresse ou du html" contenteditable="true"></a>
+			<form is="edit-paste" method="post" action="assets">
+				<input placeholder="Coller une url" />
+			</form>
 
 			<select class="filter" name="type" multiple>
-				<option data-placeholder="true">filtrer par...</option>
+				<option data-placeholder="true">Filtrer par type</option>
 				<option value="image">image</option>
 				<option value="video">vidéo</option>
 				<option value="embed">embed</option>

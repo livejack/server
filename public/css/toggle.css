@@ -1,0 +1,40 @@
+
+#toggle-live-status {
+	cursor:pointer;
+}
+#control > header form {
+
+}
+#control > header form > label {
+	font-size:0.8em;
+	display:inline-block;
+	vertical-align:bottom;
+}
+#control > header form input {
+	color:#003872;
+	border:0px;
+	background-color:#E5E5E5;
+	border-radius:2px;
+	padding:0 0.2em;
+	cursor:pointer;
+	text-align:right;
+}
+#control > header form input[readonly] {
+	cursor:default !important;
+	background-color:transparent;
+}
+
+#toggle-live-status.switch-light.switch-material input:focus ~ span a,
+#toggle-live-status.switch-light.switch-material input:focus + label {
+	outline:0;
+}
+#toggle-live-status.switch-material.switch-light input:checked ~ span {
+	background: #47DA6E;
+}
+
+#toggle-live-status.switch-material.switch-light input:checked ~ span a,
+#toggle-live-status.switch-light.switch-material > span:before,
+#toggle-live-status.switch-light.switch-material > span:after,
+#toggle-live-status.switch-toggle.switch-material label:after {
+	background: white;
+}

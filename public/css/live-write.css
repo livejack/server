@@ -16,6 +16,12 @@
 
 @import "./asset.css";
 
+@import "./form.css";
+
+@import "./toggle.css";
+
+@import "./filter.css";
+
 body {
 	display:flex;
 	flex-direction: row;
@@ -35,10 +41,10 @@ body {
 	height: 100vh;
 	overflow-y: auto;
 	width: 300px;
+	background: #DDD;
 }
 #control > header {
 	padding:0.8em;
-	background:#EFEFEF;
 	z-index: 100;
 	position: sticky;
 	top: 0;
@@ -109,9 +115,11 @@ body {
 	background:#F9F9F9;
 }
 .live-message .live-article,
-.live-message .live-icons,
 .live-messages figure > div > .lazy {
 	min-height:100px;
+}
+.live-message .live-icons {
+	min-height: 87px;
 }
 .live-messages .lazy {
 	width:100% !important;
@@ -130,105 +138,9 @@ body {
 }
 
 div.ressources {
-	background:#EFEFEF;
+	/* background:#EFEFEF; */
 	padding-left: 0.8%;
 	padding-right: 0.8%;
-}
-
-div.ressources > .filter {
-	margin-bottom:2px;
-	border:1px solid black;
-}
-
-div.ressources.icon {
-	column-count:6;
-}
-div.ressources.icon > .upload {
-	display:none;
-}
-
-div.ressources > a {
-	display: flex;
-	flex-direction: row;
-	margin-bottom:2px;
-	border:1px solid black;
-	text-decoration: none;
-	color: black;
-	font-size: 0.8em;
-	flex-wrap: wrap;
-}
-
-div.ressources > .new {
-	border:1px dashed black;
-	background:white;
-	text-align:center;
-	cursor:pointer;
-	color:gray;
-	width:100%;
-	display:block;
-	padding: 1em;
-}
-div.ressources > .upload {
-	text-align: center;
-	background-color: #aaa;
-	padding: 1em;
-	cursor: pointer;
-}
-div.ressources > .upload.negative {
-	background-color:#faa;
-}
-
-
-#toggle-live-status {
-	cursor:pointer;
-}
-#control > header form {
-
-}
-#control > header form > label {
-	font-size:0.8em;
-	display:inline-block;
-	vertical-align:bottom;
-}
-#control > header form input {
-	color:#003872;
-	border:0px;
-	background-color:#E5E5E5;
-	border-radius:2px;
-	padding:0 0.2em;
-	cursor:pointer;
-	text-align:right;
-}
-#control > header form input[readonly] {
-	cursor:default !important;
-	background-color:transparent;
-}
-
-#toggle-live-status.switch-light.switch-material input:focus ~ span a,
-#toggle-live-status.switch-light.switch-material input:focus + label {
-	outline:0;
-}
-#toggle-live-status.switch-material.switch-light input:checked ~ span {
-	background: #47DA6E;
-}
-
-#toggle-live-status.switch-material.switch-light input:checked ~ span a,
-#toggle-live-status.switch-light.switch-material > span:before,
-#toggle-live-status.switch-light.switch-material > span:after,
-#toggle-live-status.switch-toggle.switch-material label:after {
-	background: white;
-}
-
-.nsocket {
-	position:fixed;
-	font-size:0.7em;
-	color:#003872;
-	letter-spacing:0.1em;
-	text-align:center;
-	text-decoration:none;
-	bottom:30px;
-	left:-20px;
-	transform:rotate(90deg);
 }
 
 .flatpickr-calendar.hasTime.noCalendar {
@@ -249,14 +161,43 @@ div.ressources > .upload.negative {
 }
 
 
-.ressources.active > [is="edit-asset"] > .header {
+.ressources.active > live-asset > .header {
 	background-color: #EFEFEF;
 	color: black;
 }
 
-.ressources.active > [is="edit-asset"] > .header:hover {
+.ressources.active > live-asset > .header:hover {
 	background-color: #4165A0;
 	color: white;
 }
 
-.prosemirror-menu {text-align: right;}
+.prosemirror-menu {
+	text-align: right;
+	position: absolute;
+	right: 0;
+	z-index: 1;
+	box-shadow: -4px 4px 4px -4px rgb(0 0 0 / 66%);
+}
+
+.ss-main > .ss-multi-selected {
+	cursor:default;
+	background: transparent;
+	height:100%;
+}
+.ss-content .ss-list .ss-option {
+	cursor:default;
+}
+
+.live-message > [is] {
+	cursor:default;
+}
+.live-message.active > [is] {
+	outline:none;
+}
+.live-message.active > [is]:hover,
+.live-message.active > [is]:focus {
+	outline:1px solid black;
+}
+
+
+
