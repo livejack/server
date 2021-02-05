@@ -1,19 +1,21 @@
 div.toolbar {
-	width: calc(100% + 2em);
-	top: 100%;
+	width: calc(100% + 2rem);
 	display: flex;
 	justify-content: flex-end;
 	position: absolute;
-	background: white;
-	left: -1em;
+	background: #DDD;
+	left: -1rem;
 	z-index: 1;
+	font-size: 0.85rem;
+	padding-right: 1rem;
+	bottom: -17px;
+	padding-bottom: 0.2em;
 }
 div.toolbar > * {
-	cursor:pointer;
 	border-radius: 4px;
 	padding: 0.3em 0.4em;
 	background-color: #EEE;
-	margin: 0 0.2em;
+	margin: 0.2em;
 	border: 1px solid gray;
 }
 div.toolbar > button:hover:not([disabled]),
@@ -24,10 +26,6 @@ div.toolbar > button:focus {
 div.toolbar > button > i,
 div.toolbar > label > span {
 	font-size:1.4em;
-}
-div.toolbar [disabled] {
-	opacity:0.25 !important;
-	border-color:#CCC;
 }
 
 div.toolbar.editor {
@@ -41,4 +39,7 @@ div.toolbar.article label {
 }
 div.toolbar button[name="del"] {
 	margin-right:2em;
+}
+.ProseMirror-icon {
+	cursor:default;
 }
