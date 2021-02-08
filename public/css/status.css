@@ -1,0 +1,52 @@
+[is="edit-status"] {
+	margin: 0.2rem;
+	display: flex !important;
+	position: relative;
+	font-size:0.8em;
+}
+[is="edit-status"] .toggle-switch {
+	min-width: 0;
+	flex: 0;
+	z-index: 1;
+	--switch-theme-rgb: var(--warn-rgb);
+	--switch-margin:0;
+	transform: scale(-1, 1);
+	left: 1.5em;
+	--bar-width:3em;
+}
+
+
+[is="edit-status"] > div {
+	flex: 1;
+	opacity:0.7;
+}
+[is="edit-status"] > .start {
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+	padding-right:2em;
+	flex:1 1 50%;
+}
+[is="edit-status"] > .stop {
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+	border-left:0;
+	padding-left:2em;
+	text-align: right;
+	flex:1 1 50%;
+}
+[is="edit-status"] > .active {
+	background-color:var(--bg);
+	opacity:1;
+}
+
+.toggle-switch > label:before {
+	opacity: 1;
+}
+
+.toggle-switch > :checked+label {
+	--knob-x: calc(var(--bar-width) - var(--bar-height));
+}
+
+.toggle-switch > label {
+	--knob-x: calc(-1 * var(--bar-height) / 2);
+}

@@ -22,6 +22,7 @@ export default class EditPaste extends HTMLFormElement {
 		this.classList.add('loading');
 		this.#input.disabled = true;
 		str = str.trim();
+		this.#input.value = str;
 		let asset;
 		try {
 			if (str.startsWith('<')) {
@@ -36,6 +37,12 @@ export default class EditPaste extends HTMLFormElement {
 			this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");
+			setTimeout(() => {
+				if (this.classList.contains('error')) {
+					this.#input.value = "";
+					this.classList.remove("error");
+				}
+			}, 3000);
 		}
 		this.#input.disabled = false;
 		this.classList.remove('loading');

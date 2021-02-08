@@ -1,25 +1,18 @@
-select.filter[name="type"] {
-	display:none;
-}
-
-a[is="edit-asset"] {
+live-asset {
 	position:relative;
-	max-width:100%;
-	overflow:hidden;
-	box-shadow: 2px 2px 3px #CCC;
+	box-shadow: -2px 2px 3px var(--btncolor);
 	background: white;
-	margin-bottom: 4px;
 }
 
-a[is="edit-asset"] > .header {
+live-asset > .header {
 	background-color: #4165A0;
 	color:white;
 	display: flex;
 	width: 100%;
-	height: 2.3em;
+	/* height: 2.3em; */
 	align-items: flex-start;
 }
-a[is="edit-asset"] > .header > span {
+live-asset > .header > span {
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -29,25 +22,26 @@ a[is="edit-asset"] > .header > span {
 	padding-left: 0.5em;
 }
 
-a[is="edit-asset"] > .header > img {
+live-asset > .header > img {
 	padding: 0.4em;
 	max-width: 100%;
 	align-self: center;
-	max-height: 100%;
+	max-height: 2.2em;
 }
 
-a[is="edit-asset"] > .meta {
+live-asset > .meta {
 	padding-top: 0.15em;
 	padding-bottom: 0.15em;
 	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
-	background-color: white;
+	background-color: var(--bg);
 	margin: 0;
 	flex: 1 0 auto;
 	max-width: 70%;
+	color: var(--btncolor);
 }
-a[is="edit-asset"] > .meta > .line {
+live-asset > .meta > .line {
 	display:inline-block;
 	font-family:sans-serif;
 	font-size:0.7em;
@@ -55,19 +49,20 @@ a[is="edit-asset"] > .meta > .line {
 	margin-top:0.15em;
 }
 
-a[is="edit-asset"] > .thumbnail {
+live-asset > .thumbnail {
 	flex: 1 0 auto;
 	max-width: 30%;
 	overflow:hidden;
 	aspect-ratio: 16 / 9;
 }
 
-a[is="edit-asset"] > .thumbnail > img {
+live-asset > .thumbnail > img {
 	height: 100%;
 	width: 100%;
 	display: block;
 	object-fit: cover;
 }
+
 
 
 #asset-editor {
@@ -155,7 +150,7 @@ a[is="edit-asset"] > .thumbnail > img {
 }
 
 
-a[is="edit-asset"] button {
+live-asset button {
 	all:unset;
 	padding: 0.4em;
 	display:inline-block;
@@ -164,14 +159,14 @@ a[is="edit-asset"] button {
 	text-align:center;
 	flex: 0 0 auto;
 }
-a[is="edit-asset"] button:hover {
+live-asset button:hover {
 	background:#DDD;
 	color:#333;
 }
 
 
 
-[is="edit-asset"] > .meta > p {
+live-asset > .meta > p {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -181,4 +176,21 @@ a[is="edit-asset"] button:hover {
 
 .ProseMirror live-asset > * {
 	pointer-events: none;
+}
+
+#resources > live-asset {
+	display: flex;
+	flex-direction: row;
+	margin: 0.27rem;
+	text-decoration: none;
+	font-size: 0.8em;
+	flex-wrap: wrap;
+	border-radius: 4px;
+}
+
+#resources.icon {
+	column-count:4;
+}
+#resources.icon > form {
+	display:none;
 }

@@ -68,7 +68,7 @@ div.fig-article-body {
 .live-messages.essentiel .live-message:not(.essentiel) {
 	display:none;
 }
-.live-messages .essentiel .live-time {
+.live-messages .live-message.essentiel .live-time {
 	color:#fff;
 	background-color:#b90b04;
 	border-color:#a40c00;
@@ -207,7 +207,6 @@ div.fig-article-body {
 .live-messages > header {
 	position:relative;
 	margin-bottom:10px;
-	/*overflow:hidden;*/
 }
 
 /* STATUS BAR */

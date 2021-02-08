@@ -1,20 +1,26 @@
 import req from "../req.js";
-export default class EditAsset extends HTMLAnchorElement {
+export default class EditAsset extends HTMLElement {
 	constructor() {
 		super();
-		this.setAttribute('is', 'edit-asset');
+		this.draggable = true;
 	}
 	connectedCallback() {
-		this.addEventListener('click', this, true);
+		this.addEventListener('click', this);
+		this.addEventListener('dragstart', this);
+
 	}
 	disconnectedCallback() {
-		this.removeEventListener('click', this, true);
+		this.removeEventListener('click', this);
+		this.removeEventListener('dragstart', this);
 	}
+
 	handleEvent(e) {
-		if (e.target.name == "del") {
-			e.preventDefault();
-			e.stopPropagation();
-			this.del();
+		if (e.type == "dragstart") {
+			e.dataTransfer.setData("text/html", e.target.outerHTML);
+		} else if (e.type == "click") {
+			if (e.target.name == "del") {
+				this.del();
+			}
 		}
 	}
 	del() {

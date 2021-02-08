@@ -3,7 +3,7 @@ div.toolbar {
 	display: flex;
 	justify-content: flex-end;
 	position: absolute;
-	background: #DDD;
+	background-color: inherit;
 	left: -1rem;
 	z-index: 1;
 	font-size: 0.85rem;
@@ -42,4 +42,8 @@ div.toolbar button[name="del"] {
 }
 .ProseMirror-icon {
 	cursor:default;
+}
+
+.live-message:not([id]) > .toolbar [name="del"] {
+	display:none;
 }

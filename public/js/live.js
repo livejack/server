@@ -5,10 +5,10 @@ import { DateTime, Interval } from '../modules/luxon';
 const types = {
 	date(ctx, val) {
 		if (val == null) return val;
-		if (val === "") val = DateTime.local();
+		if (val === "" || val == "now") val = DateTime.local();
 		else val = DateTime.fromISO(val);
 		if (val.invalid) return null;
-		else return val.setLocale("fr");
+		return val.set({ millisecond: 0, second: 0 }).setLocale("fr");
 	}
 };
 const filters = {
@@ -16,7 +16,7 @@ const filters = {
 		const node = ctx.dest.node;
 		const parent = node.parentNode;
 		const old = ctx.src.node.parentNode.querySelector(`[id="${item.id}"]`);
-		if (!item.date) {
+		if (item.id && !item.date) {
 			ctx.dest.node = null;
 			ctx.dest.attr = null;
 		}
@@ -25,7 +25,10 @@ const filters = {
 			if (item.date) {
 				old.parentNode.replaceChild(node, old);
 			} else {
-				old.parentNode.removeChild(old);
+				old.classList.add('hidden');
+				setTimeout(() => {
+					old.parentNode.removeChild(old);
+				}, 700);
 			}
 		} else {
 			// insertion
@@ -39,7 +42,7 @@ const filters = {
 	},
 	date: ['date?', 'string', (ctx, date, fmt) => {
 		if (fmt == "iso") {
-			return date.toISO();
+			return date.toJSDate().toISOString();
 		} else if (fmt == "cal") {
 			return date.toFormat("DDD 'à' T");
 		} else if (fmt == "rel") {

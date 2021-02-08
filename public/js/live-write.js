@@ -4,10 +4,6 @@ import liveSetup from './live-setup.js';
 import { ready, visible } from './doc-events.js';
 import registerEditElements from "./elements/index.js";
 
-import flatpickr from "../modules/flatpickr";
-import { French } from "../modules/flatpickr/dist/esm/l10n/fr.js";
-flatpickr.localize(French);
-
 import xbytes from '../modules/xbytes';
 
 import AssetManager from "./editor/asset-manager.js";
@@ -24,6 +20,8 @@ export const editor = {
 		picto: ""
 	}
 };
+
+let blanked = false;
 
 const assetPlugin = {
 	filters: {
@@ -48,7 +46,21 @@ const assetPlugin = {
 		},
 		classIcon(ctx, type) {
 			return editor.assetType[type];
-		}
+		},
+		subtype: ['str?', (ctx, mime) => {
+			return mime.split(';')[0].split('/').pop();
+		}],
+		blank: ['array', 'str', '?*', (ctx, list, place, ...params) => {
+			if (blanked) return list;
+			blanked = true;
+			const obj = {};
+			params.forEach((param) => {
+				const [key, val] = param.split('=').map((str) => decodeURIComponent(str));
+				obj[key] = val === "" ? null : val;
+			});
+			list[place](obj);
+			return list;
+		}]
 	}
 };
 

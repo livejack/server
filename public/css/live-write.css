@@ -4,9 +4,9 @@
 
 @import "../modules/toggle-switch-css/build/toggle-switch.css";
 
-@import "../modules/slim-select/dist/slimselect.css";
-
 @import "../modules/@livejack/prosemirror/style/default.css";
+
+@import "./resources.css";
 
 @import "./spin.css";
 
@@ -16,11 +16,32 @@
 
 @import "./asset.css";
 
+@import "./article.css";
+
 @import "./form.css";
 
-@import "./toggle.css";
+@import "./status.css";
 
-@import "./filter.css";
+html {
+	--bg: white;
+	--tilebg: #EEE;
+	--border: 1px solid #888;
+	--btncolor: #888;
+	--btncolorhover: #333;
+	--warn-rgb: 184, 0, 0;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		--bg: #333;
+		--tilebg: #666;
+		--tilebghover: #333;
+		--border: 1px solid #AAA;
+		--btncolor: #CCC;
+		--btncolorhover: #FFF;
+	}
+}
+
 
 body {
 	display:flex;
@@ -41,23 +62,36 @@ body {
 	height: 100vh;
 	overflow-y: auto;
 	width: 300px;
-	background: #DDD;
+	background-color:var(--bg);
 }
+
+.tiled {
+	padding: 1em 1rem;
+	border: var(--border);
+	border-radius: 4px;
+	background-color: var(--tilebg);
+	display: block;
+	color: var(--btncolorhover);
+	background-position:center right;
+	background-repeat:no-repeat;
+	background-size: 17% 60%;
+}
+
 #control > header {
-	padding:0.8em;
 	z-index: 100;
 	position: sticky;
 	top: 0;
 }
 
-#control > header > h1 {
-	font-size:1em;
-	margin:0;
-	padding:0;
-	padding-bottom:0.5em;
-	padding-right:10.5em;
+#control > header > a {
+	font-size: 1em;
+	font-weight: bold;
+	margin:0.2rem;
 }
-#control > header > h1 > img {
+#control > header > a[href]::after {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M488.727 0H302.545c-12.853 0-23.273 10.42-23.273 23.273s10.42 23.273 23.273 23.273h129.997L192.999 286.09c-9.087 9.087-9.087 23.823 0 32.912a23.2 23.2 0 0016.455 6.816 23.195 23.195 0 0016.455-6.817L465.455 79.458v129.997c0 12.853 10.42 23.273 23.273 23.273s23.273-10.42 23.273-23.273V23.273C512 10.42 501.58 0 488.727 0z'/%3E%3Cpath d='M395.636 232.727c-12.853 0-23.273 10.42-23.273 23.273v209.455H46.545V139.636H256c12.853 0 23.273-10.42 23.273-23.273S268.853 93.091 256 93.091H23.273C10.42 93.091 0 103.511 0 116.364v372.364C0 501.58 10.42 512 23.273 512h372.364c12.853 0 23.273-10.42 23.273-23.273V256c-.001-12.853-10.421-23.273-23.274-23.273z'/%3E%3C/svg%3E");
+}
+#control > header > a > img {
 	position:relative;
 	top:1px;
 	margin-right:4px;
@@ -69,106 +103,9 @@ body {
 	display:none;
 }
 
-.live-messages > header {
-	padding-bottom: 1em;
-	position: sticky;
-	top: 0;
-	background: white;
-	z-index: 100;
-	margin-bottom: 0;
-	padding-top: 1em;
-}
-.live-message {
-	position:relative;
-}
-.live-message.live-new [class^="live-"] {
-	color: black !important;
-	background:white !important;
-}
-.live-list > .live-message.live-new,
-.live-list > .live-message.active,
-.live-list > .live-message.live-new.active,
-#live-list > .live-message.live-new,
-#live-list > .live-message.active,
-#live-list > .live-message.live-new.active {
-	background:#DDD;
-	box-shadow: 1em 0px 0 0 #ddd, -1em 0 0 0 #ddd;
-	padding-top: 1em;
-	margin-top: 1em;
-	border-top: 1px solid transparent;
-}
-.live-messages > .live-message.live-new,
-#live-messages > .live-message.live-new {
-	background:#EEE;
-	box-shadow:11px 0 0px 0px #EEE, -10px 0 0px 0px #EEE;
-}
-.live-messages > .live-message.active + .live-message,
-.live-messages > .live-message.live-new + .live-message,
-#live-messages > .live-message.active + .live-message,
-#live-messages > .live-message.live-new + .live-message {
-	border-top:1px solid transparent;
-}
-.live-message.active > .focus {
-	background:white !important;
-}
-.live-message.active [class^="live-"] {
-	background:#F9F9F9;
-}
-.live-message .live-article,
-.live-messages figure > div > .lazy {
-	min-height:100px;
-}
-.live-message .live-icons {
-	min-height: 87px;
-}
-.live-messages .lazy {
-	width:100% !important;
-	opacity:1 !important;
-	background:#EEE;
-}
-
-.live-message .live-icons .selected {
-	outline:1px dotted #55F;
-}
-.live-message-locked {
-	opacity:0.2;
-}
-.live-message-changed {
-	outline:1px solid #FFDDDD;
-}
-
-div.ressources {
-	/* background:#EFEFEF; */
-	padding-left: 0.8%;
-	padding-right: 0.8%;
-}
-
-.flatpickr-calendar.hasTime.noCalendar {
-	width: 79px;
-}
-
-.live-message.unsaved {
-	position: sticky;
-	top: 0;
-	background: #EEE;
-	z-index: 10000;
-	bottom: 0;
-}
-
 [contenteditable="true"]:focus,
 [contenteditable="true"] *:focus {
 	outline: none;
-}
-
-
-.ressources.active > live-asset > .header {
-	background-color: #EFEFEF;
-	color: black;
-}
-
-.ressources.active > live-asset > .header:hover {
-	background-color: #4165A0;
-	color: white;
 }
 
 .prosemirror-menu {
@@ -178,26 +115,4 @@ div.ressources {
 	z-index: 1;
 	box-shadow: -4px 4px 4px -4px rgb(0 0 0 / 66%);
 }
-
-.ss-main > .ss-multi-selected {
-	cursor:default;
-	background: transparent;
-	height:100%;
-}
-.ss-content .ss-list .ss-option {
-	cursor:default;
-}
-
-.live-message > [is] {
-	cursor:default;
-}
-.live-message.active > [is] {
-	outline:none;
-}
-.live-message.active > [is]:hover,
-.live-message.active > [is]:focus {
-	outline:1px solid black;
-}
-
-
 

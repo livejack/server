@@ -1,12 +1,8 @@
-import SlimSelect from "../../modules/slim-select";
 export default class AssetManager {
 	constructor() {
 		this.root = document.body.querySelector('[data-live="assets"]');
-		this.select = new SlimSelect({
-			select: this.root.querySelector('.filter[name="type"]'),
-			allowDeselect: true,
-			showSearch: false
-		});
+		this.select = this.root.querySelector('.filter[name="type"]');
+		// TODO filter by type on change
 	}
 	async handleEvent(e) {
 		if (e.type == "click") {

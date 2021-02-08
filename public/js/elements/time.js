@@ -1,3 +1,6 @@
+import flatpickr from "../../modules/flatpickr";
+import { French } from "../../modules/flatpickr/dist/esm/l10n/fr.js";
+flatpickr.localize(French);
 export default class EditTime extends HTMLTimeElement {
 	#defaultValue
 	constructor() {
@@ -13,9 +16,7 @@ export default class EditTime extends HTMLTimeElement {
 	}
 	set value(val) {
 		this.dateTime = val;
-		this.textContent = this.constructor.matchdom.merge('[date|date:rel]', {
-			date: val
-		});
+		this.textContent = this.mergeDate(val);
 	}
 	get defaultValue() {
 		return this.#defaultValue;
@@ -45,7 +46,7 @@ export default class EditTime extends HTMLTimeElement {
 		this.helperInput = document.createElement('input');
 		this.helperInput.style.display = 'none';
 		this.insertAdjacentElement('afterEnd', this.helperInput);
-		this.picker = window.flatpickr(this, {
+		this.picker = flatpickr(this, {
 			clickOpens: true,
 			noCalendar: true,
 			enableTime: true,
