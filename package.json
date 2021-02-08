@@ -6,7 +6,7 @@
     "@livejack/moduleserver": "^1.2.0",
     "@livejack/prosemirror": "^1.0.6",
     "@webreflection/custom-elements": "^0.2.12",
-    "ajv-keywords": "^4.0.0",
+    "ajv-keywords": "^3.5.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "diff-list": "^1.0.3",
