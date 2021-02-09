@@ -18,6 +18,7 @@ export default async function req(url, method = "get", params = {}) {
 	}
 	return window.fetch(url, opts).then(res => {
 		if (res.status == 200) return res.json();
+		else if (res.status >= 400) throw new Error(res.status);
 		else return {};
 	});
 }
