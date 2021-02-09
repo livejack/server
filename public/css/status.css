@@ -11,8 +11,15 @@
 	--switch-theme-rgb: var(--warn-rgb);
 	--switch-margin:0;
 	transform: scale(-1, 1);
-	left: 1.5em;
+	left: 0;
 	--bar-width:3em;
+	width: 100%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	text-align: center;
+	padding-left: calc(50% - 1.5em);
 }
 
 
@@ -43,10 +50,3 @@
 	opacity: 1;
 }
 
-.toggle-switch > :checked+label {
-	--knob-x: calc(var(--bar-width) - var(--bar-height));
-}
-
-.toggle-switch > label {
-	--knob-x: calc(-1 * var(--bar-height) / 2);
-}
