@@ -84,35 +84,13 @@ class LiveSetup extends Live {
 		});
 	}
 	reveal(node) {
-		if (node.matches('.tweet')) {
-			node.classList.remove('lazy');
-			node.classList.remove('tweet');
-			node.classList.add('twitter-tweet');
-			if (window.twttr) window.twttr.widgets.load(node);
-			return;
-		}
-
-		const src = node.dataset.src;
-		if (src) {
-			node.setAttribute('src', src);
-			node.removeAttribute('data-src');
-			node.removeAttribute('title');
-			node.classList.remove('lazy');
-			return;
-		}
+		if (node.children.length) return;
 		const html = node.dataset.html;
-		if (html) {
-			const frag = parseHTML(html);
-			var withoutScript = frag.querySelectorAll('script').length == 0;
-			if (withoutScript) frag.classList.add('lazy');
-			node.parentNode.replaceChild(frag, node);
-			if (withoutScript) setTimeout(function () {
-				frag.classList.remove('lazy');
-			}, 20);
-		}
+		if (!html) return;
+		node.appendChild(parseHTML(html));
 	}
 	trackUi(node) {
-		node.querySelectorAll('.lazy').forEach((node) => {
+		node.querySelectorAll('live-asset').forEach((node) => {
 			this.observer.observe(node);
 		});
 		const time = node.querySelector('time');
