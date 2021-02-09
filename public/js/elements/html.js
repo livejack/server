@@ -17,9 +17,11 @@ class EditHtml {
 	connectedCallback() {
 		this.defaultValue = this.value;
 		this.addEventListener('click', this, true);
+		this.addEventListener('focus', this);
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this, true);
+		this.removeEventListener('focus', this);
 		this.stop();
 	}
 	get article() {
@@ -50,6 +52,8 @@ class EditHtml {
 	handleEvent(e) {
 		if (e.type == "click") {
 			if (this.article.active) this.start();
+		} else if (e.type == "focus") {
+			document.querySelector('#resources [is="edit-filter"]').start(this.view, this.options.assets);
 		}
 	}
 	start() {
@@ -62,6 +66,7 @@ class EditHtml {
 		const fragment = this.view.toDOM();
 		this.view.destroy();
 		delete this.view;
+		document.querySelector('#resources [is="edit-filter"]').stop();
 		this.textContent = '';
 		this.appendChild(fragment);
 	}
@@ -97,12 +102,31 @@ export class EditMark extends HTMLDivElement {
 	}
 	options = {
 		nodes: {
-			doc: { content: "inline*" },
-			image: BaseSpec.nodes.image,
-			hard_break: BaseSpec.nodes.hard_break,
-			text: BaseSpec.nodes.text
+			doc: { content: "image*" },
+			text: BaseSpec.nodes.text,
+			image: {
+				inline: true,
+				attrs: {
+					src: {},
+					alt: { default: null }
+				},
+				draggable: true,
+				parseDOM: [{
+					tag: "img[src]", getAttrs(dom) {
+						return {
+							src: dom.getAttribute("src"),
+							alt: dom.getAttribute("alt")
+						};
+					}
+				}],
+				toDOM(node) {
+					let { src, alt } = node.attrs;
+					return ["img", { src, alt }];
+				}
+			}
 		},
-		menu: false
+		menu: false,
+		assets: ['icon']
 	};
 }
 extend(EditMark, EditHtml);
@@ -116,7 +140,8 @@ export class EditText extends HTMLDivElement {
 		nodes: BaseSpec.nodes,
 		marks: BaseSpec.marks,
 		list: true,
-		menu: true
+		menu: true,
+		assets: ['link', 'image', 'video', 'embed']
 	};
 }
 extend(EditText, EditHtml);

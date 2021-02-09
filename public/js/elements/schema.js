@@ -22,30 +22,6 @@ export const nodes = {
 		group: "inline"
 	},
 
-	image: {
-		inline: true,
-		attrs: {
-			src: {},
-			alt: { default: null },
-			title: { default: null }
-		},
-		group: "inline",
-		draggable: true,
-		parseDOM: [{
-			tag: "img[src]", getAttrs(dom) {
-				return {
-					src: dom.getAttribute("src"),
-					title: dom.getAttribute("title"),
-					alt: dom.getAttribute("alt")
-				};
-			}
-		}],
-		toDOM(node) {
-			let { src, alt, title } = node.attrs;
-			return ["img", { src, alt, title }];
-		}
-	},
-
 	asset: {
 		group: "block",
 		defining: true,
@@ -64,8 +40,8 @@ export const nodes = {
 				default: null
 			}
 		},
-		parseDOM: [{ // TODO add more logic for various asset types
-			tag: "live-asset",
+		parseDOM: [{
+			tag: 'live-asset',
 			getAttrs(dom) {
 				return {
 					url: dom.dataset.url,
@@ -94,21 +70,20 @@ export const nodes = {
 export const marks = {
 	link: {
 		attrs: {
-			href: {},
-			title: { default: null }
+			href: {}
 		},
 		inclusive: false,
 		parseDOM: [{
-			tag: "a[href]", getAttrs(dom) {
+			tag: "a[href]",
+			getAttrs(dom) {
 				return {
-					href: dom.getAttribute("href"),
-					title: dom.getAttribute("title")
+					href: dom.getAttribute("href")
 				};
 			}
 		}],
 		toDOM(node) {
-			let { href, title } = node.attrs;
-			return ["a", { href, title }, 0];
+			let { href } = node.attrs;
+			return ["a", { href }, 0];
 		}
 	},
 

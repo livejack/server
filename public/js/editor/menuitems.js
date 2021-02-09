@@ -34,29 +34,6 @@ function markItem(markType, options) {
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
-function linkItem(markType) {
-	return new MenuItem({
-		title: "Add or remove link",
-		icon: icons.link,
-		active(state) { return markActive(state, markType); },
-		enable(state) { return !state.selection.empty; },
-		run(state, dispatch, view) {
-			if (markActive(state, markType)) {
-				toggleMark(markType)(state, dispatch);
-				return true;
-			}
-			view.prompt().then((meta) => {
-				// TODO if mark is collapsed insert meta.title here
-				// and select it
-				toggleMark(markType, {
-					url: meta.url
-				})(view.state, view.dispatch);
-				view.focus();
-			});
-		}
-	});
-}
-
 function wrapListItem(nodeType, options) {
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
 }
@@ -127,9 +104,6 @@ export function buildMenuItems(schema, promptUrl) {
 	if ((type = schema.marks.em)) {
 		r.toggleEm = markItem(type, { title: "Toggle emphasis", icon: icons.em });
 	}
-	if ((type = schema.marks.link)) {
-		r.toggleLink = linkItem(type, promptUrl);
-	}
 
 	if ((type = schema.nodes.bullet_list)) {
 		r.wrapBulletList = wrapListItem(type, {
@@ -157,7 +131,7 @@ export function buildMenuItems(schema, promptUrl) {
 	}
 
 	let cut = arr => arr.filter(x => x);
-	r.inlineMenu = [cut([r.toggleStrong, r.toggleEm, r.toggleCode, r.toggleLink])];
+	r.inlineMenu = [cut([r.toggleStrong, r.toggleEm, r.toggleCode])];
 	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
 	r.fullMenu = r.inlineMenu.concat(r.blockMenu);
 

@@ -2,6 +2,7 @@ import cePolyfill from '../../modules/@webreflection/custom-elements';
 cePolyfill(window);
 
 import EditAsset from './asset.js';
+import EditFilter from './filter.js';
 import EditPaste from './paste.js';
 import EditUpload from './upload.js';
 import EditStatus from './status.js';
@@ -23,5 +24,6 @@ export default function register(live) {
 	ce.define('edit-paste', EditPaste, { extends: 'form' });
 	ce.define('edit-upload', EditUpload, { extends: 'form' });
 	ce.define('edit-status', EditStatus, { extends: 'form' });
+	ce.define('edit-filter', EditFilter, { extends: 'form' });
 	ce.define('live-asset', EditAsset);
 }

@@ -10,6 +10,8 @@ import {
 	addListNodes
 } from "../../modules/@livejack/prosemirror";
 
+import { HTML as parseHTML } from "../../modules/matchdom";
+
 import { menuBar } from "./menubar.js";
 import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
@@ -34,7 +36,9 @@ function getPlugins({schema, menu}) {
 
 export class Editor extends EditorView {
 	#serializer
-	constructor(place, { nodes, marks, list, menu }) {
+	#parser
+	#content
+	constructor(place, { nodes, marks, list, menu, assets = [] }) {
 		const baseSchema = new Schema({ nodes, marks });
 		let specNodes = baseSchema.spec.nodes;
 		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
@@ -57,12 +61,35 @@ export class Editor extends EditorView {
 				}
 				this.updateState(this.state.apply(tr));
 			},
-			domParser: parser
+			domParser: parser,
+			transformPastedHTML(str) {
+				const frag = parseHTML(str);
+				if (frag.matches && frag.matches('live-asset')) {
+					return this.convertAsset(frag).outerHTML;
+				}
+				return str;
+			}
 		});
+		this.#content = nodes.doc.content.replace('*', '');
+		this.#parser = parser;
 		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
-	async prompt(url) {
-		// virtual
+	convertAsset(dom) {
+		if (dom.dataset.type == "link") {
+			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
+		} else if (this.#content == "text" && dom.dataset.title) {
+			return parseHTML(dom.dataset.title);
+		} else if (this.#content == "image" && dom.favicon) {
+			return parseHTML(`<img src="${dom.favicon}">`);
+		} else return dom;
+	}
+	insertAsset(dom) {
+		const frag = dom.ownerDocument.createDocumentFragment();
+		frag.appendChild(this.convertAsset(dom).cloneNode(true));
+		const node = this.#parser.parse(frag);
+		const tr = this.state.tr;
+		tr.replaceSelectionWith(node);
+		this.dispatch(tr);
 	}
 	toDOM() {
 		return this.#serializer.serializeFragment(this.state.doc.content);

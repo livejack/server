@@ -6,8 +6,6 @@ import registerEditElements from "./elements/index.js";
 
 import xbytes from '../modules/xbytes';
 
-import AssetManager from "./editor/asset-manager.js";
-
 export const editor = {
 	assetType: {
 		none: "icon-plus",
@@ -70,6 +68,5 @@ liveSetup.matchdom.extend(assetPlugin);
 
 ready(async () => {
 	await visible();
-	liveSetup.assetManager = new AssetManager();
 	registerEditElements(liveSetup);
 });
