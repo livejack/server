@@ -120,15 +120,13 @@
 			<form is="edit-paste" method="post" action="assets">
 				<input placeholder="Coller une url" class="tiled" />
 			</form>
-
-			<select class="filter tiled" name="type">
-				<option>Aucun filtre</option>
-				<option value="image">Image</option>
-				<option value="video">Vidéo</option>
-				<option value="embed">Embed</option>
-				<option value="link">Lien</option>
-				<option value="icon">Pictos</option>
-			</select>
+			<form is="edit-filter" method="get">
+				<label><input name="link" type="checkbox" /><span>Lien</span></label>
+				<label><input name="image" type="checkbox" /><span>Image</span></label>
+				<label><input name="video" type="checkbox" /><span>Vidéo</span></label>
+				<label><input name="embed" type="checkbox" /><span>Embed</span></label>
+				<label><input name="icon" type="checkbox" /><span>Picto</span></label>
+			</form>
 			<template data-mode="insert">
 				<live-asset
 					class="[it.meta.type|classIcon:]"
@@ -137,6 +135,7 @@
 					data-title="[it.meta.title]"
 					data-description="[it.meta.description]"
 					data-html="[it.meta.html]"
+					data-type="[it.meta.type]"
 				>
 					<div class="header">
 						<img src="[it.meta.icon|orAt:*]" class="favicon" />
@@ -144,7 +143,7 @@
 						<button name="del">✕</button>
 					</div>
 					<div class="meta">
-						[it.meta.type] ([it.meta.mime|subtype:])
+						<strong>[it.meta.type]</strong> ([it.meta.mime|subtype:])
 						<em>([it.meta.size|orAt:*|units:])</em>
 						<span>[it.meta.width|orAt:*][it.meta.height|pre:x]px</span><br>
 						[it.date|date:rel]
