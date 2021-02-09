@@ -56,7 +56,7 @@ const filters = {
 			else return date.toFormat("D '\nà' T");
 		}
 	}],
-	procrastify(ctx, frag) {
+	importAssets(ctx, frag) {
 		if (!frag || !frag.querySelector) return frag;
 		const objects = ['object', 'iframe', 'embed', 'opta', '.dugout-video'];
 		const list = frag.querySelectorAll([
