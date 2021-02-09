@@ -4,6 +4,7 @@ const got = require('got');
 const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 const inspector = promisify(require('url-inspector'));
+const thumbnailer = require('../lib/thumbnailer');
 
 exports.GET = (req) => {
 	const { domain, key } = req.params;
@@ -85,6 +86,8 @@ async function createAsset(page, body = {}) {
 	if (meta.type == "image" && meta.mime != "text/html" && !meta.thumbnail) {
 		meta.thumbnail = meta.url;
 	}
+	if (meta.icon == "data:/,") delete meta.icon;
+	if (meta.thumbnail) meta.thumbnail = await thumbnailer(meta.thumbnail);
 	if (!item.meta) item.meta = {};
 	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
 		if (meta[name] != null) item.meta[name] = meta[name];
