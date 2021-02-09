@@ -133,13 +133,13 @@
 					id="[assets.assets|repeat:*:it|place:before|id]"
 					data-url="[it.url]"
 					data-title="[it.meta.title]"
-					data-description="[it.meta.description]"
 					data-html="[it.meta.html]"
 					data-type="[it.meta.type]"
+					data-icon="[it.meta.icon]"
 				>
 					<div class="header">
 						<img src="[it.meta.icon|orAt:*]" class="favicon" />
-						<span>[it.meta.title]</span>
+						<a href="[it.url]">[it.meta.title]</a>
 						<button name="del">✕</button>
 					</div>
 					<div class="meta">

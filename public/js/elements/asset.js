@@ -41,6 +41,8 @@ export default class EditAsset extends HTMLElement {
 		} else if (e.type == "click") {
 			if (e.target.name == "del") {
 				this.del();
+			} else if (e.target.closest('a[href]')) {
+				e.preventDefault();
 			}
 		}
 	}

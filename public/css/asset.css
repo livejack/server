@@ -12,10 +12,10 @@ live-asset {
 	color:white;
 	display: flex;
 	width: 100%;
-	/* height: 2.3em; */
+	height: 2.3em;
 	align-items: flex-start;
 }
-#resources live-asset > .header > span {
+#resources live-asset > .header > a {
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -23,6 +23,8 @@ live-asset {
 	flex: 1 1 auto;
 	line-height: 2.3em;
 	padding-left: 0.5em;
+	color:inherit;
+	text-decoration: none;
 }
 
 #resources live-asset > .header > img {
@@ -87,10 +89,12 @@ live-asset {
 	all:unset;
 	padding: 0.4em;
 	display:inline-block;
-	width: 1.5em;
-	height: 1.5em;
+	width: 2.3em;
+	height: 2.3em;
 	text-align:center;
 	flex: 0 0 auto;
+	box-sizing: border-box;
+	line-height: 1.2em;
 }
 #resources live-asset button:hover {
 	background:#DDD;
