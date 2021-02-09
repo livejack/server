@@ -83,7 +83,7 @@ app.route("/favicon.ico").get(function(req, res) {
 
 app.use(serveModule("/modules"));
 
-app.route(/\/js|css|img|lib\//).get(
+app.route(/\/js|css|img\//).get(
 	serveStatic(app.get('statics'), {
 		index: false,
 		redirect: false,

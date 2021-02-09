@@ -50,9 +50,6 @@
     "postinstall": "^0.7.0",
     "stylelint-config-standard": "^20.0.0"
   },
-  "prepare": {
-    "@webreflection/custom-elements/index.js": "link public/lib/custom-elements.js"
-  },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
     "globals": {
