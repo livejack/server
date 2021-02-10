@@ -65,6 +65,7 @@ body {
 	overflow-y: auto;
 	width: 300px;
 	background-color:var(--bg);
+	scroll-snap-type: y proximity;
 }
 
 .tiled {
@@ -85,6 +86,7 @@ body {
 	top: 0;
 	background-color: var(--bg);
 	padding-top: 0.2rem;
+	scroll-snap-align: start;
 }
 
 #control > header > a {
