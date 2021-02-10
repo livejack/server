@@ -40,7 +40,6 @@ live-asset {
 	padding-left:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
-	background-color: var(--bg);
 	margin: 0;
 	flex: 1 0 auto;
 	max-width: 70%;
@@ -58,7 +57,7 @@ live-asset {
 }
 
 #resources live-asset > .thumbnail {
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 	max-width: 30%;
 	overflow:hidden;
 	aspect-ratio: 16 / 9;
@@ -126,6 +125,7 @@ live-asset {
 	font-size: 0.8em;
 	flex-wrap: wrap;
 	border-radius: 4px;
+	background-color: var(--bg);
 }
 
 #resources.icon {
