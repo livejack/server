@@ -61,7 +61,7 @@ form[is].negative > input {
 }
 
 #resources > form[is="edit-filter"] {
-	display:flex;
+	display: none;
 	margin-top: 1rem;
 }
 [is="edit-filter"] > label {
