@@ -7,7 +7,7 @@ const months = [
 ];
 
 function getTimeStr(date) {
-	return `${date.getHours()}:${date.getMinutes()}`;
+	return date.toLocaleTimeString('fr-FR').split(':').slice(0, 2).join(':');
 }
 
 const types = {
@@ -57,7 +57,7 @@ const filters = {
 			if (sameDay) {
 				return time;
 			} else {
-				return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} à ${time}`;
+				return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}\nà ${time}`;
 			}
 		}
 	}],
