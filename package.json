@@ -46,10 +46,12 @@
     "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
     "@kapouer/eslint-config": "^1.2.1",
+    "esbuild": "^0.8.43",
     "expect.js": "^0.3.1",
     "jsondiffpatch": "^0.4.1",
     "mocha": "^8.2.1",
-    "postinstall": "^0.7.0",
+    "postinstall-css": "^0.7.0",
+    "postinstall-js": "^0.7.0",
     "stylelint-config-standard": "^20.0.0"
   },
   "eslintConfig": {
@@ -144,7 +146,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "prepare": "postinstall",
+    "prepare": "node prepare.js",
     "noffprint": "npm explore noffprint -- npm run start"
   }
 }
