@@ -27,6 +27,7 @@ export default class EditStatus extends HTMLFormElement {
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-status');
+		this.#input = this.querySelector('[name="status"]');
 	}
 	connectedCallback() {
 		this.addEventListener('change', this);
