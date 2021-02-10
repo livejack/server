@@ -5,7 +5,7 @@ import { DateTime, Interval } from '../modules/luxon';
 const types = {
 	date(ctx, val) {
 		if (val == null) return val;
-		if (val === "" || val == "now") val = DateTime.local();
+		if (val == "now") val = DateTime.local();
 		else val = DateTime.fromISO(val);
 		if (val.invalid) return null;
 		return val.set({ millisecond: 0, second: 0 }).setLocale("fr");
