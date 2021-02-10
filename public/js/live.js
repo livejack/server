@@ -12,14 +12,10 @@ const types = {
 	}
 };
 const filters = {
-	place(ctx, item, pos) {
+	place(ctx, item) {
+		const cursor = ctx.src.node;
 		const node = ctx.dest.node;
-		const parent = node.parentNode;
-		const old = ctx.src.node.parentNode.querySelector(`[id="${item.id}"]`);
-		if (item.id && !item.date) {
-			ctx.dest.node = null;
-			ctx.dest.attr = null;
-		}
+		const old = cursor.parentNode.querySelector(`[id="${item.id}"]`);
 
 		if (old) {
 			if (item.date) {
@@ -30,13 +26,9 @@ const filters = {
 					old.parentNode.removeChild(old);
 				}, 700);
 			}
-		} else {
-			// insertion
-			if (pos == "before") {
-				parent.insertBefore(node, parent.querySelector('[id]'));
-			} else if (pos == "after") {
-				parent.insertBefore(node, parent.querySelector('[id] + :not([id])'));
-			}
+		} else if (item.date) {
+			// insert before first node with [id]
+			cursor.parentNode.insertBefore(node, cursor.parentNode.querySelector('[id]'));
 		}
 		return item;
 	},

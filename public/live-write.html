@@ -70,7 +70,7 @@
 			</header>
 			<div class="live-list">
 				<template data-mode="insert">
-					<article is="edit-article" id="[page.messages|blank:push:date=now|repeat:*:msg|place:before|id]"
+					<article is="edit-article" id="[page.messages|blank:push:date=now|repeat:*:msg:place|id]"
 						class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 						itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#[msg.id]" />
@@ -130,7 +130,7 @@
 			<template data-mode="insert">
 				<live-asset
 					class="[it.meta.type|classIcon:]"
-					id="[assets.assets|repeat:*:it|place:before|id]"
+					id="[assets.assets|repeat:*:it:place|id]"
 					data-url="[it.url]"
 					data-title="[it.meta.title]"
 					data-html="[it.meta.html]"
