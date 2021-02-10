@@ -1,14 +1,14 @@
 import { Matchdom } from "../modules/matchdom";
 import "./array-like.js";
-import { DateTime, Interval } from '../modules/luxon';
 
 const types = {
 	date(ctx, val) {
 		if (val == null) return val;
-		if (val == "now") val = DateTime.local();
-		else val = DateTime.fromISO(val);
-		if (val.invalid) return null;
-		return val.set({ millisecond: 0, second: 0 }).setLocale("fr");
+		const date = val == "now" ? new Date() : new Date(val);
+		if (Number.isNaN(date.getTime())) return null;
+		date.setMilliseconds(0);
+		date.setSeconds(0);
+		return date;
 	}
 };
 const filters = {
@@ -38,14 +38,18 @@ const filters = {
 		} else if (fmt == "cal") {
 			return date.toFormat("DDD 'à' T");
 		} else if (fmt == "rel") {
-			let inter = 1;
+			let sameDay = false;
 			const live = ctx.scope.live;
 			if (live && live.rooms && live.rooms.page) {
-				const ref = DateTime.fromISO(live.rooms.page);
-				inter = Interval.fromDateTimes(date, ref).length('days');
+				const ref = new Date(live.rooms.page);
+				sameDay = Math.abs((date.getTime() - ref.getTime())) < 1000 * 3600 * 24;
 			}
-			if (inter == 0) return date.toFormat('T');
-			else return date.toFormat("D '\nà' T");
+			const time = `${date.getHours()}:${date.getMinutes()}`;
+			if (sameDay) {
+				return time;
+			} else {
+				return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} à ${time}`;
+			}
 		}
 	}],
 	importAssets(ctx, frag) {
