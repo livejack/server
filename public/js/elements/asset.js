@@ -14,10 +14,12 @@ export default class EditAsset extends HTMLElement {
 			if (html != this.innerHTML) {
 				this.textContent = '';
 				this.appendChild(parseHTML(html));
-				// TODO insert scripts
-				// this.querySelectorAll('script').forEach(node => {
-				// 	node.setAttribute('src', node.getAttribute('src'));
-				// });
+				this.querySelectorAll('script').forEach(node => {
+					const copy = node.ownerDocument.createElement('script');
+					copy.src = node.src;
+					copy.async = true;
+					node.parentNode.replaceChild(copy, node);
+				});
 			}
 		}
 
