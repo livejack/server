@@ -32,7 +32,7 @@ const filters = {
 		}
 		return item;
 	},
-	date: ['date?', 'string', (ctx, date, fmt) => {
+	date: ['date?now', 'string', (ctx, date, fmt) => {
 		if (fmt == "iso") {
 			return date.toJSDate().toISOString();
 		} else if (fmt == "cal") {
