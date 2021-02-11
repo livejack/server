@@ -75,12 +75,12 @@ export class Editor extends EditorView {
 		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
 	convertAsset(dom) {
-		if (dom.dataset.type == "link") {
-			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
+		if (this.#content == "image" && dom.favicon) {
+			return parseHTML(`<img src="${dom.favicon}">`);
 		} else if (this.#content == "text" && dom.dataset.title) {
 			return parseHTML(dom.dataset.title);
-		} else if (this.#content == "image" && dom.favicon) {
-			return parseHTML(`<img src="${dom.favicon}">`);
+		} else if (dom.dataset.type == "link") {
+			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
 		} else return dom;
 	}
 	insertAsset(dom) {
