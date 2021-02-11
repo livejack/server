@@ -2,19 +2,31 @@ import req from "../req.js";
 
 export default class EditFilter extends HTMLFormElement {
 	#view
+	#control
+	#assets
+	#icons
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-filter');
 	}
 	connectedCallback() {
-		document.querySelector('#resources').addEventListener('click', this);
+		this.#control = this.closest('#control');
+		this.#assets = this.#control.querySelector('#resources');
+		this.#icons = this.#control.querySelector('#icons');
+		this.#control.addEventListener('click', this);
 	}
 	disconnectedCallback() {
-		document.querySelector('#resources').removeEventListener('click', this);
+		this.#control.removeEventListener('click', this);
 	}
 	handleEvent(e) {
 		if (e.type == "click" && this.#view) {
-			const asset = e.target.closest('live-asset');
+			let asset;
+			if (this.#assets.contains(e.target)) {
+				asset = e.target.closest('live-asset');
+			} else if (this.#icons.contains(e.target)) {
+				asset = e.target.closest('div');
+				if (asset) asset = asset.firstElementChild;
+			}
 			if (asset) this.#view.insertAsset(asset);
 		}
 	}
