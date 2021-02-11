@@ -67,7 +67,6 @@ export default class EditTime extends HTMLTimeElement {
 			},
 			onChange: (sel, dateStr) => {
 				this.value = dateStr;
-				this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 			}
 		});
 		this.picker.open();

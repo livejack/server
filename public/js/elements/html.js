@@ -7,7 +7,7 @@ class HtmlEditor extends Editor {
 		super(place, opts);
 	}
 	changed() {
-		this.dom.dispatchEvent(new Event("article:update", { "bubbles": true }));
+		this.dom.dispatchEvent(new Event("change", { "bubbles": true }));
 	}
 	async prompt(url) {
 		return await EditHtml.assetManager.choose(url);
@@ -26,9 +26,6 @@ class EditHtml {
 	}
 	get article() {
 		return this.closest('[is="edit-article"]');
-	}
-	changed() {
-		this.dispatchEvent(new Event("article:update", { "bubbles": true }));
 	}
 	get name() {
 		return this.getAttribute('name');

@@ -9,12 +9,10 @@ export default class EditArticle extends HTMLElement {
 	connectedCallback() {
 		this.addEventListener('click', this, true);
 		this.addEventListener('change', this);
-		this.addEventListener('article:update', this);
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this, true);
 		this.removeEventListener('change', this);
-		this.removeEventListener('article:update', this);
 	}
 	get active() {
 		return this.#active;
@@ -34,7 +32,6 @@ export default class EditArticle extends HTMLElement {
 				}
 				break;
 			case "change":
-			case "article:update":
 				this.unsaved = true;
 				break;
 		}
