@@ -24,8 +24,9 @@ export default class EditFilter extends HTMLFormElement {
 			if (this.#assets.contains(e.target)) {
 				asset = e.target.closest('live-asset');
 			} else if (this.#icons.contains(e.target)) {
-				asset = e.target.closest('div');
-				if (asset) asset = asset.firstElementChild;
+				asset = e.target;
+				if (asset.nodeName == "DIV") asset = asset.firstElementChild;
+				if (asset.nodeName != "IMG") asset = null;
 			}
 			if (asset) this.#view.insertAsset(asset);
 		}
