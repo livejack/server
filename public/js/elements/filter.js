@@ -1,3 +1,5 @@
+import req from "../req.js";
+
 export default class EditFilter extends HTMLFormElement {
 	#view
 	constructor() {
@@ -6,38 +8,30 @@ export default class EditFilter extends HTMLFormElement {
 	}
 	connectedCallback() {
 		document.querySelector('#resources').addEventListener('click', this);
-		this.addEventListener('change', this);
 	}
 	disconnectedCallback() {
 		document.querySelector('#resources').removeEventListener('click', this);
-		this.removeEventListener('change', this);
 	}
 	handleEvent(e) {
-		if (e.type == "change") {
-			this.update();
-		} else if (e.type == "click" && this.#view) {
+		if (e.type == "click" && this.#view) {
 			const asset = e.target.closest('live-asset');
 			if (asset) this.#view.insertAsset(asset);
 		}
 	}
-	start(view, types = []) {
+	async start(view, name) {
 		this.#view = view;
-		this.querySelectorAll('input[type="checkbox"]').forEach(node => {
-			node.disabled = !types.includes(node.name);
-			node.checked = !node.disabled;
-		});
-		this.update();
-	}
-	update() {
-		this.querySelectorAll('input[type="checkbox"]').forEach(node => {
-			this.classList.toggle(node.name, node.checked);
-		});
+		const control = this.closest('#control');
+		if (name == "mark") {
+			control.classList.add('icons');
+			const root = document.getElementById('icons');
+			if (root.children.length > 1) return;
+			const icons = await req('../pictos/assets.json');
+			this.merge(root, icons);
+		} else {
+			control.classList.remove('icons');
+		}
 	}
 	stop() {
 		this.#view = null;
-		this.querySelectorAll('input[type="checkbox"]').forEach(node => {
-			node.disabled = false;
-			node.checked = false;
-		});
 	}
 }

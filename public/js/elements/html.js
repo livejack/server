@@ -17,11 +17,11 @@ class EditHtml {
 	connectedCallback() {
 		this.defaultValue = this.value;
 		this.addEventListener('click', this, true);
-		this.addEventListener('focus', this);
+		this.addEventListener('focus', this, true);
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this, true);
-		this.removeEventListener('focus', this);
+		this.removeEventListener('focus', this, true);
 		this.stop();
 	}
 	get article() {
@@ -50,7 +50,7 @@ class EditHtml {
 		if (e.type == "click") {
 			if (this.article.active) this.start();
 		} else if (e.type == "focus") {
-			document.querySelector('#resources [is="edit-filter"]').start(this.view, this.options.assets);
+			document.querySelector('#resources [is="edit-filter"]').start(this.view, this.name);
 		}
 	}
 	start() {
@@ -122,8 +122,7 @@ export class EditMark extends HTMLDivElement {
 				}
 			}
 		},
-		menu: false,
-		assets: ['icon']
+		menu: false
 	};
 }
 extend(EditMark, EditHtml);
@@ -137,8 +136,7 @@ export class EditText extends HTMLDivElement {
 		nodes: BaseSpec.nodes,
 		marks: BaseSpec.marks,
 		list: true,
-		menu: true,
-		assets: ['link', 'image', 'video', 'embed']
+		menu: true
 	};
 }
 extend(EditText, EditHtml);

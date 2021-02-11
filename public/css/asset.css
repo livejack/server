@@ -70,19 +70,6 @@ live-asset {
 }
 
 
-
-#asset-editor {
-	display:none;
-	position:absolute;
-	top:0;
-	bottom:0;
-	left:0;
-	right:0;
-	z-index:1;
-	background-color:#CCC;
-}
-
-
 #resources live-asset button {
 	all:unset;
 	padding: 0.4em;
@@ -146,4 +133,27 @@ live-asset {
 	color:white;
 	font-size:0.8em;
 	padding:1em;
+}
+
+#control.icons > #resources,
+#control > #icons {
+	display:none;
+}
+
+#control.icons > #icons {
+	display:flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin:0.2rem;
+}
+#icons > div {
+	flex: 0 0 20%;
+	border: 1px solid var(--btncolor);
+	border-radius: 4px;
+	aspect-ratio: 1/1;
+	padding: 0.4em;
+}
+#icons > div > img {
+	width:100%;
+	max-height:100%;
 }

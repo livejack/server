@@ -155,44 +155,10 @@
 				</live-asset>
 			</template>
 		</div>
-		<div id="asset-editor" class="live-messages">
-			<div class="title">
-				<i></i>
-				<p class="url"></p>
-				<p class="error">Format&nbsp;non&nbsp;reconnu</p>
-			</div>
-			<fieldset class="image">
-				<label>Légende<br />
-					<input name="legende" placeholder="pas de légende" /></label>
-				<label>Crédits<br />
-					<input name="credits" placeholder="pas d'auteur" /></label>
-			</fieldset>
-			<fieldset class="link">
-				<label>URL<br />
-					<input name="url" placeholder="http://" /></label>
-				<label>Légende<br />
-					<input name="legende" placeholder="pas de légende - affiche l'url" /></label>
-			</fieldset>
-			<fieldset class="link">
-				<legend>Target</legend>
-				<label><input name="style" type="radio" value="_blank" checked /><span>Blank</span></label>
-				<label><input name="style" type="radio" value="_self" /><span>Self</span></label>
-			</fieldset>
-			<fieldset class="iframe video">
-				<legend>Ratio</legend>
-				<label title="non responsif"><input name="style" type="radio" value="" checked /><span>fixe</span></label>
-				<label><input name="style" type="radio" value="ratio-16-9" /><span>16/9</span></label>
-				<label><input name="style" type="radio" value="ratio-4-3" /><span>4/3</span></label>
-			</fieldset>
-			<div class="content live-article"></div>
-			<div class="toolbar">
-				<button type="button" disabled name="delete" class="btn" title="Supprimer la ressource"><i class="fas fa-trash"></i>
-					Supprimer</button>
-				<button type="button" name="cancel" class="btn" title="Annuler les modifications en cours"><i
-						class="fas fa-remove"></i> Annuler</button>
-				<button type="button" disabled name="publish" class="btn" title="Enregistrer la ressource"><i class="fas fa-ok"></i>
-					Valider</button>
-			</div>
+		<div id="icons">
+			<template data-mode="insert">
+				<div><img src="[assets|repeat:div|url]" /></div>
+			</template>
 		</div>
 	</div>
 	<div class="notification" id="errors"
