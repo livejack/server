@@ -7,17 +7,6 @@ function getTimeStr(date) {
 	return date.toLocaleTimeString('fr-FR').split(':').slice(0, 2).join(':');
 }
 
-export const types = {
-	date(ctx, val) {
-		if (val == null) return val;
-		const date = val == "now" ? new Date() : new Date(val);
-		if (Number.isNaN(date.getTime())) return null;
-		date.setMilliseconds(0);
-		date.setSeconds(0);
-		return date;
-	}
-};
-
 export const filters = {
 	date: ['date?now', 'string', (ctx, date, fmt) => {
 		if (fmt == "iso") {

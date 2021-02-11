@@ -48,8 +48,8 @@ const assetPlugin = {
 		subtype: ['str?', (ctx, mime) => {
 			return mime.split(';')[0].split('/').pop();
 		}],
-		blank: ['array', 'str', '?*', (ctx, list, place, ...params) => {
-			if (blanked) return list;
+		blank: ['array?', 'str', '?*', (ctx, list, place, ...params) => {
+			if (!list || blanked) return list;
 			blanked = true;
 			const obj = {};
 			params.forEach((param) => {
