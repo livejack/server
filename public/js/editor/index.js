@@ -88,7 +88,16 @@ export class Editor extends EditorView {
 		frag.appendChild(this.convertAsset(dom).cloneNode(true));
 		const node = this.#parser.parse(frag);
 		const tr = this.state.tr;
-		tr.replaceSelectionWith(node);
+		const sel = tr.selection;
+		const marks = [];
+		node.descendants((node) => {
+			if (node.marks.length > 0) marks.push(...node.marks);
+		});
+		if (marks.length) {
+			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
+		} else {
+			tr.replaceSelectionWith(node);
+		}
 		this.dispatch(tr);
 	}
 	toDOM() {
