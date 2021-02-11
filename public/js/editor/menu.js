@@ -46,7 +46,7 @@ export class MenuItem {
 				spec.run(view.state, view.dispatch, view, e);
 		});
 
-		function update(state) {
+		function update(state, view) {
 			if (spec.select) {
 				let selected = spec.select(state);
 				dom.style.display = selected ? "" : "none";
@@ -54,11 +54,11 @@ export class MenuItem {
 			}
 			let enabled = true;
 			if (spec.enable) {
-				enabled = spec.enable(state) || false;
+				enabled = spec.enable(state, view) || false;
 				setClass(dom, prefix + "-disabled", !enabled);
 			}
 			if (spec.active) {
-				let active = enabled && spec.active(state) || false;
+				let active = enabled && spec.active(state, view) || false;
 				setClass(dom, prefix + "-active", active);
 			}
 			return true;
@@ -123,10 +123,10 @@ function translate(view, text) {
 //   representation.
 
 function combineUpdates(updates, nodes) {
-	return state => {
+	return (state, view) => {
 		let something = false;
 		for (let i = 0; i < updates.length; i++) {
-			let up = updates[i](state);
+			let up = updates[i](state, view);
 			nodes[i].style.display = up ? "" : "none";
 			if (up) something = true;
 		}
@@ -158,10 +158,10 @@ export function renderGrouped(view, content) {
 		}
 	}
 
-	function update(state) {
+	function update(state, view) {
 		let something = false, needSep = false;
 		for (let i = 0; i < updates.length; i++) {
-			let hasContent = updates[i](state);
+			let hasContent = updates[i](state, view);
 			if (i) separators[i - 1].style.display = needSep && hasContent ? "" : "none";
 			needSep = hasContent;
 			if (hasContent) something = true;
@@ -230,6 +230,14 @@ export const icons = {
 	asset: {
 		width: 16, height: 16,
 		path: "M14 16v-11l-1 1v9h-12v-12h9l1-1h-11v14z M16 1.4l-1.4-1.4-6.8 6.8-1.8-1.8v5h5l-1.8-1.8z"
+	},
+	sup: {
+		width: 492, height: 492,
+		path: "M211 282l132 148h-81l-92-109-91 109H0l131-148L6 142h80l87 101 88-101h76zm181-101l54-40c19-12 31-24 37-35s8-23 8-35c0-21-6-37-20-50a77 77 0 00-54-19c-22 0-39 7-52 19-13 13-19 32-19 58h41c0-15 3-26 8-32 6-6 13-9 23-9 9 0 17 3 22 9 6 6 9 14 9 23 0 8-3 16-8 24s-20 19-43 36c-20 14-47 28-55 41v48h149v-38z"
+	},
+	sub: {
+		width: 492, height: 492,
+		path: "M211 262l132 148h-81l-92-109-91 109H0l131-148L6 122h80l87 101 88-101h76zm181 193l54-40c19-12 31-24 37-35s8-23 8-35c0-21-6-37-20-50a77 77 0 00-54-19c-22 0-39 7-52 19-13 13-19 32-19 58h41c0-15 3-26 8-32 6-6 13-9 23-9 9 0 17 3 22 9 6 6 9 14 9 23 0 8-3 16-8 24s-20 19-43 36c-20 14-47 28-55 41v48h149v-38z"
 	}
 };
 

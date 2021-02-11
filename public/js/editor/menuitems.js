@@ -38,71 +38,43 @@ function wrapListItem(nodeType, options) {
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
 }
 
-// :: (Schema) → Object
-// Given a schema, look for default mark and node types in it and
-// return an object with relevant menu items relating to those marks:
-//
-// **`toggleStrong`**`: MenuItem`
-//   : A menu item to toggle the [strong mark](#schema-basic.StrongMark).
-//
-// **`toggleEm`**`: MenuItem`
-//   : A menu item to toggle the [emphasis mark](#schema-basic.EmMark).
-//
-// **`toggleCode`**`: MenuItem`
-//   : A menu item to toggle the [code font mark](#schema-basic.CodeMark).
-//
-// **`toggleLink`**`: MenuItem`
-//   : A menu item to toggle the [link mark](#schema-basic.LinkMark).
-//
-// **`insertImage`**`: MenuItem`
-//   : A menu item to insert an [image](#schema-basic.Image).
-//
-// **`wrapBulletList`**`: MenuItem`
-//   : A menu item to wrap the selection in a [bullet list](#schema-list.BulletList).
-//
-// **`wrapOrderedList`**`: MenuItem`
-//   : A menu item to wrap the selection in an [ordered list](#schema-list.OrderedList).
-//
-// **`wrapBlockQuote`**`: MenuItem`
-//   : A menu item to wrap the selection in a [block quote](#schema-basic.BlockQuote).
-//
-// **`makeParagraph`**`: MenuItem`
-//   : A menu item to set the current textblock to be a normal
-//     [paragraph](#schema-basic.Paragraph).
-//
-// **`makeCodeBlock`**`: MenuItem`
-//   : A menu item to set the current textblock to be a
-//     [code block](#schema-basic.CodeBlock).
-//
-// **`makeHead[N]`**`: MenuItem`
-//   : Where _N_ is 1 to 6. Menu items to set the current textblock to
-//     be a [heading](#schema-basic.Heading) of level _N_.
-//
-// **`insertHorizontalRule`**`: MenuItem`
-//   : A menu item to insert a horizontal rule.
-//
-// The return value also contains some prefabricated menu elements and
-// menus, that you can use instead of composing your own menu from
-// scratch:
-//
-// **`insertMenu`**`: Dropdown`
-//   : A dropdown containing the `insertImage` and
-//     `insertHorizontalRule` items.
-//
-// **`typeMenu`**`: Dropdown`
-//   : A dropdown containing the items for making the current
-//     textblock a paragraph, code block, or heading.
-//
-// **`fullMenu`**`: [[MenuElement]]`
-//   : An array of arrays of menu elements for use as the full menu
-//     for, for example the [menu bar](https://github.com/prosemirror/prosemirror-menu#user-content-menubar).
+function linkItem(markType) {
+	return new MenuItem({
+		title: "Add or remove link",
+		icon: icons.link,
+		active(state) {
+			return markActive(state, markType);
+		},
+		enable(state, view) {
+			view.dom.queryAssets();
+			return !state.selection.empty;
+		},
+		run(state, dispatch, view) {
+			if (markActive(state, markType)) {
+				toggleMark(markType)(state, dispatch);
+				return true;
+			}
+			view.dom.queryAssets('link');
+		}
+	});
+}
+
 export function buildMenuItems(schema, promptUrl) {
 	let r = {}, type;
+	if ((type = schema.marks.link)) {
+		r.toggleLink = linkItem(type, promptUrl);
+	}
 	if ((type = schema.marks.strong)) {
-		r.toggleStrong = markItem(type, { title: "Toggle strong style", icon: icons.strong });
+		r.toggleStrong = markItem(type, { icon: icons.strong });
 	}
 	if ((type = schema.marks.em)) {
-		r.toggleEm = markItem(type, { title: "Toggle emphasis", icon: icons.em });
+		r.toggleEm = markItem(type, { icon: icons.em });
+	}
+	if ((type = schema.marks.sup)) {
+		r.toggleSup = markItem(type, { icon: icons.sup });
+	}
+	if ((type = schema.marks.sub)) {
+		r.toggleSub = markItem(type, { icon: icons.sub });
 	}
 
 	if ((type = schema.nodes.bullet_list)) {
@@ -131,7 +103,7 @@ export function buildMenuItems(schema, promptUrl) {
 	}
 
 	let cut = arr => arr.filter(x => x);
-	r.inlineMenu = [cut([r.toggleStrong, r.toggleEm, r.toggleCode])];
+	r.inlineMenu = [cut([r.toggleLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
 	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
 	r.fullMenu = r.inlineMenu.concat(r.blockMenu);
 

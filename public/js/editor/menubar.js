@@ -26,7 +26,7 @@ class MenuBarView {
 	}
 
 	update() {
-		this.contentUpdate(this.editorView.state);
+		this.contentUpdate(this.editorView.state, this.editorView);
 
 		if (this.menu.offsetWidth != this.widthForMaxHeight) {
 			this.widthForMaxHeight = this.menu.offsetWidth;

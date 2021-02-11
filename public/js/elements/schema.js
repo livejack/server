@@ -108,6 +108,16 @@ export const marks = {
 			}
 		],
 		toDOM() { return ["strong", 0]; }
+	},
+
+	sup: {
+		parseDOM: [{ tag: "sup" }, { style: "vertical-align=super" }],
+		toDOM() { return ["sup", 0]; }
+	},
+
+	sub: {
+		parseDOM: [{ tag: "sub" }, { style: "vertical-align=sub" }],
+		toDOM() { return ["sub", 0]; }
 	}
 };
 

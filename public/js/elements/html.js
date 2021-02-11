@@ -9,9 +9,6 @@ class HtmlEditor extends Editor {
 	changed() {
 		this.dom.dispatchEvent(new Event("change", { "bubbles": true }));
 	}
-	async prompt(url) {
-		return await EditHtml.assetManager.choose(url);
-	}
 }
 class EditHtml {
 	connectedCallback() {
@@ -50,8 +47,11 @@ class EditHtml {
 		if (e.type == "click") {
 			if (this.article.active) this.start();
 		} else if (e.type == "focus") {
-			document.querySelector('#resources [is="edit-filter"]').start(this.view, this.name);
+			this.queryAssets(this.name);
 		}
+	}
+	queryAssets(name) {
+		document.querySelector('#resources [is="edit-filter"]').start(this.view, name);
 	}
 	start() {
 		if (this.view) return;

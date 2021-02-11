@@ -5,6 +5,7 @@ export default class EditFilter extends HTMLFormElement {
 	#control
 	#assets
 	#icons
+	#mode
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-filter');
@@ -23,6 +24,12 @@ export default class EditFilter extends HTMLFormElement {
 			let asset;
 			if (this.#assets.contains(e.target)) {
 				asset = e.target.closest('live-asset');
+				if (asset && this.mode == "link") {
+					const link = document.createElement('a');
+					link.setAttribute('href', asset.dataset.url);
+					link.textContent = "-";
+					asset = link;
+				}
 			} else if (this.#icons.contains(e.target)) {
 				asset = e.target;
 				if (asset.nodeName == "DIV") asset = asset.firstElementChild;
@@ -31,17 +38,23 @@ export default class EditFilter extends HTMLFormElement {
 			if (asset) this.#view.insertAsset(asset);
 		}
 	}
+	get mode() {
+		return this.#mode;
+	}
+	set mode(name) {
+		const control = this.closest('#control');
+		control.className = "";
+		control.classList.add(name);
+		this.#mode = name;
+	}
 	async start(view, name) {
 		this.#view = view;
-		const control = this.closest('#control');
+		this.mode = name;
 		if (name == "mark") {
-			control.classList.add('icons');
 			const root = document.getElementById('icons');
 			if (root.children.length > 1) return;
 			const icons = await req('../pictos/assets.json');
 			this.merge(root, icons);
-		} else {
-			control.classList.remove('icons');
 		}
 	}
 	stop() {

@@ -115,13 +115,6 @@ live-asset {
 	background-color: var(--bg);
 }
 
-#resources.icon {
-	column-count:4;
-}
-#resources.icon > form {
-	display:none;
-}
-
 .dragging {
 	opacity:0.3;
 }
@@ -136,12 +129,12 @@ live-asset {
 	padding:1em;
 }
 
-#control.icons > #resources,
+#control.mark > #resources,
 #control > #icons {
 	display:none;
 }
 
-#control.icons > #icons {
+#control.mark > #icons {
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -158,4 +151,27 @@ live-asset {
 #icons > div > img {
 	width:100%;
 	max-height:100%;
+}
+
+
+#control.link > header {
+	opacity: 0.5;
+}
+
+#control.link [is="edit-upload"] {
+	opacity: 0.5;
+}
+
+#control.link [is="edit-paste"] {
+	--tilebg: var(--bg);
+	--btncolor: var(--btncolorhover);
+
+	filter: brightness(0.5);
+}
+
+#control.link #resources live-asset > .header {
+	background-color: var(--btncolor);
+}
+#control.link #resources live-asset:hover > .header {
+	background-color:#4165A0;
 }
