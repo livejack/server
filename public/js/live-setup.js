@@ -12,8 +12,15 @@ class LiveSetup extends Live {
 
 	visitor(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE") {
+			// see live-build visitor
 			let mode = node.dataset.mode;
 			let parent = node.parentNode;
+			if (!data.page) data.page = {};
+			['title', 'backtrack', 'start', 'stop'].forEach(str => {
+				if (data.page[str] === undefined && node.dataset[str] != null) {
+					data.page[str] = node.dataset[str];
+				}
+			});
 			if (mode == "replace") {
 				while (node.nextSibling) parent.removeChild(node.nextSibling);
 				parent.appendChild(node.content.cloneNode(true));

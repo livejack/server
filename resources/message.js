@@ -32,8 +32,6 @@ exports.POST = (req) => {
 			room: `/${domain}/${key}/page`,
 			mtime: page.update,
 			data: {
-				start: page.start,
-				stop: page.stop,
 				update: page.update,
 				messages: [msg]
 			}
@@ -57,8 +55,6 @@ exports.PUT = (req) => {
 			room: `/${domain}/${key}/page`,
 			mtime: page.update,
 			data: {
-				start: page.start,
-				stop: page.stop,
 				update: page.update,
 				messages: [msg]
 			}
@@ -81,8 +77,6 @@ exports.DELETE = (req) => {
 			room: `/${domain}/${key}/page`,
 			mtime: page.update,
 			data: {
-				start: page.start,
-				stop: page.stop,
 				update: page.update,
 				messages: [{ id: id }]
 			}

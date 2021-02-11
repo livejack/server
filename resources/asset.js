@@ -110,8 +110,6 @@ exports.PUT = (req) => {
 			room: `/${domain}/${key}/page`,
 			mtime: page.update,
 			data: {
-				start: page.start,
-				stop: page.stop,
 				update: page.update,
 				assets: [asset]
 			}
@@ -134,8 +132,6 @@ exports.DELETE = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: page.update,
 			data: {
-				start: page.start,
-				stop: page.stop,
 				update: page.update,
 				assets: [{ id }]
 			}

@@ -10,6 +10,14 @@ class LiveBuild extends Live {
 	}
 	visitor(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE" && node.content) {
+			if (data.page) {
+				// a kludge, the generatlisation of which involves DOM Shadow
+				// or knowing which matchdom expressions are going to be merged in that node.content
+				['title', 'backtrack', 'start', 'stop'].forEach(str => {
+					if (data.page[str] != null) node.dataset[str] = data.page[str];
+					else node.removeAttribute('data-' + str);
+				});
+			}
 			// jump to next node so we can insert before
 			iter.nextNode();
 			let sub = node.content.cloneNode(true);
