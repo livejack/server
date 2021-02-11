@@ -34,12 +34,6 @@ export default class EditArticle extends HTMLElement {
 				}
 				break;
 			case "change":
-				if (e.target.matches('[name="style"]')) {
-					e.target.options.forEach((opt) => {
-						if (opt.value) this.classList.toggle(opt.value, opt.selected);
-					});
-				}
-				break;
 			case "article:update":
 				this.unsaved = true;
 				break;

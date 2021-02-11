@@ -8,6 +8,7 @@ import EditUpload from './upload.js';
 import EditStatus from './status.js';
 import EditArticle from './article.js';
 import EditTime from './time.js';
+import EditSelect from './select.js';
 import { EditTitle, EditMark, EditText } from './html.js';
 
 
@@ -20,6 +21,7 @@ export default function register(live) {
 	ce.define('edit-time', EditTime, { extends: 'time' });
 	ce.define('edit-title', EditTitle, { extends: 'h2' });
 	ce.define('edit-text', EditText, { extends: 'div' });
+	ce.define('edit-select', EditSelect, { extends: 'select' });
 	ce.define('edit-mark', EditMark, { extends: 'div' });
 	ce.define('edit-paste', EditPaste, { extends: 'form' });
 	ce.define('edit-upload', EditUpload, { extends: 'form' });
