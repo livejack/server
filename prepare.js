@@ -5,6 +5,7 @@ const rootDir = path.resolve('public');
 const Resolver = require('@livejack/moduleserver/resolver');
 const pijs = require('postinstall-js');
 const picss = require('postinstall-css');
+const buildDir = "dist";
 
 const resolver = new Resolver({
 	node_path: path.join('.', 'node_modules'),
@@ -35,7 +36,7 @@ const moduleResolver = {
 		'js/live-setup.js',
 		'js/live-build.js',
 	].map(async file => {
-		const dest = path.join('builds', version, file);
+		const dest = path.join(buildDir, version, file);
 		await esbuild.build({
 			absWorkingDir: rootDir,
 			entryPoints: [file],
@@ -54,7 +55,7 @@ const moduleResolver = {
 		'css/live-read.css',
 		'css/live-write.css'
 	].map(async file => {
-		const dest = path.join('builds', version, file);
+		const dest = path.join(buildDir, version, file);
 		await esbuild.build({
 			absWorkingDir: rootDir,
 			entryPoints: [file],
