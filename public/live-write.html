@@ -95,20 +95,20 @@
 				</a>
 				<form is="edit-status">
 					<div class="tiled start active">
-						Commencer le<br>live[page|when:before|ifAt:div]
+						Commencer<br>le live[page|when:before|ifAt:div]
 					</div>
 					<div class="tiled start">
-						Commencé le<br>[page.start|orAt:div|then:date:cal]
+						Commencé<br>[page.start|then:date:cal|orAt:div]
 					</div>
 					<label class="toggle-switch">
 						<input name="status" value="on" checked="[page|when:during]" id="live-status" type="checkbox" />
 						<label for="live-status"></label>
 					</label>
 					<div class="tiled stop active">
-						Terminer le<br>live[page|when:during|ifAt:div]
+						Terminer<br>le live[page|when:during|ifAt:div]
 					</div>
 					<div class="tiled stop">
-						Terminé le [page.stop|orAt:div|then:date:cal]
+						Terminé<br>[page.stop|then:date:cal|orAt:div]
 					</div>
 				</form>
 			</template>
