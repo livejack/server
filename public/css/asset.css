@@ -41,9 +41,9 @@ live-asset {
 	/* let div.meta grow with its content */
 	position:relative;
 	margin: 0;
-	flex: 1 0 auto;
-	max-width: 70%;
+	flex: 1 1 70%;
 	color: var(--btncolor);
+	overflow: hidden;
 }
 #resources live-asset > .meta > strong {
 	color: var(--btncolorhover);
@@ -57,8 +57,7 @@ live-asset {
 }
 
 #resources live-asset > .thumbnail {
-	flex: 1 1 auto;
-	max-width: 30%;
+	flex: 1 1 30%;
 	overflow:hidden;
 	aspect-ratio: 16 / 9;
 }
