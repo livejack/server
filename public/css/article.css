@@ -92,3 +92,8 @@
 	content: '\00a0';
 	color:gray;
 }
+
+
+.ProseMirror-menuitem:hover {
+	background-color: #DDD;
+}
