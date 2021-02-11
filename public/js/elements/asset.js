@@ -32,6 +32,10 @@ export default class EditAsset extends HTMLElement {
 
 	handleEvent(e) {
 		if (e.type == "dragstart") {
+			if (!this.closest('.live-message')) {
+				e.preventDefault();
+				return;
+			}
 			const div = document.createElement("div");
 			div.innerText = this.dataset.title;
 			div.className = 'handle';
