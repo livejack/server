@@ -40,12 +40,12 @@ export default class EditStatus extends HTMLFormElement {
 	}
 	async toggle() {
 		this.#input.disabled = true;
-		const status = !this.#input.checked;
+		const started = this.#input.checked;
 		try {
-			await req("./page", "put", {});
-			this.#input.checked = status;
+			await req("./page", "put", { started });
 		} catch (err) {
-			// TODO global notification
+			console.error(err);
+			this.#input.checked = !started;
 		}
 		this.#input.disabled = false;
 	}

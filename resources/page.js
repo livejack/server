@@ -3,7 +3,7 @@ const { Page } = Models;
 
 exports.GET = async (req, res) => {
 	const { domain, key } = req.params;
-	return await Page.query()
+	return Page.query()
 		.findOne({ domain, key }).select()
 		.throwIfNotFound()
 		.withGraphFetched('messages(select,order)');
@@ -11,11 +11,23 @@ exports.GET = async (req, res) => {
 
 exports.PUT = async (req) => {
 	const { domain, key } = req.params;
-	return await Page.transaction(async trx => {
+	return Page.transaction(async trx => {
+		const data = req.body;
+		const started = data.started;
+		if (started !== undefined) {
+			delete data.started;
+			if (started) {
+				data.stop = null;
+				data.start = new Date().toISOString();
+			} else {
+				data.stop = new Date().toISOString();
+			}
+		}
+
 		const page = await Page.query(trx)
 			.findOne({ domain, key })
 			.throwIfNotFound()
-			.patch(req.body)
+			.patch(data)
 			.returning('*');
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
@@ -23,8 +35,7 @@ exports.PUT = async (req) => {
 			data: {
 				start: page.start,
 				update: page.update,
-				stop: page.stop,
-				title: page.title
+				stop: page.stop
 			}
 		});
 		return page;
