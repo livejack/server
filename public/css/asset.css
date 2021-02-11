@@ -5,6 +5,7 @@ live-asset {
 	position:relative;
 	box-shadow: -1px 1px 3px var(--btncolor);
 	background: white;
+	user-select:none;
 }
 
 #resources live-asset > .header {
@@ -145,6 +146,7 @@ live-asset {
 	flex-direction: row;
 	flex-wrap: wrap;
 	margin:0.2rem;
+	user-select:none;
 }
 #icons > div {
 	flex: 0 0 20%;
