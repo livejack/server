@@ -50,7 +50,7 @@
     "expect.js": "^0.3.1",
     "jsondiffpatch": "^0.4.1",
     "mocha": "^8.2.1",
-    "postinstall-css": "^0.7.0",
+    "postinstall-css": "^0.7.1",
     "postinstall-js": "^0.7.0",
     "stylelint-config-standard": "^20.0.0"
   },
