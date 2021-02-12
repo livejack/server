@@ -15,6 +15,7 @@ class EditHtml {
 		this.defaultValue = this.value;
 		this.addEventListener('click', this, true);
 		this.addEventListener('focus', this, true);
+		this.filter = document.querySelector('#resources [is="edit-filter"]');
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this, true);
@@ -47,11 +48,11 @@ class EditHtml {
 		if (e.type == "click") {
 			if (this.article.active) this.start();
 		} else if (e.type == "focus") {
-			this.queryAssets(this.name);
+			this.queryAssets();
 		}
 	}
 	queryAssets(name) {
-		document.querySelector('#resources [is="edit-filter"]').start(this.view, name);
+		this.filter.start(this.view, name || this.name);
 	}
 	start() {
 		if (this.view) return;
@@ -63,7 +64,7 @@ class EditHtml {
 		const fragment = this.view.toDOM();
 		this.view.destroy();
 		delete this.view;
-		document.querySelector('#resources [is="edit-filter"]').stop();
+		this.filter.stop();
 		this.textContent = '';
 		this.appendChild(fragment);
 	}
