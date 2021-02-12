@@ -17,7 +17,7 @@ form[is] > input {
 } */
 
 form[is] > input:hover {
-	color:var(--btncolorhover);
+	color: var(--bg);
 	background-color: var(--btncolor);
 }
 
