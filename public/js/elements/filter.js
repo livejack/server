@@ -52,6 +52,7 @@ export default class EditFilter extends HTMLFormElement {
 		}
 	}
 	stop() {
+		this.mode = null;
 		this.#view = null;
 	}
 }
