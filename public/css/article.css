@@ -27,24 +27,24 @@
 .live-message:not([id]):not(.active) {
 	--focus-color:#F5F5F5;
 }
-.live-message:not([id]):hover, .live-message.active {
+.live-messages > .live-message {
+	display:block !important;
+}
+.live-messages > .live-message:hover, .live-message.active {
 	background-color: var(--focus-color);
 	box-shadow: 1em 0px 0 0 var(--focus-color), -1em 0 0 0 var(--focus-color);
 	padding-top: 1em;
 	margin-top: 1em;
-	border-top: 1px solid transparent;
 	scroll-margin-top: 5em;
 }
 
-.live-messages > .live-message.active + .live-message {
-	border-top:1px solid transparent;
-}
 .live-message.active > .focus {
 	background:white !important;
 }
 .live-message.active [class^="live-"] {
 	background:#F9F9F9;
 }
+
 .live-message .live-article,
 .live-messages figure > div > .lazy {
 	min-height:100px;

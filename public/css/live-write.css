@@ -127,7 +127,7 @@ body {
 .prosemirror-menu {
 	text-align: right;
 	position: absolute;
-	z-index: 1;
+	z-index: 2;
 	box-shadow: -4px 4px 4px -4px rgb(0 0 0 / 66%);
 	background-color: white;
 	right: 0;

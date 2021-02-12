@@ -18,6 +18,11 @@ const filters = {
 					old.parentNode.removeChild(old);
 				}, 700);
 			}
+		} else if (!item.id) {
+			// special case
+			const parent = document.querySelector("#live-messages > .live-list");
+			if (parent) parent.parentNode.insertBefore(node, parent);
+			else node.parentNode.removeChild(node);
 		} else if (item.date) {
 			// insert before first node with [id]
 			cursor.parentNode.insertBefore(node, cursor.parentNode.querySelector('[id]'));
