@@ -24,12 +24,6 @@ export default class EditFilter extends HTMLFormElement {
 			let asset;
 			if (this.#assets.contains(e.target)) {
 				asset = e.target.closest('live-asset');
-				if (asset && this.mode == "link") {
-					const link = document.createElement('a');
-					link.setAttribute('href', asset.dataset.url);
-					link.textContent = "-";
-					asset = link;
-				}
 			} else if (this.#icons.contains(e.target)) {
 				asset = e.target;
 				if (asset.nodeName == "DIV") asset = asset.firstElementChild;
@@ -44,7 +38,7 @@ export default class EditFilter extends HTMLFormElement {
 	set mode(name) {
 		const control = this.closest('#control');
 		control.className = "";
-		control.classList.add(name);
+		if (name) control.classList.add(name);
 		this.#mode = name;
 	}
 	async start(view, name) {
