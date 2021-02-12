@@ -47,3 +47,11 @@ div.toolbar button[name="del"] {
 .live-message:not([id]) > .toolbar [name="del"] {
 	display:none;
 }
+
+
+.ProseMirror-menuitem {
+	margin: 0;
+}
+.ProseMirror-menuitem > .ProseMirror-icon {
+	padding: 0.6em;
+}

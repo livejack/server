@@ -1,16 +1,10 @@
 live-asset {
 	cursor: default;
 }
-#resources live-asset {
-	position:relative;
-	box-shadow: -1px 1px 3px var(--btncolor);
-	background: white;
-	user-select:none;
-}
 
 #resources live-asset > .header {
-	background-color: #4165A0;
-	color:white;
+	background-color: var(--tilebg);
+	color: var(--btncolor);
 	display: flex;
 	width: 100%;
 	height: 2.3em;
@@ -83,8 +77,8 @@ live-asset {
 	line-height: 1.2em;
 }
 #resources live-asset button:hover {
-	background:#DDD;
-	color:#333;
+	color:var(--btncolor);
+	background-color:var(--bg);
 }
 
 
@@ -104,15 +98,24 @@ live-asset {
 	cursor:grab;
 }
 
-#resources > live-asset {
+#control live-asset {
 	display: flex;
 	flex-direction: row;
-	margin: 0.2rem;
+	margin: 0.3rem;
 	text-decoration: none;
 	font-size: 0.8em;
 	flex-wrap: wrap;
 	border-radius: 4px;
 	background-color: var(--bg);
+	position:relative;
+	box-shadow: 0px 1px 2px var(--btncolor), 0px -1px 2px var(--tilebg);
+	user-select:none;
+	margin-top: 0.4rem;
+}
+.text#control live-asset:hover > .header,
+.link#control live-asset:hover > .header {
+	color:var(--bg);
+	background-color: var(--btncolor);
 }
 
 .dragging {
@@ -138,40 +141,44 @@ live-asset {
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin:0.2rem;
+	margin: 0.2rem;
 	user-select:none;
 }
 #icons > div {
-	flex: 0 0 20%;
-	border: 1px solid var(--btncolor);
+	flex: 0 0 calc(20% - 2px);
+	border: 1px solid var(--middle-color);
 	border-radius: 4px;
 	aspect-ratio: 1/1;
 	padding: 0.4em;
+	margin: 1px;
 }
 #icons > div > img {
 	width:100%;
 	max-height:100%;
 }
+#icons > div:hover {
+	background-color: var(--tilebg);
+}
 
 
 #control.link > header {
 	opacity: 0.5;
+	pointer-events: none;
 }
 
 #control.link [is="edit-upload"] {
 	opacity: 0.5;
+	pointer-events: none;
 }
 
-#control.link [is="edit-paste"] {
-	--tilebg: var(--bg);
-	--btncolor: var(--btncolorhover);
-
-	filter: brightness(0.5);
+#control.link [is="edit-paste"],
+#control.link live-asset > .header {
+	--tilebg: var(--text-low-color);
+	--btncolor: var(--back-low-color);
 }
 
-#control.link #resources live-asset > .header {
-	background-color: var(--btncolor);
-}
-#control.link #resources live-asset:hover > .header {
-	background-color:#4165A0;
+#control.link [is="edit-paste"]:hover,
+#control.link live-asset:hover > .header {
+	--btncolor: var(--bgselcolor);
+	--bg: var(--selcolor);
 }

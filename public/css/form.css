@@ -10,9 +10,15 @@ form[is] > input {
 	cursor: default;
 }
 
-form[is] > input:hover:not([disabled]) {
+/* form[is] > input:hover:not([disabled]) {
 	border-color: var(--btncolor);
-	background-color: var(--tilebghover);
+	background-color: var(--btncolorhover);
+	color: var(--bg);
+} */
+
+form[is] > input:hover {
+	color:var(--btncolorhover);
+	background-color: var(--btncolor);
 }
 
 form[is="edit-paste"] > input {
@@ -21,6 +27,9 @@ form[is="edit-paste"] > input {
 form[is="edit-upload"] > input {
 	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' height='100%' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M182.461 155.48L232 105.941V368a24 24 0 0048 0V105.941l49.539 49.539a24 24 0 1033.941-33.941l-90.509-90.51a24 24 0 00-33.942 0l-90.509 90.51a24 24 0 1033.941 33.941z'/%3E%3Cpath d='M464 232a24 24 0 00-24 24v184H72V256a24 24 0 00-48 0v192a40 40 0 0040 40h384a40 40 0 0040-40V256a24 24 0 00-24-24z'/%3E%3C/svg%3E");
 	color: transparent;
+}
+form[is] > input[type="file"]:hover {
+	color:transparent;
 }
 form[is] > input[type="file"]::file-selector-button {
 	border:none;
@@ -46,14 +55,14 @@ form[is] > input::placeholder {
 }
 
 form[is] > input:hover::placeholder {
-	color:var(--btncolorhover);
+	color:var(--bg);
 }
 
 form[is] > input:hover::file-selector-button {
-	color:var(--btncolorhover);
+	color:var(--bg);
 }
 form[is] > input:hover::-webkit-file-upload-button {
-	color:var(--btncolorhover);
+	color:var(--bg);
 }
 
 form[is].negative > input {

@@ -24,26 +24,44 @@
 
 @import "./status.css";
 
-html {
-	--bg: white;
-	--tilebg: #EEE;
-	--border: 1px solid #888;
-	--btncolor: #888;
-	--btncolorhover: #333;
+:root {
+	/* colors */
+	--back-color: white;
+	--text-color: #333;
+	--back-low-color: #EEE;
+	--text-low-color: #555;
+	--middle-color: #888;
 	--warn-rgb: 184, 0, 0;
+	--bgselcolor:#4165A0;
+	--selcolor:white;
 }
 
 @media (prefers-color-scheme: dark) {
-	html {
-		--bg: #333;
-		--tilebg: #666;
-		--tilebghover: #333;
-		--border: 1px solid #AAA;
-		--btncolor: #CCC;
-		--btncolorhover: #FFF;
+	:root {
+		--text-color: white;
+		--back-color: #333;
+		--text-low-color: #EEE;
+		--back-low-color: #555;
 	}
 }
 
+html {
+	/* semantic */
+	--bg: var(--back-color);
+	--tilebg: var(--back-low-color);
+	--btncolor: var(--text-low-color);
+	--btncolorhover: var(--text-color);
+	--border: 1px solid var(--middle-color);
+}
+
+#control {
+	flex: 1 256px;
+	height: 100vh;
+	overflow-y: auto;
+	width: 300px;
+	background-color:var(--bg);
+	scroll-snap-type: y proximity;
+}
 
 body {
 	display:flex;
@@ -58,14 +76,6 @@ body {
 	overflow-y: auto;
 	padding-left:1em;
 	padding-right:1em;
-}
-#control {
-	flex: 1 256px;
-	height: 100vh;
-	overflow-y: auto;
-	width: 300px;
-	background-color:var(--bg);
-	scroll-snap-type: y proximity;
 }
 
 .tiled {
@@ -117,9 +127,9 @@ body {
 .prosemirror-menu {
 	text-align: right;
 	position: absolute;
-	right: 0;
 	z-index: 1;
 	box-shadow: -4px 4px 4px -4px rgb(0 0 0 / 66%);
 	background-color: white;
+	right: 0;
 }
 

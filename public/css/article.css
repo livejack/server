@@ -97,3 +97,12 @@
 .ProseMirror-menuitem:hover {
 	background-color: #DDD;
 }
+
+.ProseMirror *::selection {
+	background: var(--bgselcolor);
+	color: var(--selcolor);
+}
+
+.ProseMirror-selectednode {
+  outline: 2px solid var(--bgselcolor);
+}
