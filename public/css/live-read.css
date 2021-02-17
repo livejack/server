@@ -145,6 +145,11 @@ div.fig-article-body {
 .live-messages .live-article iframe {
 	transition: opacity 2s;
 }
+.live-messages .live-article object,
+.live-messages .live-article embed,
+.live-messages .live-article iframe {
+	border: none;
+}
 .live-messages figure > :first-child {
 	display:block;
 }
