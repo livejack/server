@@ -94,6 +94,7 @@
 					[page.title]
 				</a>
 				<form is="edit-status">
+					<label class="above">Modifier le statut du live</label>
 					<div class="tiled start active">
 						Commencer<br>le live[page|when:before|ifAt:div]
 					</div>
@@ -115,10 +116,12 @@
 		</header>
 		<div data-live="assets" id="resources">
 			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="tile icon">
-				<input placeholder="Charger une image" type="file" name="file" class="tiled" />
+				<label class="above">Ajouter une image</label>
+				<input type="file" name="file" class="tiled" />
 			</form>
 			<form is="edit-paste" method="post" action="assets">
-				<input placeholder="Cliquer pour coller une url" class="tiled" />
+				<label class="above">Ajouter une url</label>
+				<input placeholder="Cliquer pour coller" class="tiled" />
 			</form>
 			<form is="edit-filter" method="get">
 				<label><input name="link" type="checkbox" /><span>Lien</span></label>
