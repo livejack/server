@@ -6,9 +6,17 @@ const rewrite = require('express-urlrewrite');
 const URL = require('url');
 const Path = require('path');
 const serveStatic = require('serve-static');
-const serveModule = require("@livejack/moduleserver");
+const got = require('got');
 
+const serveModule = require("@livejack/moduleserver");
 const LiveJack = require('@livejack/client/node');
+
+const Upcache = require('upcache');
+const tag = {
+	page: Upcache.tag('app', 'data-:domain-:key'),
+	domain: Upcache.tag('app', 'data-:domain'),
+	all: Upcache.tag('app', 'data')
+};
 
 const ini = require('./lib/express-ini');
 
@@ -68,22 +76,30 @@ app.get('/.well-known/status', (req) => {
 	return 204;
 });
 
+app.post('/.well-known/upcache', Upcache.tag('app'), (req) => {
+	return 204;
+});
+
 const auth = require('./lib/auth');
 const domainLock = auth.lock('write-:domain');
 auth.init(app);
 
-app.route("/robots.txt").get(function(req, res) {
-	res.type('text/plain');
-	res.send("User-agent: *\nDisallow: /\n");
-});
+app.route("/robots.txt").get(
+	Upcache.tag('app'),
+	(req, res) => {
+		res.type('text/plain').send("User-agent: *\nDisallow: /\n");
+	}
+);
 
-app.route("/favicon.ico").get(function(req, res) {
-	res.sendStatus(404);
-});
+app.route("/favicon.ico").get(
+	Upcache.tag('app'),
+	() => 404
+);
 
-app.use(serveModule("/modules"));
+app.get("/modules/*", Upcache.tag('app'), serveModule("/modules"));
 
-app.route(/\/js|css|img\//).get(
+app.route(/\/js|css|img|dist\//).get(
+	Upcache.tag('app'),
 	serveStatic(app.get('statics'), {
 		index: false,
 		redirect: false,
@@ -98,7 +114,7 @@ app.use(require('express-extension-to-accept')(['html', 'json']));
 
 app.use(morgan(':method :status :response-time ms :url - :res[content-length]'));
 
-app.get('/lives.json', routes.lives.GET);
+app.get('/lives.json', Upcache.tag('data'), routes.lives.GET);
 
 app.param('domain', (req, res, next, domain) => {
 	req.domain = req.app.settings.domains[req.params.domain];
@@ -146,36 +162,32 @@ app.get('/:domain/:key', function(req, res, next) {
 app.put('/:domain/:key', rewrite('/:domain/:key/write'));
 app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
 
-app.get('/:domain/:key/read', routes.read.GET);
+app.get('/:domain/:key/read', tag.page, routes.read.GET);
 
-app.get('/:domain/:key/status', resources.status.GET);
+app.get('/:domain/:key/status', tag.page, resources.status.GET);
 
 app.route('/:domain/:key/page')
-	.get(resources.page.GET)
-	.put(domainLock, jsonParser, resources.page.PUT);
-
-app.route('/:domain/pages/:key?')
-	.get(domainLock, resources.pages.GET)
-	.put(domainLock, jsonParser, resources.pages.PUT);
+	.get(tag.page, resources.page.GET)
+	.put(tag.page, tag.domain, tag.all, domainLock, jsonParser, resources.page.PUT);
 
 app.route('/:domain/:key/messages/:id?')
-	.get(resources.message.GET)
-	.put(domainLock, jsonParser, resources.message.PUT)
-	.post(domainLock, jsonParser, resources.message.POST)
-	.delete(domainLock, jsonParser, resources.message.DELETE);
+	.get(tag.page, resources.message.GET)
+	.put(tag.page, domainLock, jsonParser, resources.message.PUT)
+	.post(tag.page, domainLock, jsonParser, resources.message.POST)
+	.delete(tag.page, domainLock, jsonParser, resources.message.DELETE);
 
 app.route('/:domain/:key/assets/:id?')
-	.get(resources.asset.GET)
-	.put(domainLock, jsonParser, resources.asset.PUT)
-	.post(domainLock, jsonParser, resources.asset.POST)
-	.delete(domainLock, jsonParser, resources.asset.DELETE);
+	.get(tag.page, domainLock, resources.asset.GET)
+	.put(tag.page, domainLock, jsonParser, resources.asset.PUT)
+	.post(tag.page, domainLock, jsonParser, resources.asset.POST)
+	.delete(tag.page, domainLock, jsonParser, resources.asset.DELETE);
 
 app.route('/:domain/:key/write')
-	.get(domainLock, routes.write.GET)
-	.put(domainLock, jsonParser, routes.write.PUT)
-	.delete(domainLock, jsonParser, routes.write.DELETE);
+	.get(tag.page, domainLock, routes.write.GET)
+	.put(tag.page, tag.domain, domainLock, jsonParser, routes.write.PUT)
+	.delete(tag.page, domainLock, jsonParser, routes.write.DELETE);
 
-app.get('/:domain', domainLock, prerender('domain'));
+app.get('/:domain', tag.domain, domainLock, prerender('domain'));
 
 app.use(function (err, req, res, next) {
 	let code = objection.errorStatus(err);
@@ -198,6 +210,7 @@ await objection.Models.User.populate(
 await auth.keygen(config);
 require('http').createServer(app).listen(config.listen, () => {
 	console.info("Listening on port", config.listen); // eslint-disable-line
+	got.post(`${config.site.href}.well-known/upcache`);
 });
 
 })();
