@@ -5,6 +5,7 @@ const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 const inspector = promisify(require('url-inspector'));
 const thumbnailer = require('../lib/thumbnailer');
+const providers = require('../lib/providers');
 
 exports.GET = (req) => {
 	const { domain, key } = req.params;
@@ -81,7 +82,8 @@ async function createAsset(page, body = {}) {
 	const meta = await inspector(item.url, {
 		nofavicon: false,
 		nosource: true,
-		file: false
+		file: false,
+		providers
 	});
 	if (meta.type == "image" && meta.mime != "text/html" && !meta.thumbnail) {
 		meta.thumbnail = meta.url;
