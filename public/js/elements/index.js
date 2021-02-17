@@ -20,6 +20,9 @@ export default function register(live) {
 	EditFilter.prototype.merge = (dom, data) => {
 		return live.matchdom.merge(dom, data);
 	};
+	EditAsset.prototype.observe = function() {
+		return live.observer.observe(this);
+	};
 	ce.define('edit-article', EditArticle, { extends: 'article' });
 	ce.define('edit-time', EditTime, { extends: 'time' });
 	ce.define('edit-title', EditTitle, { extends: 'h2' });

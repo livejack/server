@@ -1,5 +1,4 @@
 import req from "../req.js";
-import { HTML as parseHTML } from "../../modules/matchdom";
 
 export default class EditAsset extends HTMLElement {
 	constructor() {
@@ -9,20 +8,7 @@ export default class EditAsset extends HTMLElement {
 		this.addEventListener('click', this);
 		this.addEventListener('dragstart', this);
 		this.addEventListener('dragend', this);
-		if (this.closest('.live-message')) {
-			const html = this.dataset.html;
-			if (html != this.innerHTML) {
-				this.textContent = '';
-				this.appendChild(parseHTML(html));
-				this.querySelectorAll('script').forEach(node => {
-					const copy = node.ownerDocument.createElement('script');
-					copy.src = node.src;
-					copy.async = true;
-					node.parentNode.replaceChild(copy, node);
-				});
-			}
-		}
-
+		this.observe();
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
@@ -46,6 +32,7 @@ export default class EditAsset extends HTMLElement {
 			this.classList.remove('dragging');
 		} else if (e.type == "click") {
 			if (e.target.name == "del") {
+				e.stopPropagation();
 				this.del();
 			} else if (e.target.closest('a[href]')) {
 				e.preventDefault();

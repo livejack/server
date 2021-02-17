@@ -93,8 +93,19 @@ class LiveSetup extends Live {
 	reveal(node) {
 		if (node.children.length) return;
 		const html = node.dataset.html;
-		if (!html) return;
-		node.appendChild(parseHTML(html));
+		if (html == node.innerHTML) return;
+		node.textContent = '';
+		const dom = parseHTML(html);
+		dom.querySelectorAll('script').forEach(node => {
+			node.parentNode.removeChild(node);
+			const src = node.getAttribute('src');
+			if (document.head.querySelector(`script[src="${src}"]`)) return;
+			const copy = document.createElement('script');
+			copy.setAttribute('src', src);
+			copy.setAttribute('defer', '');
+			document.head.appendChild(copy);
+		});
+		node.appendChild(dom);
 	}
 	trackUi(node) {
 		node.querySelectorAll('live-asset').forEach((node) => {
