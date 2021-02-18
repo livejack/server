@@ -11,17 +11,20 @@ const filters = {
 		const old = list.querySelector(`[data-id="${item.id}"]`);
 		const refTime = item.date && Date.parse(item.date) || 0;
 		const refPin = item.style == "pinned";
-		const next = refTime ? list.children.find(node => {
-			let time = node.querySelector('time');
-			if (!time) return;
-			time = Date.parse(time.getAttribute('datetime'));
-			const pin = node.classList.contains('pinned');
-			if (refPin) {
-				return refTime > time || !pin;
-			} else {
-				return refTime > time && !pin;
+		const next = (() => {
+			if (!refTime) return null;
+			let child = cursor;
+			while ((child = child.nextElementSibling)) {
+				let time = child.querySelector('time');
+				if (!time) return cursor.nextElementSibling;
+				time = Date.parse(time.getAttribute('datetime'));
+				const pin = child.classList.contains('pinned');
+				if (refPin && (!pin || refTime > time) || !pin && refTime > time) {
+					return child;
+				}
 			}
-		}) : null;
+			return cursor.nextElementSibling;
+		})();
 		if (!item.id) {
 			// special case
 			const list = document.querySelector('#live-messages > .live-list');
