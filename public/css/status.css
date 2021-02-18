@@ -4,7 +4,6 @@
 	position: relative;
 	font-size:0.8em;
 	box-shadow: 0px 2px 3px -1px var(--bg);
-	margin-top: 0.8rem;
 }
 [is="edit-status"] .toggle-switch {
 	--switch-theme-rgb: var(--warn-rgb);
