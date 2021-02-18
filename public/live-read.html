@@ -52,8 +52,8 @@
 		</header>
 		<div class="live-list">
 			<template data-mode="insert">
-				<article id="[page.messages|repeat:*:msg:place|id]" class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-					<meta itemprop="url" content="[page.backtrack|or:]#[msg.id]" />
+				<article id="t[page.messages|repeat:*:msg:place|date|date:time]" data-id="[msg.id]" class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+					<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
 					<meta itemprop="dateModified" content="[msg.update|date:iso]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack|orAt:*]" />
 					<time itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>

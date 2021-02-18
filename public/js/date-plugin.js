@@ -26,6 +26,8 @@ export const filters = {
 			} else {
 				return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}\nà ${time}`;
 			}
+		} else if (fmt == "time") {
+			return date.toLocaleTimeString().replace(':', 'H').replace(':', 'M');
 		}
 	}]
 };

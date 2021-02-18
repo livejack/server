@@ -40,7 +40,7 @@ export default class EditAsset extends HTMLElement {
 		}
 	}
 	del() {
-		return req("./assets/" + this.id, "delete");
+		return req("./assets/" + this.dataset.id, "delete");
 	}
 	get favicon() {
 		const img = this.querySelector('.header > img');

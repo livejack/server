@@ -7,25 +7,37 @@ const filters = {
 	place(ctx, item) {
 		const cursor = ctx.src.node;
 		const node = ctx.dest.node;
-		const old = cursor.parentNode.querySelector(`[id="${item.id}"]`);
-
-		if (old) {
-			if (item.date) {
+		const list = cursor.parentNode;
+		const old = list.querySelector(`[data-id="${item.id}"]`);
+		const refTime = item.date && Date.parse(item.date) || 0;
+		const refPin = item.style == "pinned";
+		const next = refTime ? list.children.find(node => {
+			let time = node.querySelector('time');
+			if (!time) return;
+			time = Date.parse(time.getAttribute('datetime'));
+			const pin = node.classList.contains('pinned');
+			if (refPin) {
+				return refTime > time || !pin;
+			} else {
+				return refTime > time && !pin;
+			}
+		}) : null;
+		if (!item.id) {
+			// special case
+			const list = document.querySelector('#live-messages > .live-list');
+			list.parentNode.insertBefore(node, list);
+		} else if (old) {
+			if (old.nextElementSibling == next && refTime) {
 				old.parentNode.replaceChild(node, old);
 			} else {
 				old.classList.add('hidden');
 				setTimeout(() => {
-					old.parentNode.removeChild(old);
+					list.removeChild(old);
 				}, 700);
+				if (item.date) list.insertBefore(node, next);
 			}
-		} else if (!item.id) {
-			// special case
-			const parent = document.querySelector("#live-messages > .live-list");
-			if (parent) parent.parentNode.insertBefore(node, parent);
-			else node.parentNode.removeChild(node);
 		} else if (item.date) {
-			// insert before first node with [id]
-			cursor.parentNode.insertBefore(node, cursor.parentNode.querySelector('[id]'));
+			list.insertBefore(node, next);
 		}
 		return item;
 	},
@@ -73,14 +85,10 @@ const filters = {
 };
 
 export default class Live {
-	static get plugins() {
-		return [DatePlugin, { filters }];
-	}
-
 	constructor() {
 		this.matchdom = new Matchdom({
 			visitor: this.visitor
-		}).extend(this.constructor.plugins);
+		}).extend([DatePlugin, { filters }]);
 	}
 
 	init() {

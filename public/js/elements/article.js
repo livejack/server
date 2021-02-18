@@ -38,14 +38,11 @@ export default class EditArticle extends HTMLElement {
 	}
 	reset() {
 		this.unsaved = false;
-		this.stop();
-		this.editables.forEach((node) => {
-			node.value = node.defaultValue;
-		});
+		this.stop(true);
 	}
 	del() {
 		this.stop();
-		return req("./messages/" + this.id, "delete");
+		return req("./messages/" + this.dataset.id, "delete");
 	}
 	async submit() {
 		// collect changes in time, icons, title, html and fetch({method: 'put'}) or post
@@ -54,8 +51,8 @@ export default class EditArticle extends HTMLElement {
 			data[node.name] = node.value;
 		});
 		// await req put/post then node.defaultValue = node.value;
-		if (this.id) {
-			data.id = this.id;
+		if (this.dataset.id) {
+			data.id = this.dataset.id;
 			await req("./messages", "put", data);
 			this.stop();
 		} else {
@@ -83,13 +80,19 @@ export default class EditArticle extends HTMLElement {
 		}
 		return true;
 	}
-	stop() {
+	stop(reset) {
 		this.unsaved = false;
 		this.classList.remove('active');
+		this.#active = false;
+		this.editables.forEach((node) => {
+			node.stop();
+			if (reset) {
+				if (node.reset) node.reset();
+				else node.value = node.defaultValue;
+			}
+		});
 		this.removeChild(this.toolbar);
 		delete this.toolbar;
-		this.#active = false;
-		this.editables.forEach((node) => node.stop());
 	}
 	get editables() {
 		return this.querySelectorAll('[name][is^="edit-"]');

@@ -13,18 +13,18 @@
 
 	--focus-color: #EEE;
 }
-.live-message:not([id]):not(.active) > [is] {
+.live-message:not([data-id]):not(.active) > [is] {
 	opacity:0.5;
 	min-height:0;
 }
-.live-message:not([id]):not(.active) > [is="edit-title"]:empty::before {
+.live-message:not([data-id]):not(.active) > [is="edit-title"]:empty::before {
 	content: '+';
 }
-.live-message:not([id]):not(.active):hover > [is] {
+.live-message:not([data-id]):not(.active):hover > [is] {
 	opacity:1;
 }
 
-.live-message:not([id]):not(.active) {
+.live-message:not([data-id]):not(.active) {
 	--focus-color:#F5F5F5;
 }
 .live-messages > .live-message {
