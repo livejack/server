@@ -77,10 +77,11 @@ live-asset {
 	flex: 0 0 auto;
 	box-sizing: border-box;
 	line-height: 1.2em;
+	border-radius: 2.3em;
 }
 #resources live-asset button:hover {
-	color:var(--btncolor);
-	background-color:var(--bg);
+	color:var(--bg);
+	background-color:var(--btncolor);
 }
 
 
