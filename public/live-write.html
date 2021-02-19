@@ -73,7 +73,7 @@
 					<article
 						is="edit-article"
 						data-id="[msg.id]"
-						id="t[page.messages|blank:push:date=now|repeat:*:msg:place|date|date:time]"
+						id="t[page.messages|blank:push:date=now|repeat:*:msg:place|.date|date:time]"
 						class="live-message [msg.style] [msg|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 						itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
@@ -133,7 +133,7 @@
 			<template data-mode="insert">
 				<live-asset
 					class="[it.meta.type|classIcon:]"
-					data-id="[assets.assets|repeat:*:it:place|id]"
+					data-id="[assets.assets|repeat:*:it:place|.id]"
 					data-url="[it.url]"
 					data-title="[it.meta.title]"
 					data-html="[it.meta.html]"
@@ -146,10 +146,11 @@
 						<button name="del">✕</button>
 					</div>
 					<div class="meta">
-						<strong>[it.meta.type]</strong> ([it.meta.mime|subtype:])
-						<em>([it.meta.size|orAt:*|units:])</em>
-						<span>[it.meta.width|orAt:*][it.meta.height|pre:x]px</span><br>
-						[it.date|date:rel]
+						<strong>[it.meta.type]</strong>
+						<em>[it.meta.author|orAt:*]</em>
+						<br>
+						<span>[it.meta.date|else:get:it.date|date:date]</span>
+						<em>[it.meta.width|orAt:*][it.meta.height|pre:x]px</em>
 						<p>[it.meta.description|orAt:*]</p>
 					</div>
 					<div class="thumbnail">
@@ -160,7 +161,7 @@
 		</div>
 		<div id="icons">
 			<template data-mode="insert">
-				<div><img src="[assets|repeat:div|url]" /></div>
+				<div><img src="[assets|repeat:div|.url]" /></div>
 			</template>
 		</div>
 	</div>
@@ -178,7 +179,7 @@
 			<i class="btn fas fa-remove"></i>
 		</div>
 		<div class="content">
-			<p class="message">[errors|reverse:|repeat:*|message]</p>
+			<p class="message">[errors|reverse:|repeat:*|.message]</p>
 		</div>
 	</div>
 </body>
