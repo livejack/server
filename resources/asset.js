@@ -88,7 +88,7 @@ async function createAsset(page, body = {}) {
 	if (meta.type == "image" && meta.mime != "text/html" && !meta.thumbnail) {
 		meta.thumbnail = meta.url;
 	}
-	if (meta.icon == "data:/,") delete meta.icon;
+	if (meta.icon && meta.icon.startsWith('data:') && meta.icon.length < 64) delete meta.icon;
 	if (meta.thumbnail) meta.thumbnail = await thumbnailer(meta.thumbnail);
 	if (!item.meta) item.meta = {};
 	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
