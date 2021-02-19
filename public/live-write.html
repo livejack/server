@@ -146,9 +146,11 @@
 						<button name="del">✕</button>
 					</div>
 					<div class="meta">
-						<strong>[it.meta.type]</strong>
-						<em>[it.meta.date|else:get:it.date|date:date]</em>
-						<span><br>[it.meta.author|or:&nbsp;]</span>
+						<p>
+							<strong>[it.meta.type]</strong>
+							<em>[it.meta.date|else:get:it.date|date:date]</em>
+							<span><br>[it.meta.author|or:&nbsp;]</span>
+						</p>
 						<p>[it.meta.description|orAt:*]</p>
 					</div>
 					<div class="thumbnail">

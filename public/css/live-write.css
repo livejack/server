@@ -26,7 +26,8 @@
 
 :root {
 	/* colors */
-	--back-color: white;
+	--back-color-rgb: 255, 255, 255;
+	--back-color: rgb(--back-color-rgb);
 	--text-color: #333;
 	--back-low-color: #EEE;
 	--text-low-color: #555;
@@ -39,7 +40,7 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--text-color: white;
-		--back-color: #333;
+		--back-color-rgb: 48, 48, 48;
 		--text-low-color: #EEE;
 		--back-low-color: #555;
 	}

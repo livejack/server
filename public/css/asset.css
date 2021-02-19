@@ -31,21 +31,19 @@ live-asset {
 
 #resources live-asset > .meta {
 	padding-top: 0.15em;
-	padding-bottom: 0.15em;
 	padding-left:0.5em;
+	padding-right:0.5em;
 	/* let div.meta grow with its content */
 	position:relative;
 	margin: 0;
 	flex: 1 1 70%;
 	color: var(--btncolor);
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 #resources live-asset > .meta > strong {
 	color: var(--btncolorhover);
-}
-#resources live-asset > .meta > em {
-	float: right;
-	margin-right: 0.2em;
 }
 #resources live-asset > .meta > .line {
 	display:inline-block;
@@ -86,14 +84,36 @@ live-asset {
 }
 
 
-
-#resources live-asset > .meta > p {
+#resources live-asset > .meta > p:first-of-type {
+	margin: 0;
+}
+#resources live-asset > .meta > p + p {
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 	margin-bottom: 0;
+	max-height: 2.2em;
+	text-align: justify;
+	position:relative;
+}
+#resources live-asset > .meta > p + p::after {
+	content:'';
+	position:absolute;
+	left:95%;
+	right:0;
+	bottom:0;
+	height: 1.2em;
+	background:linear-gradient(to right, rgba(var(--back-color-rgb), 0), rgba(var(--back-color-rgb), 1));
+}
+@media screen and (max-width: 1280px) {
+	#resources live-asset > .meta > p + p {
+		white-space: nowrap;
+	}
 }
 
+#resources live-asset > .meta > p > em {
+	position:absolute;
+	margin-right:0.2em;
+	right:0;
+}
 
 .live-message live-asset > * {
 	pointer-events: none;
