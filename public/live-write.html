@@ -147,10 +147,9 @@
 					</div>
 					<div class="meta">
 						<strong>[it.meta.type]</strong>
-						<em>[it.meta.author|orAt:*]</em>
+						<em>[it.meta.date|else:get:it.date|date:date]</em>
 						<br>
-						<span>[it.meta.date|else:get:it.date|date:date]</span>
-						<em>[it.meta.width|orAt:*][it.meta.height|pre:x]px</em>
+						<span>[it.meta.author|orAt:*]</span>
 						<p>[it.meta.description|orAt:*]</p>
 					</div>
 					<div class="thumbnail">
