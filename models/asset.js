@@ -77,6 +77,12 @@ class Asset extends BaseModel {
 						},
 						size: {
 							type: 'string'
+						},
+						date: {
+							type: 'string'
+						},
+						author: {
+							type: 'string'
 						}
 					}
 				},
