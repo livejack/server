@@ -97,6 +97,7 @@ body {
 	background-color: var(--bg);
 	padding-top: 0.2rem;
 	scroll-snap-align: start;
+	box-shadow: 0px 2px 2px var(--bg);
 }
 
 #control > header > a {
