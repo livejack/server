@@ -43,6 +43,10 @@ live-asset {
 #resources live-asset > .meta > strong {
 	color: var(--btncolorhover);
 }
+#resources live-asset > .meta > em {
+	float: right;
+	margin-right: 0.2em;
+}
 #resources live-asset > .meta > .line {
 	display:inline-block;
 	font-family:sans-serif;
