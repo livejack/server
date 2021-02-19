@@ -28,6 +28,8 @@ export const filters = {
 			}
 		} else if (fmt == "time") {
 			return date.toLocaleTimeString().replace(':', 'H').replace(':', 'M');
+		} else if (fmt == "date") {
+			return date.toLocaleDateString();
 		}
 	}]
 };
