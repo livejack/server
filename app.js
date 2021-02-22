@@ -27,6 +27,7 @@ const jsonParser = require('body-parser').json({
 global.HttpError = require('http-errors');
 
 const express = require('express');
+const upload = require('./lib/upload');
 const app = require('./lib/express-async')(express)();
 const config = ini(app);
 
@@ -179,7 +180,7 @@ app.route('/:domain/:key/messages/:id?')
 app.route('/:domain/:key/assets/:id?')
 	.get(tag.page, domainLock, resources.asset.GET)
 	.put(tag.page, domainLock, jsonParser, resources.asset.PUT)
-	.post(tag.page, domainLock, jsonParser, resources.asset.POST)
+	.post(tag.page, domainLock, upload, jsonParser, resources.asset.POST)
 	.delete(tag.page, domainLock, jsonParser, resources.asset.DELETE);
 
 app.route('/:domain/:key/write')
