@@ -71,47 +71,56 @@ form[is].negative > input {
 	background-color:#faa;
 }
 
-#resources > form[is="edit-filter"] {
-	display: none;
-	margin-top: 1rem;
+#icons > form[is="edit-filter"] {
+	flex-basis: 100%;
+	margin: 0.2rem 0;
+	font-size: 0.8rem;
 }
-[is="edit-filter"] > label {
-	flex: 1 0 20%;
-	user-select:none;
+[is="edit-filter"] .mode,
+[is="edit-filter"] .list {
+	display:flex;
+	flex-wrap:wrap;
+	border-radius: 4px;
+	border: 1px solid var(--middle-color);
+	overflow: hidden;
 }
 
-[is="edit-filter"] > label > input {
+[is="edit-filter"] .list {
+	margin-top:0.2rem;
+}
+[is="edit-filter"] label {
+	user-select:none;
+	flex: 1 1 auto;
+	position: relative;
+}
+[is="edit-filter"] label > input {
 	display:none;
 }
-[is="edit-filter"] > label:first-of-type > input + span {
-	border-top-left-radius:4px;
-	border-bottom-left-radius:4px;
-}
-[is="edit-filter"] > label:last-of-type > input + span {
-	border-top-right-radius:4px;
-	border-bottom-right-radius: 4px;
-}
-[is="edit-filter"] > label > input + span {
-	display:block;
+[is="edit-filter"] label > input + span {
+	display:inline-block;
+	width:100%;
 	background-color:var(--tilebg);
 	text-align:center;
 	padding: 0.5em;
-	border: 1px solid var(--btncolor);
 	color:var(--btncolor);
 }
-[is="edit-filter"] > label + label > input + span {
+[is="edit-filter"] .list label + label > input + span {
 	border-left:0;
 	margin-left:0;
 }
-[is="edit-filter"] > label > input[disabled] + span {
+[is="edit-filter"] label > input[disabled] + span {
 	opacity:0.5;
 }
-[is="edit-filter"] > label:hover > input:not([disabled]) + span {
+[is="edit-filter"] label:hover > input:not([disabled]) + span {
 	color:var(--btncolorhover);
+	/* background-color:var(--tilebghover); */
+}
+[is="edit-filter"] label > input:checked + span {
+	color: var(--btncolor);
 	background-color:var(--tilebghover);
 }
-[is="edit-filter"] > label > input:checked + span {
-	color:var(--btncolorhover);
-	background-color:var(--tilebghover);
-	font-weight:bolder;
+
+
+[is="edit-filter"].notags > .list {
+	display: none;
 }

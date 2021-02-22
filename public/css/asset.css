@@ -169,7 +169,7 @@ live-asset {
 	margin: 0.2rem;
 	user-select:none;
 }
-#icons > div {
+#icons > .icon {
 	flex: 0 0 calc(20% - 2px);
 	border: 1px solid var(--middle-color);
 	border-radius: 4px;

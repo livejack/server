@@ -1,58 +1,58 @@
-import req from "../req.js";
-
 export default class EditFilter extends HTMLFormElement {
-	#view
-	#control
-	#assets
-	#icons
 	#mode
+	#icons
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-filter');
 	}
 	connectedCallback() {
-		this.#control = this.closest('#control');
-		this.#assets = this.#control.querySelector('#resources');
-		this.#icons = this.#control.querySelector('#icons');
-		this.#control.addEventListener('click', this);
+		this.addEventListener('change', this);
+		this.#icons = this.parentNode;
 	}
 	disconnectedCallback() {
-		this.#control.removeEventListener('click', this);
+		this.removeEventListener('change', this);
 	}
 	handleEvent(e) {
-		if (e.type == "click" && this.#view) {
-			let asset;
-			if (this.#assets.contains(e.target)) {
-				asset = e.target.closest('live-asset');
-			} else if (this.#icons.contains(e.target)) {
-				asset = e.target;
-				if (asset.nodeName == "DIV") asset = asset.firstElementChild;
-				if (asset.nodeName != "IMG") asset = null;
-			}
-			if (asset) this.#view.insertAsset(asset);
+		if (e.type != "change") return;
+		if (e.target.name == "mode") {
+			this.setMode(e.target.value, true);
+		} else if (e.target.name == "tag") {
+			this.setMode("search");
 		}
 	}
-	get mode() {
-		return this.#mode;
+	init() {
+		const prevMode = this.#mode;
+		if (!prevMode && this.setMode("used") == 0) this.setMode("search");
 	}
-	set mode(name) {
-		const control = this.closest('#control');
-		control.className = "";
-		if (name) control.classList.add(name);
-		this.#mode = name;
-	}
-	async start(view, name) {
-		this.#view = view;
-		this.mode = name;
-		if (name == "mark") {
-			const root = document.getElementById('icons');
-			if (root.children.length > 1) return;
-			const icons = await req('../pictos/assets.json');
-			this.merge(root, icons);
+	setMode(mode) {
+		this.querySelector(`[name="mode"][value="${mode}"]`).checked = true;
+		this.#mode = mode;
+		if (mode == "search") {
+			this.classList.remove('notags');
+			const tags = this.querySelectorAll(
+				'input[name="tag"]:checked'
+			).map(node => node.value);
+			this.parentNode.querySelectorAll('.icon').forEach(icon => {
+				const list = icon.dataset.tags.split(' ');
+				icon.classList.toggle('hide', !list.some(tag => tags.includes(tag)));
+			});
+		} else if (mode == "all") {
+			this.classList.add('notags');
+			this.parentNode.querySelectorAll('.icon').forEach(icon => {
+				icon.classList.remove('hide');
+			});
+		} else if (mode == "used") {
+			this.classList.add('notags');
+			const marks = document.querySelectorAll(
+				'#live-messages > .live-list > article > [name="mark"] img'
+			).map(node => node.src);
+			let count = 0;
+			this.parentNode.querySelectorAll('.icon > img').forEach(icon => {
+				const present = marks.includes(icon.src);
+				if (present) count++;
+				icon.parentNode.classList.toggle('hide', !present);
+			});
+			return count;
 		}
-	}
-	stop() {
-		this.mode = null;
-		this.#view = null;
 	}
 }

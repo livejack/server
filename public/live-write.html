@@ -89,7 +89,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="control">
+	<div id="control" is="edit-control">
 		<header data-live="page">
 			<template data-mode="replace">
 				<a href="[page.backtrack]" target="_blank" class="tiled">
@@ -117,18 +117,11 @@
 			</template>
 		</header>
 		<div data-live="assets" id="resources">
-			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="tile icon">
+			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="icon">
 				<input type="file" name="file" class="tiled" />
 			</form>
 			<form is="edit-paste" method="post" action="assets">
 				<input placeholder="Coller l'url du presse-papier" class="tiled" />
-			</form>
-			<form is="edit-filter" method="get">
-				<label><input name="link" type="checkbox" /><span>Lien</span></label>
-				<label><input name="image" type="checkbox" /><span>Image</span></label>
-				<label><input name="video" type="checkbox" /><span>Vidéo</span></label>
-				<label><input name="embed" type="checkbox" /><span>Embed</span></label>
-				<label><input name="icon" type="checkbox" /><span>Picto</span></label>
 			</form>
 			<template data-mode="insert">
 				<live-asset
@@ -160,8 +153,18 @@
 			</template>
 		</div>
 		<div id="icons">
+			<form is="edit-filter" method="get">
+				<div class="mode">
+					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
+					<label><input name="mode" value="all" type="radio" /><span>Tous</span></label>
+					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
+				</div>
+				<div class="list">
+					<label><input name="tag" type="checkbox" value="[assets|tags:|repeat:label:tag|pretty:]" /><span>[tag]</span></label>
+				</div>
+			</form>
 			<template data-mode="insert">
-				<div><img src="[assets|repeat:div|.url]" /></div>
+				<div class="icon hide" data-tags="[assets|repeat:*:asset|.tags|map:pretty|join: ]"><img src="[asset.url]" /></div>
 			</template>
 		</div>
 	</div>

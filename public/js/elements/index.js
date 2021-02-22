@@ -3,6 +3,7 @@ cePolyfill(window);
 
 import EditAsset from './asset.js';
 import EditFilter from './filter.js';
+import EditControl from './control.js';
 import EditPaste from './paste.js';
 import EditUpload from './upload.js';
 import EditStatus from './status.js';
@@ -17,7 +18,7 @@ export default function register(live) {
 	EditTime.prototype.mergeDate = (str) => {
 		return live.matchdom.merge('[date|date:rel]', { date: str });
 	};
-	EditFilter.prototype.merge = (dom, data) => {
+	EditControl.prototype.merge = (dom, data) => {
 		return live.matchdom.merge(dom, data);
 	};
 	EditAsset.prototype.observe = function() {
@@ -32,6 +33,7 @@ export default function register(live) {
 	ce.define('edit-paste', EditPaste, { extends: 'form' });
 	ce.define('edit-upload', EditUpload, { extends: 'form' });
 	ce.define('edit-status', EditStatus, { extends: 'form' });
+	ce.define('edit-control', EditControl, { extends: 'div' });
 	ce.define('edit-filter', EditFilter, { extends: 'form' });
 	ce.define('live-asset', EditAsset);
 }

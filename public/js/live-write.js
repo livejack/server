@@ -58,7 +58,21 @@ const assetPlugin = {
 			});
 			list[place](obj);
 			return list;
-		}]
+		}],
+		tags: ['array', (ctx, list) => {
+			const tags = [];
+			list.forEach((item, i) => {
+				(item.tags || []).forEach(tag => {
+					if (tags.indexOf(tag) < 0) tags.push(tag);
+				});
+			});
+			tags.sort((a, b) => a.localeCompare(b));
+			return tags;
+		}],
+		pretty(ctx, str) {
+			if (str == null) return str;
+			return str.toLowerCase().replace(/\s+/g, '-').replace(/-+/g, '-');
+		}
 	}
 };
 
