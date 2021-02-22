@@ -191,12 +191,17 @@ app.route('/:domain/:key/write')
 app.get('/:domain', tag.domain, domainLock, prerender('domain'));
 
 app.use(function (err, req, res, next) {
-	let code = objection.errorStatus(err);
+	let code;
+	if (err instanceof HttpError) {
+		code = err.status;
+	} else {
+		code = objection.errorStatus(err);
+	}
 	if (typeof code != 'number' || code == 500) {
 		console.error(err); // eslint-disable-line
 		code = 500;
 	}
-	res.sendStatus(code);
+	res.status(code).send(err.toString());
 });
 
 if (config.cron) require('./lib/cron')(config.cron);
