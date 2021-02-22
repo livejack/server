@@ -101,7 +101,15 @@ export default class EditArticle extends HTMLElement {
 		return this.#unsaved;
 	}
 	set unsaved(val) {
-		if (this.toolbar) this.toolbar.querySelector('[type="submit"]').disabled = !val;
+		if (this.toolbar) {
+			const submit = this.toolbar.querySelector('[type="submit"]');
+			submit.disabled = !val;
+			if (submit.disabled) {
+				submit.tabIndex = "";
+			} else {
+				submit.tabIndex = (this.dataset.id || '') + "9";
+			}
+		}
 		this.classList.toggle('unsaved', val);
 		this.#unsaved = val;
 	}

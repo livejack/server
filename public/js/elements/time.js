@@ -6,7 +6,6 @@ export default class EditTime extends HTMLTimeElement {
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-time');
-		this.tabIndex = 10;
 	}
 	get name() {
 		return this.getAttribute('name');

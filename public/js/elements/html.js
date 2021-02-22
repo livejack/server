@@ -45,11 +45,8 @@ class EditHtml {
 		this.innerHTML = val;
 	}
 	handleEvent(e) {
-		if (e.type == "click") {
-			if (this.article.active) this.start();
-		} else if (e.type == "focus") {
-			this.queryAssets();
-		}
+		if (this.article.active) this.start();
+		this.queryAssets();
 	}
 	queryAssets(name) {
 		this.control.start(this.view, name || this.name);
