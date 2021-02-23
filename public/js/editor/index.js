@@ -8,7 +8,7 @@ import {
 	EditorView,
 	Schema, DOMParser, DOMSerializer,
 	addListNodes,
-	Selection, TextSelection
+	Selection, TextSelection, NodeSelection
 } from "../../modules/@livejack/prosemirror";
 
 import { HTML as parseHTML } from "../../modules/matchdom";
@@ -91,6 +91,7 @@ export class Editor extends EditorView {
 		const node = this.#parser.parse(frag);
 		const tr = this.state.tr;
 		const sel = tr.selection;
+
 		const marks = [];
 		node.descendants((node) => {
 			if (node.marks.length > 0) marks.push(...node.marks);
@@ -99,6 +100,14 @@ export class Editor extends EditorView {
 			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
 			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
 		} else {
+			if (sel.empty) {
+				const $pos = sel.$from;
+				const parent = $pos.parent;
+				if (parent.isTextblock && parent.childCount == 0) {
+					// select parent
+					tr.setSelection(NodeSelection.create(tr.doc, $pos.before($pos.depth)));
+				}
+			}
 			tr.replaceSelectionWith(node);
 		}
 		this.focus();
