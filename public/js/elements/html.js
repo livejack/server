@@ -45,16 +45,19 @@ class EditHtml {
 		this.innerHTML = val;
 	}
 	handleEvent(e) {
-		if (this.article.active) this.start();
+		if (this.article.active) {
+			this.start({ left: e.pageX, top: e.pageY });
+		}
 		this.queryAssets();
 	}
 	queryAssets(name) {
 		this.control.start(this.view, name || this.name);
 	}
-	start() {
-		if (this.view) return;
-		this.view = new HtmlEditor(this, this.options);
-		this.view.focus();
+	start(coords) {
+		if (!this.view) {
+			this.view = new HtmlEditor(this, this.options);
+			this.view.initCursor(coords);
+		}
 	}
 	stop() {
 		if (!this.view) return;

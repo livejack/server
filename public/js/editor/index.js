@@ -7,7 +7,8 @@ import {
 	gapCursor,
 	EditorView,
 	Schema, DOMParser, DOMSerializer,
-	addListNodes
+	addListNodes,
+	Selection
 } from "../../modules/@livejack/prosemirror";
 
 import { HTML as parseHTML } from "../../modules/matchdom";
@@ -103,5 +104,12 @@ export class Editor extends EditorView {
 	}
 	toDOM() {
 		return this.#serializer.serializeFragment(this.state.doc.content);
+	}
+	initCursor({ left, top }) {
+		if (!left || !top) return;
+		const tr = this.state.tr;
+		const pos = this.posAtCoords({ left, top });
+		let sel = Selection.near(tr.doc.resolve(pos ? pos.pos : 0));
+		this.dispatch(tr.setSelection(sel));
 	}
 }
