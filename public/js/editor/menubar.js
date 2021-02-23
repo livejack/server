@@ -11,6 +11,7 @@ export function menuBar(options) {
 }
 
 class MenuBarView {
+	#hidden
 	constructor(view, options) {
 		this.view = view;
 		this.options = options;
@@ -24,6 +25,8 @@ class MenuBarView {
 		view.dom.before(this.menu);
 
 		this.ticking = false;
+		document.addEventListener('mousedown', this);
+		document.addEventListener('mouseup', this);
 		document.getElementById('live').addEventListener('scroll', this);
 
 		this.update();
@@ -35,6 +38,8 @@ class MenuBarView {
 	}
 
 	handleEvent(e) {
+		if (e.type == "mousedown") this.#hidden = true;
+		else if (e.type == "mouseup") this.#hidden = false;
 		this.requestMove();
 	}
 
@@ -49,7 +54,7 @@ class MenuBarView {
 	move() {
 		const sel = this.view.state.selection;
 		const style = this.menu.style;
-		if (sel.empty) {
+		if (sel.empty || sel.node && sel.node.type.name == "asset" || this.#hidden) {
 			style.display = "none";
 		} else {
 			const aft = this.view.coordsAtPos(sel.to, 1);
@@ -66,6 +71,8 @@ class MenuBarView {
 
 
 	destroy() {
+		document.removeEventListener('mousedown', this);
+		document.removeEventListener('mouseup', this);
 		document.getElementById('live').removeEventListener('scroll', this);
 		this.menu.remove();
 	}
