@@ -15,10 +15,11 @@ import { EditTitle, EditMark, EditText } from './html.js';
 
 export default function register(live) {
 	const ce = window.customElements;
-	EditTime.prototype.mergeDate = (str) => {
-		return live.matchdom.merge('[date|date:rel]', { date: str });
+	EditTime.prototype.mergeDate = function(str) {
+		this.innerHTML = '[date|date:rel|as:text]';
+		return live.matchdom.merge(this, { date: str });
 	};
-	EditControl.prototype.merge = (dom, data) => {
+	EditControl.prototype.merge = function(dom, data) {
 		return live.matchdom.merge(dom, data);
 	};
 	EditAsset.prototype.observe = function() {

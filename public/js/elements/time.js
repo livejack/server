@@ -23,7 +23,7 @@ export default class EditTime extends HTMLTimeElement {
 	}
 	set value(val) {
 		this.dateTime = val;
-		this.textContent = this.mergeDate(val);
+		this.mergeDate(val);
 	}
 	get defaultValue() {
 		return this.#defaultValue;
