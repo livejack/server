@@ -20,8 +20,9 @@ export default class EditArticle extends HTMLElement {
 	handleEvent(e) {
 		switch (e.type) {
 			case "click":
+				e.preventDefault();
 				if (!this.start()) {
-					e.preventDefault();
+					e.preventPropagation();
 					return;
 				}
 				if (!this.toolbar) {

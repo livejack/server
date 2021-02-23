@@ -7,7 +7,7 @@ form[is] > input {
 	text-align:left;
 	color:var(--btncolor);
 	width:100%;
-	cursor: default;
+	cursor: pointer;
 }
 
 /* form[is] > input:hover:not([disabled]) {
@@ -44,6 +44,7 @@ form[is] > input[type="file"]::file-selector-button {
 	color:var(--btncolor);
 	padding:0;
 	background:transparent;
+	cursor: pointer;
 }
 form[is] > input[type="file"]::file-selector-button:focus {
 	outline:none;
@@ -53,6 +54,7 @@ form[is] > input[type="file"]::-webkit-file-upload-button {
 	color:var(--btncolor);
 	padding:0;
 	background:transparent;
+	cursor: pointer;
 }
 form[is] > input[type="file"]::-webkit-file-upload-button:focus {
 	outline:none;

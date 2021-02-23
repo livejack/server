@@ -80,6 +80,9 @@
 .live-message > [is] {
 	cursor:default;
 }
+.live-message > [is].ProseMirror {
+	cursor:text;
+}
 .live-message.active > [is] {
 	outline:none;
 }

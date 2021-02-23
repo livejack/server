@@ -2,7 +2,7 @@ live-asset {
 	cursor: default;
 }
 
-#resources live-asset > .header {
+live-asset > .header {
 	background-color: var(--tilebg);
 	color: var(--btncolor);
 	display: flex;
@@ -10,7 +10,7 @@ live-asset {
 	height: 2.3em;
 	align-items: flex-start;
 }
-#resources live-asset > .header > a {
+live-asset > .header > a {
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -22,14 +22,14 @@ live-asset {
 	text-decoration: none;
 }
 
-#resources live-asset > .header > img {
+live-asset > .header > img {
 	padding: 0.4em;
 	align-self: center;
 	height: 2.3em;
 	background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
-#resources live-asset > .meta {
+live-asset > .meta {
 	padding-top: 0.15em;
 	padding-left:0.5em;
 	padding-right:0.5em;
@@ -42,10 +42,10 @@ live-asset {
 	display: flex;
 	flex-direction: column;
 }
-#resources live-asset > .meta > strong {
+live-asset > .meta > strong {
 	color: var(--btncolorhover);
 }
-#resources live-asset > .meta > .line {
+live-asset > .meta > .line {
 	display:inline-block;
 	font-family:sans-serif;
 	font-size:0.7em;
@@ -53,21 +53,26 @@ live-asset {
 	margin-top:0.15em;
 }
 
-#resources live-asset > .thumbnail {
+live-asset > .thumbnail {
 	flex: 1 1 30%;
 	overflow:hidden;
 	aspect-ratio: 16 / 9;
 }
 
-#resources live-asset > .thumbnail > img {
+live-asset > .thumbnail > img {
 	height: 100%;
 	width: 100%;
 	display: block;
 	object-fit: cover;
 }
 
-
-#resources live-asset button {
+.live-message live-asset button {
+	display:none;
+}
+.live-message .ProseMirror live-asset button {
+	display:block;
+}
+live-asset button {
 	all:unset;
 	padding: 0.4em;
 	display:inline-block;
@@ -78,24 +83,27 @@ live-asset {
 	box-sizing: border-box;
 	line-height: 1.2em;
 	border-radius: 2.3em;
+	cursor:pointer;
 }
-#resources live-asset button:hover {
+
+live-asset button:hover {
 	color:var(--bg);
 	background-color:var(--btncolor);
 }
 
-
-#resources live-asset > .meta > p:first-of-type {
+live-asset > .meta > p:first-of-type {
 	margin: 0;
 }
-#resources live-asset > .meta > p + p {
+
+live-asset > .meta > p + p {
 	overflow: hidden;
 	margin-bottom: 0;
 	max-height: 2.2em;
 	text-align: justify;
 	position:relative;
 }
-#resources live-asset > .meta > p + p::after {
+
+live-asset > .meta > p + p::after {
 	content:'';
 	position:absolute;
 	left:95%;
@@ -104,26 +112,39 @@ live-asset {
 	height: 1.2em;
 	background:linear-gradient(to right, rgba(var(--back-color-rgb), 0), rgba(var(--back-color-rgb), 1));
 }
+
 @media screen and (max-width: 1280px) {
-	#resources live-asset > .meta > p + p {
+	live-asset > .meta > p + p {
 		white-space: nowrap;
 	}
 }
 
-#resources live-asset > .meta > p > em {
+live-asset > .meta > p > em {
 	position:absolute;
 	margin-right:0.2em;
 	right:0;
 }
 
-.live-message live-asset > * {
-	pointer-events: none;
-}
 .live-message live-asset {
+	display:flex;
 	cursor:grab;
+	white-space: normal;
+	margin: 1em;
+	width: auto;
+	height: auto;
+	aspect-ratio: auto;
+}
+.live-message live-asset .thumbnail {
+	height: 6em;
+	flex-basis: 7%;
+	aspect-ratio: 16 / 9;
+}
+.live-message live-asset > .meta > p + p {
+	white-space: normal;
+	text-align:left;
 }
 
-#control live-asset {
+live-asset {
 	display: flex;
 	flex-direction: row;
 	margin: 0.3rem;

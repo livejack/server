@@ -8,7 +8,8 @@ export default class EditAsset extends HTMLElement {
 		this.addEventListener('click', this);
 		this.addEventListener('dragstart', this);
 		this.addEventListener('dragend', this);
-		this.observe();
+		const asset = document.querySelector(`#resources > live-asset[data-url="${this.dataset.url}"]`);
+		if (asset) this.innerHTML = asset.innerHTML;
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
@@ -40,7 +41,11 @@ export default class EditAsset extends HTMLElement {
 		}
 	}
 	del() {
-		return req("./assets/" + this.dataset.id, "delete");
+		if (this.closest("#resource")) {
+			return req("./assets/" + this.dataset.id, "delete");
+		} else {
+			this.parentNode.removeChild(this);
+		}
 	}
 	get favicon() {
 		const img = this.querySelector('.header > img');

@@ -9,7 +9,6 @@
 	--switch-theme-rgb: var(--warn-rgb);
 	--bar-width:3em;
 	--switch-margin:0;
-
 	min-width: 0;
 	flex: 0;
 	z-index: 1;
@@ -22,6 +21,7 @@
 	bottom: 0;
 	text-align: center;
 	padding-left: calc(50% - 1.5em);
+	cursor: pointer;
 }
 
 
@@ -47,8 +47,10 @@
 	background-color:var(--bg);
 	opacity:1;
 }
-
-.toggle-switch > label:before {
+.toggle-switch > label,
+.toggle-switch > label:before,
+.toggle-switch > label:after {
 	opacity: 1;
+	cursor: pointer;
 }
 
