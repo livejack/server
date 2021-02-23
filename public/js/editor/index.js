@@ -8,7 +8,7 @@ import {
 	EditorView,
 	Schema, DOMParser, DOMSerializer,
 	addListNodes,
-	Selection
+	Selection, TextSelection
 } from "../../modules/@livejack/prosemirror";
 
 import { HTML as parseHTML } from "../../modules/matchdom";
@@ -97,9 +97,11 @@ export class Editor extends EditorView {
 		});
 		if (marks.length) {
 			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
+			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
 		} else {
 			tr.replaceSelectionWith(node);
 		}
+		this.focus();
 		this.dispatch(tr);
 	}
 	toDOM() {

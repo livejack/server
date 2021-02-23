@@ -38,7 +38,7 @@ class MenuBarView {
 	}
 
 	handleEvent(e) {
-		if (e.type == "mousedown") this.#hidden = true;
+		if (e.type == "mousedown" && this.view.dom.contains(e.target)) this.#hidden = true;
 		else if (e.type == "mouseup") this.#hidden = false;
 		this.requestMove();
 	}
