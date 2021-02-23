@@ -198,7 +198,7 @@ div.fig-article-body {
 	width:30%;
 	text-align:right;
 }
-.live-messages .live-article img {
+.live-messages .live-article live-asset > img {
 	width: auto;
 	height: 100%;
 	margin: 0 auto;
