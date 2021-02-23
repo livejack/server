@@ -214,9 +214,15 @@ await objection.Models.User.populate(
 	})
 );
 await auth.keygen(config);
-require('http').createServer(app).listen(config.listen, () => {
+require('http').createServer(app).listen(config.listen, async () => {
 	console.info("Listening on port", config.listen); // eslint-disable-line
-	got.post(`${config.site.href}.well-known/upcache`);
+	await got.post(`${config.site.href}.well-known/upcache`, {
+		retry: {
+			limit: Math.Infinity,
+			methods: ["POST"]
+		}
+	});
+	console.info("Cache invalidated");
 });
 
 })();
