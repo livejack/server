@@ -199,7 +199,10 @@ div.fig-article-body {
 	text-align:right;
 }
 .live-messages .live-article img {
-	max-width:100%;
+	width: auto;
+	height: 100%;
+	margin: 0 auto;
+	display: block;
 }
 .live-messages .live-article strong {
 	font-weight:bold;
