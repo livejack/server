@@ -24,7 +24,7 @@
 
 @import "./status.css";
 
-:root {
+#control,#live {
 	/* colors */
 	--back-color-rgb: 255, 255, 255;
 	--back-color: rgb(var(--back-color-rgb));
@@ -38,7 +38,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
+	#control {
 		--text-color: white;
 		--back-color-rgb: 48, 48, 48;
 		--text-low-color: #EEE;
@@ -46,7 +46,7 @@
 	}
 }
 
-html {
+#control,#live {
 	/* semantic */
 	--bg: var(--back-color);
 	--tilebg: var(--back-low-color);
