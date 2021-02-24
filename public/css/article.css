@@ -8,10 +8,12 @@
 	z-index: 2;
 	box-shadow: 1em 0px 0 0 white, -1em 0 0 0 white;
 }
-.live-message {
-	position:relative;
-
+.live-messages .live-message {
 	--focus-color: #EEE;
+	
+	position:relative;
+	transition-duration: 0.5s;
+	transition-property: background-color, box-shadow, opacity;
 }
 .live-message:not([data-id]):not(.active) > [is] {
 	opacity:0.5;
@@ -39,10 +41,10 @@
 }
 
 .live-message.active > .focus {
-	background:white !important;
+	background-color:white !important;
 }
 .live-message.active [class^="live-"] {
-	background:#F9F9F9;
+	background-color:#F9F9F9;
 }
 
 .live-message .live-article,
@@ -68,9 +70,6 @@
 
 .live-message.unsaved {
 	--focus-color: #DDD;
-
-	transition-duration: 1s;
-	transition-property: background-color, box-shadow;
 }
 
 .live-message.unsaved.blink {
