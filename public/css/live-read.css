@@ -47,6 +47,7 @@ div.fig-article-body {
 	/* height:100%; disable for now */
 	background:inherit; /* hides dashes from article */
 	text-align: center;
+	background-color: white;
 }
 .live-messages .live-icons img {
 	display:block;
@@ -152,6 +153,7 @@ div.fig-article-body {
 .live-messages .live-article iframe {
 	border: none;
 }
+/* old styles */
 .live-messages figure > :first-child {
 	display:block;
 }
@@ -200,9 +202,31 @@ div.fig-article-body {
 	width:30%;
 	text-align:right;
 }
-.live-messages .live-article live-asset > img {
-	width: auto;
-	height: 100%;
+
+
+.live-messages figure > div > .lazy {
+	overflow:hidden;
+}
+
+.live-messages .lazy {
+	display:block;
+	width:1px;
+	height:1px;
+	opacity:0;
+}
+/* stylelint-disable-next-line selector-type-no-unknown */
+.live-messages opta {
+	display:none;
+}
+
+.live-messages .BeOpWidget {
+	display:block;
+}
+/* end old styles */
+
+live-asset > * {
+	max-width: 100%;
+	height: auto;
 	margin: 0 auto;
 	display: block;
 }
@@ -304,29 +328,12 @@ div.fig-article-body {
 	border-bottom:6px solid #666;
 }
 
-.live-messages figure > div > .lazy {
-	overflow:hidden;
-}
 .live-messages > .live-list {
 	display:flex;
 	flex-direction:column;
 }
 .live-messages.reverse > .live-list {
 	flex-direction:column-reverse;
-}
-.live-messages .lazy {
-	display:block;
-	width:1px;
-	height:1px;
-	opacity:0;
-}
-/* stylelint-disable-next-line selector-type-no-unknown */
-.live-messages opta {
-	display:none;
-}
-
-.live-messages .BeOpWidget {
-	display:block;
 }
 
 /* DESKTOP */
@@ -381,10 +388,8 @@ div.fig-article-body {
 	display:block;
 	position:relative;
 	width: 100%;
-	aspect-ratio: 16 / 9;
 	height: auto;
 }
-
 
 .live-message live-asset > * {
 	width: 100%;
@@ -396,3 +401,23 @@ div.fig-article-body {
 	padding-left: 1em;
 	margin-left: 0;
 }
+
+live-asset[data-ratio="2-1"] {
+	aspect-ratio: 2 / 1;
+}
+live-asset[data-ratio="16-9"] {
+	aspect-ratio: 16 / 9;
+}
+live-asset[data-ratio="16-10"] {
+	aspect-ratio: 16 / 10;
+}
+live-asset[data-ratio="4-3"] {
+	aspect-ratio: 4 / 3;
+}
+live-asset[data-ratio="1-1"] {
+	aspect-ratio: 1 / 1;
+}
+live-asset[data-ratio="9-16"] {
+	aspect-ratio: 9 / 16;
+}
+
