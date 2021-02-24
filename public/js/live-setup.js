@@ -127,8 +127,8 @@ live.matchdom.extend({
 	filters: {
 		trackUi(ctx, val) {
 			const node = ctx.dest.node;
-			live.trackUi(node);
 			setTimeout(() => {
+				live.trackUi(node);
 				node.classList.remove('hidden');
 			});
 			return 'hidden';
