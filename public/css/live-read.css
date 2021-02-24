@@ -112,6 +112,7 @@ div.fig-article-body {
 	background: url('https://a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -1406px;
 	text-indent:-999em;
 	content:"\2729";
+	z-index:1;
 }
 
 .live-messages .pinned .live-time {
