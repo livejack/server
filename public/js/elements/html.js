@@ -35,7 +35,11 @@ class EditHtml {
 			parent = frag.ownerDocument.createElement("div");
 			parent.appendChild(frag);
 		} else {
-			parent = this;
+			parent = this.cloneNode(true);
+			// cleanup temp view
+			parent.querySelectorAll('live-asset').forEach(node => {
+				node.textContent = '';
+			});
 		}
 		const val = parent.innerHTML.trim();
 		if (val == "<br>" || val == "<p></p>") return "";
