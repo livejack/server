@@ -41,7 +41,7 @@ export default class EditControl extends HTMLDivElement {
 			}
 			this.querySelector('#icons > [is="edit-filter"]').update();
 		} else {
-			this.querySelector('#assets > [is="edit-filter"]').update();
+			this.querySelector('#assets > [is="edit-filter"]').update(name);
 		}
 
 	}

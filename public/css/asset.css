@@ -209,6 +209,7 @@ live-asset > .meta > p > em {
 #control[data-mode="link"] > header {
 	opacity: 0.5;
 	pointer-events: none;
+	position: relative;
 }
 
 #control[data-mode="link"] > [is="edit-upload"] {

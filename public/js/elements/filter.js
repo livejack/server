@@ -18,16 +18,22 @@ export default class EditFilter extends HTMLFormElement {
 			this.setMode("search");
 		}
 	}
-	update() {
+	update(name) {
 		const prevMode = this.#mode;
-		if (!prevMode && this.setMode(this.dataset.default) == 0) this.setMode("search");
+		if (name == 'link') {
+			this.setMode('unused', true);
+		} else if (!prevMode && this.setMode(this.dataset.default) == 0) {
+			this.setMode("search");
+		} else if (prevMode) {
+			this.setMode(prevMode);
+		}
 	}
 	getItems() {
 		return this.parentNode.querySelectorAll('[data-url]');
 	}
-	setMode(mode) {
+	setMode(mode, temp) {
 		this.querySelector(`[name="mode"][value="${mode}"]`).checked = true;
-		this.#mode = mode;
+		if (!temp) this.#mode = mode;
 		const isFor = this.dataset.for;
 		if (mode == "search") {
 			this.classList.remove('notags');
