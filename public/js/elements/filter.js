@@ -44,7 +44,9 @@ export default class EditFilter extends HTMLFormElement {
 				`#live-messages > .live-list > article > [name="${isFor}"] [data-url]`,
 				`#live-messages > .live-list > article > [name="${isFor}"] [src]`,
 				`#live-messages > .live-list > article > [name="${isFor}"] [href]`
-			].join(',')).map(node => node.dataset.url);
+			].join(',')).map(node => {
+				return node.dataset.url || node.src || node.href;
+			});
 			let count = 0;
 			this.getItems().forEach(node => {
 				const present = urls.includes(node.dataset.url);
