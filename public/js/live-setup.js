@@ -91,6 +91,9 @@ class LiveSetup extends Live {
 		});
 	}
 	reveal(node) {
+		if (node.nodeName == "LIVE-ICON" && !node.dataset.html) {
+			node.dataset.html = `<img src="${node.dataset.url}" alt="${node.dataset.title || ''}" />`;
+		}
 		if (node.children.length) return;
 		const html = node.dataset.html;
 		if (html == node.innerHTML) return;
@@ -108,7 +111,7 @@ class LiveSetup extends Live {
 		node.appendChild(dom);
 	}
 	trackUi(node) {
-		node.querySelectorAll('live-asset').forEach((node) => {
+		node.querySelectorAll('[data-url]').forEach((node) => {
 			this.observer.observe(node);
 		});
 		const time = node.querySelector('time');

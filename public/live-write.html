@@ -116,16 +116,25 @@
 				</form>
 			</template>
 		</header>
-		<div data-live="assets" id="resources">
+		<div data-live="assets" id="assets">
 			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="icon">
 				<input type="file" name="file" class="tiled" />
 			</form>
 			<form is="edit-paste" method="post" action="assets">
 				<input placeholder="Coller l'url du presse-papier" class="tiled" />
 			</form>
+			<form is="edit-filter" method="get" data-for="text" data-default="unused">
+				<div class="mode">
+					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
+					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
+					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
+				</div>
+				<div class="list">
+					<label><input name="filter" type="checkbox" value="[assets.assets|filters:meta.type|repeat:label:filter|pretty:]" /><span>[filter]</span></label>
+				</div>
+			</form>
 			<template data-mode="insert">
 				<live-asset
-					class="[it.meta.type|classIcon:]"
 					data-id="[assets.assets|repeat:*:it:place|.id]"
 					data-url="[it.url]"
 					data-title="[it.meta.title]"
@@ -153,18 +162,18 @@
 			</template>
 		</div>
 		<div id="icons">
-			<form is="edit-filter" method="get">
+			<form is="edit-filter" method="get" data-for="mark" data-default="used">
 				<div class="mode">
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
-					<label><input name="mode" value="all" type="radio" /><span>Tous</span></label>
+					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
 					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
 				</div>
 				<div class="list">
-					<label><input name="tag" type="checkbox" value="[assets|tags:|repeat:label:tag|pretty:]" /><span>[tag]</span></label>
+					<label><input name="filter" type="checkbox" value="[assets|filters:tags|repeat:label:filter|pretty:]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
-				<div class="icon hide" data-tags="[assets|repeat:*:asset|.tags|map:pretty|join: ]"><img src="[asset.url]" /></div>
+				<live-icon class="hide" data-title="[asset.meta.title]" data-url="[asset.url]" data-tags="[assets|repeat:*:asset|.tags|map:pretty|join: ]" />
 			</template>
 		</div>
 	</div>

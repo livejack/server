@@ -4,14 +4,13 @@ export default class EditControl extends HTMLDivElement {
 	#view
 	#assets
 	#icons
-	#mode
 	#loaded
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-control');
 	}
 	connectedCallback() {
-		this.#assets = this.querySelector('#resources');
+		this.#assets = this.querySelector('#assets');
 		this.#icons = this.querySelector('#icons');
 		this.addEventListener('click', this);
 	}
@@ -20,24 +19,16 @@ export default class EditControl extends HTMLDivElement {
 	}
 	handleEvent(e) {
 		if (e.type == "click" && this.#view) {
-			let asset;
-			if (this.#assets.contains(e.target)) {
-				asset = e.target.closest('live-asset');
-			} else if (this.#icons.contains(e.target)) {
-				asset = e.target;
-				if (asset.nodeName == "DIV") asset = asset.firstElementChild;
-				if (asset.nodeName != "IMG") asset = null;
-			}
+			let asset = e.target.closest('[data-url]');
 			if (asset) this.#view.insertAsset(asset);
 		}
 	}
 	get mode() {
-		return this.#mode;
+		return this.dataset.mode;
 	}
 	set mode(name) {
-		this.className = "";
-		if (name) this.classList.add(name);
-		this.#mode = name;
+		//this.setAttribute('data-mode', name);
+		this.dataset.mode = name;
 	}
 	async start(view, name) {
 		this.#view = view;
@@ -47,9 +38,12 @@ export default class EditControl extends HTMLDivElement {
 				this.#loaded = true;
 				const icons = await req('../pictos/assets.json');
 				this.merge(this.#icons, icons);
-				this.querySelector('[is="edit-filter"]').init();
 			}
+			this.querySelector('#icons > [is="edit-filter"]').update();
+		} else {
+			this.querySelector('#assets > [is="edit-filter"]').update();
 		}
+
 	}
 	stop() {
 		this.mode = null;

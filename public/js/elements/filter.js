@@ -1,13 +1,11 @@
 export default class EditFilter extends HTMLFormElement {
 	#mode
-	#icons
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-filter');
 	}
 	connectedCallback() {
 		this.addEventListener('change', this);
-		this.#icons = this.parentNode;
 	}
 	disconnectedCallback() {
 		this.removeEventListener('change', this);
@@ -16,41 +14,40 @@ export default class EditFilter extends HTMLFormElement {
 		if (e.type != "change") return;
 		if (e.target.name == "mode") {
 			this.setMode(e.target.value, true);
-		} else if (e.target.name == "tag") {
+		} else if (e.target.name == "filter") {
 			this.setMode("search");
 		}
 	}
-	init() {
+	update() {
 		const prevMode = this.#mode;
-		if (!prevMode && this.setMode("used") == 0) this.setMode("search");
+		if (!prevMode && this.setMode(this.dataset.default) == 0) this.setMode("search");
+	}
+	getItems() {
+		return this.parentNode.querySelectorAll('[data-url]');
 	}
 	setMode(mode) {
 		this.querySelector(`[name="mode"][value="${mode}"]`).checked = true;
 		this.#mode = mode;
+		const isFor = this.dataset.for;
 		if (mode == "search") {
 			this.classList.remove('notags');
 			const tags = this.querySelectorAll(
-				'input[name="tag"]:checked'
+				'input[name="filter"]:checked'
 			).map(node => node.value);
-			this.parentNode.querySelectorAll('.icon').forEach(icon => {
-				const list = icon.dataset.tags.split(' ');
-				icon.classList.toggle('hide', !list.some(tag => tags.includes(tag)));
+			this.getItems().forEach(node => {
+				const list = node.dataset[isFor == "mark" ? "tags" : "type"].split(' ');
+				node.classList.toggle('hide', !list.some(tag => tags.includes(tag)));
 			});
-		} else if (mode == "all") {
+		} else {
 			this.classList.add('notags');
-			this.parentNode.querySelectorAll('.icon').forEach(icon => {
-				icon.classList.remove('hide');
-			});
-		} else if (mode == "used") {
-			this.classList.add('notags');
-			const marks = document.querySelectorAll(
-				'#live-messages > .live-list > article > [name="mark"] img'
-			).map(node => node.src);
+			const urls = document.querySelectorAll(
+				`#live-messages > .live-list > article > [name="${isFor}"] > [data-url]`
+			).map(node => node.dataset.url);
 			let count = 0;
-			this.parentNode.querySelectorAll('.icon > img').forEach(icon => {
-				const present = marks.includes(icon.src);
+			this.getItems().forEach(node => {
+				const present = urls.includes(node.dataset.url);
 				if (present) count++;
-				icon.parentNode.classList.toggle('hide', !present);
+				node.classList.toggle('hide', mode == "used" ? !present : present);
 			});
 			return count;
 		}

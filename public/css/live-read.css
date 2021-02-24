@@ -46,6 +46,7 @@ div.fig-article-body {
 	width:25px;
 	/* height:100%; disable for now */
 	background:inherit; /* hides dashes from article */
+	text-align: center;
 }
 .live-messages .live-icons img {
 	display:block;
@@ -372,7 +373,9 @@ div.fig-article-body {
 		width:auto;
 	}
 }
-
+.live-message live-icon {
+	display: inline-block;
+}
 .live-message live-asset {
 	display:block;
 	position:relative;

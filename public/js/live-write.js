@@ -42,9 +42,6 @@ const assetPlugin = {
 				node.removeAttribute('data-tags');
 			}
 		},
-		classIcon(ctx, type) {
-			return editor.assetType[type];
-		},
 		subtype: ['str?', (ctx, mime) => {
 			return mime.split(';')[0].split('/').pop();
 		}],
@@ -59,15 +56,17 @@ const assetPlugin = {
 			list[place](obj);
 			return list;
 		}],
-		tags: ['array', (ctx, list) => {
-			const tags = [];
+		filters: ['array', 'path', (ctx, list, path) => {
+			const uniques = [];
 			list.forEach((item, i) => {
-				(item.tags || []).forEach(tag => {
-					if (tags.indexOf(tag) < 0) tags.push(tag);
+				let data = ctx.expr.get(item, path) || [];
+				if (Array.isArray(data) == false) data = [data];
+				data.forEach(val => {
+					if (uniques.indexOf(val) < 0) uniques.push(val);
 				});
 			});
-			tags.sort((a, b) => a.localeCompare(b));
-			return tags;
+			uniques.sort((a, b) => a.localeCompare(b));
+			return uniques;
 		}],
 		pretty(ctx, str) {
 			if (str == null) return str;
@@ -83,4 +82,5 @@ liveSetup.matchdom.extend(assetPlugin);
 ready(async () => {
 	await visible();
 	registerEditElements(liveSetup);
+	document.querySelector('#assets > [is="edit-filter"]').setMode('unused');
 });

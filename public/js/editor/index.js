@@ -65,7 +65,7 @@ export class Editor extends EditorView {
 			domParser: parser,
 			transformPastedHTML(str) {
 				const frag = parseHTML(str);
-				if (frag.matches && frag.matches('live-asset')) {
+				if (frag.matches && frag.matches('[data-url]')) {
 					return this.convertAsset(frag).outerHTML;
 				}
 				return str;
@@ -77,8 +77,9 @@ export class Editor extends EditorView {
 	}
 	convertAsset(dom) {
 		const empty = this.state.selection.empty;
-		if (this.#content == "image" && dom.favicon) {
-			return parseHTML(`<img src="${dom.favicon}">`);
+		if (this.#content == "inline") {
+			if (dom.favicon) return parseHTML(`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`);
+			else return dom;
 		} else if (this.#content == "text" && dom.dataset.title) {
 			return parseHTML(dom.dataset.title);
 		} else if (dom.dataset.type == "link" || !empty) {
@@ -103,10 +104,12 @@ export class Editor extends EditorView {
 			if (sel.empty) {
 				const $pos = sel.$from;
 				const parent = $pos.parent;
-				if (parent.isTextblock && parent.childCount == 0) {
+				if (parent.isTextblock && parent.childCount == 0 && $pos.pos > 0) {
 					// select parent
 					tr.setSelection(NodeSelection.create(tr.doc, $pos.before($pos.depth)));
 				}
+			} else if (this.#content == "inline" && sel.node) {
+				tr.setSelection(TextSelection.create(tr.doc, sel.to, sel.to));
 			}
 			tr.replaceSelectionWith(node);
 		}

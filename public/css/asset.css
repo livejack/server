@@ -1,5 +1,17 @@
 live-asset {
 	cursor: default;
+	display: flex;
+	flex-direction: row;
+	margin: 0 0.1rem;
+	text-decoration: none;
+	font-size: 0.8em;
+	flex-wrap: wrap;
+	border-radius: 4px;
+	background-color: var(--bg);
+	position:relative;
+	box-shadow: 0px 1px 2px var(--btncolor), 0px -1px 2px var(--tilebg);
+	user-select:none;
+	margin-top: 0.4rem;
 }
 
 live-asset > .header {
@@ -144,22 +156,8 @@ live-asset > .meta > p > em {
 	text-align:left;
 }
 
-live-asset {
-	display: flex;
-	flex-direction: row;
-	margin: 0.3rem;
-	text-decoration: none;
-	font-size: 0.8em;
-	flex-wrap: wrap;
-	border-radius: 4px;
-	background-color: var(--bg);
-	position:relative;
-	box-shadow: 0px 1px 2px var(--btncolor), 0px -1px 2px var(--tilebg);
-	user-select:none;
-	margin-top: 0.4rem;
-}
-.text#control live-asset:hover > .header,
-.link#control live-asset:hover > .header {
+#control[data-mode="text"] live-asset:hover > .header,
+#control[data-mode="link"] live-asset:hover > .header {
 	color:var(--bg);
 	background-color: var(--btncolor);
 }
@@ -178,53 +176,54 @@ live-asset {
 	padding:1em;
 }
 
-#control.mark > #resources,
+#control[data-mode="mark"] > #assets,
 #control > #icons {
 	display:none;
 }
 
-#control.mark > #icons {
+#control[data-mode="mark"] > #icons {
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin: 0.2rem;
 	user-select:none;
 }
-#icons > .icon {
-	flex: 0 0 calc(20% - 2px);
+#control live-icon {
+	display:block;
+	width:calc(20% - 0.2rem);
 	border: 1px solid var(--middle-color);
 	border-radius: 4px;
 	aspect-ratio: 1/1;
-	padding: 0.4em;
-	margin: 1px;
+	padding: 0.2em;
+	margin: 0.1rem;
 }
-#icons > div > img {
+#control live-icon > img {
 	width:100%;
 	max-height:100%;
+	vertical-align: top;
 }
-#icons > div:hover {
+#control live-icon:hover {
 	background-color: var(--tilebg);
 }
 
 
-#control.link > header {
+#control[data-mode="link"] > header {
 	opacity: 0.5;
 	pointer-events: none;
 }
 
-#control.link [is="edit-upload"] {
+#control[data-mode="link"] > [is="edit-upload"] {
 	opacity: 0.5;
 	pointer-events: none;
 }
 
-#control.link [is="edit-paste"],
-#control.link live-asset > .header {
+#control[data-mode="link"] > [is="edit-paste"],
+#control[data-mode="link"] live-asset > .header {
 	--tilebg: var(--text-low-color);
 	--btncolor: var(--back-low-color);
 }
 
-#control.link [is="edit-paste"]:hover,
-#control.link live-asset:hover > .header {
+#control[data-mode="link"] > [is="edit-paste"]:hover,
+#control[data-mode="link"] live-asset:hover > .header {
 	--btncolor: var(--bgselcolor);
 	--bg: var(--selcolor);
 }

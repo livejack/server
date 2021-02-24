@@ -59,10 +59,11 @@ html {
 #control {
 	flex: 1 256px;
 	height: 100vh;
-	overflow-y: auto;
+	overflow-y: scroll;
 	width: 300px;
 	background-color:var(--bg);
 	scroll-snap-type: y proximity;
+	padding: 0.2rem;
 }
 
 body {
@@ -97,7 +98,7 @@ body {
 	position: sticky;
 	top: 0;
 	background-color: var(--bg);
-	padding-top: 0.2rem;
+	margin: 0.2rem 0;
 	scroll-snap-align: start;
 	box-shadow: 0px 2px 2px var(--bg);
 }
@@ -105,7 +106,6 @@ body {
 #control > header > a {
 	font-size: 1em;
 	font-weight: bold;
-	margin: 0 0.2rem;
 }
 #control > header > a[href]::after {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M488.727 0H302.545c-12.853 0-23.273 10.42-23.273 23.273s10.42 23.273 23.273 23.273h129.997L192.999 286.09c-9.087 9.087-9.087 23.823 0 32.912a23.2 23.2 0 0016.455 6.816 23.195 23.195 0 0016.455-6.817L465.455 79.458v129.997c0 12.853 10.42 23.273 23.273 23.273s23.273-10.42 23.273-23.273V23.273C512 10.42 501.58 0 488.727 0z'/%3E%3Cpath d='M395.636 232.727c-12.853 0-23.273 10.42-23.273 23.273v209.455H46.545V139.636H256c12.853 0 23.273-10.42 23.273-23.273S268.853 93.091 256 93.091H23.273C10.42 93.091 0 103.511 0 116.364v372.364C0 501.58 10.42 512 23.273 512h372.364c12.853 0 23.273-10.42 23.273-23.273V256c-.001-12.853-10.421-23.273-23.274-23.273z'/%3E%3C/svg%3E");
@@ -116,6 +116,11 @@ body {
 	margin-right:4px;
 	max-width:16px;
 	max-height:16px;
+}
+
+#control > #assets,
+#control > #icons {
+	margin-top:0.4rem;
 }
 
 #gui {

@@ -50,10 +50,22 @@ export const nodes = {
 					html: dom.dataset.html
 				};
 			}
+		}, {
+			tag: 'img',
+			getAttrs(dom) {
+				return {
+					url: dom.getAttribute('src'),
+					title: dom.getAttribute('alt'),
+					html: dom.outerHTML
+				};
+			}
 		}],
 		toDOM(node) {
 			const data = {};
-			for (let key in node.attrs) data['data-' + key] = node.attrs[key];
+			for (let key in node.attrs) {
+				const val = node.attrs[key];
+				if (val) data['data-' + key] = val;
+			}
 			return ["live-asset", data];
 		}
 	},
@@ -122,3 +134,47 @@ export const marks = {
 };
 
 
+export const icons = {
+	doc: {
+		content: "inline*"
+	},
+	text: {
+		group: "inline"
+	},
+	icon: {
+		inline: true,
+		group: "inline",
+		draggable: true,
+		attrs: {
+			url: {
+				default: null
+			},
+			title: {
+				default: null
+			}
+		},
+		parseDOM: [{
+			tag: 'live-icon',
+			getAttrs(dom) {
+				return {
+					url: dom.getAttribute('data-url'),
+					title: dom.getAttribute('data-title')
+				};
+			}
+		}, {
+			tag: 'img',
+			getAttrs(dom) {
+				return {
+					url: dom.getAttribute('src'),
+					title: dom.getAttribute('alt')
+				};
+			}
+		}],
+		toDOM(node) {
+			return ["live-icon", {
+				"data-url": node.attrs.url,
+				"data-title": node.attrs.title
+			}];
+		}
+	}
+};

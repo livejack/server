@@ -99,30 +99,7 @@ export class EditMark extends HTMLDivElement {
 		this.setAttribute('is', 'edit-mark');
 	}
 	options = {
-		nodes: {
-			doc: { content: "image*" },
-			text: BaseSpec.nodes.text,
-			image: {
-				inline: true,
-				attrs: {
-					src: {},
-					alt: { default: null }
-				},
-				draggable: true,
-				parseDOM: [{
-					tag: "img[src]", getAttrs(dom) {
-						return {
-							src: dom.getAttribute("src"),
-							alt: dom.getAttribute("alt")
-						};
-					}
-				}],
-				toDOM(node) {
-					let { src, alt } = node.attrs;
-					return ["img", { src, alt }];
-				}
-			}
-		},
+		nodes: BaseSpec.icons,
 		menu: false
 	};
 }

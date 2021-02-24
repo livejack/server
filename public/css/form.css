@@ -1,6 +1,6 @@
-#resources > form {
-	margin: 0.2rem;
+form[is] {
 	font-size: 0.8em;
+	margin: 0.2rem 0;
 }
 
 form[is] > input {
@@ -9,12 +9,6 @@ form[is] > input {
 	width:100%;
 	cursor: pointer;
 }
-
-/* form[is] > input:hover:not([disabled]) {
-	border-color: var(--btncolor);
-	background-color: var(--btncolorhover);
-	color: var(--bg);
-} */
 
 form[is] > input:hover {
 	color:var(--bg);
@@ -73,11 +67,12 @@ form[is].negative > input {
 	background-color:#faa;
 }
 
-#icons > form[is="edit-filter"] {
+form[is="edit-filter"] {
 	flex-basis: 100%;
-	margin: 0.2rem 0;
+	margin-top: 0.4rem;
 	font-size: 0.8rem;
 }
+
 [is="edit-filter"] .mode,
 [is="edit-filter"] .list {
 	display:flex;
@@ -94,6 +89,7 @@ form[is].negative > input {
 	user-select:none;
 	flex: 1 1 auto;
 	position: relative;
+	border: 1px solid var(--middle-color);
 }
 [is="edit-filter"] label > input {
 	display:none;

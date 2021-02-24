@@ -2,6 +2,7 @@ import cePolyfill from '../../modules/@webreflection/custom-elements';
 cePolyfill(window);
 
 import EditAsset from './asset.js';
+import EditIcon from './icon.js';
 import EditFilter from './filter.js';
 import EditControl from './control.js';
 import EditPaste from './paste.js';
@@ -22,9 +23,17 @@ export default function register(live) {
 	EditControl.prototype.merge = function(dom, data) {
 		return live.matchdom.merge(dom, data);
 	};
-	EditAsset.prototype.observe = function() {
-		return live.observer.observe(this);
+	const revealer = {
+		observe() {
+			return live.observer.observe(this);
+		},
+		unobserve() {
+			return live.observer.unobserve(this);
+		}
 	};
+	Object.assign(EditIcon.prototype, revealer);
+	Object.assign(EditAsset.prototype, revealer);
+
 	ce.define('edit-article', EditArticle, { extends: 'article' });
 	ce.define('edit-time', EditTime, { extends: 'time' });
 	ce.define('edit-title', EditTitle, { extends: 'h2' });
@@ -37,4 +46,5 @@ export default function register(live) {
 	ce.define('edit-control', EditControl, { extends: 'div' });
 	ce.define('edit-filter', EditFilter, { extends: 'form' });
 	ce.define('live-asset', EditAsset);
+	ce.define('live-icon', EditIcon);
 }

@@ -1,15 +1,18 @@
 import req from "../req.js";
 
 export default class EditAsset extends HTMLElement {
-	constructor() {
-		super();
-	}
 	connectedCallback() {
 		this.addEventListener('click', this);
 		this.addEventListener('dragstart', this);
 		this.addEventListener('dragend', this);
-		const asset = document.querySelector(`#resources > live-asset[data-url="${this.dataset.url}"]`);
-		if (asset) this.innerHTML = asset.innerHTML;
+		if (this.children.length == 0) {
+			const asset = document.querySelector(`#assets > live-asset[data-url="${this.dataset.url}"]`);
+			if (asset) {
+				this.innerHTML = asset.innerHTML;
+			} else {
+				// TODO ask "paste" form to insert that asset
+			}
+		}
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
@@ -41,7 +44,7 @@ export default class EditAsset extends HTMLElement {
 		}
 	}
 	del() {
-		if (this.closest("#resource")) {
+		if (this.closest("#control")) {
 			return req("./assets/" + this.dataset.id, "delete");
 		} else {
 			this.parentNode.removeChild(this);
