@@ -188,18 +188,20 @@ live-asset > .meta > p > em {
 	user-select:none;
 }
 #control live-icon {
-	display:block;
+	display: flex;
 	width:calc(20% - 0.2rem);
 	border: 1px solid var(--middle-color);
 	border-radius: 4px;
-	aspect-ratio: 1/1;
 	padding: 0.2em;
 	margin: 0.1rem;
+	align-content: center;
+	flex-direction: column;
+	justify-content: space-around;
+	aspect-ratio: 1 / 1;
 }
 #control live-icon > img {
 	width:100%;
 	max-height:100%;
-	vertical-align: top;
 }
 #control live-icon:hover {
 	background-color: var(--tilebg);
