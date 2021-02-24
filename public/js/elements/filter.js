@@ -40,9 +40,11 @@ export default class EditFilter extends HTMLFormElement {
 			});
 		} else {
 			this.classList.add('notags');
-			const urls = document.querySelectorAll(
-				`#live-messages > .live-list > article > [name="${isFor}"] > [data-url]`
-			).map(node => node.dataset.url);
+			const urls = document.querySelectorAll([
+				`#live-messages > .live-list > article > [name="${isFor}"] [data-url]`,
+				`#live-messages > .live-list > article > [name="${isFor}"] [src]`,
+				`#live-messages > .live-list > article > [name="${isFor}"] [href]`
+			].join(',')).map(node => node.dataset.url);
 			let count = 0;
 			this.getItems().forEach(node => {
 				const present = urls.includes(node.dataset.url);
