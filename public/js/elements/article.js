@@ -22,7 +22,7 @@ export default class EditArticle extends HTMLElement {
 			case "click":
 				e.preventDefault();
 				if (!this.start()) {
-					e.preventPropagation();
+					e.stopPropagation();
 					return;
 				}
 				if (!this.toolbar) {
