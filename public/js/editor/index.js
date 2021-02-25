@@ -63,8 +63,14 @@ export class Editor extends EditorView {
 				this.updateState(this.state.apply(tr));
 			},
 			domParser: parser,
-			transformPastedHTML(str) {
-				const frag = parseHTML(str);
+			transformPastedHTML: (str) => {
+				let frag = parseHTML(str);
+				if (frag.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+					for (let i = frag.children.length - 1; i >= 0; i--) {
+						if (frag.children[i].nodeName == "META") frag.removeChild(frag.children[i]);
+					}
+					if (frag.children.length == 1) frag = frag.children[0];
+				}
 				if (frag.matches && frag.matches('[data-url]')) {
 					return this.convertAsset(frag).outerHTML;
 				}
@@ -81,7 +87,7 @@ export class Editor extends EditorView {
 			if (dom.favicon) return parseHTML(`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`);
 			else return dom;
 		} else if (this.#content == "text" && dom.dataset.title) {
-			return parseHTML(dom.dataset.title);
+			return parseHTML(`<span>${dom.dataset.title}</span>`);
 		} else if (dom.dataset.type == "link" || !sel.empty && !sel.node) {
 			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
 		} else return dom;
