@@ -1,11 +1,14 @@
 import req from "../req.js";
 
 export default class EditAsset extends HTMLElement {
+	#editable
 	connectedCallback() {
 		this.addEventListener('click', this);
 		this.addEventListener('dragstart', this);
 		this.addEventListener('dragend', this);
 		this.addEventListener('mousemove', this);
+		this.addEventListener('mouseleave', this);
+		this.#editable = !!this.closest(".live-article");
 		if (this.children.length == 0) {
 			const asset = document.querySelector(`#assets > live-asset[data-url="${this.dataset.url}"]`);
 			if (asset) {
@@ -20,6 +23,7 @@ export default class EditAsset extends HTMLElement {
 		this.removeEventListener('dragstart', this);
 		this.removeEventListener('dragend', this);
 		this.removeEventListener('mousemove', this);
+		this.removeEventListener('mouseleave', this);
 	}
 
 	handleEvent(e) {
@@ -47,14 +51,16 @@ export default class EditAsset extends HTMLElement {
 				e.preventDefault();
 			}
 		} else if (e.type == "mousemove") {
-			this.classList.toggle('ctrl', e.ctrlKey);
+			this.classList.toggle('ctrl', !this.#editable && e.ctrlKey);
+		} else if (e.type == "mouseleave") {
+			this.classList.remove('ctrl');
 		}
 	}
 	del() {
-		if (this.closest("#control")) {
-			return req("./assets/" + this.dataset.id, "delete");
-		} else {
+		if (this.#editable) {
 			this.parentNode.removeChild(this);
+		} else {
+			return req("./assets/" + this.dataset.id, "delete");
 		}
 	}
 	save() {
