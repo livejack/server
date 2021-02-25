@@ -79,12 +79,6 @@ live-asset > .thumbnail > img {
 	object-fit: cover;
 }
 
-.live-message live-asset button {
-	display:none;
-}
-.live-message .ProseMirror live-asset button {
-	display:initial;
-}
 live-asset button {
 	all:unset;
 	padding: 0.4em;
@@ -97,9 +91,12 @@ live-asset button {
 	border-radius: 2.3em;
 	cursor:pointer;
 }
+
+.live-message live-asset button,
 live-asset button[name="save"] {
 	display:none;
 }
+.live-message .ProseMirror live-asset button[name="del"],
 live-asset.ctrl button[name="save"] {
 	display:initial;
 }
