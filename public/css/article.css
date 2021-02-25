@@ -108,3 +108,11 @@
 .ProseMirror-selectednode {
   outline: 2px solid var(--bgselcolor);
 }
+
+.ProseMirror-menu-toggle > svg + svg,
+.ProseMirror-menu-toggle.ProseMirror-menu-active > svg:first-of-type {
+	display: none;
+}
+.ProseMirror-menu-toggle.ProseMirror-menu-active > svg + svg {
+	display: initial;
+}

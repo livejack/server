@@ -41,7 +41,10 @@ function wrapListItem(nodeType, options) {
 function linkItem(markType) {
 	return new MenuItem({
 		title: "Add or remove link",
-		icon: icons.link,
+		icon: {
+			active: icons.unlink,
+			inactive: icons.link
+		},
 		active(state) {
 			return markActive(state, markType);
 		},
