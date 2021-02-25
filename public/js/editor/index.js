@@ -113,7 +113,6 @@ export class Editor extends EditorView {
 			}
 			tr.replaceSelectionWith(node);
 		}
-		this.focus();
 		this.dispatch(tr);
 	}
 	toDOM() {

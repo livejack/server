@@ -20,7 +20,11 @@ export default class EditControl extends HTMLDivElement {
 	handleEvent(e) {
 		if (e.type == "click" && this.#view) {
 			let asset = e.target.closest('[data-url]');
-			if (asset) this.#view.insertAsset(asset);
+			if (asset) {
+				e.preventDefault();
+				this.#view.focus();
+				setTimeout(() => this.#view.insertAsset(asset));
+			}
 		}
 	}
 	get mode() {
