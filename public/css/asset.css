@@ -83,12 +83,11 @@ live-asset > .thumbnail > img {
 	display:none;
 }
 .live-message .ProseMirror live-asset button {
-	display:inline-block;
+	display:initial;
 }
 live-asset button {
 	all:unset;
 	padding: 0.4em;
-	display:inline-block;
 	width: 2.3em;
 	height: 2.3em;
 	text-align:center;
@@ -97,6 +96,12 @@ live-asset button {
 	line-height: 1.2em;
 	border-radius: 2.3em;
 	cursor:pointer;
+}
+live-asset button[name="save"] {
+	display:none;
+}
+live-asset.ctrl button[name="save"] {
+	display:initial;
 }
 
 live-asset button:hover {

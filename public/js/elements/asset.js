@@ -5,6 +5,7 @@ export default class EditAsset extends HTMLElement {
 		this.addEventListener('click', this);
 		this.addEventListener('dragstart', this);
 		this.addEventListener('dragend', this);
+		this.addEventListener('mousemove', this);
 		if (this.children.length == 0) {
 			const asset = document.querySelector(`#assets > live-asset[data-url="${this.dataset.url}"]`);
 			if (asset) {
@@ -18,6 +19,7 @@ export default class EditAsset extends HTMLElement {
 		this.removeEventListener('click', this);
 		this.removeEventListener('dragstart', this);
 		this.removeEventListener('dragend', this);
+		this.removeEventListener('mousemove', this);
 	}
 
 	handleEvent(e) {
@@ -35,12 +37,17 @@ export default class EditAsset extends HTMLElement {
 		} else if (e.type == "dragend") {
 			this.classList.remove('dragging');
 		} else if (e.type == "click") {
-			if (e.target.name == "del") {
+			if (e.target.name == "save") {
+				e.stopPropagation();
+				this.save();
+			} else if (e.target.name == "del") {
 				e.stopPropagation();
 				this.del();
 			} else if (e.target.closest('a[href]')) {
 				e.preventDefault();
 			}
+		} else if (e.type == "mousemove") {
+			this.classList.toggle('ctrl', e.ctrlKey);
 		}
 	}
 	del() {
@@ -49,6 +56,9 @@ export default class EditAsset extends HTMLElement {
 		} else {
 			this.parentNode.removeChild(this);
 		}
+	}
+	save() {
+		return req("./assets/" + this.dataset.id, "put", { url: this.dataset.url });
 	}
 	get favicon() {
 		const img = this.querySelector('.header > img');
