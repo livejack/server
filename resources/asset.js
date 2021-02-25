@@ -26,7 +26,9 @@ exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
-		const asset = await createAsset(page, req.body);
+		await prepareAsset(req.body);
+		if (req.body.id) delete req.body.id;
+		const asset = await page.$relatedQuery('assets').insertAndFetch(req.body);
 		await page.$query(trx).patch({
 			update: asset.date
 		});
@@ -41,9 +43,7 @@ exports.POST = (req) => {
 	});
 };
 
-async function createAsset(page, body = {}) {
-	const item = Object.assign({}, body);
-	if (item.id !== undefined) delete item.id;
+async function prepareAsset(item) {
 	if (!item.url) throw new HttpError.BadRequest("Missing url");
 	const meta = await inspector(item.url, {
 		nofavicon: false,
@@ -60,7 +60,6 @@ async function createAsset(page, body = {}) {
 	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
 		if (meta[name] != null) item.meta[name] = meta[name];
 	});
-	return page.$relatedQuery('assets').insertAndFetch(item);
 }
 
 exports.PUT = (req) => {
@@ -68,6 +67,7 @@ exports.PUT = (req) => {
 	const id = req.params.id || req.body.id;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
+		await prepareAsset(req.body);
 		const asset = await page.$relatedQuery('assets', trx)
 			.patchAndFetchById(id, req.body)
 			.throwIfNotFound();
@@ -75,10 +75,9 @@ exports.PUT = (req) => {
 			update: asset.update
 		});
 		global.livejack.send({
-			room: `/${domain}/${key}/page`,
-			mtime: page.update,
+			room: `/${domain}/${key}/assets`,
+			mtime: asset.date,
 			data: {
-				update: page.update,
 				assets: [asset]
 			}
 		});
@@ -100,7 +99,6 @@ exports.DELETE = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: page.update,
 			data: {
-				update: page.update,
 				assets: [{ id }]
 			}
 		});
