@@ -13,7 +13,6 @@ form[is] > input {
 form[is] > input:hover {
 	color:var(--bg);
 	background-color: var(--btncolor);
-	background-image:none;
 }
 form[is] > input::placeholder {
 	color:var(--btncolor);
