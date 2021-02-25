@@ -76,13 +76,13 @@ export class Editor extends EditorView {
 		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
 	convertAsset(dom) {
-		const empty = this.state.selection.empty;
+		const sel = this.state.selection;
 		if (this.#content == "inline") {
 			if (dom.favicon) return parseHTML(`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`);
 			else return dom;
 		} else if (this.#content == "text" && dom.dataset.title) {
 			return parseHTML(dom.dataset.title);
-		} else if (dom.dataset.type == "link" || !empty) {
+		} else if (dom.dataset.type == "link" || !sel.empty && !sel.node) {
 			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
 		} else return dom;
 	}
