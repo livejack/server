@@ -83,6 +83,9 @@ class Asset extends BaseModel {
 						},
 						author: {
 							type: 'string'
+						},
+						site: {
+							type: 'string'
 						}
 					}
 				},

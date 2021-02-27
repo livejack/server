@@ -34,7 +34,7 @@
     "toggle-switch-css": "^1.0.3",
     "toml": "^3.0.0",
     "upcache": "^2.1.0",
-    "url-inspector": "^2.10.1",
+    "url-inspector": "^2.10.2",
     "xbytes": "^1.7.0",
     "xdg-basedir": "^4.0.0"
   },
