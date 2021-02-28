@@ -55,7 +55,16 @@ async function prepareAsset(item) {
 		meta.thumbnail = meta.url;
 	}
 	if (meta.icon && meta.icon.startsWith('data:') && meta.icon.length < 64) delete meta.icon;
-	if (meta.thumbnail) meta.thumbnail = await thumbnailer(meta.thumbnail);
+	if (meta.thumbnail) try {
+		meta.thumbnail = await thumbnailer(meta.thumbnail);
+	} catch (err) {
+		console.group(item.url);
+		console.error("Impossible to generate thumbnail from")
+		console.error(meta.thumbnail);
+		console.error(err.toString());
+		console.groupEnd();
+		delete meta.thumbnail;
+	}
 	if (!item.meta) item.meta = {};
 	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
 		if (meta[name] != null) item.meta[name] = meta[name];
