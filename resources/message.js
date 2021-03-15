@@ -13,7 +13,7 @@ exports.GET = async (req) => {
 		return Page.relatedQuery('messages').withGraphFetched('[hrefs(minimalSelect)]')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.select()
-			.sortBy(req.query.sort || 'date')
+			.sortBy(req.query.sort || 'created_at')
 			.limit(parseInt(req.query.limit) || Infinity)
 			.offset(parseInt(req.query.offset) || 0);
 	}
@@ -28,14 +28,14 @@ exports.POST = (req) => {
 			relate: true
 		});
 		await page.$query(trx).patch({
-			update: msg.date
+			updated_at: msg.created_at
 		});
 
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
-			mtime: page.update,
+			mtime: page.updated_at,
 			data: {
-				update: page.update,
+				updated_at: page.updated_at,
 				messages: [msg]
 			}
 		});
@@ -53,13 +53,13 @@ exports.PUT = (req) => {
 			unrelate: true
 		}).throwIfNotFound();
 		await page.$query(trx).patch({
-			update: msg.update
+			updated_at: msg.updated_at
 		});
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
-			mtime: page.update,
+			mtime: page.updated_at,
 			data: {
-				update: page.update,
+				updated_at: page.updated_at,
 				messages: [msg]
 			}
 		});
@@ -75,13 +75,13 @@ exports.DELETE = (req) => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		await page.$relatedQuery('messages', trx).deleteById(id).throwIfNotFound();
 		await page.$query(trx).patch({
-			update: new Date().toISOString()
+			updated_at: new Date().toISOString()
 		});
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
-			mtime: page.update,
+			mtime: page.updated_at,
 			data: {
-				update: page.update,
+				updated_at: page.updated_at,
 				messages: [{ id: id }]
 			}
 		});

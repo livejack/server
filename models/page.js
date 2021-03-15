@@ -31,11 +31,11 @@ class Page extends BaseModel {
 			type: 'object',
 			required: ['domain', 'key'],
 			properties: {
-				date: {
+				created_at: {
 					type: 'string',
 					format: 'date-time'
 				},
-				update: {
+				updated_at: {
 					type: 'string',
 					format: 'date-time'
 				},
@@ -73,12 +73,9 @@ class Page extends BaseModel {
 			}
 		};
 	}
-	$beforeInsert() {
-		this.date = new Date().toISOString();
-	}
+
 	$beforeUpdate() {
-		this.update = new Date().toISOString();
-		if (this.date == null) this.date = this.update;
+		this.updated_at = new Date().toISOString();
 	}
 
 	get when() {

@@ -38,11 +38,15 @@ class Message extends BaseModel {
 				id: {
 					type: 'integer'
 				},
-				date: {
+				created_at: {
 					type: 'string',
 					format: 'date-time'
 				},
-				update: {
+				updated_at: {
+					type: 'string',
+					format: 'date-time'
+				},
+				date: {
 					type: 'string',
 					format: 'date-time'
 				},
@@ -61,15 +65,8 @@ class Message extends BaseModel {
 			}
 		};
 	}
-	$beforeInsert() {
-		this.date = new Date().toISOString();
-	}
 	$beforeUpdate() {
-		this.update = new Date().toISOString();
-		if (this.date == null) {
-			// fix bad record
-			this.date = this.update;
-		}
+		this.updated_at = new Date().toISOString();
 	}
 }
 

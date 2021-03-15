@@ -1,15 +1,10 @@
 const pg = require('pg');
-const { DateTime } = require('luxon');
 
-// parse timestamps without timezone
+// convert SQL timestamp to ISO8601 timestamp
+// 2004-10-19 10:23:54.210+02 becomes 2004-10-19T10:23:54.210+02:00
 pg.types.setTypeParser(
-	pg.types.builtins.TIMESTAMP,
-	val => {
-		if (val === null) return val;
-		else return DateTime.fromSQL(val, {
-			zone: "UTC"
-		}).toISO();
-	}
+	pg.types.builtins.TIMESTAMPTZ,
+	str => str.split(' ').join('T') + ":00"
 );
 
 const objection = require('objection');
@@ -111,7 +106,7 @@ class BaseModel extends Model {
 				builder.select();
 			},
 			order(builder) {
-				builder.orderBy('date');
+				builder.orderBy('created_at');
 			}
 		};
 	}

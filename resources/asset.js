@@ -30,11 +30,11 @@ exports.POST = (req) => {
 		if (req.body.id) delete req.body.id;
 		const asset = await page.$relatedQuery('hrefs').insertAndFetch(req.body);
 		await page.$query(trx).patch({
-			update: asset.date
+			updated_at: asset.updated_at
 		});
 		global.livejack.send({
 			room: `/${domain}/${key}/assets`,
-			mtime: asset.date,
+			mtime: asset.updated_at,
 			data: {
 				assets: [asset]
 			}
@@ -84,11 +84,11 @@ exports.PUT = (req) => {
 			.patchAndFetchById(id, req.body)
 			.throwIfNotFound();
 		await page.$query(trx).patch({
-			update: asset.update
+			updated_at: asset.updated_at
 		});
 		global.livejack.send({
 			room: `/${domain}/${key}/assets`,
-			mtime: asset.date,
+			mtime: asset.updated_at,
 			data: {
 				assets: [asset]
 			}
@@ -105,11 +105,11 @@ exports.DELETE = (req) => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		await page.$relatedQuery('assets', trx).deleteById(id).throwIfNotFound();
 		await page.$query(trx).patch({
-			update: new Date().toISOString()
+			updated_at: new Date().toISOString()
 		});
 		global.livejack.send({
 			room: `/${domain}/${key}/assets`,
-			mtime: page.update,
+			mtime: page.updated_at,
 			data: {
 				assets: [{ id }]
 			}

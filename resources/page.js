@@ -31,10 +31,10 @@ exports.PUT = async (req) => {
 			.returning('*');
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
-			mtime: page.update,
+			mtime: page.updated_at,
 			data: {
 				start: page.start,
-				update: page.update,
+				updated_at: page.updated_at,
 				stop: page.stop
 			}
 		});
