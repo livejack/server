@@ -33,10 +33,10 @@ const config = ini(app);
 
 config.live.version = require('@livejack/client/package.json').version;
 
-(async() => {
+(async () => {
 
 process.title = config.name + '-' + config.version;
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
 	console.error(err); // eslint-disable-line
 	process.exit(1);
 });
@@ -65,7 +65,7 @@ const routes = require('./routes/*');
 
 app.use((req, res) => {
 	res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-	res.setHeader('X-XSS-Protection','1;mode=block');
+	res.setHeader('X-XSS-Protection', '1;mode=block');
 	res.setHeader('X-Frame-Options', 'sameorigin');
 	res.setHeader('X-Content-Type-Options', 'nosniff');
 	res.setHeader('Content-Security-Policy', [
@@ -125,7 +125,7 @@ app.param('domain', (req, res, next, domain) => {
 	next();
 });
 
-app.get('/:domain/:key', function(req, res, next) {
+app.get('/:domain/:key', function (req, res, next) {
 	if (req.query.write !== undefined || req.legacyHost) {
 		delete req.query.write;
 		return res.redirect(URL.format({
@@ -147,7 +147,7 @@ app.get('/:domain/:key(pictos)/synchro', domainLock, resources.synchro.pictos);
 // appelé par BO site pour synchroniser un live
 app.get('/:domain/:key/synchro', domainLock, resources.synchro.GET);
 
-app.get('/:domain/:key', function(req, res, next) {
+app.get('/:domain/:key', function (req, res, next) {
 	var mw;
 	if (req.query.maxresults != undefined) {
 		var indir = '/:domain/:key/page?limit=:maxresults';
@@ -211,9 +211,10 @@ if (config.cron) require('./lib/cron')(config.cron);
 if (config.autoExpire) require('./lib/expiration')(config);
 
 await ini.async(config);
+
 await objection.Models.User.populate(
 	Object.entries(config.domains).map(([domain, obj]) => {
-		return {domain, token: obj.password};
+		return { domain, token: obj.password };
 	})
 );
 await auth.keygen(config);
