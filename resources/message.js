@@ -1,16 +1,16 @@
 const { Models } = require('objection');
-const { Page } = Models;
+const { Page, Message } = Models;
 
 exports.GET = async (req) => {
 	const { domain, key } = req.params;
 	if (req.params.id) {
-		return Page.relatedQuery('messages')
+		return Page.relatedQuery('messages').withGraphFetched('[hrefs(minimalSelect)]')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.findById(req.params.id)
 			.throwIfNotFound()
 			.select();
 	} else {
-		return Page.relatedQuery('messages')
+		return Page.relatedQuery('messages').withGraphFetched('[hrefs(minimalSelect)]')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.select()
 			.sortBy(req.query.sort || 'date')
@@ -23,7 +23,10 @@ exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		const msg = await page.$relatedQuery('messages', trx).insertAndFetch(req.body);
+		req.body.page = { id: page.id };
+		const msg = await Message.query(trx).upsertGraphAndFetch(req.body, {
+			relate: true
+		});
 		await page.$query(trx).patch({
 			update: msg.date
 		});
@@ -42,12 +45,13 @@ exports.POST = (req) => {
 
 exports.PUT = (req) => {
 	const { domain, key } = req.params;
-	const id = req.params.id || req.body.id;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		const msg = await page.$relatedQuery('messages', trx)
-			.patchAndFetchById(id, req.body)
-			.throwIfNotFound();
+		req.body.page = { id: page.id };
+		const msg = await Message.query(trx).upsertGraphAndFetch(req.body, {
+			relate: true,
+			unrelate: true
+		}).throwIfNotFound();
 		await page.$query(trx).patch({
 			update: msg.update
 		});

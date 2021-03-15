@@ -6,7 +6,7 @@ exports.GET = async (req, res) => {
 	return Page.query()
 		.findOne({ domain, key }).select()
 		.throwIfNotFound()
-		.withGraphFetched('messages(select,order)');
+		.withGraphFetched('[messages(select,order).hrefs(minimalSelect)]');
 };
 
 exports.PUT = async (req) => {

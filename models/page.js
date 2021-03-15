@@ -15,12 +15,12 @@ class Page extends BaseModel {
 					to: 'messages.page_id'
 				}
 			},
-			assets: {
+			hrefs: {
 				relation: BaseModel.HasManyRelation,
-				modelClass: Models.Asset,
+				modelClass: Models.Href,
 				join: {
 					from: 'pages.id',
-					to: 'assets.page_id'
+					to: 'hrefs.page_id'
 				}
 			}
 		};

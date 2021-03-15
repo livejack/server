@@ -43,7 +43,7 @@ module.exports = function(app) {
 
 	BaseModel.knex(knex);
 	objection.BaseModel = BaseModel;
-	['asset', 'message', 'page', 'user'].forEach((name) => {
+	['href', 'message', 'page', 'user'].forEach((name) => {
 		const model = require(Path.join('..', 'models', name));
 		objection.Models[model.name] = model;
 	});

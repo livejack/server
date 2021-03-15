@@ -74,13 +74,13 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		}
 	});
 	for (let asset of diff.put) {
-		await page.$relatedQuery('assets').patchById(asset.id, asset);
+		await page.$relatedQuery('hrefs').patchById(asset.id, asset);
 	}
 	for (let asset of diff.post) {
-		await page.$relatedQuery('assets').insert(asset);
+		await page.$relatedQuery('hrefs').insert(asset);
 	}
 	for (let asset of diff.del) {
-		await page.$relatedQuery('assets').deleteById(asset.id);
+		await page.$relatedQuery('hrefs').deleteById(asset.id);
 	}
 };
 

@@ -14,6 +14,18 @@ class Message extends BaseModel {
 					from: 'messages.page_id',
 					to: 'pages.id'
 				}
+			},
+			hrefs: {
+				relation: BaseModel.ManyToManyRelation,
+				modelClass: Models.Href,
+				join: {
+					from: 'messages.id',
+					through: {
+						from: "messages_hrefs.message_id",
+						to: "messages_hrefs.href_id"
+					},
+					to: 'hrefs.id'
+				}
 			}
 		};
 	}

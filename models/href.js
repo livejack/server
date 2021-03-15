@@ -1,8 +1,8 @@
 const { BaseModel, Models } = require('objection');
 
-class Asset extends BaseModel {
+class Href extends BaseModel {
 	static get tableName() {
-		return 'assets';
+		return 'hrefs';
 	}
 
 	static get relationMappings() {
@@ -11,7 +11,7 @@ class Asset extends BaseModel {
 				relation: BaseModel.BelongsToOneRelation,
 				modelClass: Models.Page,
 				join: {
-					from: 'assets.page_id',
+					from: 'hrefs.page_id',
 					to: 'pages.id'
 				}
 			}
@@ -34,7 +34,11 @@ class Asset extends BaseModel {
 					}],
 					default: 'internal'
 				},
-				date: {
+				created_at: {
+					type: 'string',
+					format: 'date-time'
+				},
+				updated_at: {
 					type: 'string',
 					format: 'date-time'
 				},
@@ -42,31 +46,37 @@ class Asset extends BaseModel {
 					type: 'string',
 					format: 'uri-reference'
 				},
+				type: {
+					type: 'string'
+				},
+				html: {
+					type: 'string'
+				},
+				script: {
+					type: 'string'
+				},
+				width: {
+					type: 'string'
+				},
+				height: {
+					type: 'string'
+				},
 				meta: {
 					type: 'object',
 					properties: {
-						type: {
-							type: 'string'
-						},
 						title: {
 							type: 'string'
 						},
 						description: {
 							type: 'string'
 						},
-						html: {
+						author: {
 							type: 'string'
 						},
 						icon: {
 							type: 'string'
 						},
 						mime: {
-							type: 'string'
-						},
-						width: {
-							type: 'string'
-						},
-						height: {
 							type: 'string'
 						},
 						duration: {
@@ -81,36 +91,32 @@ class Asset extends BaseModel {
 						date: {
 							type: 'string'
 						},
-						author: {
-							type: 'string'
-						},
 						site: {
 							type: 'string'
+						},
+						keywords: {
+							type: 'array',
+							nullable: true,
+							items: {
+								type: 'string'
+							}
 						}
 					}
-				},
-				legende: {
-					type: 'string'
-				},
-				credits: {
-					type: 'string'
-				},
-				tags: {
-					type: 'object'
-				},
-				style: {
-					type: 'string'
 				}
 			}
 		};
 	}
-	$beforeInsert() {
-		this.date = new Date().toISOString();
+	static get modifiers() {
+		return Object.assign({
+			minimalSelect(builder) {
+				builder.select("url", "width", "height", "type", "html", "script");
+			}
+		}, super.modifiers);
 	}
 	$beforeUpdate() {
-		if (this.date == null) this.date = new Date().toISOString();
+		this.updated_at = new Date().toISOString();
 	}
 }
 
-module.exports = Asset;
+module.exports = Href;
 

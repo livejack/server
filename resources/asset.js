@@ -1,5 +1,5 @@
 const { Models } = require('objection');
-const { Page, Asset } = Models;
+const { Page, Href } = Models;
 const { promisify } = require('util');
 const inspector = promisify(require('url-inspector'));
 const thumbnailer = require('../lib/thumbnailer');
@@ -8,7 +8,7 @@ const providers = require('../lib/providers');
 exports.GET = (req) => {
 	const { domain, key } = req.params;
 	if (req.params.id) {
-		return Page.relatedQuery('assets')
+		return Page.relatedQuery('hrefs')
 			.for(Page.query().findOne({ domain, key }).throwIfNotFound())
 			.findById(req.params.id)
 			.throwIfNotFound()
@@ -18,7 +18,7 @@ exports.GET = (req) => {
 		return Page.query()
 			.findOne({ domain, key }).select()
 			.throwIfNotFound()
-			.withGraphFetched('assets(select,order)');
+			.withGraphFetched('hrefs(select,order)');
 	}
 };
 
@@ -28,7 +28,7 @@ exports.POST = (req) => {
 		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
 		await prepareAsset(req.body);
 		if (req.body.id) delete req.body.id;
-		const asset = await page.$relatedQuery('assets').insertAndFetch(req.body);
+		const asset = await page.$relatedQuery('hrefs').insertAndFetch(req.body);
 		await page.$query(trx).patch({
 			update: asset.date
 		});
@@ -66,8 +66,11 @@ async function prepareAsset(item) {
 		delete meta.thumbnail;
 	}
 	if (!item.meta) item.meta = {};
-	Object.keys(Asset.jsonSchema.properties.meta.properties).forEach((name) => {
+	Object.keys(Href.jsonSchema.properties.meta.properties).forEach((name) => {
 		if (meta[name] != null) item.meta[name] = meta[name];
+	});
+	Object.keys(Href.jsonSchema.properties).forEach((name) => {
+		if (meta[name] != null) item[name] = meta[name];
 	});
 }
 
@@ -77,7 +80,7 @@ exports.PUT = (req) => {
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		await prepareAsset(req.body);
-		const asset = await page.$relatedQuery('assets', trx)
+		const asset = await page.$relatedQuery('hrefs', trx)
 			.patchAndFetchById(id, req.body)
 			.throwIfNotFound();
 		await page.$query(trx).patch({
