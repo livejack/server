@@ -105,7 +105,7 @@ exports.DELETE = (req) => {
 
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		await page.$relatedQuery('assets', trx).deleteById(id).throwIfNotFound();
+		await page.$relatedQuery('hrefs', trx).deleteById(id).throwIfNotFound();
 		await page.$query(trx).patch({
 			updated_at: new Date().toISOString()
 		});
