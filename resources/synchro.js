@@ -40,12 +40,12 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		await page.$query().patch(npage);
 	}
 
-	const nassets = [];
+	let nassets = [];
 	if (obj.categorie) {
 		obj.categorie.forEach(function(categorie) {
 			var titre = categorie.titre ? categorie.titre.toString() : null;
-			if (categorie.media) categorie.media.forEach(function(asset) {
-				if (titre) asset.tags = [titre];
+			if (categorie.media) categorie.media.forEach(function (asset) {
+				if (titre && !asset.tags) asset.tags = [titre];
 				nassets.push(asset);
 			});
 		});
@@ -55,11 +55,16 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		return;
 	}
 
-	nassets.forEach(function(asset) {
-		if (!asset.credits) asset.credits = null;
-		if (!asset.legende) asset.legende = null;
-		asset.type = type;
-		asset.origin = "external";
+	nassets = nassets.map(function (item) {
+		const asset = {
+			url: item.url,
+			origin: 'external',
+			type: type
+		};
+		if (item.legende) asset.meta.title = item.legende;
+		if (item.credits) asset.meta.author = item.credits;
+		if (item.tags) asset.meta.keywords = item.tags;
+		return asset;
 	});
 
 	const assets = await page.$relatedQuery('assets').where({
@@ -68,7 +73,7 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 	const diff = DiffList(assets, nassets, {
 		key: 'url',
 		equal: function(a, b) {
-			var isEqual = a.credits == b.credits && a.legende == b.legende && a.type == type;
+			var isEqual = a.meta.title == b.meta.title && a.meta.author == b.meta.author && a.type == b.type;
 			b.id = a.id; // we compared on url, but id is missing
 			return isEqual;
 		}
