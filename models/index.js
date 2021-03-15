@@ -27,7 +27,7 @@ const Path = require('path');
 
 module.exports = function (app) {
 	const knex = Knex({
-		client: 'postgresql',
+		client: 'pg',
 		connection: app.settings.database,
 		pool: {
 			min: 2,
