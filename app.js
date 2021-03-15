@@ -57,6 +57,9 @@ const prerender = require('./lib/prerender');
 prerender.configure(config);
 
 const objection = require('./models')(app);
+await objection.BaseModel.knex().migrate.latest({
+	directory: "migrations/"
+});
 const resources = require('./resources/*');
 const routes = require('./routes/*');
 
