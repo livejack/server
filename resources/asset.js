@@ -58,11 +58,13 @@ async function prepareAsset(item) {
 	if (meta.thumbnail) try {
 		meta.thumbnail = await thumbnailer(meta.thumbnail);
 	} catch (err) {
+		/* eslint-disable no-console */
 		console.group(item.url);
-		console.error("Impossible to generate thumbnail from")
+		console.error("Impossible to generate thumbnail from");
 		console.error(meta.thumbnail);
 		console.error(err.toString());
 		console.groupEnd();
+		/* eslint-enable no-console */
 		delete meta.thumbnail;
 	}
 	if (!item.meta) item.meta = {};
