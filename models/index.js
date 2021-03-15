@@ -25,7 +25,7 @@ const Knex = require('knex');
 const AjvKeywords = require('ajv-keywords');
 const Path = require('path');
 
-module.exports = function(app) {
+module.exports = function (app) {
 	const knex = Knex({
 		client: 'postgresql',
 		connection: app.settings.database,
@@ -34,7 +34,6 @@ module.exports = function(app) {
 			max: 10
 		}
 	});
-
 
 	BaseModel.knex(knex);
 	objection.BaseModel = BaseModel;
@@ -49,15 +48,15 @@ module.exports = function(app) {
 	};
 	objection.errorStatus = (err) => {
 		if (err instanceof ValidationError
-		|| err instanceof NotNullViolationError
-		|| err instanceof CheckViolationError
-		|| err instanceof DataError) {
+			|| err instanceof NotNullViolationError
+			|| err instanceof CheckViolationError
+			|| err instanceof DataError) {
 			return 400;
 		} else if (err instanceof NotFoundError) {
 			return 404;
 		} else if (err instanceof UniqueViolationError
-		|| err instanceof ForeignKeyViolationError
-		|| err instanceof ConstraintViolationError) {
+			|| err instanceof ForeignKeyViolationError
+			|| err instanceof ConstraintViolationError) {
 			return 409;
 		} else {
 			return err.statusCode || err.code || 500;
