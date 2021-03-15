@@ -228,5 +228,8 @@ require('http').createServer(app).listen(config.listen, async () => {
 	console.info("Cache invalidated");
 });
 
-})();
+})().catch((err) => {
+	console.error(err);
+	process.exit(1);
+});
 
