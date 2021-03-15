@@ -54,7 +54,7 @@ class MenuBarView {
 	move() {
 		const sel = this.view.state.selection;
 		const style = this.menu.style;
-		if (sel.empty || sel.node && sel.node.type.name == "asset" || this.#hidden) {
+		if (!this.view.docView || sel.empty || sel.node && sel.node.type.name == "asset" || this.#hidden) {
 			style.display = "none";
 		} else {
 			const aft = this.view.coordsAtPos(sel.to, 1);

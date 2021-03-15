@@ -1,6 +1,9 @@
 import { Matchdom } from "../modules/matchdom";
 import * as DatePlugin from "./date-plugin.js";
 import "./array-like.js";
+import '../modules/@ungap/custom-elements';
+
+import { LiveAsset, LiveIcon } from "./elements/live-asset.js";
 
 
 const filters = {
@@ -9,7 +12,8 @@ const filters = {
 		const node = ctx.dest.node;
 		const list = cursor.parentNode;
 		const old = list.querySelector(`[data-id="${item.id}"]`);
-		const refTime = item.date && Date.parse(item.date) || 0;
+		const date = item.date || item.created_at;
+		const refTime = Date.parse(date) || 0;
 		const refPin = item.style == "pinned";
 		const next = (() => {
 			if (!refTime) return null;
@@ -37,43 +41,12 @@ const filters = {
 				setTimeout(() => {
 					list.removeChild(old);
 				}, 700);
-				if (item.date) list.insertBefore(node, next);
+				if (date) list.insertBefore(node, next);
 			}
-		} else if (item.date) {
+		} else if (date) {
 			list.insertBefore(node, next);
 		}
 		return item;
-	},
-
-	importAssets(ctx, frag) {
-		if (!frag || !frag.querySelector) return frag;
-		const objects = ['object', 'iframe', 'embed', 'opta', '.dugout-video'];
-		const list = frag.querySelectorAll([
-			'img', 'be-op', '.twitter-tweet'
-		].concat(objects).join(','));
-		list.forEach((node) => {
-			if (node.matches('be-op')) {
-				node.classList.add('lazy');
-				return;
-			}
-			if (node.matches('.twitter-tweet')) {
-				node.classList.add('lazy');
-				node.classList.remove('twitter-tweet');
-				node.classList.add('tweet');
-				return;
-			}
-			if (node.matches('.lazy') || node.parentNode.closest('object')) {
-				return true;
-			}
-			const url = node.matches(objects.join(','))
-				&& node.getAttribute('title') || node.getAttribute('src');
-			const frag = node.ownerDocument.createElement('span');
-			frag.classList.add('lazy');
-			frag.dataset.html = node.outerHTML;
-			if (url) frag.setAttribute('title', url);
-			node.parentNode.replaceChild(frag, node);
-		});
-		return frag;
 	},
 	when(ctx, page, param) {
 		const now = Date.now();
@@ -87,11 +60,24 @@ const filters = {
 	}
 };
 
+const refs = {};
+
 export default class Live {
 	constructor() {
+		this.hrefs = {};
+		this.LiveAsset = LiveAsset;
 		this.matchdom = new Matchdom({
-			visitor: this.visitor
+			visitor: this.visitor,
+			hooks: {
+				beforeEach: (val) => {
+					if (val && val.hrefs && Array.isArray(val.hrefs)) {
+						// FIXME those should just go to live-article (the parent merging msg)
+						this.set(val.hrefs);
+					}
+				}
+			}
 		}).extend([DatePlugin, { filters }]);
+		this.adopt(this.LiveAsset);
 	}
 
 	init() {
@@ -101,6 +87,32 @@ export default class Live {
 			vars[meta.name.substring(pre.length + 1)] = meta.content;
 		});
 		this.vars = vars;
+		if (!window.customElements.get('live-asset')) {
+			window.customElements.define('live-asset', this.LiveAsset);
+		}
+		if (!window.customElements.get('live-icon')) {
+			window.customElements.define('live-icon', LiveIcon);
+		}
+	}
+
+	get(url) {
+		return refs[url];
+	}
+	set(list) {
+		list.forEach(item => {
+			if (refs[item.url]) Object.assign(refs[item.url], item);
+			else refs[item.url] = item;
+		});
+	}
+
+	adopt(Class) {
+		if (Object.getOwnPropertyDescriptor(Class.prototype, "live")) return;
+		Object.defineProperty(Class.prototype, "live", {
+			value: this,
+			writable: false,
+			enumerable: false,
+			configurable: false
+		});
 	}
 
 	findAll() {
@@ -116,6 +128,11 @@ export default class Live {
 	}
 
 	merge(node, data) {
+		if (!data) console.trace("no data", node, data);
+		if (data && data.assets && data.assets.hrefs) {
+			// we need these before the ones in each message
+			this.set(data.assets.hrefs);
+		}
 		return this.matchdom.merge(node, data, {live: this});
 	}
 }

@@ -51,6 +51,7 @@ export default class EditArticle extends HTMLElement {
 		this.editables.forEach((node) => {
 			data[node.name] = node.value;
 		});
+		data.hrefs = this.hrefs;
 		// await req put/post then node.defaultValue = node.value;
 		if (this.dataset.id) {
 			data.id = this.dataset.id;

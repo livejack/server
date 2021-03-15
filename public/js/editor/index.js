@@ -17,14 +17,16 @@ import { menuBar } from "./menubar.js";
 import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
+import nodeViewSelect from "./nodeviewselect.js";
 
-function getPlugins({schema, menu}) {
+function getPlugins({ schema, menu }) {
 	let plugins = [
 		buildInputRules(schema),
 		keymap(buildKeymap(schema)),
 		keymap(baseKeymap),
 		dropCursor(),
 		gapCursor(),
+		nodeViewSelect(),
 		history()
 	];
 	if (menu !== false) {
@@ -40,7 +42,18 @@ export class Editor extends EditorView {
 	#parser
 	#content
 	constructor(place, { nodes, marks, list, menu, assets = [] }) {
-		const baseSchema = new Schema({ nodes, marks });
+		const nodeViews = {};
+		if (nodes) Object.keys(nodes).forEach(name => {
+			if (nodes[name].View) nodeViews[name] = (node, view, getPos) => {
+				return new nodes[name].View(node, view, getPos);
+			};
+		});
+		if (marks) Object.keys(marks).forEach(name => {
+			if (marks[name].View) nodeViews[name] = (node, view) => {
+				return new marks[name].View(node, view);
+			};
+		});
+		const baseSchema = new Schema({ nodes: Object.assign({}, nodes), marks });
 		let specNodes = baseSchema.spec.nodes;
 		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
 		const schema = new Schema({
@@ -48,12 +61,10 @@ export class Editor extends EditorView {
 			marks: baseSchema.spec.marks
 		});
 		const parser = DOMParser.fromSchema(schema);
-		const copy = place.cloneNode(true);
-		place.textContent = '';
 
 		super({ mount: place }, {
 			state: EditorState.create({
-				doc: parser.parse(copy),
+				doc: parser.parse(place),
 				plugins: getPlugins({ schema, menu })
 			}),
 			dispatchTransaction: (tr) => {
@@ -62,6 +73,7 @@ export class Editor extends EditorView {
 				}
 				this.updateState(this.state.apply(tr));
 			},
+			nodeViews,
 			domParser: parser,
 			transformPastedHTML: (str) => {
 				let frag = parseHTML(str);
@@ -84,13 +96,21 @@ export class Editor extends EditorView {
 	convertAsset(dom) {
 		const sel = this.state.selection;
 		if (this.#content == "inline") {
-			if (dom.favicon) return parseHTML(`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`);
-			else return dom;
+			if (dom.favicon) {
+				dom = parseHTML(
+					`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`
+				);
+			}
 		} else if (this.#content == "text" && dom.dataset.title) {
-			return parseHTML(`<span>${dom.dataset.title}</span>`);
+			dom = parseHTML(
+				`<span>${dom.dataset.title}</span>`
+			);
 		} else if (dom.dataset.type == "link" || !sel.empty && !sel.node) {
-			return parseHTML(`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`);
-		} else return dom;
+			dom = parseHTML(
+				`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`
+			);
+		}
+		return dom;
 	}
 	insertAsset(dom) {
 		const frag = dom.ownerDocument.createDocumentFragment();
@@ -99,25 +119,29 @@ export class Editor extends EditorView {
 		const tr = this.state.tr;
 		const sel = tr.selection;
 
-		const marks = [];
-		node.descendants((node) => {
-			if (node.marks.length > 0) marks.push(...node.marks);
-		});
-		if (marks.length) {
-			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
-			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
-		} else {
-			if (sel.empty) {
-				const $pos = sel.$from;
-				const parent = $pos.parent;
-				if (parent.isTextblock && parent.childCount == 0 && $pos.pos > 0) {
-					// select parent
-					tr.setSelection(NodeSelection.create(tr.doc, $pos.before($pos.depth)));
-				}
-			} else if (this.#content == "inline" && sel.node) {
+		if (sel.node) {
+			if (this.#content == "inline") {
+				// insert after
 				tr.setSelection(TextSelection.create(tr.doc, sel.to, sel.to));
 			}
 			tr.replaceSelectionWith(node);
+		} else if (sel.empty) {
+			const $pos = sel.$from;
+			const parent = $pos.parent;
+			if (parent.isTextblock && parent.childCount == 0 && $pos.pos > 0) {
+				// select whole empty text block for replacement
+				tr.setSelection(NodeSelection.create(tr.doc, $pos.before($pos.depth)));
+			}
+			tr.replaceSelectionWith(node);
+		} else if (frag.querySelector('a')) {
+			// apply marks
+			const marks = [];
+			node.descendants((node) => {
+				if (node.marks.length > 0) marks.push(...node.marks);
+			});
+			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
+			// reselect text
+			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
 		}
 		this.dispatch(tr);
 	}

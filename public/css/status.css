@@ -1,8 +1,7 @@
-[is="edit-status"] {
+form[is="edit-status"] {
 	margin: 0.2rem 0;
-	display: flex !important;
+	display: flex;
 	position: relative;
-	font-size:0.8em;
 	box-shadow: 0px 2px 3px -1px var(--bg);
 }
 [is="edit-status"] .toggle-switch {
@@ -30,8 +29,6 @@
 	opacity:0.7;
 }
 [is="edit-status"] > .start {
-	border-top-right-radius:0;
-	border-bottom-right-radius:0;
 	padding-right:2em;
 	flex:1 1 50%;
 }

@@ -6,13 +6,19 @@ import req from "./req.js";
 class LiveBuild extends Live {
 	constructor() {
 		super();
+		this.matchdom.extend({
+			filters: {
+				// keep it for now
+				trackUi: (c, v) => v,
+				unhide: (c, v) => v
+			},
+		});
 		this.channels = {};
 	}
 	visitor(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE" && node.content) {
 			if (data.page) {
-				// a kludge, the generatlisation of which involves DOM Shadow
-				// or knowing which matchdom expressions are going to be merged in that node.content
+				// persist minimal page data from build to setup
 				['title', 'backtrack', 'start', 'stop'].forEach(str => {
 					if (data.page[str] != null) node.dataset[str] = data.page[str];
 					else node.removeAttribute('data-' + str);
@@ -50,7 +56,7 @@ class LiveBuild extends Live {
 				if (!this.rooms[name]) {
 					const data = await this.fetch(name);
 					datas[name] = data;
-					mtimes[name] = this.rooms[name] = data.update;
+					mtimes[name] = this.rooms[name] = data.updated_at;
 				}
 			}));
 			const keys = Object.keys(mtimes);
@@ -63,18 +69,13 @@ class LiveBuild extends Live {
 		if (first) {
 			document.head.insertAdjacentHTML(
 				'beforeEnd',
-				'	<meta name="live-update-[rooms|as:entries|repeat:*|key]" content="[value]">\n'
+				'	<meta name="live-update-[rooms|as:entries|repeat:*|.key]" content="[.value]">\n'
 			);
 			this.merge(document.head, { rooms: this.rooms });
 		}
 	}
 }
 const live = new LiveBuild();
-live.matchdom.extend({
-	filters: {
-		trackUi: (c, v) => v
-	}
-});
 export default live;
 
 ready(async () => {

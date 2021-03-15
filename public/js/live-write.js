@@ -1,8 +1,10 @@
+import registerWrite from "./elements/write.js";
 import liveBuild from './live-build.js';
+registerWrite(liveBuild);
 import liveSetup from './live-setup.js';
 
+
 import { ready, visible } from './doc-events.js';
-import registerEditElements from "./elements/index.js";
 
 import xbytes from '../modules/xbytes';
 
@@ -27,21 +29,6 @@ const assetPlugin = {
 			if (val == null) return null;
 			return xbytes(val);
 		}],
-		store(ctx, asset) {
-			if (!asset.type) asset.type = "none";
-			if (!asset.origin) asset.origin = "internal";
-			const node = ctx.dest.node;
-			for (let key in asset) {
-				if (typeof asset[key] != "object") node.setAttribute(`data-${key}`, asset[key]);
-			}
-			if (asset.tags) {
-				node.dataset.tags = asset.tags
-					.map((tag) => tag.toLowerCase().replace(/ /g, '\u00A0'))
-					.join(' ');
-			} else {
-				node.removeAttribute('data-tags');
-			}
-		},
 		subtype: ['str?', (ctx, mime) => {
 			return mime.split(';')[0].split('/').pop();
 		}],
@@ -67,27 +54,7 @@ const assetPlugin = {
 			});
 			uniques.sort((a, b) => a.localeCompare(b));
 			return uniques;
-		}],
-		pretty(ctx, str) {
-			if (str == null) return str;
-			return str.toLowerCase().replace(/\s+/g, '-').replace(/-+/g, '-');
-		},
-		ratio(ctx, meta, nw, nh) {
-			if (!meta) return meta;
-			const width = parseInt(meta[nw]);
-			const height = parseInt(meta[nh]);
-
-			if (Number.isNaN(width) || Number.isNaN(height)) return null;
-			const ratio = 100 * width / height;
-
-			const pair = [[2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
-				.find(([a, b]) => {
-					const r = ratio / a * b;
-					return 98 <= r && r < 102;
-				});
-			if (!pair) return null;
-			return `${pair[0]}-${pair[1]}`;
-		}
+		}]
 	}
 };
 
@@ -97,6 +64,5 @@ liveSetup.matchdom.extend(assetPlugin);
 
 ready(async () => {
 	await visible();
-	registerEditElements(liveSetup);
 	document.querySelector('#assets > [is="edit-filter"]').setMode('unused');
 });

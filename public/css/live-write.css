@@ -85,13 +85,16 @@ body {
 .tiled {
 	padding: 1em 1rem;
 	border: var(--border);
-	border-radius: 4px;
 	background-color: var(--tilebg);
 	display: block;
 	color: var(--btncolorhover);
 	background-position:center right;
 	background-repeat:no-repeat;
 	background-size: 17% 60%;
+}
+.tiled:first-of-type {
+	border-top-left-radius: var(--border-radius);
+	border-top-right-radius: var(--border-radius);
 }
 
 #control > header {
@@ -121,7 +124,7 @@ body {
 
 #control > #assets,
 #control > #icons {
-	margin-top:0.4rem;
+	margin-top: 0.3rem;
 }
 
 #gui {

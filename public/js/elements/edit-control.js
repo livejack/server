@@ -31,7 +31,6 @@ export default class EditControl extends HTMLDivElement {
 		return this.dataset.mode;
 	}
 	set mode(name) {
-		//this.setAttribute('data-mode', name);
 		this.dataset.mode = name;
 	}
 	async start(view, name) {
@@ -41,7 +40,7 @@ export default class EditControl extends HTMLDivElement {
 			if (!this.#loaded) {
 				this.#loaded = true;
 				const icons = await req('../pictos/assets.json');
-				this.merge(this.#icons, icons);
+				this.live.merge(this.#icons, icons);
 			}
 			this.querySelector('#icons > [is="edit-filter"]').update();
 		} else {

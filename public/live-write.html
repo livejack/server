@@ -10,7 +10,7 @@
 
 	<script type="module" src="js/live-write.js"></script>
 
-	<title data-live="page">[page.title]</title>
+	<title data-live="page">[page.title|or:Sans titre]</title>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	<div id="live">
-		<div id="live-messages" class="live-messages" data-live="page">
+		<div id="live-messages" class="live-messages" data-live="page assets">
 			<header>
 				<div class="live-controls">
 					<div class="filter">
@@ -71,19 +71,19 @@
 			<div class="live-list">
 				<template data-mode="insert">
 					<article
-						is="edit-article"
-						data-id="[msg.id]"
-						id="t[page.messages|blank:push:date=now|repeat:*:msg:place|.date|date:time]"
-						class="live-message [msg.style] [msg|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
-						itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+					is="edit-article"
+					data-id="[msg.id]"
+					id="t[page.messages|blank:push:date=now|repeat:*:msg:place|.date|date:time]"
+					class="live-message [msg.style] [msg|unhide:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
+					itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
-						<meta itemprop="dateModified" content="[msg.update|date:iso]" />
-						<meta itemprop="mainEntityOfPage" content="[page.backtrack]" />
+						<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
+						<meta itemprop="mainEntityOfPage" content="[page.backtrack|orAt:*]" />
 						<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
 							datetime="[msg.date|date:iso]" tabindex="[msg.id]1">[msg.date|date:rel|as:text]</time>
 						<h2 name="title" is="edit-title" itemprop="headline" class="live-title" tabindex="[msg.id]2">[msg.title]</h2>
 						<div name="mark" is="edit-mark" class="live-icons">[msg.mark|as:html]</div>
-						<div name="text" is="edit-text" class="live-article" itemprop="articleBody" tabindex="[msg.id]4">[msg.text|as:html|importAssets:]</div>
+						<div name="text" is="edit-text" class="live-article" itemprop="articleBody" tabindex="[msg.id]4">[msg.text|as:html]</div>
 					</article>
 				</template>
 			</div>
@@ -94,7 +94,7 @@
 			<template data-mode="replace">
 				<a href="[page.backtrack]" target="_blank" class="tiled">
 					<img src="[shortcut-icon|orAt:*]" />
-					[page.title]
+					[page.title|or:Sans titre]
 				</a>
 				<form is="edit-status">
 					<div class="tiled start active">
@@ -130,37 +130,11 @@
 					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
 				</div>
 				<div class="list">
-					<label><input name="filter" type="checkbox" value="[assets.assets|filters:meta.type|repeat:label:filter|pretty:]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:type|repeat:label:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
-				<live-asset
-					data-id="[assets.assets|repeat:*:it:place|.id]"
-					data-url="[it.url]"
-					data-title="[it.meta.title]"
-					data-html="[it.meta.html]"
-					data-type="[it.meta.type]"
-					data-icon="[it.meta.icon]"
-					data-ratio="[it.meta|ratio:width:height]"
-				>
-					<div class="header" title="[it.meta.site]">
-						<img src="[it.meta.icon|orAt:*]" class="favicon" />
-						<a href="[it.url]">[it.meta.title]</a>
-						<button name="save">🗘</button>
-						<button name="del">✕</button>
-					</div>
-					<div class="meta">
-						<p>
-							<strong>[it.meta.type]</strong>
-							<em>[it.meta.date|else:get:it.date|date:date]</em>
-							<span><br>[it.meta.author|or:&nbsp;]</span>
-						</p>
-						<p>[it.meta.description|orAt:*]</p>
-					</div>
-					<div class="thumbnail">
-						<img src="[it.meta.thumbnail|orAt:**]" />
-					</div>
-				</live-asset>
+				<live-asset data-id="[assets|.hrefs|repeat:*:it:place|.id]" data-url="[it.url]" />
 			</template>
 		</div>
 		<div id="icons">
@@ -171,11 +145,11 @@
 					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
 				</div>
 				<div class="list">
-					<label><input name="filter" type="checkbox" value="[assets|filters:tags|repeat:label:filter|pretty:]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|repeat:label:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
-				<live-icon class="hide" data-title="[asset.meta.title]" data-url="[asset.url]" data-tags="[assets|repeat:*:asset|.tags|map:pretty|join: ]" />
+				<live-icon class="hide" data-url="[hrefs|repeat:*:asset|.url]" />
 			</template>
 		</div>
 	</div>

@@ -49,8 +49,16 @@ function linkItem(markType) {
 			return markActive(state, markType);
 		},
 		enable(state, view) {
+			const sel = state.selection;
+			if (sel.empty) return false;
+			let can = false;
+			state.doc.nodesBetween(sel.from, sel.to, function (node, pos) {
+				if (can) return false;
+				can = node.inlineContent && node.type.allowsMarkType(markType);
+			});
+			if (!can) return false;
 			view.dom.queryAssets();
-			return !state.selection.empty;
+			return true;
 		},
 		run(state, dispatch, view) {
 			if (markActive(state, markType)) {

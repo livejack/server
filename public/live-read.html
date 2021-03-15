@@ -9,7 +9,7 @@
 	<script type="module" src="js/live-build.js"></script>
 	<script type="module" src="js/live-setup.js"></script>
 
-	<title data-live="page">[page.title]</title>
+	<title data-live="page">[page.title|or:Sans titre]</title>
 </head>
 <body>
 	<div id="live-messages" class="live-messages" data-live="page">
@@ -40,6 +40,7 @@
 				</template>
 			</div>
 			<div class="hide">
+				<!-- TODO this should be done by dom prepare and livejack's config -->
 				<div id="blogPublisher" itemscope itemprop="publisher" itemtype="https://schema.org/Organization">
 					<meta itemprop="name" content="Le Figaro">
 					<div itemscope="" itemprop="logo" itemtype="https://schema.org/ImageObject">
@@ -52,16 +53,19 @@
 		</header>
 		<div class="live-list">
 			<template data-mode="insert">
-				<article id="t[page.messages|repeat:*:msg:place|.date|date:time]" data-id="[msg.id]" class="live-message [msg.style|trackUi:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
+				<article
+				data-id="[msg.id]"
+				id="t[page.messages|repeat:*:msg:place|.date|date:time]"
+				class="live-message [msg.style|unhide:] [msg.mark|and:|or:no-live-icons]"
+				itemprop="liveBlogUpdate" itemscope
+				itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 					<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
-					<meta itemprop="dateModified" content="[msg.update|date:iso]" />
+					<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack|orAt:*]" />
-					<time itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>
+					<time is="live-time" itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>
 					<h2 itemprop="headline" class="live-title">[msg.title]</h2>
 					<div class="live-icons">[msg.mark|as:html]</div>
-					<div class="live-article" itemprop="articleBody">
-						[msg.text|as:html|importAssets:]
-					</div>
+					<div class="live-article" itemprop="articleBody">[msg.text|as:html]</div>
 				</article>
 			</template>
 		</div>

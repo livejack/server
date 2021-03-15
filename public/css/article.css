@@ -6,7 +6,7 @@
 	margin-bottom: 0;
 	padding-top: 1em;
 	z-index: 2;
-	box-shadow: 1em 0px 0 0 white, -1em 0 0 0 white;
+	box-shadow: 1em 0px 0 0 white, -1em 0 0 0 white, 0 -2px 4px black;
 }
 .live-messages .live-message {
 	--focus-color: #EEE;
@@ -96,7 +96,7 @@
 }
 
 
-.ProseMirror-menuitem:hover {
+.ProseMirror-menuitem > *:not(.ProseMirror-menu-disabled):hover {
 	background-color: #DDD;
 }
 

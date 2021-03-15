@@ -1,6 +1,6 @@
 form[is] {
 	font-size: 0.8em;
-	margin: 0.2rem 0;
+	margin: 0.3rem 0;
 }
 
 form[is] > input {
@@ -68,7 +68,6 @@ form[is].negative > input {
 
 form[is="edit-filter"] {
 	flex-basis: 100%;
-	margin-top: 0.4rem;
 	font-size: 0.8rem;
 }
 

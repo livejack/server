@@ -128,6 +128,38 @@ live-asset > .meta > p + p::after {
 	background:linear-gradient(to right, rgba(var(--back-color-rgb), 0), rgba(var(--back-color-rgb), 1));
 }
 
+#control live-asset > form {
+	display:none;
+}
+live-asset > form {
+	display:flex;
+	flex-wrap: wrap;
+}
+
+live-asset > form > label:first-of-type {
+	flex:3 1 auto;
+}
+live-asset > form > label:last-of-type {
+	flex:1 1 auto;
+}
+live-asset > form > label {
+	display:flex;
+	border: 1px solid var(--middle-color);
+	border-radius: 0;
+	overflow: hidden;
+}
+live-asset > form > label > span {
+	color:var(--middle-color);
+	background-color:var(--back-low-color);
+	padding:0.2em;
+	margin-right: 0.2em;
+}
+live-asset > form > label > input {
+	flex:1 0 auto;
+	border-radius: 0;
+	border: none;
+}
+
 @media screen and (max-width: 1280px) {
 	live-asset > .meta > p + p {
 		white-space: nowrap;

@@ -41,6 +41,15 @@ class EditHtml {
 				node.textContent = '';
 			});
 		}
+		const hrefs = [];
+		parent.querySelectorAll('live-asset').forEach(node => {
+			const url = node.dataset.url;
+			if (!url) return;
+			const asset = this.live.get(url);
+			if (!asset) return;
+			hrefs.push({ id: asset.id });
+		});
+		this.article.hrefs = hrefs;
 		const val = parent.innerHTML.trim();
 		if (val == "<br>" || val == "<p></p>") return "";
 		else return val;
@@ -50,7 +59,7 @@ class EditHtml {
 	}
 	handleEvent(e) {
 		if (this.article.active) {
-			this.start({ left: e.pageX, top: e.pageY });
+			this.start({ left: e.pageX, top: e.pageY, node: e.target });
 		}
 		this.queryAssets();
 	}
@@ -60,7 +69,14 @@ class EditHtml {
 	start(coords) {
 		if (!this.view) {
 			this.view = new HtmlEditor(this, this.options);
-			this.view.initCursor(coords);
+			if (coords.node.nodeName == "INPUT") {
+				coords.node.select();
+				// const asset = coords.node.closest('live-asset');
+				// const input = this.querySelector(`live-asset[data-url="${asset.dataset.url}"] input[name="${coords.node.name}"]`);
+				// if (input) input.select();
+			} else {
+				this.view.initCursor(coords);
+			}
 		}
 	}
 	stop() {
@@ -114,11 +130,12 @@ export class EditText extends HTMLDivElement {
 		super();
 		this.setAttribute('is', 'edit-text');
 	}
+
 	options = {
 		nodes: BaseSpec.nodes,
 		marks: BaseSpec.marks,
 		list: true,
 		menu: true
-	};
+	}
 }
 extend(EditText, EditHtml);

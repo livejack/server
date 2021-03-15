@@ -162,11 +162,22 @@ div.fig-article-body {
 	line-height:1;
 	color:#666;
 }
+.live-messages figure > figcaption {
+	display: flex;
+	justify-content: center;
+}
 .live-messages figure > figcaption > em {
-	color:#999;
+	margin-left:0.5em;
+}
+.live-messages figure > figcaption > * {
+	display: block;
 }
 .live-messages figure > div > * {
 	max-width:100%;
+}
+.live-messages figure > img {
+	width:100%;
+	height:auto;
 }
 .live-messages figure > div.ratio-16-9 {
 	padding-bottom:56.25%;

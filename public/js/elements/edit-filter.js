@@ -41,8 +41,16 @@ export default class EditFilter extends HTMLFormElement {
 				'input[name="filter"]:checked'
 			).map(node => node.value);
 			this.getItems().forEach(node => {
-				const list = node.dataset[isFor == "mark" ? "tags" : "type"].split(' ');
-				node.classList.toggle('hide', !list.some(tag => tags.includes(tag)));
+				const url = node.dataset.url;
+				const item = this.live.get(url);
+				if (!item) {
+					console.error("Missing item", url);
+				} else {
+					const words = (isFor == "mark")
+						? item.meta.keywords
+						: item.type.split(" ");
+					node.classList.toggle('hide', !words.some(tag => tags.includes(tag)));
+				}
 			});
 		} else {
 			this.classList.add('notags');

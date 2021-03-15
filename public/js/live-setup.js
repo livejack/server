@@ -2,12 +2,21 @@ import Live from './live.js';
 import { ready, visible } from './doc-events.js';
 import { fromScript } from "./template.js";
 import { LiveJack } from "../modules/@livejack/client";
-import { HTML as parseHTML } from "../modules/matchdom";
 
 class LiveSetup extends Live {
 	constructor() {
 		super();
-		this.observer = this.createObserver();
+		this.matchdom.extend({
+			filters: {
+				unhide(ctx, val) {
+					const node = ctx.dest.node;
+					setTimeout(() => {
+						node.classList.remove('hidden');
+					});
+					return 'hidden';
+				}
+			}
+		});
 	}
 
 	visitor(node, iter, data, scope) {
@@ -63,7 +72,6 @@ class LiveSetup extends Live {
 		root.querySelectorAll('.live-controls').forEach((node) => {
 			node.addEventListener('change', this, false);
 		});
-		root.querySelectorAll('article').forEach((node) => this.trackUi(node));
 	}
 
 	handleEvent(e) {
@@ -75,72 +83,15 @@ class LiveSetup extends Live {
 			root.classList.toggle("reverse", node.checked);
 		}
 	}
-
-	createObserver() {
-		return new IntersectionObserver((entries, observer) => {
-			entries.forEach((entry) => {
-				var target = entry.target;
-				var ratio = entry.intersectionRatio || 0;
-				if (ratio <= 0) return;
-				observer.unobserve(target);
-				this.reveal(target);
-			});
-		}, {
-			threshold: [0.0001, 0.2],
-			rootMargin: "30px"
-		});
-	}
-	reveal(node) {
-		if (node.nodeName == "LIVE-ICON" && !node.dataset.html) {
-			node.dataset.html = `<img src="${node.dataset.url}" alt="${node.dataset.title || ''}" />`;
-		}
-		if (node.children.length) return;
-		const html = node.dataset.html;
-		if (html == node.innerHTML) return;
-		node.textContent = '';
-		const dom = parseHTML(html);
-		dom.querySelectorAll('script').forEach(node => {
-			node.parentNode.removeChild(node);
-			const src = node.getAttribute('src');
-			if (document.head.querySelector(`script[src="${src}"]`)) return;
-			const copy = document.createElement('script');
-			copy.setAttribute('src', src);
-			copy.setAttribute('defer', '');
-			document.head.appendChild(copy);
-		});
-		node.appendChild(dom);
-	}
-	trackUi(node) {
-		node.querySelectorAll('[data-url]').forEach((node) => {
-			this.observer.observe(node);
-		});
-		const time = node.querySelector('time');
-		if (time) {
-			// time.textContent = live.moment(time.dataset.datetime).fromNow();
-		}
-		return 'hidden';
-	}
 }
 
 const live = new LiveSetup();
-live.matchdom.extend({
-	filters: {
-		trackUi(ctx, val) {
-			const node = ctx.dest.node;
-			setTimeout(() => {
-				live.trackUi(node);
-				node.classList.remove('hidden');
-			});
-			return 'hidden';
-		}
-	}
-});
 
 export default live;
 
 ready(async () => {
-	await visible();
 	live.init();
+	await visible();
 	await live.setup();
 }).catch((err) => {
 	console.error(err); // eslint-disable-line
