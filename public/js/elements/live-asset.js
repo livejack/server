@@ -45,7 +45,10 @@ export class LiveAsset extends HTMLElement {
 		if (script) this.dataset.script = script;
 
 		if (type == "image") {
-			this.appendChild(this.live.merge(`<figure>
+			this.appendChild(this.live.merge(`<figure itemscope="" itemprop="associatedMedia image" itemtype="http://schema.org/ImageObject">
+				<meta itemprop="width" content="[width]">
+				<meta itemprop="height" content="[height]">
+				<meta itemprop="url" content="[url]">
 				<img width="[width]" height="[height]" style="max-width:[width|orAt:*]px" />
 				<figcaption><span>[title|orAt:*]</span><em>[author|orAt:*]</em></figcaption>
 			</figure>`, Object.assign({}, { width, height }, this.dataset)));

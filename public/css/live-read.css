@@ -154,15 +154,14 @@ div.fig-article-body {
 	border: none;
 }
 /* old styles */
-.live-messages figure > :first-child {
+.live-messages figure > img,
+.live-messages figure > div {
 	display:block;
 }
 .live-messages figure > figcaption {
 	font-size:0.8em;
-	line-height:1;
+	line-height:1.2;
 	color:#666;
-}
-.live-messages figure > figcaption {
 	display: flex;
 	justify-content: center;
 }
