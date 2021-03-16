@@ -18,7 +18,7 @@ export const filters = {
 			const live = ctx.scope.live;
 			if (live && live.rooms && live.rooms.page) {
 				const ref = new Date(live.rooms.page);
-				sameDay = Math.abs((date.getTime() - ref.getTime())) < 1000 * 3600 * 24;
+				sameDay = date.toISOString().split('T')[0] === ref.toISOString().split('T')[0];
 			}
 			const time = getTimeStr(date);
 			if (sameDay) {
