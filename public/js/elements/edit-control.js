@@ -23,7 +23,11 @@ export default class EditControl extends HTMLDivElement {
 			if (asset) {
 				e.preventDefault();
 				this.#view.focus();
-				setTimeout(() => this.#view.insertAsset(asset));
+				const item = this.live.get(asset.dataset.url);
+				const node = asset.cloneNode(false);
+				node.dataset.title = item.meta.title;
+				node.dataset.author = item.meta.author;
+				setTimeout(() => this.#view.insertAsset(node));
 			}
 		}
 	}

@@ -106,11 +106,11 @@ export default class EditAsset extends LiveAsset {
 		<form data-type="[type|eq:image|ifAt:*]" autocomplete="off" draggable="false">
 			<label>
 				<span>Title</span>
-				<input name="title" value="[title|else:get:meta.title]">
+				<input name="title" value="[title]">
 			</label>
 			<label>
 				<span>Author</span>
-				<input name="author" value="[author|else:get:meta.author]">
+				<input name="author" value="[author]">
 			</label>
 		</form>`, Object.assign({}, this.live.get(this.dataset.url), this.dataset));
 		const frag = this.cloneNode(false);
