@@ -39,8 +39,8 @@ const filters = {
 			} else {
 				old.classList.add('hidden');
 				setTimeout(() => {
-					list.removeChild(old);
-				}, 700);
+					if (old.parentNode == list) list.removeChild(old);
+				}, 500);
 				if (date) list.insertBefore(node, next);
 			}
 		} else if (date) {
