@@ -58,10 +58,12 @@ class EditHtml {
 		this.innerHTML = val;
 	}
 	handleEvent(e) {
-		if (this.article.active) {
-			this.start({ left: e.pageX, top: e.pageY, node: e.target });
+		if (e.type == "click" || e.type == "focus") {
+			if (this.article.active) {
+				this.start({ left: e.pageX, top: e.pageY, node: e.target });
+			}
+			this.queryAssets();
 		}
-		this.queryAssets();
 	}
 	queryAssets(name) {
 		this.control.start(this.view, name || this.name);
