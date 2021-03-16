@@ -1,4 +1,27 @@
 export const nodes = {
+	title: {
+		content: "text*",
+		isolating: true,
+		inline: false,
+		context: "asset/",
+		marks: "",
+		parseDOM: [{ tag: "span" }],
+		toDOM(node) {
+			return ["span", 0];
+		}
+	},
+
+	author: {
+		content: "text*",
+		isolating: true,
+		inline: false,
+		context: "asset/",
+		marks: "",
+		parseDOM: [{ tag: "em" }],
+		toDOM(node) {
+			return ["em", 0];
+		}
+	},
 	image: {
 		group: "block",
 		defining: true,
