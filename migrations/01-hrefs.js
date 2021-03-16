@@ -27,8 +27,7 @@ exports.up = async function (knex) {
 			.onDelete('CASCADE');
 		table.integer('href_id')
 			.notNullable().index().unsigned()
-			.references('id').inTable('hrefs')
-			.onDelete('CASCADE');
+			.references('id').inTable('hrefs');
 	});
 
 	/* not sure this is a good idea - it's better to import icons and leave the rest empty
