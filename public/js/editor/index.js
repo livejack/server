@@ -115,7 +115,7 @@ export class Editor extends EditorView {
 	insertAsset(dom) {
 		const frag = dom.ownerDocument.createDocumentFragment();
 		frag.appendChild(this.convertAsset(dom).cloneNode(true));
-		const node = this.#parser.parse(frag);
+		const slice = this.#parser.parseSlice(frag);
 		const tr = this.state.tr;
 		const sel = tr.selection;
 
@@ -124,7 +124,7 @@ export class Editor extends EditorView {
 				// insert after
 				tr.setSelection(TextSelection.create(tr.doc, sel.to, sel.to));
 			}
-			tr.replaceSelectionWith(node);
+			tr.replaceSelection(slice);
 		} else if (sel.empty) {
 			const $pos = sel.$from;
 			const parent = $pos.parent;
@@ -132,16 +132,19 @@ export class Editor extends EditorView {
 				// select whole empty text block for replacement
 				tr.setSelection(NodeSelection.create(tr.doc, $pos.before($pos.depth)));
 			}
-			tr.replaceSelectionWith(node);
+
+			tr.replaceSelection(slice);
 		} else if (frag.querySelector('a')) {
 			// apply marks
 			const marks = [];
-			node.descendants((node) => {
+			slice.content.descendants((node) => {
 				if (node.marks.length > 0) marks.push(...node.marks);
 			});
 			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
 			// reselect text
 			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
+		} else {
+			tr.replaceSelection(slice);
 		}
 		this.dispatch(tr);
 	}
