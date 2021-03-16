@@ -8,9 +8,7 @@ class LiveBuild extends Live {
 		super();
 		this.matchdom.extend({
 			filters: {
-				// keep it for now
-				trackUi: (c, v) => v,
-				unhide: (c, v) => v
+				unhide: (c, v) => null
 			},
 		});
 		this.channels = {};
