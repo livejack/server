@@ -1,8 +1,10 @@
 import flatpickr from "../../modules/flatpickr";
 import { French } from "../../modules/flatpickr/l10n/fr";
 flatpickr.localize(French);
+
 export default class EditTime extends HTMLTimeElement {
 	#defaultValue
+	#tick
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-time');
@@ -38,8 +40,16 @@ export default class EditTime extends HTMLTimeElement {
 	connectedCallback() {
 		this.#defaultValue = this.value;
 		this.addEventListener('click', this);
+		const art = this.article;
+		if (art && !art.dataset.id) {
+			// blank node, update time
+			this.#tick = setInterval(() => {
+				this.value = (new Date()).toISOString();
+			}, 1000);
+		}
 	}
 	disconnectedCallback() {
+		if (this.#tick) clearInterval(this.#tick);
 		this.removeEventListener('click', this);
 	}
 	handleEvent(e) {
