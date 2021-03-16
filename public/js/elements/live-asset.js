@@ -50,12 +50,12 @@ export class LiveAsset extends HTMLElement {
 				<figcaption><span>[title|orAt:*]</span><em>[author|orAt:*]</em></figcaption>
 			</figure>`, Object.assign({}, { width, height }, this.dataset)));
 		} else if (type == "picto") {
-			this.classList.add(`ratio-1-1`);
+			this.dataset.ratio = '1-1';
 			this.insertAdjacentHTML('afterbegin', `<img />`);
 		} else {
 			if (width && height) {
 				const ratio = LiveAsset.ratio(width, height);
-				if (ratio) this.classList.add(`ratio-${ratio}`);
+				if (ratio) this.dataset.ratio = ratio;
 			}
 			if (html) this.dataset.html = html;
 			else this.insertAdjacentHTML('afterbegin', '<iframe />');
@@ -87,7 +87,7 @@ export class LiveIcon extends HTMLElement {
 	}
 	populate() {
 		if (this.children.length) return;
-		this.classList.add(`ratio-1-1`);
+		this.dataset.ratio = '1-1';
 		this.insertAdjacentHTML('afterbegin', `<img />`);
 	}
 	reveal() {
