@@ -36,7 +36,7 @@ exports.POST = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: asset.updated_at,
 			data: {
-				assets: [asset]
+				hrefs: [asset]
 			}
 		});
 		return asset;
@@ -92,7 +92,7 @@ exports.PUT = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: asset.updated_at,
 			data: {
-				assets: [asset]
+				hrefs: [asset]
 			}
 		});
 		return asset;
@@ -113,7 +113,7 @@ exports.DELETE = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: page.updated_at,
 			data: {
-				assets: [{ id }]
+				hrefs: [{ id }]
 			}
 		});
 		return { id };
