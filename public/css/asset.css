@@ -78,7 +78,9 @@ live-asset > .thumbnail > img {
 	display: block;
 	object-fit: cover;
 }
-
+:not([data-mode="unused"]) > live-asset button[name="del"] {
+	display:none;
+}
 live-asset button {
 	all:unset;
 	padding: 0.4em;

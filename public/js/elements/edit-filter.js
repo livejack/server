@@ -34,6 +34,7 @@ export default class EditFilter extends HTMLFormElement {
 	setMode(mode, temp) {
 		this.querySelector(`[name="mode"][value="${mode}"]`).checked = true;
 		if (!temp) this.#mode = mode;
+		this.parentNode.dataset.mode = mode;
 		const isFor = this.dataset.for;
 		if (mode == "search") {
 			this.classList.remove('notags');
@@ -44,6 +45,7 @@ export default class EditFilter extends HTMLFormElement {
 				const url = node.dataset.url;
 				const item = this.live.get(url);
 				if (!item) {
+					// eslint-disable-next-line no-console
 					console.error("Missing item", url);
 				} else {
 					const words = (isFor == "mark")
