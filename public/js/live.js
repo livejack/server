@@ -20,14 +20,14 @@ const filters = {
 			let child = cursor;
 			while ((child = child.nextElementSibling)) {
 				let time = child.querySelector('time');
-				if (!time) return cursor.nextElementSibling;
+				if (!time) return (old || cursor).nextElementSibling;
 				time = Date.parse(time.getAttribute('datetime'));
 				const pin = child.classList.contains('pinned');
 				if (refPin && (!pin || refTime > time) || !pin && refTime > time) {
 					return child;
 				}
 			}
-			return cursor.nextElementSibling;
+			return (old || cursor).nextElementSibling;
 		})();
 		if (!item.id) {
 			// special case
