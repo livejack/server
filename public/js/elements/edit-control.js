@@ -25,8 +25,8 @@ export default class EditControl extends HTMLDivElement {
 				this.#view.focus();
 				const item = this.live.get(asset.dataset.url);
 				const node = asset.cloneNode(false);
-				node.dataset.title = item.meta.title;
-				node.dataset.author = item.meta.author;
+				if (item.meta.title) node.dataset.title = item.meta.title;
+				if (item.meta.author) node.dataset.author = item.meta.author;
 				node.dataset.type = item.type;
 				setTimeout(() => this.#view.insertAsset(node));
 			}
