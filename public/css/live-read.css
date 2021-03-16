@@ -178,6 +178,7 @@ div.fig-article-body {
 .live-messages figure > img {
 	width:100%;
 	height:auto;
+	margin: 0 auto;
 }
 .live-messages figure > div.ratio-16-9 {
 	padding-bottom:56.25%;
