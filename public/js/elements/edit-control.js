@@ -36,7 +36,8 @@ export default class EditControl extends HTMLDivElement {
 		return this.dataset.mode;
 	}
 	set mode(name) {
-		this.dataset.mode = name;
+		if (name == null) delete this.dataset.mode;
+		else this.dataset.mode = name;
 	}
 	async start(view, name) {
 		this.#view = view;
