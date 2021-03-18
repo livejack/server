@@ -99,6 +99,7 @@ export default class Live {
 		return refs[url];
 	}
 	set(list) {
+		if (!Array.isArray(list)) list = [list];
 		list.forEach(item => {
 			if (refs[item.url]) Object.assign(refs[item.url], item);
 			else refs[item.url] = item;
