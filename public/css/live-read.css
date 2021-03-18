@@ -235,7 +235,9 @@ div.fig-article-body {
 }
 /* end old styles */
 
-live-asset > * {
+live-asset > figure,
+live-asset > iframe,
+live-asset > img {
 	max-width: 100%;
 	height: auto;
 	margin: 0 auto;
