@@ -54,11 +54,16 @@ export default class EditPaste extends HTMLFormElement {
 			if (node.value.length > 0) this.submit();
 		}
 	}
+	async create(url) {
+		this.#input.value = url;
+		return this.submit();
+	}
 	async submit() {
 		this.classList.add('loading');
 		this.#input.disabled = true;
+		let item;
 		try {
-			await req("./assets", "post", { url: this.#input.value });
+			item = await req("./assets", "post", { url: this.#input.value });
 			this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");
@@ -71,5 +76,6 @@ export default class EditPaste extends HTMLFormElement {
 		}
 		this.#input.disabled = false;
 		this.classList.remove('loading');
+		return item;
 	}
 }
