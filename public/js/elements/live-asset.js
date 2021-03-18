@@ -19,7 +19,7 @@ export class LiveAsset extends HTMLElement {
 		if (Number.isNaN(width) || Number.isNaN(height)) return null;
 		const ratio = 100 * width / height;
 
-		const pair = [[2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
+		const pair = [[21, 9], [2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
 			.find(([a, b]) => {
 				const r = ratio / a * b;
 				return 99 <= r;
