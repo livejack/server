@@ -40,9 +40,7 @@ export class LiveAsset extends HTMLElement {
 		const {
 			type, html, script,
 			width, height
-		} = url && this.live.get(url) || {};
-
-		if (script) this.dataset.script = script;
+		} = Object.assign(url && this.live.get(url) || {}, this.dataset);
 
 		if (type == "image") {
 			this.appendChild(this.live.merge(`<figure itemscope="" itemprop="associatedMedia image" itemtype="http://schema.org/ImageObject">
@@ -60,14 +58,24 @@ export class LiveAsset extends HTMLElement {
 				const ratio = LiveAsset.ratio(width, height);
 				if (ratio) this.dataset.ratio = ratio;
 			}
-			if (html) this.dataset.html = html;
-			else this.insertAdjacentHTML('afterbegin', '<iframe />');
+			if (script) this.dataset.script = script;
+			if (html) {
+				this.dataset.html = html;
+			} else {
+				this.insertAdjacentHTML('afterbegin', '<iframe />');
+			}
 		}
 	}
 	reveal() {
 		const { url, script, html } = this.dataset;
 		if (html) {
-			this.innerHTML = html;
+			this.textContent = '';
+			this.appendChild(this.live.merge(html, {}));
+			this.querySelectorAll('script:not([src])').forEach(node => {
+				const copy = document.createElement('script');
+				copy.textContent = node.textContent;
+				node.parentNode.replaceChild(copy, node);
+			});
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}
