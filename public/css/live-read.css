@@ -413,6 +413,9 @@ live-asset > * {
 	margin-left: 0;
 }
 
+live-asset[data-ratio="21-9"] {
+	aspect-ratio: 21 / 9;
+}
 live-asset[data-ratio="2-1"] {
 	aspect-ratio: 2 / 1;
 }
