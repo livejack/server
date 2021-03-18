@@ -11,6 +11,9 @@ exports.up = async function (knex) {
 	await knex.schema.table('pages', function (table) {
 		table.renameColumn('start', 'start_noz');
 		table.renameColumn('stop', 'stop_noz');
+	});
+
+	await knex.schema.table('pages', function (table) {
 		table.timestamp('start', { useTz: true });
 		table.timestamp('stop', { useTz: true });
 	});
