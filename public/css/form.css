@@ -97,7 +97,7 @@ form[is="edit-filter"] {
 	width:100%;
 	background-color:var(--tilebg);
 	text-align:center;
-	padding: 0.5em;
+	padding: 0.4em;
 	color:var(--btncolor);
 }
 [is="edit-filter"] .list label + label > input + span {
