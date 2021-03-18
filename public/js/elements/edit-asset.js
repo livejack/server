@@ -184,10 +184,13 @@ export default class EditAsset extends LiveAsset {
 		if (url) {
 			const asset = this.live.get(url);
 			if (!asset) {
-				delete this.dataset.html;
-				return this.add(url);
+				if (this.parentNode.isContentEditable) {
+					delete this.dataset.html;
+					return this.add(url);
+				}
+			} else {
+				Object.assign(data, asset);
 			}
-			Object.assign(data, asset);
 		}
 		Object.assign(data, this.dataset);
 		const node = this.live.merge(url ? assetTemplate : iframeTemplate, data);
