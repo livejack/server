@@ -48,9 +48,13 @@ export default class EditFilter extends HTMLFormElement {
 					// eslint-disable-next-line no-console
 					console.error("Missing item", url);
 				} else {
-					const words = (isFor == "mark")
+					let words = item.meta.keywords || [];
+					/*
+					(isFor == "mark")
 						? item.meta.keywords
 						: item.type.split(" ");
+					*/
+					if (words.length == 0) words = ['-'];
 					node.classList.toggle('hide', !words.some(tag => tags.includes(tag)));
 				}
 			});

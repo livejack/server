@@ -127,10 +127,11 @@
 				<div class="mode">
 					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
-					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
+					<label><input name="mode" value="search" type="radio" /><span>Mots-clés</span></label>
 				</div>
 				<div class="list">
-					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:type|repeat:label:filter]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
+					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|repeat:label:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
@@ -142,9 +143,10 @@
 				<div class="mode">
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
 					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
-					<label><input name="mode" value="search" type="radio" /><span>Filtres</span></label>
+					<label><input name="mode" value="search" type="radio" /><span>Mots-clés</span></label>
 				</div>
 				<div class="list">
+					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
 					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|repeat:label:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
