@@ -83,6 +83,9 @@ export class LiveAsset extends HTMLElement {
 			const copy = document.createElement('script');
 			copy.setAttribute('src', script);
 			copy.setAttribute('defer', '');
+			copy.onload = copy.onerror = () => {
+				document.head.removeChild(copy);
+			};
 			document.head.appendChild(copy);
 		}
 	}
