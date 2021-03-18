@@ -49,7 +49,10 @@ export default class EditTime extends HTMLTimeElement {
 		}
 	}
 	disconnectedCallback() {
-		if (this.#tick) clearInterval(this.#tick);
+		if (this.#tick) {
+			clearInterval(this.#tick);
+			this.#tick = null;
+		}
 		this.removeEventListener('click', this);
 	}
 	handleEvent(e) {
