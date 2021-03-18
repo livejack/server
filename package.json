@@ -30,7 +30,7 @@
     "passwd-user": "^3.0.0",
     "pg": "^8.5.1",
     "serve-static": "^1.14.1",
-    "sharp": "^0.22.1",
+    "sharp": "^0.26.3",
     "toggle-switch-css": "^1.0.3",
     "toml": "^3.0.0",
     "upcache": "^2.1.0",
