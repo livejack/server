@@ -68,16 +68,20 @@ export const nodes = {
 				this.node = node;
 				this.view = view;
 				this.getPos = getPos;
+				this.dom = document.createElement('live-asset');
+				this.update(node);
+			}
+			change(attrs) {
+				const tr = this.view.state.tr;
+				tr.setNodeMarkup(this.getPos(), null, Object.assign({}, this.node.attrs, attrs));
+				this.view.dispatch(tr);
 			}
 			stopEvent(e) {
 				if (e.target.nodeName == "INPUT") {
 					if (e.type == "keyup" || e.type == "change") {
-						const tr = this.view.state.tr;
-						const attrs = Object.assign({}, this.node.attrs, {
+						this.change({
 							[e.target.name] : e.target.value
 						});
-						tr.setNodeMarkup(this.getPos(), null, attrs);
-						this.view.dispatch(tr);
 					}
 					return true;
 				}
@@ -85,17 +89,21 @@ export const nodes = {
 			update({ attrs }) {
 				if (attrs.url !== this.node.attrs.url) return;
 				this.node.attrs = attrs;
-				const domPos = this.view.domAtPos(this.getPos());
-				if (!domPos) return;
-				const { node, offset } = domPos;
-				const dom = node.childNodes[offset];
-				if (!dom || dom.nodeName != "LIVE-ASSET") return;
+				const dom = this.dom;
 				for (let key in attrs) {
 					const val = attrs[key];
 					if (val == null) delete dom.dataset[key];
 					else dom.dataset[key] = val;
 				}
 				return true;
+			}
+			ignoreMutation(record) {
+				if (record.target == this.dom && record.type == "attributes" && record.attributeName.startsWith('data-')) {
+					Object.assign(this.node.attrs, record.target.dataset);
+					return false;
+				} else {
+					return true;
+				}
 			}
 		}
 	},

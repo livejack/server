@@ -8,9 +8,57 @@ function updateDOM(from, to) {
 }
 
 let dragImage;
+const searchTemplate = `<div class="header">
+	<span class="favicon">🔍</span>
+	<a href="url">[url]</a>
+</div>`;
+const iframeTemplate = `<div class="header">
+	<span class="favicon">❮❯</span>
+	<a>[title]</a>
+	<button name="del">✕</button>
+</div>
+<iframe class="content" sandbox="allow-scripts allow-same-origin"></iframe>`;
+
+const assetTemplate = `<div class="header" title="[meta.site]">
+	<img src="[meta.icon|orAt:*]" class="favicon" />
+	<a href="[url]">[meta.title]</a>
+	<button name="save">🗘</button>
+	<button name="del">✕</button>
+</div>
+<div class="meta">
+	<p>
+		<strong>[type]</strong>
+		<em>[meta.date|else:get:date|date:date]</em>
+		<span><br>[meta.author|or:&nbsp;]</span>
+	</p>
+	<p>[meta.description|orAt:*]</p>
+</div>
+<div class="thumbnail">
+	<img src="[meta.thumbnail|orAt:**]" />
+</div>
+<form data-type="[type|eq:image|ifAt:*]" autocomplete="off" draggable="false">
+	<label>
+		<span>Title</span>
+		<input name="title" value="[title]">
+	</label>
+	<label>
+		<span>Author</span>
+		<input name="author" value="[author]">
+	</label>
+</form>`;
+
+const docTemplate = `<html>
+<head>
+	<style>html,body {margin:0;}</style>
+	<script src="[script|orAt:*]" defer></script>
+</head>
+<body>[html|as:html]</body>
+</html>`;
 
 export default class EditAsset extends LiveAsset {
 	#editable
+	#watchFrame
+	#adding
 	connectedCallback() {
 		super.connectedCallback();
 		this.addEventListener('click', this);
@@ -30,6 +78,10 @@ export default class EditAsset extends LiveAsset {
 		this.removeEventListener('mouseup', this);
 		this.removeEventListener('mousemove', this);
 		this.removeEventListener('mouseleave', this);
+		if (this.#watchFrame) {
+			clearInterval(this.#watchFrame);
+			this.#watchFrame = null;
+		}
 		super.disconnectedCallback();
 	}
 
@@ -85,40 +137,77 @@ export default class EditAsset extends LiveAsset {
 		if (img) return img.src;
 		else return null;
 	}
+	async add(url) {
+		if (this.#adding) return;
+		let asset = this.live.get(url);
+		if (!asset) {
+			this.#adding = true;
+			this.appendChild(this.live.merge(searchTemplate, {url}));
+			try {
+				asset = await document.querySelector('form[is="edit-paste"]').create(url);
+				this.live.set(asset);
+			} catch (err) {
+				console.error(err);
+			}
+			this.textContent = '';
+			this.#adding = false;
+		}
+		if (asset) {
+			this.dataset.url = url;
+			this.populate();
+		} else {
+			this.remove();
+		}
+	}
+	findUrl() {
+		const dom = this.live.merge('<div>[html|as:html]</div>', this.dataset);
+		let wid = dom.querySelector('blockquote.twitter-tweet');
+		if (wid) {
+			const node = wid.lastElementChild;
+			if (node && node.matches('a')) {
+				return node.protocol + '//' + node.host + node.pathname;
+			} else {
+				return;
+			}
+		}
+		wid = dom.querySelector('iframe');
+		if (wid) return wid.src;
+	}
+
 	populate() {
-		const node = this.live.merge(`<div class="header" title="[meta.site]">
-			<img src="[meta.icon|orAt:*]" class="favicon" />
-			<a href="[url]">[meta.title]</a>
-			<button name="save">🗘</button>
-			<button name="del">✕</button>
-		</div>
-		<div class="meta">
-			<p>
-				<strong>[type]</strong>
-				<em>[meta.date|else:get:date|date:date]</em>
-				<span><br>[meta.author|or:&nbsp;]</span>
-			</p>
-			<p>[meta.description|orAt:*]</p>
-		</div>
-		<div class="thumbnail">
-			<img src="[meta.thumbnail|orAt:**]" />
-		</div>
-		<form data-type="[type|eq:image|ifAt:*]" autocomplete="off" draggable="false">
-			<label>
-				<span>Title</span>
-				<input name="title" value="[title]">
-			</label>
-			<label>
-				<span>Author</span>
-				<input name="author" value="[author]">
-			</label>
-		</form>`, Object.assign({}, this.live.get(this.dataset.url), this.dataset));
+		let url = this.dataset.url;
+		if (!url && this.dataset.html) {
+			url = this.findUrl();
+			if (url) this.dataset.url = url;
+		}
+		const data = {};
+		if (url) {
+			const asset = this.live.get(url);
+			if (!asset) {
+				delete this.dataset.html;
+				return this.add(url);
+			}
+			Object.assign(data, asset);
+		}
+		Object.assign(data, this.dataset);
+		const node = this.live.merge(url ? assetTemplate : iframeTemplate, data);
 		const frag = this.cloneNode(false);
 		frag.appendChild(node);
 		updateDOM(this, frag);
 	}
 	reveal() {
-		// do nothing !
+		if (this.#adding) return;
+		const { url, script, html } = this.dataset;
+		if (url || !html && !script) return;
+		const iframe = this.lastElementChild;
+		if (!iframe || iframe.nodeName != "IFRAME") return;
+		const doc = this.live.merge(docTemplate, { html, script });
+		if (iframe.srcdoc == doc.outerHTML) return;
+		iframe.srcdoc = doc.outerHTML;
+		this.#watchFrame = setInterval(() => {
+			const h = iframe.contentDocument.documentElement.scrollHeight;
+			iframe.style.height = h + 'px';
+		}, 1000);
 	}
 }
 
