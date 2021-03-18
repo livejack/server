@@ -78,21 +78,35 @@ export class Editor extends EditorView {
 			transformPastedHTML: (str) => {
 				let frag = parseHTML(str);
 				if (frag.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
-					for (let i = frag.children.length - 1; i >= 0; i--) {
-						if (frag.children[i].nodeName == "META") frag.removeChild(frag.children[i]);
+					let text = frag.textContent;
+					if (text.startsWith('<') && text.endsWith('>')) {
+						return this.props.transformPastedHTML(text);
 					}
-					if (frag.children.length == 1) frag = frag.children[0];
 				}
-				if (frag.matches && frag.matches('[data-url]')) {
-					return this.convertAsset(frag).outerHTML;
-				}
-				return str;
+				if (frag.dataset && frag.dataset.url) return this.convertAsset(frag).outerHTML;
+				else return this.convertSnippet(frag) || str;
 			}
 		});
 		this.#content = nodes.doc.content.replace('*', '');
 		this.#parser = parser;
 		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
+	convertSnippet(frag) {
+		const data = { html: "" };
+		for (let child of frag.childNodes) {
+			if (child.nodeType == Node.TEXT_NODE && /\s*/.test(child.nodeValue)) continue;
+			if (child.nodeType != Node.ELEMENT_NODE) return;
+			if (child.nodeName == "SCRIPT" && child.src) data.script = child.src;
+			else if (child.nodeName == "IFRAME" && child.src) data.url = child.src;
+			else data.html += child.outerHTML;
+		}
+		if (!data.script && !data.url) return;
+		if (data.html.trim() == "") delete data.html;
+		const dom = document.createElement('live-asset');
+		Object.assign(dom.dataset, data);
+		return dom.outerHTML;
+	}
+
 	convertAsset(dom) {
 		const sel = this.state.selection;
 		if (this.#content == "inline") {
