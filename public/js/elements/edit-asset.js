@@ -146,11 +146,11 @@ export default class EditAsset extends LiveAsset {
 			try {
 				asset = await document.querySelector('form[is="edit-paste"]').create(url);
 				this.live.set(asset);
+				this.#adding = false;
 			} catch (err) {
 				console.error(err);
 			}
 			this.textContent = '';
-			this.#adding = false;
 		}
 		if (asset) {
 			this.dataset.url = url;
