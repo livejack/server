@@ -167,33 +167,17 @@ export default class EditAsset extends LiveAsset {
 			this.textContent = '';
 		}
 		if (asset) {
+			delete this.dataset.html;
+			// keep dataset.script
 			this.dataset.url = url;
 			this.populate();
 		} else {
 			this.remove();
 		}
 	}
-	findUrl() {
-		const dom = this.live.merge('<div>[html|as:html]</div>', this.dataset);
-		let wid = dom.querySelector('blockquote.twitter-tweet');
-		if (wid) {
-			const node = wid.lastElementChild;
-			if (node && node.matches('a')) {
-				return node.protocol + '//' + node.host + node.pathname;
-			} else {
-				return;
-			}
-		}
-		wid = dom.querySelector('iframe');
-		if (wid) return wid.src;
-	}
 
 	populate() {
 		let url = this.dataset.url;
-		if (!url && this.dataset.html) {
-			url = this.findUrl();
-			if (url) this.dataset.url = url;
-		}
 		const data = {};
 		if (url) {
 			const asset = this.live.get(url);
