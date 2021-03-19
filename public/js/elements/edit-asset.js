@@ -21,11 +21,14 @@ const iframeTemplate = `<div class="header">
 <iframe class="content" sandbox="allow-scripts allow-same-origin"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
-<a>HTML Embed [script|or:]</a>
+<a>HTML Embed</a>
 <button name="preview">preview</button>
 <button name="del">✕</button>
 </div>
-<code class="content">[html]</code>`;
+<code class="content">
+	[html|as:text]
+	<span><br>&lt;script src="[script|orAt:*]"&gt;&lt;/script&gt;</span>
+</code>`;
 
 const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|orAt:*]" class="favicon" />
