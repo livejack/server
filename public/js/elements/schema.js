@@ -10,14 +10,6 @@ export const nodes = {
 		toDOM() { return ["p", 0]; }
 	},
 
-	blockquote: {
-		content: "block+",
-		group: "block",
-		defining: true,
-		parseDOM: [{ tag: "blockquote" }],
-		toDOM() { return ["blockquote", 0]; }
-	},
-
 	text: {
 		group: "inline"
 	},
@@ -53,6 +45,21 @@ export const nodes = {
 			tag: 'live-asset',
 			getAttrs(dom) {
 				return Object.assign({}, dom.dataset);
+			}
+		}, {
+			tag: 'iframe[src]',
+			getAttrs(dom) {
+				return {
+					url: dom.getAttribute('src')
+				};
+			}
+		}, {
+			tag: 'blockquote.twitter-tweet',
+			getAttrs(dom) {
+				const node = dom.lastElementChild;
+				if (node && node.nodeName == "A") return {
+					url: node.href
+				};
 			}
 		}],
 		toDOM(node) {
@@ -106,6 +113,13 @@ export const nodes = {
 				}
 			}
 		}
+	},
+	blockquote: {
+		content: "block+",
+		group: "block",
+		defining: true,
+		parseDOM: [{ tag: "blockquote" }],
+		toDOM() { return ["blockquote", 0]; }
 	},
 
 	hard_break: {
