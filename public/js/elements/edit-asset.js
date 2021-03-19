@@ -15,9 +15,17 @@ const searchTemplate = `<div class="header">
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
 	<a>[title]</a>
+	<button name="preview">code</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin"></iframe>`;
+const codeTemplate = `<div class="header">
+<span class="favicon">❮❯</span>
+<a>HTML Embed [script|or:]</a>
+<button name="preview">preview</button>
+<button name="del">✕</button>
+</div>
+<code class="content">[html]</code>`;
 
 const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|orAt:*]" class="favicon" />
@@ -59,6 +67,7 @@ export default class EditAsset extends LiveAsset {
 	#editable
 	#watchFrame
 	#adding
+	#preview
 	connectedCallback() {
 		super.connectedCallback();
 		this.addEventListener('click', this);
@@ -111,6 +120,12 @@ export default class EditAsset extends LiveAsset {
 				e.preventDefault();
 			} else if (e.target.matches('label > span')) {
 				e.target.nextElementSibling.select();
+			} else if (e.target.name == "preview") {
+				e.stopPropagation();
+				e.preventDefault();
+				this.#preview = !this.#preview;
+				this.populate();
+				this.reveal();
 			}
 		} else if (e.type == "mousemove") {
 			this.classList.toggle('ctrl', !this.#editable && e.ctrlKey);
@@ -193,7 +208,8 @@ export default class EditAsset extends LiveAsset {
 			}
 		}
 		Object.assign(data, this.dataset);
-		const node = this.live.merge(url ? assetTemplate : iframeTemplate, data);
+		const tpl = url && assetTemplate || this.#preview && iframeTemplate || codeTemplate;
+		const node = this.live.merge(tpl, data);
 		const frag = this.cloneNode(false);
 		frag.appendChild(node);
 		updateDOM(this, frag);
@@ -208,8 +224,14 @@ export default class EditAsset extends LiveAsset {
 		if (iframe.srcdoc == doc.outerHTML) return;
 		iframe.srcdoc = doc.outerHTML;
 		this.#watchFrame = setInterval(() => {
-			const h = iframe.contentDocument.documentElement.scrollHeight;
-			iframe.style.height = h + 'px';
+			const iframe = this.lastElementChild;
+			if (!iframe || iframe.nodeName != "IFRAME") {
+				clearInterval(this.#watchFrame);
+				this.#watchFrame = null;
+			} else if (iframe.contentDocument) {
+				const h = iframe.contentDocument.documentElement.scrollHeight;
+				iframe.style.height = h + 'px';
+			}
 		}, 1000);
 	}
 }

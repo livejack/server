@@ -21,6 +21,10 @@ export default class EditArticle extends HTMLElement {
 		switch (e.type) {
 			case "click":
 				e.preventDefault();
+				if (e.target.name == "preview") {
+					// let edit-asset preview button be handled independently
+					return;
+				}
 				if (!this.start()) {
 					e.stopPropagation();
 					return;

@@ -175,7 +175,12 @@ live-asset > .meta > p > em {
 	margin-right:0.2em;
 	right:0;
 }
-
+.live-message live-asset > .content {
+	pointer-events:none;
+}
+.live-message live-asset > code.content {
+	padding:1em;
+}
 .live-message live-asset {
 	display:flex;
 	cursor:grab;
