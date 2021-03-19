@@ -66,7 +66,7 @@ const docTemplate = `<html>
 export default class EditAsset extends LiveAsset {
 	#editable
 	#watchFrame
-	#adding
+	#added
 	#preview
 	connectedCallback() {
 		super.connectedCallback();
@@ -153,15 +153,14 @@ export default class EditAsset extends LiveAsset {
 		else return null;
 	}
 	async add(url) {
-		if (this.#adding) return;
+		if (this.#added) return;
 		let asset = this.live.get(url);
 		if (!asset) {
-			this.#adding = true;
+			this.#added = true;
 			this.appendChild(this.live.merge(searchTemplate, {url}));
 			try {
 				asset = await document.querySelector('form[is="edit-paste"]').create(url);
 				this.live.set(asset);
-				this.#adding = false;
 			} catch (err) {
 				console.error(err);
 			}
@@ -199,8 +198,7 @@ export default class EditAsset extends LiveAsset {
 		if (url) {
 			const asset = this.live.get(url);
 			if (!asset) {
-				if (this.parentNode.isContentEditable) {
-					delete this.dataset.html;
+				if (this.parentNode && this.parentNode.isContentEditable) {
 					return this.add(url);
 				}
 			} else {
@@ -215,7 +213,6 @@ export default class EditAsset extends LiveAsset {
 		updateDOM(this, frag);
 	}
 	reveal() {
-		if (this.#adding) return;
 		const { url, script, html } = this.dataset;
 		if (url || !html && !script) return;
 		const iframe = this.lastElementChild;
