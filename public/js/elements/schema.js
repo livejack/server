@@ -87,7 +87,7 @@ export const nodes = {
 				if (e.target.nodeName == "INPUT") {
 					if (e.type == "keyup" || e.type == "change") {
 						this.change({
-							[e.target.name] : e.target.value
+							[e.target.name]: e.target.value
 						});
 					}
 					return true;
