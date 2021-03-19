@@ -84,18 +84,19 @@ live-asset > .thumbnail > img {
 }
 live-asset button {
 	all:unset;
-	padding: 0.4em;
-	width: 2.3em;
-	height: 2.3em;
+	padding: 0.4em 0.6em;
+	height: 2em;
 	text-align:center;
 	flex: 0 0 auto;
 	box-sizing: border-box;
 	line-height: 1.2em;
 	border-radius: 2.3em;
 	cursor:pointer;
+	margin-top: 0.1em;
+	margin-right: 0.15em;
 }
 
-.live-message live-asset button,
+.live-message live-asset button[name="del"],
 live-asset button[name="save"] {
 	display:none;
 }
