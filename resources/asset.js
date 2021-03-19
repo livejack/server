@@ -28,7 +28,14 @@ exports.POST = (req) => {
 		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
 		await prepareAsset(req.body);
 		if (req.body.id) delete req.body.id;
-		const asset = await page.$relatedQuery('hrefs').insertAndFetch(req.body);
+		let asset = await page.$relatedQuery('hrefs').findOne({ url: req.body.url });
+		if (asset) {
+			asset = await page.$relatedQuery('hrefs', trx)
+				.patchAndFetchById(asset.id, req.body)
+				.throwIfNotFound();
+		} else {
+			asset = await page.$relatedQuery('hrefs').insertAndFetch(req.body);
+		}
 		await page.$query(trx).patch({
 			updated_at: asset.updated_at
 		});
