@@ -2,7 +2,7 @@
   "name": "@livejack/server",
   "version": "0.1.0",
   "dependencies": {
-    "@livejack/client": "^1.0.1",
+    "@livejack/client": "^1.0.2",
     "@livejack/moduleserver": "^1.3.0",
     "@livejack/prosemirror": "^1.1.0-1",
     "@ungap/custom-elements": "^0.1.15",
