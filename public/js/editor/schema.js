@@ -50,7 +50,7 @@ export const nodes = {
 			tag: 'iframe[src]',
 			getAttrs(dom) {
 				return {
-					url: dom.getAttribute('src')
+					url: dom.src
 				};
 			}
 		}, {
@@ -60,6 +60,29 @@ export const nodes = {
 				if (node && node.nodeName == "A") return {
 					url: node.href
 				};
+			}
+		}, {
+			tag: 'figure',
+			getAttrs(dom) {
+				const srcNode = dom.querySelector('img,iframe');
+				if (!srcNode || !srcNode.src) return false;
+				const attrs = {
+					url: srcNode.src
+				};
+				const caption = dom.querySelector('figcaption');
+				if (caption) {
+					const title = caption.firstChild;
+					const author = caption.lastChild;
+					if (title) {
+						if (title.nodeType == Node.TEXT_NODE) attrs.title = title.nodeValue;
+						else attrs.title = title.textContent;
+					}
+					if (author && author != title) {
+						if (author.nodeType == Node.TEXT_NODE) attrs.author = author.nodeValue;
+						else attrs.author = author.textContent;
+					}
+				}
+				return attrs;
 			}
 		}],
 		toDOM(node) {
