@@ -8,7 +8,8 @@ import {
 	EditorView,
 	Schema, DOMParser, DOMSerializer,
 	addListNodes,
-	Selection, TextSelection, NodeSelection
+	Selection, TextSelection, NodeSelection,
+	tableNodes, tableEditing
 } from "../../modules/@livejack/prosemirror";
 
 import { HTML as parseHTML } from "../../modules/matchdom";
@@ -19,7 +20,7 @@ import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
 import nodeViewSelect from "./nodeviewselect.js";
 
-function getPlugins({ schema, menu }) {
+function getPlugins({ schema, menu, table }) {
 	let plugins = [
 		buildInputRules(schema),
 		keymap(buildKeymap(schema)),
@@ -34,6 +35,11 @@ function getPlugins({ schema, menu }) {
 			content: buildMenuItems(schema).fullMenu
 		}));
 	}
+	if (table !== false) {
+		plugins.push(
+			tableEditing()
+		);
+	}
 	return plugins;
 }
 
@@ -41,7 +47,7 @@ export class Editor extends EditorView {
 	#serializer
 	#parser
 	#content
-	constructor(place, { nodes, marks, list, menu, assets = [] }) {
+	constructor(place, { nodes, marks, list, menu, table, assets = [] }) {
 		const nodeViews = {};
 		if (nodes) Object.keys(nodes).forEach(name => {
 			if (nodes[name].View) nodeViews[name] = (node, view, getPos) => {
@@ -56,6 +62,12 @@ export class Editor extends EditorView {
 		const baseSchema = new Schema({ nodes: Object.assign({}, nodes), marks });
 		let specNodes = baseSchema.spec.nodes;
 		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
+		if (table !== false) {
+			specNodes = specNodes.append(tableNodes({
+				tableGroup: "block",
+				cellContent: "inline*"
+			}));
+		}
 		const schema = new Schema({
 			nodes: specNodes,
 			marks: baseSchema.spec.marks

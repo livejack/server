@@ -8,6 +8,8 @@
 
 @import "../modules/@livejack/prosemirror/style/gapcursor.css";
 
+@import "../modules/@livejack/prosemirror/style/tables.css";
+
 @import "./resources.css";
 
 @import "./spin.css";
