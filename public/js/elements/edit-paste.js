@@ -36,8 +36,9 @@ export default class EditPaste extends HTMLFormElement {
 			const txt = await navigator.clipboard.readText();
 			if (!this.validateUrl(txt) || txt.length > 2048) return;
 			this.#input.value = txt.trim();
-		} catch {
+		} catch (err) {
 			// do nothing
+			console.error(err);
 		}
 	}
 	async handleEvent(e) {
