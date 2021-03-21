@@ -1,6 +1,6 @@
 import { Editor } from '../editor/index.js';
 
-import * as BaseSpec from './schema.js';
+import * as BaseSpec from '../editor/schema.js';
 
 class HtmlEditor extends Editor {
 	constructor(place, opts) {
