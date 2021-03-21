@@ -15,14 +15,14 @@ const searchTemplate = `<div class="header">
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
 	<a>[title]</a>
-	<button name="preview">code</button>
+	<button name="preview" class="strike">👁</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
 <a>HTML Embed</a>
-<button name="preview">preview</button>
+<button name="preview">👁</button>
 <button name="del">✕</button>
 </div>
 <code class="content">
