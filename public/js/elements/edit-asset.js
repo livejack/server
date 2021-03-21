@@ -14,7 +14,7 @@ const searchTemplate = `<div class="header">
 </div>`;
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
-	<a>[title]</a>
+	<a>HTML Embed</a>
 	<button name="preview" class="strike">👁</button>
 	<button name="del">✕</button>
 </div>
