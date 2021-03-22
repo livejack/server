@@ -21,7 +21,7 @@ class LiveRead extends Live {
 		});
 	}
 
-	visitor(node, iter, data, scope) {
+	visitorBuild(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE" && node.content) {
 			if (data.page) {
 				// persist minimal page data from build to setup
@@ -37,7 +37,12 @@ class LiveRead extends Live {
 			node.parentNode.insertBefore(sub, node.nextSibling);
 			toScript(node);
 			return false;
-		} else if (node.nodeName == "TEMPLATE") {
+		} else {
+			return true;
+		}
+	}
+	visitorSetup(node, iter, data, scope) {
+		if (node.nodeName == "TEMPLATE") {
 			// see live-build visitor
 			let mode = node.dataset.mode;
 			let parent = node.parentNode;
@@ -69,6 +74,7 @@ class LiveRead extends Live {
 	}
 
 	async build() {
+		this.matchdom.visitor = this.visitorBuild;
 		const roots = this.findAll();
 		let first = false;
 		await Promise.all(roots.map(async ({ node, names }) => {
@@ -98,6 +104,7 @@ class LiveRead extends Live {
 	}
 
 	async setup() {
+		this.matchdom.visitor = this.visitorSetup;
 		const jack = new LiveJack(this.vars);
 		await jack.init();
 		const roots = this.findAll();

@@ -67,7 +67,6 @@ export default class Live {
 		this.hrefs = {};
 		this.LiveAsset = LiveAsset;
 		this.matchdom = new Matchdom({
-			visitor: this.visitor,
 			hooks: {
 				beforeEach: (val) => {
 					if (val && val.hrefs && Array.isArray(val.hrefs)) {
