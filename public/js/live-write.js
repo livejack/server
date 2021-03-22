@@ -1,8 +1,6 @@
 import registerWrite from "./elements/write.js";
-import liveBuild from './live-build.js';
-registerWrite(liveBuild);
-import liveSetup from './live-setup.js';
-
+import liveRead from './live-read.js';
+registerWrite(liveRead);
 
 import { ready, visible } from './doc-events.js';
 
@@ -58,9 +56,7 @@ const assetPlugin = {
 	}
 };
 
-liveBuild.matchdom.extend(assetPlugin);
-liveSetup.matchdom.extend(assetPlugin);
-
+liveRead.matchdom.extend(assetPlugin);
 
 ready(async () => {
 	await visible();
