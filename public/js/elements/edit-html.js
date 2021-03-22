@@ -94,9 +94,14 @@ class EditHtml {
 
 
 function extend(A, B) {
+	const desc = Object.getOwnPropertyDescriptors(B.prototype);
+	if (desc.constructor) {
+		// one cannot redefine constructor, especially when transpiled
+		delete desc.constructor;
+	}
 	Object.defineProperties(
 		A.prototype,
-		Object.getOwnPropertyDescriptors(B.prototype)
+		desc
 	);
 }
 
