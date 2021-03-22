@@ -176,22 +176,22 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	app.route('/:domain/:key/messages/:id?')
 		.get(tag.page, resources.message.GET)
-		.put(tag.page, domainLock, jsonParser, resources.message.PUT)
-		.post(tag.page, domainLock, jsonParser, resources.message.POST)
-		.delete(tag.page, domainLock, jsonParser, resources.message.DELETE);
+		.put(domainLock, tag.page, jsonParser, resources.message.PUT)
+		.post(domainLock, tag.page, jsonParser, resources.message.POST)
+		.delete(domainLock, tag.page, jsonParser, resources.message.DELETE);
 
 	app.route('/:domain/:key/assets/:id?')
-		.get(tag.page, domainLock, resources.asset.GET)
-		.put(tag.page, domainLock, jsonParser, resources.asset.PUT)
-		.post(tag.page, domainLock, upload, jsonParser, resources.asset.POST)
-		.delete(tag.page, domainLock, jsonParser, resources.asset.DELETE);
+		.get(domainLock, tag.page, resources.asset.GET)
+		.put(domainLock, tag.page, jsonParser, resources.asset.PUT)
+		.post(domainLock, tag.page, upload, jsonParser, resources.asset.POST)
+		.delete(domainLock, tag.page, jsonParser, resources.asset.DELETE);
 
 	app.route('/:domain/:key/write')
-		.get(tag.page, domainLock, routes.write.GET)
-		.put(tag.page, tag.domain, domainLock, jsonParser, routes.write.PUT)
-		.delete(tag.page, domainLock, jsonParser, routes.write.DELETE);
+		.get(domainLock, tag.page, routes.write.GET)
+		.put(domainLock, tag.page, tag.domain, jsonParser, routes.write.PUT)
+		.delete(domainLock, tag.page, jsonParser, routes.write.DELETE);
 
-	app.get('/:domain', tag.domain, domainLock, prerender('domain'));
+	app.get('/:domain', domainLock, tag.domain, prerender('domain'));
 
 	app.use(function (err, req, res, next) {
 		let code;
