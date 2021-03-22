@@ -128,9 +128,8 @@ export default class Live {
 		return roots;
 	}
 
-	merge(node, data) {
-		if (!data) console.trace("no data", node, data);
-		if (data && data.assets && data.assets.hrefs) {
+	merge(node, data = {}) {
+		if (data.assets && data.assets.hrefs) {
 			// we need these before the ones in each message
 			this.set(data.assets.hrefs);
 		}
