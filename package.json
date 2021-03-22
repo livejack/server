@@ -146,8 +146,6 @@
     }
   },
   "scripts": {
-    "start": "node app.js",
-    "prepare": "node prepare.js",
-    "noffprint": "npm explore noffprint -- npm run start"
+    "start": "node app.js"
   }
 }
