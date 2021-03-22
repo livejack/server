@@ -39,6 +39,7 @@ live-asset > .header > .favicon {
 	padding: 0.4em;
 	align-self: center;
 	height: 2.3em;
+	width: 2.3em;
 	background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
 	line-height: 1.4;
 }
