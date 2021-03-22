@@ -147,5 +147,11 @@
   },
   "scripts": {
     "start": "node app.js"
-  }
+  },
+  "browserslist": [
+    "> 0.25% in FR",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ]
 }
