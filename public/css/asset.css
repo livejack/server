@@ -15,9 +15,12 @@ live-asset {
 	aspect-ratio: auto !important;
 }
 /* postcss-aspect-ratio polyfill ignores auto above */
-live-asset::before,
-live-asset::after {
+live-asset[data-ratio]::before,
+live-asset[data-ratio]::after {
 	content:none !important;
+}
+live-asset[data-ratio] > * {
+	position:relative !important;
 }
 
 live-asset > .header {
