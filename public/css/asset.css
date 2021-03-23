@@ -14,6 +14,11 @@ live-asset {
 	margin-top: 0.4rem;
 	aspect-ratio: auto !important;
 }
+/* postcss-aspect-ratio polyfill ignores auto above */
+live-asset::before,
+live-asset::after {
+	content:none !important;
+}
 
 live-asset > .header {
 	background-color: var(--tilebg);
