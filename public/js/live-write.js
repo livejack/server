@@ -46,9 +46,7 @@ const assetPlugin = {
 			list.forEach((item, i) => {
 				let data = ctx.expr.get(item, path) || [];
 				if (Array.isArray(data) == false) data = [data];
-				data.forEach(val => {
-					if (uniques.indexOf(val) < 0) uniques.push(val);
-				});
+				if (data.length > 0 && uniques.indexOf(data[0]) < 0) uniques.push(data[0]);
 			});
 			uniques.sort((a, b) => a.localeCompare(b));
 			return uniques;
