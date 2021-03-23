@@ -13,7 +13,7 @@ export default class EditFilter extends HTMLFormElement {
 	handleEvent(e) {
 		if (e.type != "change") return;
 		if (e.target.name == "mode") {
-			this.setMode(e.target.value, true);
+			this.setMode(e.target.value);
 		} else if (e.target.name == "filter") {
 			this.setMode("search");
 		}
@@ -22,7 +22,7 @@ export default class EditFilter extends HTMLFormElement {
 		const prevMode = this.#mode;
 		if (name == 'link') {
 			this.setMode('unused', true);
-		} else if (!prevMode && this.setMode(this.dataset.default) == 0) {
+		} else if (!prevMode) {
 			this.setMode("search");
 		} else if (prevMode) {
 			this.setMode(prevMode);
@@ -36,6 +36,7 @@ export default class EditFilter extends HTMLFormElement {
 		if (!temp) this.#mode = mode;
 		this.parentNode.dataset.mode = mode;
 		const isFor = this.dataset.for;
+
 		if (mode == "search") {
 			this.classList.remove('notags');
 			const tags = this.querySelectorAll(
@@ -55,7 +56,8 @@ export default class EditFilter extends HTMLFormElement {
 						: item.type.split(" ");
 					*/
 					if (words.length == 0) words = ['-'];
-					node.classList.toggle('hide', !words.some(tag => tags.includes(tag)));
+					const active = words.some(tag => tags.includes(tag));
+					node.classList.toggle('hide', !active);
 				}
 			});
 		} else {
@@ -67,13 +69,10 @@ export default class EditFilter extends HTMLFormElement {
 			].join(',')).map(node => {
 				return node.dataset.url || node.src || node.href;
 			});
-			let count = 0;
 			this.getItems().forEach(node => {
 				const present = urls.includes(node.dataset.url);
-				if (present) count++;
 				node.classList.toggle('hide', mode == "used" ? !present : present);
 			});
-			return count;
 		}
 	}
 }
