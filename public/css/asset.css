@@ -255,8 +255,13 @@ live-asset > .meta > p > em {
 	flex-direction: column;
 	justify-content: space-around;
 	aspect-ratio: 1 / 1;
+	position:relative;
+	overflow: hidden;
 }
 #control live-icon > img {
+	position:absolute;
+	top:0;
+	left:0;
 	width:100%;
 	max-height:100%;
 }
