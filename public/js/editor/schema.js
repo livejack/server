@@ -62,6 +62,13 @@ export const nodes = {
 				};
 			}
 		}, {
+			tag: 'opta',
+			getAttrs(dom) {
+				return {
+					html: dom.outerHTML
+				};
+			}
+		}, {
 			tag: 'figure',
 			getAttrs(dom) {
 				const srcNode = dom.querySelector('img,iframe');
