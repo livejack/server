@@ -57,6 +57,7 @@ export class LiveAsset extends HTMLElement {
 			if (width && height) {
 				const ratio = LiveAsset.ratio(width, height);
 				if (ratio) this.dataset.ratio = ratio;
+				else if (!html && !script) this.dataset.ratio = "16-9";
 			}
 			if (script) this.dataset.script = script;
 			if (html) {
