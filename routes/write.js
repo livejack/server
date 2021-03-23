@@ -4,11 +4,15 @@ const prerender = require('../lib/prerender');
 // ouverture de la page
 exports.GET = async function(req, res, next) {
 	const {domain, key} = req.params;
-
-	const page = await Models.Page.query().findOne({ domain, key }).throwIfNotFound();
-	// never do a full prerendering - it's simple this way and useless to do otherwise
-	req.query.develop = null;
-	prerender(`live-write`)(req, res, next);
+	try {
+		if (!req.domain) throw new HttpError.BadRequest("No domain");
+		await Models.Page.query().findOne({ domain, key }).throwIfNotFound();
+		// never do a full prerendering - it's simple this way and useless to do otherwise
+		req.query.develop = null;
+		prerender(`live-write`)(req, res, next);
+	} catch (err) {
+		next(err);
+	}
 };
 
 // TODO: move this to pages collection resource

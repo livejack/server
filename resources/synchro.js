@@ -8,7 +8,7 @@ exports.GET = async (req, res, next) => {
 	await Page.have({
 		domain, key,
 		view: req.domain.view
-	}).throwIfNotFound();
+	});
 
 	await exports.syncAssets(req, req.domain.export, 'image');
 	res.sendStatus(200);
@@ -22,9 +22,9 @@ exports.pictos = async (req, res, next) => {
 // TODO rate limit this ?
 exports.syncAssets = async (req, remoteUrl, type) => {
 	const {domain, key} = req.params;
-	const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
+	const page = await Page.have({ domain, key, view: req.domain.view });
 	let obj = req.body;
-	if (Object.keys(obj).length > 0) {
+	if (obj && Object.keys(obj).length > 0) {
 		// use obj
 	} else if (remoteUrl) {
 		obj = await got(remoteUrl.replace('%s', page.key)).json();
@@ -59,7 +59,8 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		const asset = {
 			url: item.url,
 			origin: 'external',
-			type: type
+			type: type,
+			meta: {}
 		};
 		if (item.legende) asset.meta.title = item.legende;
 		if (item.credits) asset.meta.author = item.credits;
@@ -67,7 +68,7 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		return asset;
 	});
 
-	const assets = await page.$relatedQuery('assets').where({
+	const assets = await page.$relatedQuery('hrefs').where({
 		origin: 'external'
 	});
 	const diff = DiffList(assets, nassets, {
