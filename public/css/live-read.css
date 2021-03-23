@@ -225,12 +225,9 @@ div.fig-article-body {
 	height:1px;
 	opacity:0;
 }
-/* stylelint-disable-next-line selector-type-no-unknown */
-.live-messages opta {
-	display:none;
-}
 
-.live-messages .BeOpWidget {
+/* stylelint-disable-next-line selector-type-no-unknown */
+.live-messages .BeOpWidget, .live-messages opta {
 	display:block;
 }
 /* end old styles */
