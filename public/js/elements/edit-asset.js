@@ -220,14 +220,15 @@ export default class EditAsset extends LiveAsset {
 		const iframe = this.lastElementChild;
 		iframe.onload = () => {
 			const doc = iframe.contentDocument;
+			// get live-read.css
 			doc.head.appendChild(
 				doc.importNode(document.head.querySelector('link[rel="stylesheet"]'))
 			);
-			const liveAsset = document.createElement('live-asset');
+			const liveAsset = doc.importNode(document.createElement('live-asset'));
 			Object.assign(liveAsset.dataset, this.dataset);
+			doc.body.firstElementChild.appendChild(liveAsset);
 			LiveAsset.prototype.populate.call(liveAsset);
 			LiveAsset.prototype.reveal.call(liveAsset);
-			doc.body.firstElementChild.appendChild(doc.importNode(liveAsset, true));
 
 			this.#watchFrame = setInterval(() => {
 				const iframe = this.lastElementChild;

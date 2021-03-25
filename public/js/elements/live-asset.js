@@ -69,25 +69,26 @@ export class LiveAsset extends HTMLElement {
 	}
 	reveal() {
 		const { url, script, html } = this.dataset;
+		const doc = this.ownerDocument;
 		if (html) {
 			this.textContent = '';
 			this.appendChild(this.live.merge(html.trim()));
 			this.querySelectorAll('script:not([src])').forEach(node => {
-				const copy = document.createElement('script');
+				const copy = doc.createElement('script');
 				copy.textContent = node.textContent;
 				node.parentNode.replaceChild(copy, node);
 			});
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}
-		if (script && !document.head.querySelector(`script[src="${script}"]`)) {
-			const copy = document.createElement('script');
+		if (script && !doc.head.querySelector(`script[src="${script}"]`)) {
+			const copy = doc.createElement('script');
 			copy.setAttribute('src', script);
 			copy.setAttribute('defer', '');
 			copy.onload = copy.onerror = () => {
-				document.head.removeChild(copy);
+				doc.head.removeChild(copy);
 			};
-			document.head.appendChild(copy);
+			doc.head.appendChild(copy);
 		}
 	}
 }
