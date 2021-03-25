@@ -71,7 +71,7 @@ export class LiveAsset extends HTMLElement {
 		const { url, script, html } = this.dataset;
 		if (html) {
 			this.textContent = '';
-			this.appendChild(this.live.merge(html, {}));
+			this.appendChild(this.live.merge(html.trim()));
 			this.querySelectorAll('script:not([src])').forEach(node => {
 				const copy = document.createElement('script');
 				copy.textContent = node.textContent;
