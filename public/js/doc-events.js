@@ -4,9 +4,7 @@ class ThenEvent {
 			this.go = resolve;
 		});
 		this.q = this.q.bind(this);
-		this.init();
 	}
-	init() {}
 	destroy() {}
 	handleEvent() {
 		this.destroy();
@@ -19,42 +17,48 @@ class ThenEvent {
 }
 
 class DocReady extends ThenEvent {
-	init() {
-		if (document.readyState == "complete") {
+	constructor(doc) {
+		super();
+		if (!doc) doc = document;
+		this.doc = doc;
+		if (doc.readyState == "complete") {
 			this.go();
 		} else {
-			document.addEventListener('DOMContentLoaded', this, false);
-			window.addEventListener('load', this, false);
+			doc.addEventListener('DOMContentLoaded', this, false);
+			doc.defaultView.addEventListener('load', this, false);
 		}
 	}
 	destroy() {
-		document.removeEventListener('DOMContentLoaded', this, false);
-		window.removeEventListener('load', this, false);
+		this.doc.removeEventListener('DOMContentLoaded', this, false);
+		this.doc.defaultView.removeEventListener('load', this, false);
 	}
 }
 const ready = new DocReady().q;
 
 class DocVisible extends ThenEvent {
-	init() {
+	constructor(doc) {
+		super();
+		if (!doc) doc = document;
+		this.doc = doc;
 		let hidden;
-		if (typeof document.hidden !== "undefined") {
+		if (typeof doc.hidden !== "undefined") {
 			hidden = "hidden";
 			this.evt = "visibilitychange";
-		} else if (typeof document.msHidden !== "undefined") {
+		} else if (typeof doc.msHidden !== "undefined") {
 			hidden = "msHidden";
 			this.evt = "msvisibilitychange";
-		} else if (typeof document.webkitHidden !== "undefined") {
+		} else if (typeof doc.webkitHidden !== "undefined") {
 			hidden = "webkitHidden";
 			this.evt = "webkitvisibilitychange";
 		}
-		if (!hidden || !document[hidden]) {
+		if (!hidden || !doc[hidden]) {
 			this.go();
 		} else {
-			document.addEventListener(this.evt, this, false);
+			doc.addEventListener(this.evt, this, false);
 		}
 	}
 	destroy() {
-		document.removeEventListener(this.evt, this, false);
+		this.doc.removeEventListener(this.evt, this, false);
 	}
 }
 
