@@ -227,6 +227,7 @@ export default class EditAsset extends LiveAsset {
 			const liveAsset = doc.importNode(document.createElement('live-asset'));
 			Object.assign(liveAsset.dataset, this.dataset);
 			doc.body.firstElementChild.appendChild(liveAsset);
+			liveAsset.live = this.live;
 			LiveAsset.prototype.populate.call(liveAsset);
 			LiveAsset.prototype.reveal.call(liveAsset);
 
