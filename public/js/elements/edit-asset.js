@@ -18,7 +18,7 @@ const iframeTemplate = `<div class="header">
 	<button name="preview" class="strike">👁</button>
 	<button name="del">✕</button>
 </div>
-<iframe class="content" sandbox="allow-scripts allow-same-origin"></iframe>`;
+<iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
 <a>HTML Embed</a>
@@ -34,6 +34,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|orAt:*]" class="favicon" />
 	<a href="[url]">[meta.title]</a>
 	<button name="save">🗘</button>
+	<button name="preview">👁</button>
 	<button name="del">✕</button>
 </div>
 <div class="meta">
@@ -57,13 +58,21 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 		<input name="author" value="[author]">
 	</label>
 </form>`;
+const assetPreviewTemplate = `<div class="header" title="[meta.site]">
+	<img src="[meta.icon|orAt:*]" class="favicon" />
+	<a href="[url]">[meta.title]</a>
+	<button name="preview" class="strike">👁</button>
+	<button name="del">✕</button>
+</div>
+<iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 
 const docTemplate = `<html>
-<head>
-	<style>html,body {margin:0;}</style>
-	<script src="[script|orAt:*]" defer></script>
-</head>
-<body>[html|as:html]</body>
+	<head>
+		<style>html,body {margin:0;}</style>
+	</head>
+	<body>
+		<div class="live-messages live-message"></div>
+	</body>
 </html>`;
 
 export default class EditAsset extends LiveAsset {
@@ -193,30 +202,45 @@ export default class EditAsset extends LiveAsset {
 			}
 		}
 		Object.assign(data, this.dataset);
-		const tpl = url && assetTemplate || this.#preview && iframeTemplate || codeTemplate;
+		let tpl;
+		if (url) {
+			if (this.#preview) tpl = assetPreviewTemplate;
+			else tpl = assetTemplate;
+		} else {
+			if (this.#preview) tpl = iframeTemplate;
+			else tpl = codeTemplate;
+		}
 		const node = this.live.merge(tpl, data);
 		const frag = this.cloneNode(false);
 		frag.appendChild(node);
 		updateDOM(this, frag);
 	}
 	reveal() {
-		const { url, script, html } = this.dataset;
-		if (url || !html && !script) return;
+		if (!this.#preview) return;
 		const iframe = this.lastElementChild;
-		if (!iframe || iframe.nodeName != "IFRAME") return;
-		const doc = this.live.merge(docTemplate, { html, script });
-		if (iframe.srcdoc == doc.outerHTML) return;
-		iframe.srcdoc = doc.outerHTML;
-		this.#watchFrame = setInterval(() => {
-			const iframe = this.lastElementChild;
-			if (!iframe || iframe.nodeName != "IFRAME") {
-				clearInterval(this.#watchFrame);
-				this.#watchFrame = null;
-			} else if (iframe.contentDocument) {
-				const h = iframe.contentDocument.documentElement.scrollHeight;
-				iframe.style.height = h + 'px';
-			}
-		}, 1000);
+		iframe.onload = () => {
+			const doc = iframe.contentDocument;
+			doc.head.appendChild(
+				doc.importNode(document.head.querySelector('link[rel="stylesheet"]'))
+			);
+			const liveAsset = document.createElement('live-asset');
+			Object.assign(liveAsset.dataset, this.dataset);
+			LiveAsset.prototype.populate.call(liveAsset);
+			LiveAsset.prototype.reveal.call(liveAsset);
+			doc.body.firstElementChild.appendChild(doc.importNode(liveAsset, true));
+
+			this.#watchFrame = setInterval(() => {
+				const iframe = this.lastElementChild;
+				if (!iframe || iframe.nodeName != "IFRAME" || !iframe.contentDocument.documentElement) {
+					clearInterval(this.#watchFrame);
+					this.#watchFrame = null;
+				} else if (iframe.contentDocument) {
+					const h = iframe.contentDocument.documentElement.scrollHeight;
+					iframe.style.height = h + 'px';
+				}
+			}, 1000);
+		};
+		iframe.srcdoc = docTemplate;
 	}
 }
 
