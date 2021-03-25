@@ -15,7 +15,7 @@ const searchTemplate = `<div class="header">
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
 	<a>HTML Embed</a>
-	<button name="preview" class="strike">👁</button>
+	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
@@ -34,7 +34,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|orAt:*]" class="favicon" />
 	<a href="[url]">[meta.title]</a>
 	<button name="save">🗘</button>
-	<button name="preview">👁</button>
+	<button name="preview">⯈</button>
 	<button name="del">✕</button>
 </div>
 <div class="meta">
@@ -61,7 +61,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|orAt:*]" class="favicon" />
 	<a href="[url]">[meta.title]</a>
-	<button name="preview" class="strike">👁</button>
+	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;

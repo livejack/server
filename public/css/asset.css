@@ -93,7 +93,7 @@ live-asset > .thumbnail > img {
 	top: 0;
 	left: 0;
 }
-:not([data-mode="unused"]) > live-asset button[name="del"] {
+#assets:not([data-mode="unused"]) > live-asset button[name="del"] {
 	display:none;
 }
 live-asset button {
@@ -110,16 +110,26 @@ live-asset button {
 	margin-right: 0.15em;
 }
 
-.live-message live-asset button[name="del"],
-live-asset button[name="save"] {
+live-asset button[name="save"],
+live-asset button[name="preview"] {
 	display:none;
 }
-.live-message .ProseMirror live-asset button[name="del"],
+.live-message live-asset button[name="preview"] {
+	display:initial;
+}
+.live-message live-asset button[name="del"] {
+	opacity:0.5;
+}
+.live-message .ProseMirror live-asset button[name="del"] {
+	opacity:initial;
+}
+
 live-asset.ctrl button[name="save"] {
 	display:initial;
 }
 
-live-asset button:hover {
+live-asset button:hover[name="preview"],
+.ProseMirror live-asset button:hover {
 	color:var(--bg);
 	background-color:var(--btncolor);
 }
@@ -291,8 +301,4 @@ live-asset > .meta > p > em {
 #control[data-mode="link"] live-asset:hover > .header {
 	--btncolor: var(--bgselcolor);
 	--bg: var(--selcolor);
-}
-
-button.strike {
-	background: linear-gradient(to left top, transparent 47.75%, currentColor 49.5%, currentColor 50.5%, transparent 52.25%);
 }
