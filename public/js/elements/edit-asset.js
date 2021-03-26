@@ -22,7 +22,7 @@ const iframeTemplate = `<div class="header">
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
 <a>HTML Embed</a>
-<button name="preview">👁</button>
+<button name="preview">⯈</button>
 <button name="del">✕</button>
 </div>
 <code class="content">
