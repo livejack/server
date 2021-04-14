@@ -8,7 +8,7 @@ const Path = require('path');
 const serveStatic = require('serve-static');
 const got = require('got');
 
-const serveModule = require("@livejack/moduleserver");
+const serveModule = require("@webmodule/serve");
 const LiveJack = require('@livejack/client/node');
 
 const Upcache = require('upcache');
