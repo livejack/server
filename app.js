@@ -100,7 +100,7 @@ config.live.version = require('@livejack/client/package.json').version;
 		() => 404
 	);
 
-	app.get("/modules/*", Upcache.tag('app'), serveModule("/modules"));
+	app.use("/node_modules/", Upcache.tag('app'), serveModule());
 
 	app.route(/\/js|css|img|dist\//).get(
 		Upcache.tag('app'),
