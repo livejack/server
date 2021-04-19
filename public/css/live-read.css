@@ -427,25 +427,25 @@ live-asset[data-ratio] > * {
 	left:0;
 	top:0;
 }
-live-asset[data-ratio="21-9"] {
+live-asset[data-ratio="21-9"]::before {
 	padding-top: calc(21 / 9 * 100%);
 }
-live-asset[data-ratio="2-1"] {
+live-asset[data-ratio="2-1"]::before {
 	padding-top: calc(2 / 1 * 100%);
 }
-live-asset[data-ratio="16-9"] {
+live-asset[data-ratio="16-9"]::before {
 	padding-top: calc(16 / 9 * 100%);
 }
-live-asset[data-ratio="16-10"] {
+live-asset[data-ratio="16-10"]::before {
 	padding-top: calc(16 / 10 * 100%);
 }
-live-asset[data-ratio="4-3"] {
+live-asset[data-ratio="4-3"]::before {
 	padding-top: calc(4 / 3 * 100%);
 }
-live-asset[data-ratio="1-1"] {
+live-asset[data-ratio="1-1"]::before {
 	padding-top: calc(1 / 1 * 100%);
 }
-live-asset[data-ratio="9-16"] {
+live-asset[data-ratio="9-16"]::before {
 	padding-top: calc(9 / 16 * 100%);
 }
 

@@ -12,9 +12,8 @@ live-asset {
 	box-shadow: 0px 1px 2px var(--btncolor), 0px -1px 2px var(--tilebg);
 	user-select:none;
 	margin-top: 0.4rem;
-	aspect-ratio: auto !important;
 }
-/* postcss-aspect-ratio polyfill ignores auto above */
+
 live-asset[data-ratio]::before,
 live-asset[data-ratio]::after {
 	content:none !important;
@@ -80,8 +79,17 @@ live-asset > .meta > .line {
 live-asset > .thumbnail {
 	flex: 1 1 30%;
 	overflow:hidden;
-	aspect-ratio: 16 / 9;
 	position: relative;
+}
+live-asset > .thumbnail::after {
+	display: block;
+	content: '';
+	clear: both;
+}
+live-asset > .thumbnail::before {
+	float:left;
+	content:'';
+	padding-top: calc(16 / 9 * 100%);
 }
 
 live-asset > .thumbnail > img {
@@ -216,7 +224,6 @@ live-asset > .meta > p > em {
 .live-message live-asset .thumbnail {
 	height: 6em;
 	flex-basis: 7%;
-	aspect-ratio: 16 / 9;
 }
 .live-message live-asset > .meta > p + p {
 	white-space: normal;
@@ -264,9 +271,18 @@ live-asset > .meta > p > em {
 	align-content: center;
 	flex-direction: column;
 	justify-content: space-around;
-	aspect-ratio: 1 / 1;
 	position:relative;
 	overflow: hidden;
+}
+#control live-icon::after {
+	display: block;
+	content: '';
+	clear: both;
+}
+#control live-icon::before {
+	float:left;
+	content:'';
+	padding-top: 100%;
 }
 #control live-icon > img {
 	position:absolute;
