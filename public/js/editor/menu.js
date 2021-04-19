@@ -7,7 +7,7 @@ import {
 	selectParentNode,
 	wrapIn,
 	setBlockType
-} from "../../modules/@livejack/prosemirror";
+} from "/node_modules/@livejack/prosemirror";
 
 import { getIcon } from "./icons.js";
 

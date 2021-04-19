@@ -1,7 +1,7 @@
 import {
 	toggleMark,
 	wrapInList
-} from "../../modules/@livejack/prosemirror";
+} from "/node_modules/@livejack/prosemirror";
 
 import {
 	wrapItem, blockTypeItem, icons, MenuItem, liftItem

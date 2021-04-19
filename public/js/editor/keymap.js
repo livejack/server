@@ -9,7 +9,7 @@ import {
 	splitListItem,
 	undo, redo,
 	undoInputRule
-} from "../../modules/@livejack/prosemirror";
+} from "/node_modules/@livejack/prosemirror";
 
 // eslint-disable-next-line no-undef
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;

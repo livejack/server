@@ -2,7 +2,7 @@ import Live from './live.js';
 import req from "./req.js";
 import { ready, visible } from './doc-events.js';
 import { fromScript, toScript } from "./template.js";
-import { LiveJack } from "../modules/@livejack/client";
+import { LiveJack } from "/node_modules/@livejack/client";
 
 class LiveRead extends Live {
 	constructor() {

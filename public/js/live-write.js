@@ -4,7 +4,7 @@ registerWrite(liveRead);
 
 import { ready, visible } from './doc-events.js';
 
-import xbytes from '../modules/xbytes';
+import xbytes from '/node_modules/xbytes';
 
 export const editor = {
 	assetType: {

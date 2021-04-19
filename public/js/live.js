@@ -1,7 +1,7 @@
-import { Matchdom } from "../modules/matchdom";
+import { Matchdom } from "/node_modules/matchdom";
 import * as DatePlugin from "./date-plugin.js";
 import "./array-like.js";
-import '../modules/@ungap/custom-elements';
+import '/node_modules/@ungap/custom-elements';
 
 import { LiveAsset, LiveIcon } from "./elements/live-asset.js";
 

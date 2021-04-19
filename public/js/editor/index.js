@@ -10,9 +10,9 @@ import {
 	addListNodes,
 	Selection, TextSelection, NodeSelection,
 	tableNodes, tableEditing
-} from "../../modules/@livejack/prosemirror";
+} from "/node_modules/@livejack/prosemirror";
 
-import { HTML as parseHTML } from "../../modules/matchdom";
+import { HTML as parseHTML } from "/node_modules/matchdom";
 
 import { menuBar } from "./menubar.js";
 import { buildMenuItems } from "./menuitems.js";

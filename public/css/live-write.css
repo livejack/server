@@ -1,14 +1,14 @@
-@import "../modules/modern-normalize/modern-normalize.css";
+@import "/node_modules/modern-normalize";
 
-@import "../modules/flatpickr/dist/flatpickr.css";
+@import "/node_modules/flatpickr";
 
-@import "../modules/toggle-switch-css/build/toggle-switch.css";
+@import "/node_modules/toggle-switch-css";
 
-@import "../modules/@livejack/prosemirror/style/default.css";
+@import "/node_modules/@livejack/prosemirror/style/default.css";
 
-@import "../modules/@livejack/prosemirror/style/gapcursor.css";
+@import "/node_modules/@livejack/prosemirror/style/gapcursor.css";
 
-@import "../modules/@livejack/prosemirror/style/tables.css";
+@import "/node_modules/@livejack/prosemirror/style/tables.css";
 
 @import "./resources.css";
 

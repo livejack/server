@@ -1,6 +1,6 @@
 import req from "../req.js";
 import { LiveAsset } from "./live-asset.js";
-import { DiffDOM } from "../../modules/diff-dom";
+import { DiffDOM } from "/node_modules/diff-dom";
 
 function updateDOM(from, to) {
 	const dd = new DiffDOM();

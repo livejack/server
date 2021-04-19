@@ -1,4 +1,4 @@
-import { Plugin } from "../../modules/@livejack/prosemirror";
+import { Plugin } from "/node_modules/@livejack/prosemirror";
 
 import { renderGrouped } from "./menu.js";
 
