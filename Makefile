@@ -1,6 +1,6 @@
 
 version=$(shell node -p 'require("./package").version')
-bundler=npx webmodule-bundle --modules=/modules --root public
+bundler=npx webmodule-bundle --root public
 
 transpiled:
 	$(bundler) --concatenate --css dist/live-read-${version}.css --js dist/live-read-${version}.js public/live-read.html
