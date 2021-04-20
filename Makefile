@@ -3,8 +3,8 @@ version=$(shell node -p 'require("./package").version')
 bundler=npx webmodule-bundle --root public
 
 transpiled:
-	$(bundler) --concatenate --css dist/live-read-${version}.css --js dist/live-read-${version}.js public/live-read.html
-	$(bundler) --concatenate --css dist/live-write-${version}.css --js dist/live-write-${version}.js public/live-write.html
+	$(bundler) --concatenate --assets dist/assets-${version} --css dist/live-read-${version}.css --js dist/live-read-${version}.js public/live-read.html
+	$(bundler) --concatenate --assets dist/assets-${version} --css dist/live-write-${version}.css --js dist/live-write-${version}.js public/live-write.html
 
 minified:
 	$(bundler) --css dist/live-read-${version}.min.css --js dist/live-read-${version}.min.js public/live-read.html
