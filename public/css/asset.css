@@ -89,7 +89,7 @@ live-asset > .thumbnail::after {
 live-asset > .thumbnail::before {
 	float:left;
 	content:'';
-	padding-top: calc(16 / 9 * 100%);
+	padding-top: calc(9 / 16 * 100%);
 }
 
 live-asset > .thumbnail > img {
