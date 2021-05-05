@@ -1,6 +1,7 @@
 import flatpickr from "/node_modules/flatpickr";
-import { French } from "/node_modules/flatpickr/dist/l10n/fr";
-flatpickr.localize(French);
+import flatLocale from "/node_modules/flatpickr/dist/l10n/fr";
+
+flatpickr.localize(flatLocale.French);
 
 export default class EditTime extends HTMLTimeElement {
 	#defaultValue
