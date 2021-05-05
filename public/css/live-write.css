@@ -37,6 +37,13 @@
 	--warn-rgb: 184, 0, 0;
 	--bgselcolor:#4165A0;
 	--selcolor:white;
+	/* semantic */
+	--bg: var(--back-color);
+	--tilebg: var(--back-low-color);
+	--tilebghover: var(--back-color);
+	--btncolor: var(--text-low-color);
+	--btncolorhover: var(--text-color);
+	--border: 1px solid var(--middle-color);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -46,16 +53,6 @@
 		--text-low-color: #EEE;
 		--back-low-color: #555;
 	}
-}
-
-#control,#live {
-	/* semantic */
-	--bg: var(--back-color);
-	--tilebg: var(--back-low-color);
-	--tilebghover: var(--back-color);
-	--btncolor: var(--text-low-color);
-	--btncolorhover: var(--text-color);
-	--border: 1px solid var(--middle-color);
 }
 
 #control {
