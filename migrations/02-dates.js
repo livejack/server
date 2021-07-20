@@ -31,6 +31,15 @@ exports.up = async function (knex) {
 	});
 	await knex('messages').update('created_at', knex.ref('date'));
 	await knex('messages').update('updated_at', knex.ref('update')).whereNotNull('update');
+
+	await knex.schema.table('messages', function (table) {
+		table.renameColumn('date', 'date_noz');
+	});
+	await knex('messages').update('date', knex.ref('date_noz'));
+	await knex.schema.table('messages', function (table) {
+		table.dropColumn('date_noz');
+	});
+
 	await knex.schema.table('messages', function (table) {
 		table.dropColumn('update');
 	});
