@@ -8,6 +8,7 @@ form[is="edit-status"] {
 	--switch-theme-rgb: var(--warn-rgb);
 	--bar-width:3em;
 	--switch-margin:0;
+
 	min-width: 0;
 	flex: 0;
 	z-index: 1;

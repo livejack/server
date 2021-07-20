@@ -10,7 +10,7 @@
 }
 .live-messages .live-message {
 	--focus-color: #EEE;
-	
+
 	position:relative;
 	transition-duration: 0.5s;
 	transition-property: background-color, box-shadow, opacity;
@@ -106,7 +106,7 @@
 }
 
 .ProseMirror-selectednode {
-  outline: 2px solid var(--bgselcolor);
+	outline: 2px solid var(--bgselcolor);
 }
 
 .ProseMirror-menu-toggle > svg + svg,
