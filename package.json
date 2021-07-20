@@ -39,18 +39,12 @@
     "xdg-basedir": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/eslint-parser": "^7.13.14",
-    "@babel/eslint-plugin": "^7.13.16",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/plugin-syntax-class-properties": "^7.12.13",
-    "@babel/preset-env": "^7.14.1",
-    "@kapouer/eslint-config": "^1.2.1",
+    "@kapouer/eslint-config": "^1.3.0",
+    "@kapouer/stylelint-config": "^1.0.0",
     "@webmodule/bundle": "^5.5.2",
     "expect.js": "^0.3.1",
     "jsondiffpatch": "^0.4.1",
-    "mocha": "^8.3.2",
-    "stylelint-config-standard": "^22.0.0"
+    "mocha": "^9.0.2"
   },
   "eslintConfig": {
     "extends": "@kapouer/eslint-config",
@@ -60,87 +54,30 @@
     "overrides": [
       {
         "files": [
+          "lib/**",
+          "models/**",
+          "resources/**",
+          "routes/**",
+          "*.js"
+        ],
+        "env": {
+          "node": true,
+          "es6": true,
+          "browser": false
+        }
+      },
+      {
+        "files": [
           "public/js/**"
         ],
         "env": {
           "browser": true
         }
       }
-    ],
-    "parser": "@babel/eslint-parser",
-    "plugins": [
-      "@babel"
-    ],
-    "parserOptions": {
-      "requireConfigFile": false,
-      "babelOptions": {
-        "plugins": [
-          "@babel/plugin-syntax-class-properties"
-        ],
-        "presets": [
-          [
-            "@babel/env",
-            {
-              "targets": "supports es6-module and supports private-class-fields"
-            }
-          ]
-        ]
-      }
-    }
+    ]
   },
   "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "block-closing-brace-empty-line-before": [
-        "never",
-        {
-          "severity": "warning"
-        }
-      ],
-      "at-rule-empty-line-before": [
-        "always",
-        {
-          "severity": "warning"
-        }
-      ],
-      "number-leading-zero": [
-        "always",
-        {
-          "severity": "warning"
-        }
-      ],
-      "selector-descendant-combinator-no-non-space": [
-        true,
-        {
-          "severity": "warning"
-        }
-      ],
-      "length-zero-no-unit": null,
-      "color-hex-length": null,
-      "color-hex-case": null,
-      "selector-list-comma-newline-after": null,
-      "selector-pseudo-element-colon-notation": null,
-      "max-empty-lines": null,
-      "comment-whitespace-inside": null,
-      "no-descending-specificity": null,
-      "indentation": [
-        "tab",
-        {
-          "severity": "warning"
-        }
-      ],
-      "rule-empty-line-before": null,
-      "comment-empty-line-before": null,
-      "declaration-colon-space-after": null,
-      "selector-type-no-unknown": [
-        true,
-        {
-          "ignore": [
-            "custom-elements"
-          ]
-        }
-      ]
-    }
+    "extends": "@kapouer/stylelint-config"
   },
   "scripts": {
     "start": "NODE_ENV=development node app.js"
