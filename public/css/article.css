@@ -95,7 +95,11 @@
 	color:gray;
 }
 
-
+.ProseMirror-gapcursor:after {
+	top:-1px;
+	border-top-width:2px;
+	z-index:1;
+}
 .ProseMirror-menuitem > *:not(.ProseMirror-menu-disabled):hover {
 	background-color: #DDD;
 }
