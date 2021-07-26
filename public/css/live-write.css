@@ -61,7 +61,6 @@
 	overflow-y: scroll;
 	width: 300px;
 	background-color:var(--bg);
-	scroll-snap-type: y proximity;
 	padding: 0.2rem;
 	padding-top: 0;
 }
