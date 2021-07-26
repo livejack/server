@@ -1,6 +1,6 @@
 export const nodes = {
 	doc: {
-		content: "block+"
+		content: "(paragraph|block)+"
 	},
 
 	paragraph: {
