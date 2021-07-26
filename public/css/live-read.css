@@ -239,6 +239,7 @@ live-asset > img {
 	height: auto;
 	margin: 0 auto;
 	display: block;
+	border-width: 0;
 }
 .live-messages .live-article strong {
 	font-weight:bold;
