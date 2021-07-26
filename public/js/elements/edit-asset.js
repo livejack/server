@@ -68,7 +68,7 @@ const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 
 const docTemplate = `<html>
 	<head>
-		<style>html,body {margin:0;}</style>
+		<style>html,body {margin:0;overflow:hidden;}</style>
 	</head>
 	<body>
 		<div class="live-messages live-message"></div>
@@ -240,7 +240,7 @@ export default class EditAsset extends LiveAsset {
 					const h = iframe.contentDocument.documentElement.scrollHeight;
 					iframe.style.height = h + 'px';
 				}
-			}, 1000);
+			}, 100);
 		};
 		iframe.srcdoc = docTemplate;
 	}
