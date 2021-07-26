@@ -3,7 +3,7 @@
   "version": "0.2.4",
   "dependencies": {
     "@livejack/client": "^1.0.2",
-    "@livejack/prosemirror": "^1.2.0-5",
+    "@livejack/prosemirror": "^1.2.1",
     "@ungap/custom-elements": "^1.0.0",
     "@webmodule/serve": "^5.2.2",
     "ajv-keywords": "^3.5.2",
