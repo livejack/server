@@ -74,6 +74,10 @@ export class Editor extends EditorView {
 		});
 		const parser = DOMParser.fromSchema(schema);
 
+		if (place.firstElementChild && place.firstElementChild.nodeName != "X-EMPTY") {
+			place.insertAdjacentHTML('afterBegin', '<x-empty/>');
+		}
+
 		super({ mount: place }, {
 			state: EditorState.create({
 				doc: parser.parse(place),
@@ -216,7 +220,9 @@ export class Editor extends EditorView {
 		this.dispatch(tr);
 	}
 	toDOM() {
-		return this.#serializer.serializeFragment(this.state.doc.content);
+		const frag = this.#serializer.serializeFragment(this.state.doc.content);
+		frag.querySelectorAll('x-empty').forEach(node => node.remove());
+		return frag;
 	}
 	initCursor({ left, top }) {
 		if (!left || !top) return;

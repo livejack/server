@@ -120,3 +120,7 @@
 .ProseMirror-menu-toggle.ProseMirror-menu-active > svg + svg {
 	display: initial;
 }
+
+.ProseMirror x-empty {
+	display: block;
+}

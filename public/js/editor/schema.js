@@ -1,6 +1,17 @@
 export const nodes = {
 	doc: {
-		content: "(paragraph|block)+"
+		content: "empty block+"
+	},
+
+	empty: {
+		// work around
+		// https://bugs.chromium.org/p/chromium/issues/detail?id=1233054
+		// however prosemirror may try to implement it
+		// https://github.com/ProseMirror/prosemirror/issues/1191
+		atom: true,
+		selectable: false,
+		parseDOM: [{ tag: "x-empty" }],
+		toDOM() { return ["x-empty"]; }
 	},
 
 	paragraph: {
