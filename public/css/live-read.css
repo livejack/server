@@ -110,7 +110,7 @@ div.fig-article-body {
 	font-size:2rem;
 	line-height:1;
 	color:#FFF;
-	background: url('https://a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -1406px;
+	background: url('https://static.lefigaro.fr/a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -1406px;
 	text-indent:-999em;
 	content:"\2729";
 	z-index:1;
@@ -316,7 +316,7 @@ live-asset > img {
 	width:12px;
 	height:12px;
 	margin-left:8px;
-	background: url('https://a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -336px;
+	background: url('https://static.lefigaro.fr/a.f1g.fr/assets-img/fig-article-sprite.png') no-repeat scroll 0 -336px;
 }
 .live-messages .live-controls .sort label {
 	color:#444;
