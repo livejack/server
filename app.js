@@ -114,8 +114,6 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	app.options('*', cors());
 
-	app.use(require('express-extension-to-accept')(['html', 'json']));
-
 	app.use(morgan(':method :status :response-time ms :url - :res[content-length]'));
 
 	app.get('/lives.json', Upcache.tag('data'), routes.lives.GET);
@@ -143,9 +141,14 @@ config.live.version = require('@livejack/client/package.json').version;
 	app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
 	// appelé par BO site pour synchroniser les pictos
 	app.get('/:domain/:key(pictos)/synchro', domainLock, resources.synchro.pictos);
-
 	// appelé par BO site pour synchroniser un live
 	app.get('/:domain/:key/synchro', domainLock, resources.synchro.GET);
+
+	// this route needs its own extension
+	app.get('/:domain/:key/messages\.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
+
+	// below all routes can be .json or .html or nothing
+	app.use(require('express-extension-to-accept')(['html', 'json']));
 
 	app.get('/:domain/:key', function (req, res, next) {
 		var mw;
@@ -164,7 +167,6 @@ config.live.version = require('@livejack/client/package.json').version;
 	});
 
 	app.put('/:domain/:key', rewrite('/:domain/:key/write'));
-	app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
 
 	app.get('/:domain/:key/read', tag.page, routes.read.GET);
 
