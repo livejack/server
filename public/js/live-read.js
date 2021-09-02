@@ -67,7 +67,7 @@ class LiveRead extends Live {
 		let chan = this.channels[name];
 		if (!chan) {
 			chan = this.channels[name] = (async () => {
-				return req('./' + name + '.json');
+				return req('./' + name);
 			})(name);
 		}
 		return chan;
