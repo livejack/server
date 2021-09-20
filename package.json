@@ -23,11 +23,11 @@
     "method-override": "^3.0.0",
     "modern-normalize": "^1.1.0",
     "morgan": "^1.10.0",
-    "objection": "^2.2.15",
+    "objection": "^2.2.16",
     "objection-db-errors": "^1.1.2",
     "p-queue": "^6.6.2",
     "passwd-user": "^3.0.0",
-    "pg": "^8.6.0",
+    "pg": "^8.7.1",
     "serve-static": "^1.14.1",
     "sharp": "^0.26.3",
     "toggle-switch-css": "^1.0.3",
@@ -38,7 +38,7 @@
     "xdg-basedir": "^4.0.0"
   },
   "devDependencies": {
-    "@kapouer/eslint-config": "^1.5.1",
+    "@kapouer/eslint-config": "^1.6.0",
     "@kapouer/stylelint-config": "^1.1.0",
     "@webmodule/bundle": "^5.5.2",
     "expect.js": "^0.3.1",
