@@ -46,8 +46,8 @@ form[is="edit-status"] {
 	opacity:1;
 }
 .toggle-switch > label,
-.toggle-switch > label:before,
-.toggle-switch > label:after {
+.toggle-switch > label::before,
+.toggle-switch > label::after {
 	opacity: 1;
 	cursor: pointer;
 }
