@@ -20,15 +20,14 @@ const tag = {
 
 const ini = require('./lib/express-ini');
 
-const jsonParser = require('body-parser').json({
-	limit: "100kb"
-});
-
 global.HttpError = require('http-errors');
 
 const express = require('express');
 const upload = require('./lib/upload');
 const app = require('./lib/express-async')(express)();
+const jsonParser = express.json({
+	limit: "100kb"
+});
 const config = ini(app);
 
 config.live.version = require('@livejack/client/package.json').version;

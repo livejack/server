@@ -7,7 +7,6 @@
     "@ungap/custom-elements": "^1.0.0",
     "@webmodule/serve": "^5.2.2",
     "ajv-keywords": "^3.5.2",
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "datauri": "^3.0.0",
     "diff-dom": "^4.2.2",
