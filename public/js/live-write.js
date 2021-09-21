@@ -6,19 +6,6 @@ import { ready, visible } from './doc-events.js';
 
 import xbytes from '/node_modules/xbytes';
 
-export const editor = {
-	assetType: {
-		none: "icon-plus",
-		error: "icon-ban-circle",
-		image: "icon-picture",
-		video: "icon-film",
-		iframe: "icon-external-link",
-		link: "icon-link",
-		tweet: "icon-twitter",
-		picto: ""
-	}
-};
-
 let blanked = false;
 
 const assetPlugin = {
