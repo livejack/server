@@ -26,7 +26,12 @@ exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
-		await prepareAsset(req.body);
+		try {
+			await prepareAsset(req.body);
+		} catch (ex) {
+			if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Invalid url");
+			else throw ex;
+		}
 		if (req.body.id) delete req.body.id;
 		let asset = await page.$relatedQuery('hrefs').findOne({ url: req.body.url });
 		if (asset) {
