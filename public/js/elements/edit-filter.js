@@ -42,7 +42,7 @@ export default class EditFilter extends HTMLFormElement {
 			const tags = this.querySelectorAll(
 				'input[name="filter"]:checked'
 			).map(node => node.value);
-			this.getItems().forEach(node => {
+			for (const node of this.getItems()) {
 				const url = node.dataset.url;
 				const item = this.live.get(url);
 				if (!item) {
@@ -59,7 +59,7 @@ export default class EditFilter extends HTMLFormElement {
 					const active = words.some(tag => tags.includes(tag));
 					node.classList.toggle('hide', !active);
 				}
-			});
+			}
 		} else {
 			this.classList.add('notags');
 			const urls = document.querySelectorAll([
@@ -69,10 +69,10 @@ export default class EditFilter extends HTMLFormElement {
 			].join(',')).map(node => {
 				return node.dataset.url || node.src || node.href;
 			});
-			this.getItems().forEach(node => {
+			for (const node of this.getItems()) {
 				const present = urls.includes(node.dataset.url);
 				node.classList.toggle('hide', mode == "used" ? !present : present);
-			});
+			}
 		}
 	}
 }

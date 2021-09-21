@@ -1,11 +1,11 @@
 const observer = new IntersectionObserver((entries, observer) => {
-	entries.forEach((entry) => {
+	for (const entry of entries) {
 		var target = entry.target;
 		var ratio = entry.intersectionRatio || 0;
 		if (ratio <= 0) return;
 		observer.unobserve(target);
 		target.reveal();
-	});
+	}
 }, {
 	threshold: [0.0001, 0.2],
 	rootMargin: "30px"
@@ -74,11 +74,11 @@ export class LiveAsset extends HTMLElement {
 		if (html) {
 			this.textContent = '';
 			this.appendChild(this.live.merge(html.trim()));
-			this.querySelectorAll('script:not([src])').forEach(node => {
+			for (const node of this.querySelectorAll('script:not([src])')) {
 				const copy = doc.createElement('script');
 				copy.textContent = node.textContent;
 				node.parentNode.replaceChild(copy, node);
-			});
+			}
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}

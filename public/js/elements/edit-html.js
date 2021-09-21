@@ -37,18 +37,18 @@ class EditHtml {
 		} else {
 			parent = this.cloneNode(true);
 			// cleanup temp view
-			parent.querySelectorAll('live-asset').forEach(node => {
+			for (const node of parent.querySelectorAll('live-asset')) {
 				node.textContent = '';
-			});
+			}
 		}
 		const hrefs = [];
-		parent.querySelectorAll('live-asset').forEach(node => {
+		for (const node of parent.querySelectorAll('live-asset')) {
 			const url = node.dataset.url;
-			if (!url) return;
+			if (!url) continue;
 			const asset = this.live.get(url);
-			if (!asset) return;
+			if (!asset) continue;
 			hrefs.push({ id: asset.id });
-		});
+		}
 		this.article.hrefs = hrefs;
 		const val = parent.innerHTML.trim();
 		if (val == "<br>" || val == "<p></p>") return "";

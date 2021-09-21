@@ -52,9 +52,9 @@ export default class EditArticle extends HTMLElement {
 	async submit() {
 		// collect changes in time, icons, title, html and fetch({method: 'put'}) or post
 		const data = {};
-		this.editables.forEach((node) => {
+		for (const node of this.editables) {
 			data[node.name] = node.value;
-		});
+		}
 		data.hrefs = this.hrefs;
 		// await req put/post then node.defaultValue = node.value;
 		if (this.dataset.id) {
@@ -90,13 +90,13 @@ export default class EditArticle extends HTMLElement {
 		this.unsaved = false;
 		this.classList.remove('active');
 		this.#active = false;
-		this.editables.forEach((node) => {
+		for (const node of this.editables) {
 			node.stop();
 			if (reset) {
 				if (node.reset) node.reset();
 				else node.value = node.defaultValue;
 			}
-		});
+		}
 		this.removeChild(this.toolbar);
 		delete this.toolbar;
 	}

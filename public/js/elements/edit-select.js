@@ -8,9 +8,9 @@ export default class EditSelect extends HTMLSelectElement {
 	}
 	connectedCallback() {
 		const art = this.article;
-		if (art) this.options.forEach((opt) => {
+		if (art) for (const opt of this.options) {
 			if (art.classList.contains(opt.value)) opt.selected = true;
-		});
+		}
 		this.defaultValue = this.value;
 		this.addEventListener('change', this);
 	}
@@ -24,9 +24,9 @@ export default class EditSelect extends HTMLSelectElement {
 	}
 	update() {
 		const art = this.article;
-		this.options.forEach((opt) => {
+		for (const opt of this.options) {
 			if (opt.value) art.classList.toggle(opt.value, opt.selected);
-		});
+		}
 	}
 	reset() {
 		this.value = this.defaultValue;

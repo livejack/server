@@ -5,6 +5,9 @@ import { fromScript, toScript } from "./template.js";
 import { LiveJack } from "/node_modules/@livejack/client";
 
 class LiveRead extends Live {
+
+	static #persistProps = ['title', 'backtrack', 'start', 'stop'];
+
 	constructor() {
 		super();
 		this.channels = {};
@@ -25,10 +28,10 @@ class LiveRead extends Live {
 		if (node.nodeName == "TEMPLATE" && node.content) {
 			if (data.page) {
 				// persist minimal page data from build to setup
-				['title', 'backtrack', 'start', 'stop'].forEach(str => {
+				for (const str of LiveRead.#persistProps) {
 					if (data.page[str] != null) node.dataset[str] = data.page[str];
 					else node.removeAttribute('data-' + str);
-				});
+				}
 			}
 			// jump to next node so we can insert before
 			iter.nextNode();
@@ -47,11 +50,11 @@ class LiveRead extends Live {
 			let mode = node.dataset.mode;
 			let parent = node.parentNode;
 			if (!data.page) data.page = {};
-			['title', 'backtrack', 'start', 'stop'].forEach(str => {
+			for (const str of LiveRead.#persistProps) {
 				if (data.page[str] === undefined && node.dataset[str] != null) {
 					data.page[str] = node.dataset[str];
 				}
-			});
+			}
 			if (mode == "replace") {
 				while (node.nextSibling) parent.removeChild(node.nextSibling);
 				parent.appendChild(node.content.cloneNode(true));
@@ -108,9 +111,9 @@ class LiveRead extends Live {
 		const jack = new LiveJack(this.vars);
 		await jack.init();
 		const roots = this.findAll();
-		roots.forEach((root) => this.setupRoot(root.node));
-		Object.keys(this.rooms).forEach((room) => {
-			jack.join(this.vars.base + '/' + room, this.rooms[room], (e) => {
+		for (const root of roots) this.setupRoot(root.node);
+		for (const [room, mtime] of Object.entries(this.rooms)) {
+			jack.join(this.vars.base + '/' + room, mtime, (e) => {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
 				if (!data) {
@@ -119,22 +122,22 @@ class LiveRead extends Live {
 					return;
 				}
 				this.rooms[room] = data.update;
-				roots.forEach(({ node, names }) => {
+				for (const { node, names } of roots) {
 					if (names.includes(room)) {
 						this.merge(node, { [room]: data });
 					}
-				});
+				}
 			});
-		});
+		}
 	}
 
 	setupRoot(root) {
-		root.querySelectorAll('script[type="text/html"]').forEach((script) => {
+		for (const script of root.querySelectorAll('script[type="text/html"]')) {
 			fromScript(script);
-		});
-		root.querySelectorAll('.live-controls').forEach((node) => {
+		}
+		for (const node of root.querySelectorAll('.live-controls')) {
 			node.addEventListener('change', this, false);
-		});
+		}
 	}
 
 	handleEvent(e) {

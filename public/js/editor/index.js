@@ -49,16 +49,16 @@ export class Editor extends EditorView {
 	#content
 	constructor(place, { nodes, marks, list, menu, table, assets = [] }) {
 		const nodeViews = {};
-		if (nodes) Object.keys(nodes).forEach(name => {
-			if (nodes[name].View) nodeViews[name] = (node, view, getPos) => {
-				return new nodes[name].View(node, view, getPos);
+		if (nodes) for (const [name, node] of Object.entries(nodes)) {
+			if (node.View) nodeViews[name] = (child, view, getPos) => {
+				return new node.View(child, view, getPos);
 			};
-		});
-		if (marks) Object.keys(marks).forEach(name => {
-			if (marks[name].View) nodeViews[name] = (node, view) => {
-				return new marks[name].View(node, view);
+		}
+		if (marks) for (const [name, mark] of Object.entries(marks)) {
+			if (mark.View) nodeViews[name] = (node, view) => {
+				return new mark.View(node, view);
 			};
-		});
+		}
 		const baseSchema = new Schema({ nodes: Object.assign({}, nodes), marks });
 		let specNodes = baseSchema.spec.nodes;
 		if (list) specNodes = addListNodes(specNodes, "paragraph+", "block");
@@ -211,7 +211,7 @@ export class Editor extends EditorView {
 			slice.content.descendants((node) => {
 				if (node.marks.length > 0) marks.push(...node.marks);
 			});
-			marks.forEach(mark => tr.addMark(sel.from, sel.to, mark));
+			for (const mark of marks) tr.addMark(sel.from, sel.to, mark);
 			// reselect text
 			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
 		} else {
@@ -221,7 +221,7 @@ export class Editor extends EditorView {
 	}
 	toDOM() {
 		const frag = this.#serializer.serializeFragment(this.state.doc.content);
-		frag.querySelectorAll('x-empty').forEach(node => node.remove());
+		for (const node of frag.querySelectorAll('x-empty')) node.remove();
 		return frag;
 	}
 	initCursor({ left, top }) {

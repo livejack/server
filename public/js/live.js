@@ -82,9 +82,9 @@ export default class Live {
 	init() {
 		const vars = {};
 		const pre = "live";
-		document.querySelectorAll(`meta[name^="${pre}-"]`).forEach((meta) => {
+		for (const meta of document.querySelectorAll(`meta[name^="${pre}-"]`)) {
 			vars[meta.name.substring(pre.length + 1)] = meta.content;
-		});
+		}
 		this.vars = vars;
 		if (!window.customElements.get('live-asset')) {
 			window.customElements.define('live-asset', this.LiveAsset);
@@ -99,10 +99,10 @@ export default class Live {
 	}
 	set(list) {
 		if (!Array.isArray(list)) list = [list];
-		list.forEach(item => {
+		for (const item of list) {
 			if (refs[item.url]) Object.assign(refs[item.url], item);
 			else refs[item.url] = item;
-		});
+		}
 	}
 
 	adopt(Class) {
@@ -119,9 +119,9 @@ export default class Live {
 		this.rooms = {};
 		const roots = document.querySelectorAll('[data-live]').map((node) => {
 			const names = node.dataset.live.split(' ');
-			names.forEach((name) => {
+			for (const name of names) {
 				this.rooms[name] = this.vars[`update-${name}`];
-			});
+			}
 			return { node, names };
 		});
 		return roots;

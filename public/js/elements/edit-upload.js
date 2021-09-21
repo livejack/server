@@ -48,9 +48,7 @@ async function upload(form, track) {
 	});
 
 	function toggleDisable(val) {
-		inputs.forEach(node => {
-			node.disabled = val;
-		});
+		for (const node of inputs) node.disabled = val;
 	}
 
 	xhr.upload.addEventListener("progress", function(e) {

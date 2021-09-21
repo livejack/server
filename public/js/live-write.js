@@ -21,20 +21,20 @@ const assetPlugin = {
 			if (!list || blanked) return list;
 			blanked = true;
 			const obj = {};
-			params.forEach((param) => {
+			for (const param of params) {
 				const [key, val] = param.split('=').map((str) => decodeURIComponent(str));
 				obj[key] = val === "" ? null : val;
-			});
+			}
 			list[place](obj);
 			return list;
 		}],
 		filters: ['array', 'path', (ctx, list, path) => {
 			const uniques = [];
-			list.forEach((item, i) => {
+			for (const item of list) {
 				let data = ctx.expr.get(item, path) || [];
 				if (Array.isArray(data) == false) data = [data];
 				if (data.length > 0 && uniques.indexOf(data[0]) < 0) uniques.push(data[0]);
-			});
+			}
 			uniques.sort((a, b) => a.localeCompare(b));
 			return uniques;
 		}]
