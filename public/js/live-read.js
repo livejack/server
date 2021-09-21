@@ -82,18 +82,16 @@ class LiveRead extends Live {
 		let first = false;
 		await Promise.all(roots.map(async ({ node, names }) => {
 			const datas = {};
-			const mtimes = {};
 			await Promise.all(names.map(async (name) => {
 				if (!this.rooms[name]) {
 					const data = await this.fetch(name);
 					datas[name] = data;
-					mtimes[name] = this.rooms[name] = data.updated_at;
+					this.rooms[name] = data.updated_at;
+					first = true;
 				}
 			}));
-			const keys = Object.keys(mtimes);
-			if (keys.length > 0) {
+			if (first) {
 				this.merge(node, datas);
-				first = true;
 			}
 			return node;
 		}));
