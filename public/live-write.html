@@ -118,10 +118,15 @@
 		</header>
 		<div data-live="assets" id="assets">
 			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="icon">
-				<input type="file" name="file" class="tiled" />
+				<label class="tiled">
+					Importer une image
+					<input type="file" name="file" />
+				</label>
 			</form>
 			<form is="edit-paste" method="post" action="assets">
-				<input placeholder="Coller l'url du presse-papier" class="tiled" />
+				<label>
+					<input class="tiled" placeholder="Coller une URL de vidéo, tweet, ..." />
+				</label>
 			</form>
 			<form is="edit-filter" method="get" data-for="text" data-default="unused">
 				<div class="mode">

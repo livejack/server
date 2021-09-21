@@ -89,6 +89,8 @@ body {
 	background-position:center right;
 	background-repeat:no-repeat;
 	background-size: 17% 60%;
+	position: relative;
+	width: 100%;
 }
 .tiled:first-of-type {
 	border-top-left-radius: var(--border-radius);

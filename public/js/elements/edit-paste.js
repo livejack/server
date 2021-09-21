@@ -8,16 +8,16 @@ export default class EditPaste extends HTMLFormElement {
 		this.setAttribute('is', 'edit-paste');
 	}
 	connectedCallback() {
-		this.addEventListener('click', this);
-		this.addEventListener('mouseenter', this);
-		this.addEventListener('mouseleave', this);
+		this.addEventListener('submit', this);
+		this.addEventListener('paste', this);
+		this.addEventListener('focusin', this);
 		this.#input = this.querySelector('input');
 		this.#anchor = document.createElement("a");
 	}
 	disconnectedCallback() {
-		this.removeEventListener('click', this);
-		this.removeEventListener('mouseenter', this);
-		this.removeEventListener('mouseleave', this);
+		this.removeEventListener('submit', this);
+		this.removeEventListener('paste', this);
+		this.removeEventListener('focusin', this);
 		this.#input = null;
 		this.#anchor = null;
 	}
@@ -31,33 +31,34 @@ export default class EditPaste extends HTMLFormElement {
 			&& /\.[^0-9.]/.test(p.hostname)
 			&& !/(\s|^\.|\.$)/.test(p.hostname);
 	}
-	async paste() {
-		try {
-			const txt = await navigator.clipboard.readText();
-			if (!this.validateUrl(txt) || txt.length > 2048) return;
-			this.#input.value = txt.trim();
-		} catch (err) {
-			// do nothing
-			console.error(err);
-		}
-	}
 	async handleEvent(e) {
-		const node = this.#input;
-		if (node.disabled) return;
-		if (e.type == "mouseenter") {
-			this.paste();
-		} else if (e.type == "mouseleave") {
-			node.value = "";
-		} else if (e.type == "click") {
+		if(e.type == "submit") {
 			e.preventDefault();
-			node.blur();
-			if (node.value.length == 0) await this.paste();
-			if (node.value.length > 0) this.submit();
+			this.#input.blur();
+			try {
+				await this.create(this.#input.value);
+			} catch (e) {
+				this.classList.add('error');
+			}
+		} else if (e.type == "focusin") {
+			this.classList.remove('error');
+			this.#input.value = "";
+		} else if (e.type == "paste") {
+			this.#input.blur();
+			try {
+				await this.create(e.clipboardData.getData('text'));
+			} catch (e) {
+				this.classList.add('error');
+			}
 		}
 	}
 	async create(url) {
 		this.#input.value = url;
-		return this.submit();
+		if (this.validateUrl(url)) {
+			return this.submit();
+		} else {
+			throw new Error("Invalid url")
+		}
 	}
 	async submit() {
 		this.classList.add('loading');
@@ -68,12 +69,6 @@ export default class EditPaste extends HTMLFormElement {
 			this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");
-			setTimeout(() => {
-				if (this.classList.contains('error')) {
-					this.#input.value = "";
-					this.classList.remove("error");
-				}
-			}, 3000);
 		}
 		this.#input.disabled = false;
 		this.classList.remove('loading');
