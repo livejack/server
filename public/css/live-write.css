@@ -105,6 +105,9 @@ body {
 	padding-top: 0.2rem;
 	scroll-snap-align: start;
 	box-shadow: 0px 2px 2px var(--bg);
+	opacity:1;
+	transition-property: opacity;
+	transition-duration: 0.25s;
 }
 
 #control > header > a {
