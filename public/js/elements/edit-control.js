@@ -2,7 +2,6 @@ import req from "../req.js";
 
 export default class EditControl extends HTMLDivElement {
 	#view
-	#assets
 	#icons
 	#loaded
 	constructor() {
@@ -11,7 +10,6 @@ export default class EditControl extends HTMLDivElement {
 		this.mode = null;
 	}
 	connectedCallback() {
-		this.#assets = this.querySelector('#assets');
 		this.#icons = this.querySelector('#icons');
 		this.addEventListener('click', this);
 	}
