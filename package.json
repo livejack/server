@@ -1,6 +1,6 @@
 {
   "name": "@livejack/server",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "dependencies": {
     "@livejack/client": "^1.1.0",
     "@livejack/prosemirror": "^1.2.2",
