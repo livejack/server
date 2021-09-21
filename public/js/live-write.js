@@ -59,4 +59,6 @@ liveRead.matchdom.extend(assetPlugin);
 ready(async () => {
 	await visible();
 	document.querySelector('#assets > [is="edit-filter"]').setMode('unused');
+	document.querySelector('#live').hidden = false;
+	document.querySelector('#control').hidden = false;
 });
