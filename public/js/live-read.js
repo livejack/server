@@ -86,7 +86,8 @@ class LiveRead extends Live {
 				if (!this.rooms[name]) {
 					const data = await this.fetch(name);
 					datas[name] = data;
-					this.rooms[name] = data.updated_at;
+					if (data.updated_at) this.rooms[name] = data.updated_at;
+					else console.info("missing updated_at in", data);
 					first = true;
 				}
 			}));
@@ -119,7 +120,8 @@ class LiveRead extends Live {
 					console.warn("ignoring message without data", e.detail);
 					return;
 				}
-				this.rooms[room] = data.update;
+				if (data.updated_at) this.rooms[room] = data.updated_at;
+				else console.info("missing updated_at in", data);
 				for (const { node, names } of roots) {
 					if (names.includes(room)) {
 						this.merge(node, { [room]: data });
