@@ -48,6 +48,7 @@ exports.POST = (req) => {
 			room: `/${domain}/${key}/assets`,
 			mtime: asset.updated_at,
 			data: {
+				updated_at: asset.updated_at,
 				hrefs: [asset]
 			}
 		});
