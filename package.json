@@ -67,7 +67,9 @@
       },
       {
         "files": [
-          "public/js/**"
+          "public/js/*.js",
+          "public/js/editor/*.js",
+          "public/js/elements/*.js"
         ],
         "env": {
           "browser": true
