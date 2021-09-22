@@ -43,23 +43,21 @@ export default class EditUpload extends HTMLFormElement {
 async function upload(form, track) {
 	const xhr = new XMLHttpRequest();
 	const inputs = form.querySelectorAll('input[type="file"]');
-	const { defer, resolve, reject } = Deferred(function () {
-		toggleDisable(false);
-	});
+	const { defer, resolve, reject } = Deferred(() => toggleDisable(false));
 
 	function toggleDisable(val) {
 		for (const node of inputs) node.disabled = val;
 	}
 
-	xhr.upload.addEventListener("progress", function(e) {
+	xhr.upload.addEventListener("progress", (e) => {
 		if (e.lengthComputable) {
-			var percent = Math.round((e.loaded * 100) / e.total);
+			let percent = Math.round((e.loaded * 100) / e.total);
 			if (percent >= 100) percent = 99; // only load event can reach 100
 			track(percent);
 		}
 	});
 
-	xhr.addEventListener('load', function() {
+	xhr.addEventListener('load', () => {
 		track(100);
 		try {
 			resolve(JSON.parse(xhr.responseText));
@@ -68,7 +66,7 @@ async function upload(form, track) {
 		}
 	});
 
-	xhr.addEventListener('error', function(e) {
+	xhr.addEventListener('error', (e) => {
 		const msg = xhr.statusText || "Connection error";
 		const err = new Error(msg);
 		err.statusCode = xhr.status;
@@ -88,7 +86,7 @@ async function upload(form, track) {
 
 function Deferred(final) {
 	let resolve, reject;
-	const defer = new Promise(function (pass, fail) {
+	const defer = new Promise((pass, fail) => {
 		resolve = function (obj) {
 			final();
 			pass(obj);

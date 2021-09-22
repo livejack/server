@@ -27,11 +27,12 @@ export class MenuItem {
 	// spec](#menu.MenuItemSpec.display), and adds an event handler which
 	// executes the command when the representation is clicked.
 	render(view) {
-		let spec = this.spec;
-		let dom = spec.render ? spec.render(view)
-			: spec.icon ? getIconState(spec.icon)
-				: spec.label ? crel("div", null, translate(view, spec.label))
-					: null;
+		const spec = this.spec;
+		const dom = (() => {
+			if (spec.render) return spec.render(view);
+			if (spec.icon) return getIconState(spec.icon);
+			if (spec.label) return crel("div", null, translate(view, spec.label));
+		})();
 		if (!dom) throw new RangeError("MenuItem without icon or label property");
 		if (spec.title) {
 			const title = (typeof spec.title === "function" ? spec.title(view.state) : spec.title);
@@ -48,7 +49,7 @@ export class MenuItem {
 
 		function update(state, view) {
 			if (spec.select) {
-				let selected = spec.select(state);
+				const selected = spec.select(state);
 				dom.style.display = selected ? "" : "none";
 				if (!selected) return false;
 			}
@@ -58,7 +59,7 @@ export class MenuItem {
 				setClass(dom, prefix + "-disabled", !enabled);
 			}
 			if (spec.active) {
-				let active = enabled && spec.active(state, view) || false;
+				const active = enabled && spec.active(state, view) || false;
 				setClass(dom, prefix + "-active", active);
 			}
 			return true;
@@ -138,7 +139,7 @@ function combineUpdates(updates, nodes) {
 	return (state, view) => {
 		let something = false;
 		for (let i = 0; i < updates.length; i++) {
-			let up = updates[i](state, view);
+			const up = updates[i](state, view);
 			nodes[i].style.display = up ? "" : "none";
 			if (up) something = true;
 		}
@@ -152,13 +153,13 @@ function combineUpdates(updates, nodes) {
 // superfluous separators appear when some of the groups turn out to
 // be empty).
 export function renderGrouped(view, content) {
-	let result = document.createDocumentFragment();
-	let updates = [], separators = [];
+	const result = document.createDocumentFragment();
+	const updates = [], separators = [];
 	for (let i = 0; i < content.length; i++) {
-		let items = content[i], localUpdates = [], localNodes = [];
+		const items = content[i], localUpdates = [], localNodes = [];
 		for (let j = 0; j < items.length; j++) {
-			let { dom, update } = items[j].render(view);
-			let span = crel("span", { class: prefix + "item" }, dom);
+			const { dom, update } = items[j].render(view);
+			const span = crel("span", { class: prefix + "item" }, dom);
 			result.appendChild(span);
 			localNodes.push(span);
 			localUpdates.push(update);
@@ -173,7 +174,7 @@ export function renderGrouped(view, content) {
 	function update(state, view) {
 		let something = false, needSep = false;
 		for (let i = 0; i < updates.length; i++) {
-			let hasContent = updates[i](state, view);
+			const hasContent = updates[i](state, view);
 			if (i) separators[i - 1].style.display = needSep && hasContent ? "" : "none";
 			needSep = hasContent;
 			if (hasContent) something = true;
@@ -286,7 +287,7 @@ export const selectParentNodeItem = new MenuItem({
 
 // :: MenuItem
 // Menu item for the `undo` command.
-export let undoItem = new MenuItem({
+export const undoItem = new MenuItem({
 	title: "Undo last change",
 	run: undo,
 	enable: state => undo(state),
@@ -295,7 +296,7 @@ export let undoItem = new MenuItem({
 
 // :: MenuItem
 // Menu item for the `redo` command.
-export let redoItem = new MenuItem({
+export const redoItem = new MenuItem({
 	title: "Redo last undone change",
 	run: redo,
 	enable: state => redo(state),
@@ -307,7 +308,7 @@ export let redoItem = new MenuItem({
 // Adds `run` and `select` properties to the ones present in
 // `options`. `options.attrs` may be an object or a function.
 export function wrapItem(nodeType, options) {
-	let passedOptions = {
+	const passedOptions = {
 		run(state, dispatch) {
 			// FIXME if (options.attrs instanceof Function) options.attrs(state, attrs => wrapIn(nodeType, attrs)(state))
 			return wrapIn(nodeType, options.attrs)(state, dispatch);
@@ -316,7 +317,7 @@ export function wrapItem(nodeType, options) {
 			return wrapIn(nodeType, options.attrs instanceof Function ? null : options.attrs)(state);
 		}
 	};
-	for (let prop in options) passedOptions[prop] = options[prop];
+	for (const prop in options) passedOptions[prop] = options[prop];
 	return new MenuItem(passedOptions);
 }
 
@@ -326,17 +327,17 @@ export function wrapItem(nodeType, options) {
 // properties. Others must be given in `options`. `options.attrs` may
 // be an object to provide the attributes for the textblock node.
 export function blockTypeItem(nodeType, options) {
-	let command = setBlockType(nodeType, options.attrs);
-	let passedOptions = {
+	const command = setBlockType(nodeType, options.attrs);
+	const passedOptions = {
 		run: command,
 		enable(state) { return command(state); },
 		active(state) {
-			let { $from, to, node } = state.selection;
+			const { $from, to, node } = state.selection;
 			if (node) return node.hasMarkup(nodeType, options.attrs);
 			return to <= $from.end() && $from.parent.hasMarkup(nodeType, options.attrs);
 		}
 	};
-	for (let prop in options) passedOptions[prop] = options[prop];
+	for (const prop in options) passedOptions[prop] = options[prop];
 	return new MenuItem(passedOptions);
 }
 

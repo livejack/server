@@ -2,21 +2,13 @@ import { Plugin } from "/node_modules/@livejack/prosemirror";
 
 import { renderGrouped } from "./menu.js";
 
-export function menuBar(options) {
-	return new Plugin({
-		view(editorView) {
-			return new MenuBarView(editorView, options);
-		}
-	});
-}
-
 class MenuBarView {
 	#hidden
 	constructor(view, options) {
 		this.view = view;
 		this.options = options;
 
-		let { dom, update } = renderGrouped(view, this.options.content);
+		const { dom, update } = renderGrouped(view, this.options.content);
 		this.menu = document.createElement('div');
 		this.menu.className = "prosemirror-menu";
 		this.menu.append(dom);
@@ -76,4 +68,12 @@ class MenuBarView {
 		document.getElementById('live').removeEventListener('scroll', this);
 		this.menu.remove();
 	}
+}
+
+export function menuBar(options) {
+	return new Plugin({
+		view(editorView) {
+			return new MenuBarView(editorView, options);
+		}
+	});
 }

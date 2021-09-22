@@ -57,7 +57,7 @@ export default class EditPaste extends HTMLFormElement {
 		if (this.validateUrl(url)) {
 			return this.submit();
 		} else {
-			throw new Error("Invalid url")
+			throw new Error("Invalid url");
 		}
 	}
 	async submit() {

@@ -47,8 +47,8 @@ class LiveRead extends Live {
 	visitorSetup(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE") {
 			// see live-build visitor
-			let mode = node.dataset.mode;
-			let parent = node.parentNode;
+			const mode = node.dataset.mode;
+			const parent = node.parentNode;
 			if (!data.page) data.page = {};
 			for (const str of LiveRead.#persistProps) {
 				if (data.page[str] === undefined && node.dataset[str] != null) {

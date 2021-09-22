@@ -2,7 +2,7 @@ export function toScript(tpl) {
 	const doc = tpl.ownerDocument;
 	const node = doc.createElement('script');
 	node.setAttribute('type', 'text/html');
-	let helper = doc.createElement('div');
+	const helper = doc.createElement('div');
 	helper.textContent = tpl.content.childNodes.map(child => {
 		if (child.nodeType == Node.TEXT_NODE) return child.nodeValue;
 		else return child.outerHTML;
@@ -16,9 +16,9 @@ export function toScript(tpl) {
 
 export function fromScript(node) {
 	const doc = node.ownerDocument;
-	let helper = doc.createElement('div');
+	const helper = doc.createElement('div');
 	helper.innerHTML = node.textContent;
-	let tpl = doc.createElement('template');
+	const tpl = doc.createElement('template');
 	tpl.innerHTML = helper.textContent;
 	Object.assign(tpl.dataset, node.dataset);
 	node.parentNode.replaceChild(tpl, node);

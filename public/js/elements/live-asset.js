@@ -1,8 +1,8 @@
 const observer = new IntersectionObserver((entries, observer) => {
 	for (const entry of entries) {
-		var target = entry.target;
-		var ratio = entry.intersectionRatio || 0;
-		if (ratio <= 0) return;
+		const target = entry.target;
+		const ratio = entry.intersectionRatio || 0;
+		if (ratio <= 0) continue;
 		observer.unobserve(target);
 		target.reveal();
 	}
@@ -22,7 +22,7 @@ export class LiveAsset extends HTMLElement {
 		const pair = [[21, 9], [2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
 			.find(([a, b]) => {
 				const r = ratio / a * b;
-				return 99 <= r;
+				return r >= 99;
 			});
 		if (!pair) return null;
 		return `${pair[0]}-${pair[1]}`;

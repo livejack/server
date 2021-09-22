@@ -89,7 +89,7 @@ export default class EditAsset extends LiveAsset {
 		this.addEventListener('mouseup', this);
 		this.addEventListener('mousemove', this);
 		this.addEventListener('mouseleave', this);
-		this.#editable = !!this.closest(".live-article");
+		this.#editable = Boolean(this.closest(".live-article"));
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
@@ -189,7 +189,7 @@ export default class EditAsset extends LiveAsset {
 	}
 
 	populate() {
-		let url = this.dataset.url;
+		const url = this.dataset.url;
 		const data = {};
 		if (url) {
 			const asset = this.live.get(url);
@@ -206,10 +206,12 @@ export default class EditAsset extends LiveAsset {
 		if (url) {
 			if (this.#preview) tpl = assetPreviewTemplate;
 			else tpl = assetTemplate;
+		} else if (this.#preview) {
+			tpl = iframeTemplate;
 		} else {
-			if (this.#preview) tpl = iframeTemplate;
-			else tpl = codeTemplate;
+			tpl = codeTemplate;
 		}
+
 		const node = this.live.merge(tpl, data);
 		const frag = this.cloneNode(false);
 		frag.appendChild(node);

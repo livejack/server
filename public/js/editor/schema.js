@@ -105,7 +105,7 @@ export const nodes = {
 		}],
 		toDOM(node) {
 			const data = {};
-			for (let key in node.attrs) {
+			for (const key in node.attrs) {
 				const val = node.attrs[key];
 				if (val) data['data-' + key] = val;
 			}
@@ -138,7 +138,7 @@ export const nodes = {
 				if (attrs.url !== this.node.attrs.url) return;
 				this.node.attrs = attrs;
 				const dom = this.dom;
-				for (let key in attrs) {
+				for (const key in attrs) {
 					const val = attrs[key];
 					if (val == null) delete dom.dataset[key];
 					else dom.dataset[key] = val;
@@ -187,7 +187,7 @@ export const marks = {
 			}
 		}],
 		toDOM(node) {
-			let { href } = node.attrs;
+			const { href } = node.attrs;
 			return ["a", { href }, 0];
 		}
 	},

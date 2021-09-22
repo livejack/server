@@ -11,14 +11,14 @@ function hashPath(path) {
 }
 
 export function getIcon(icon) {
-	let node = document.createElement("div");
+	const node = document.createElement("div");
 	node.className = prefix;
 	if (icon.path) {
-		let name = "pm-icon-" + hashPath(icon.path).toString(16);
+		const name = "pm-icon-" + hashPath(icon.path).toString(16);
 		if (!document.getElementById(name)) buildSVG(name, icon);
-		let svg = node.appendChild(document.createElementNS(SVG, "svg"));
+		const svg = node.appendChild(document.createElementNS(SVG, "svg"));
 		svg.style.width = (icon.width / icon.height) + "em";
-		let use = svg.appendChild(document.createElementNS(SVG, "use"));
+		const use = svg.appendChild(document.createElementNS(SVG, "use"));
 		use.setAttributeNS(XLINK, "href", /([^#]*)/.exec(document.location)[1] + "#" + name);
 	} else if (icon.dom) {
 		node.appendChild(icon.dom.cloneNode(true));
@@ -37,10 +37,10 @@ function buildSVG(name, data) {
 		collection.style.display = "none";
 		document.body.insertBefore(collection, document.body.firstChild);
 	}
-	let sym = document.createElementNS(SVG, "symbol");
+	const sym = document.createElementNS(SVG, "symbol");
 	sym.id = name;
 	sym.setAttribute("viewBox", "0 0 " + data.width + " " + data.height);
-	let path = sym.appendChild(document.createElementNS(SVG, "path"));
+	const path = sym.appendChild(document.createElementNS(SVG, "path"));
 	path.setAttribute("d", data.path);
 	collection.appendChild(sym);
 }

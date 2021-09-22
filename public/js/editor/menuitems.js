@@ -8,11 +8,11 @@ import {
 } from "./menu.js";
 
 function cmdItem(cmd, options) {
-	let passedOptions = {
+	const passedOptions = {
 		label: options.title,
 		run: cmd
 	};
-	for (let prop in options) passedOptions[prop] = options[prop];
+	for (const prop in options) passedOptions[prop] = options[prop];
 	if ((!options.enable || options.enable === true) && !options.select)
 		passedOptions[options.enable ? "enable" : "select"] = state => cmd(state);
 
@@ -20,17 +20,17 @@ function cmdItem(cmd, options) {
 }
 
 function markActive(state, type) {
-	let { from, $from, to, empty } = state.selection;
+	const { from, $from, to, empty } = state.selection;
 	if (empty) return type.isInSet(state.storedMarks || $from.marks());
 	else return state.doc.rangeHasMark(from, to, type);
 }
 
 function markItem(markType, options) {
-	let passedOptions = {
+	const passedOptions = {
 		active(state) { return markActive(state, markType); },
 		enable: true
 	};
-	for (let prop in options) passedOptions[prop] = options[prop];
+	for (const prop in options) passedOptions[prop] = options[prop];
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
@@ -52,7 +52,7 @@ function linkItem(markType) {
 			const sel = state.selection;
 			if (sel.empty) return false;
 			let can = false;
-			state.doc.nodesBetween(sel.from, sel.to, function (node, pos) {
+			state.doc.nodesBetween(sel.from, sel.to, (node, pos) => {
 				if (can) return false;
 				can = node.inlineContent && node.type.allowsMarkType(markType);
 			});
@@ -71,7 +71,8 @@ function linkItem(markType) {
 }
 
 export function buildMenuItems(schema, promptUrl) {
-	let r = {}, type;
+	const r = {};
+	let type;
 	if ((type = schema.marks.link)) {
 		r.toggleLink = linkItem(type, promptUrl);
 	}
@@ -113,7 +114,7 @@ export function buildMenuItems(schema, promptUrl) {
 		});
 	}
 
-	let cut = arr => arr.filter(x => x);
+	const cut = arr => arr.filter(x => x);
 	r.inlineMenu = [cut([r.toggleLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
 	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
 	r.fullMenu = r.inlineMenu.concat(r.blockMenu);

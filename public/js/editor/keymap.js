@@ -20,10 +20,11 @@ const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : f
 // argument, which maps key names (say `"Mod-B"` to either `false`, to
 // remove the binding, or a new key name string.
 export function buildKeymap(schema, mapKeys) {
-	let keys = {}, type;
+	const keys = {};
+	let type;
 	function bind(key, cmd) {
 		if (mapKeys) {
-			let mapped = mapKeys[key];
+			const mapped = mapKeys[key];
 			if (mapped === false) return;
 			if (mapped) key = mapped;
 		}
@@ -51,7 +52,7 @@ export function buildKeymap(schema, mapKeys) {
 	}
 
 	if ((type = schema.nodes.hard_break)) {
-		let br = type, cmd = chainCommands(exitCode, (state, dispatch) => {
+		const br = type, cmd = chainCommands(exitCode, (state, dispatch) => {
 			dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
 			return true;
 		});

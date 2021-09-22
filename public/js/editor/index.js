@@ -21,7 +21,7 @@ import { buildInputRules } from "./inputrules.js";
 import nodeViewSelect from "./nodeviewselect.js";
 
 function getPlugins({ schema, menu, table }) {
-	let plugins = [
+	const plugins = [
 		buildInputRules(schema),
 		keymap(buildKeymap(schema)),
 		keymap(baseKeymap),
@@ -127,7 +127,7 @@ export class Editor extends EditorView {
 		const data = { html: "" };
 		const copy = document.createDocumentFragment();
 
-		for (let child of frag.childNodes) {
+		for (const child of frag.childNodes) {
 			if (child.nodeType == Node.TEXT_NODE && child.nodeValue.trim().length == 0) {
 				continue;
 			} else if (child.nodeType != Node.ELEMENT_NODE) {
@@ -228,7 +228,7 @@ export class Editor extends EditorView {
 		if (!left || !top) return;
 		const tr = this.state.tr;
 		const pos = this.posAtCoords({ left, top });
-		let sel = Selection.near(tr.doc.resolve(pos ? pos.pos : 0));
+		const sel = Selection.near(tr.doc.resolve(pos ? pos.pos : 0));
 		this.dispatch(tr.setSelection(sel));
 	}
 }
