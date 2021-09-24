@@ -9,6 +9,7 @@ pg.types.setTypeParser(
 
 const objection = require('objection');
 objection.Models = {};
+
 const {
 	// DBError,
 	ValidationError,
@@ -18,11 +19,11 @@ const {
 	NotNullViolationError,
 	ForeignKeyViolationError,
 	CheckViolationError,
-	DataError,
-	Model
+	DataError
 } = objection;
+
+const BaseModel = require('./base');
 const Knex = require('knex');
-const AjvKeywords = require('ajv-keywords');
 const Path = require('path');
 
 module.exports = function (app) {
@@ -64,71 +65,4 @@ module.exports = function (app) {
 	};
 	return objection;
 };
-
-class BaseQueryBuilder extends Model.QueryBuilder {
-	sortBy(list) {
-		if (!Array.isArray(list)) list = [list];
-		list.forEach(str => {
-			let dir = 'asc';
-			if (str.startsWith('-')) {
-				str = str.slice(1);
-				dir = 'desc';
-			}
-			this.orderBy(str, dir);
-		});
-		return this;
-	}
-	select(...args) {
-		if (args.length == 0) {
-			const model = this.modelClass();
-			const table = this.tableRefFor(model);
-			args = model.columns.map(col => `${table}.${col}`);
-		}
-		return super.select(...args);
-	}
-	limit(num) {
-		if (num == Infinity || num == null) return this;
-		else return super.limit(num);
-	}
-}
-
-class BaseModel extends Model {
-	static get QueryBuilder() {
-		return BaseQueryBuilder;
-	}
-	static get columns() {
-		return Object.keys(this.jsonSchema.properties);
-	}
-	static get modifiers() {
-		return {
-			select(builder) {
-				builder.select();
-			},
-			order(builder) {
-				builder.orderBy('created_at');
-			}
-		};
-	}
-	static createValidator() {
-		return new objection.AjvValidator({
-			onCreateAjv: (ajv) => {
-				AjvKeywords(ajv);
-			},
-			options: {
-				$data: true,
-				allErrors: true,
-				validateSchema: false,
-				ownProperties: true,
-				coerceTypes: 'array',
-				removeAdditional: "all",
-				nullable: true,
-				formats: {
-					singleline: /^[^\n\r]*$/,
-					pathname: /^(\/[\w-.]*)+$/,
-					id: /^[\w-]+$/
-				}
-			}
-		});
-	}
-}
 

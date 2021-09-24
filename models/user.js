@@ -29,7 +29,7 @@ class User extends BaseModel {
 				return a.token === b.token;
 			}
 		});
-		for (let user of diff.put) {
+		for (const user of diff.put) {
 			await this.query().findOne({
 				domain: user.domain
 			}).throwIfNotFound().patch(user);
