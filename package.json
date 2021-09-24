@@ -12,7 +12,7 @@
     "diff-dom": "^4.2.2",
     "diff-list": "^1.0.3",
     "express": "^4.17.1",
-    "express-dom": "^5.13.4",
+    "express-dom": "^5.14.3",
     "express-extension-to-accept": "^0.0.2",
     "express-urlrewrite": "^1.4.0",
     "flatpickr": "^4.6.9",
