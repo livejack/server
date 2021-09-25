@@ -44,7 +44,7 @@ div.toolbar button[name="del"] {
 	cursor:default;
 }
 
-.live-message:not([id]) > .toolbar [name="del"] {
+.live-message:not([data-id]) > .toolbar [name="del"] {
 	display:none;
 }
 
