@@ -204,6 +204,8 @@ config.live.version = require('@livejack/client/package.json').version;
 		if (typeof code != 'number' || code == 500) {
 			console.error(err); // eslint-disable-line
 			code = 500;
+		} else if (process.env.NODE_ENV != "production") {
+			console.error(err);
 		}
 		res.status(code).send(err.toString());
 	});
