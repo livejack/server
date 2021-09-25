@@ -124,3 +124,9 @@
 .ProseMirror x-empty {
 	display: block;
 }
+
+.live-message:not([data-id]) > [title][is]:empty::before {
+	content: attr(title);
+	font-style: italic;
+	opacity: 0.5;
+}
