@@ -364,6 +364,7 @@ live-asset > img {
 		line-height: 1.8em;
 		position: relative;
 		margin-top: -1px;
+		margin-bottom: -1px;
 	}
 
 	.live-messages .live-title {
