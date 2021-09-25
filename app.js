@@ -35,7 +35,7 @@ config.live.version = require('@livejack/client/package.json').version;
 (async () => {
 
 	process.title = config.name + '-' + config.version;
-	process.on('uncaughtException', function (err) {
+	process.on('uncaughtException', (err) => {
 		console.error(err); // eslint-disable-line
 		process.exit(1);
 	});
@@ -122,7 +122,7 @@ config.live.version = require('@livejack/client/package.json').version;
 		next();
 	});
 
-	app.get('/:domain/:key', function (req, res, next) {
+	app.get('/:domain/:key', (req, res, next) => {
 		if (req.query.write !== undefined || req.legacyHost) {
 			delete req.query.write;
 			return res.redirect(URL.format({
@@ -144,15 +144,15 @@ config.live.version = require('@livejack/client/package.json').version;
 	app.get('/:domain/:key/synchro', domainLock, resources.synchro.GET);
 
 	// this route needs its own extension
-	app.get('/:domain/:key/messages\.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
+	app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
 
 	// below all routes can be .json or .html or nothing
 	app.use(require('express-extension-to-accept')(['html', 'json']));
 
-	app.get('/:domain/:key', function (req, res, next) {
-		var mw;
+	app.get('/:domain/:key', (req, res, next) => {
+		let mw;
 		if (req.query.maxresults != undefined) {
-			var indir = '/:domain/:key/page?limit=:maxresults';
+			let indir = '/:domain/:key/page?limit=:maxresults';
 			if (!req.query.text || req.query.text == "false" || req.query.text == "0") {
 				indir += '&omit=text';
 			}
@@ -194,7 +194,7 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	app.get('/:domain', domainLock, tag.domain, prerender('domain'));
 
-	app.use(function (err, req, res, next) {
+	app.use((err, req, res, next) => {
 		let code;
 		if (err instanceof HttpError) {
 			code = err.status;
