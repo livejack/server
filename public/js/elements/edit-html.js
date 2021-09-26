@@ -47,7 +47,9 @@ class EditHtml {
 			if (!url) continue;
 			const asset = this.live.get(url);
 			if (!asset) continue;
-			hrefs.push({ id: asset.id });
+			if (!hrefs.find((obj) => obj.id == asset.id)) {
+				hrefs.push({ id: asset.id });
+			}
 		}
 		this.article.hrefs = hrefs;
 		const val = parent.innerHTML.trim();
