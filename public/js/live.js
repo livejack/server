@@ -62,8 +62,9 @@ const filters = {
 
 const refs = {};
 
-export default class Live {
+export default class Live extends EventTarget {
 	constructor() {
+		super();
 		this.hrefs = {};
 		this.LiveAsset = LiveAsset;
 		this.matchdom = new Matchdom({

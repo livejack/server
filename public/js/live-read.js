@@ -5,7 +5,7 @@ import { fromScript, toScript } from "./template.js";
 import { LiveJack } from "/node_modules/@livejack/client";
 
 class LiveRead extends Live {
-
+	#lastError
 	static #persistProps = ['title', 'backtrack', 'start', 'stop'];
 
 	constructor() {
@@ -105,10 +105,30 @@ class LiveRead extends Live {
 		}
 	}
 
+	#redispatch(type) {
+		this.dispatchEvent(new CustomEvent("io", {
+			view: window,
+			bubbles: true,
+			cancelable: true,
+			detail: type
+		}));
+	}
+
 	async setup() {
 		this.matchdom.visitor = this.visitorSetup;
 		const jack = new LiveJack(this.vars);
 		await jack.init();
+		jack.io.on('disconnect', (e) => {
+			this.#lastError = e;
+			this.#redispatch('disconnect');
+		});
+		jack.io.on('connect', (e) => {
+			if (this.#lastError) {
+				this.#redispatch('reconnect');
+				this.#lastError = null;
+			}
+		});
+
 		const roots = this.findAll();
 		for (const root of roots) this.setupRoot(root.node);
 		for (const [room, mtime] of Object.entries(this.rooms)) {

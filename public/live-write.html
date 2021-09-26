@@ -161,15 +161,16 @@
 		</div>
 	</div>
 	<div is="edit-error" class="notification"
-		data-transport="Erreur de connexion"
-		data-join="Connecté"
+		data-disconnect="Erreur de connexion"
+		data-reconnect="Reconnecté"
 		data-server="Erreur serveur %d"
-		data-client="Echec de la requête"
-		data-auth="Permission refusée - rouvrir la page depuis le BO site"
-		data-unknown="Erreur - veuillez recharger la page">
+		data-notfound="Ressource introuvable"
+		data-conflict="Conflit"
+		data-auth="Authentification périmée"
+		data-other="Erreur %d - veuillez recharger la page">
 		<div class="content">
 			<template data-mode="replace">
-				<p class="message">[error.message]</p>
+				<p class="message">[error]</p>
 			</template>
 		</div>
 		<div class="icon">✕</div>
