@@ -1,46 +1,33 @@
 /* notifications d'erreurs */
 .notification {
-	display:none;
 	position:fixed;
 	bottom:0;
 	right:30%;
-	background-color:#D60;
-	border-radius:3px;
-	padding-right:16px;
-	padding-left:40px;
+	background-color:#E50;
+	border-radius: 0.4em;
+	padding-right: 2em;
+	padding-left: 1em;
 	z-index:99;
-	color:white;
+	color:black;
 	min-width:20%;
 	max-width:65%;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
-.notification.closed,.notification.opened {
-	display:block;
+.notification[hidden] {
+	display:none;
 }
 .notification .content {
-	font-size:14px;
-	max-height:40px;
-	transition:max-height 1s ease;
-}
-.notification.opened .content {
-	max-height:800px;
+	font-size:1rem;
 }
 .notification .content > p {
 	margin:0;
-	padding:12px 0;
+	padding:1em 0;
 }
 .notification .icon {
-	font-size:24px;
+	font-size: 1.4rem;
 	position:absolute;
-	left:8px;
-	top:8px;
+	right: 0.5em;
+	top: 0.8rem;
 	cursor:pointer;
-}
-.notification .icon.close {
-	display:none;
-}
-.notification.opened .icon.close {
-	display:block;
-}
-.notification.opened .icon {
-	display:none;
 }

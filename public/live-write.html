@@ -160,22 +160,19 @@
 			</template>
 		</div>
 	</div>
-	<div class="notification" id="errors"
+	<div is="edit-error" class="notification"
 		data-transport="Erreur de connexion"
 		data-join="Connecté"
 		data-server="Erreur serveur %d"
 		data-client="Echec de la requête"
 		data-auth="Permission refusée - rouvrir la page depuis le BO site"
 		data-unknown="Erreur - veuillez recharger la page">
-		<div class="btn icon">
-			<i class=" btn fas fa-warning-sign"></i>
-		</div>
-		<div class="btn icon close">
-			<i class="btn fas fa-remove"></i>
-		</div>
 		<div class="content">
-			<p class="message">[errors|reverse:|repeat:*|.message]</p>
+			<template data-mode="replace">
+				<p class="message">[error.message]</p>
+			</template>
 		</div>
+		<div class="icon">✕</div>
 	</div>
 </body>
 

@@ -1,3 +1,4 @@
+import EditError from './edit-error.js';
 import EditFilter from './edit-filter.js';
 import EditControl from './edit-control.js';
 import EditPaste from './edit-paste.js';
@@ -12,12 +13,14 @@ import EditAsset from './edit-asset.js';
 export default function register(live) {
 	const ce = window.customElements;
 	live.LiveAsset = EditAsset;
+	live.adopt(EditError);
 	live.adopt(EditText);
 	live.adopt(EditFilter);
 	live.adopt(EditAsset);
 	live.adopt(EditTime);
 	live.adopt(EditControl);
 
+	ce.define('edit-error', EditError, { extends: 'div' });
 	ce.define('edit-article', EditArticle, { extends: 'article' });
 	ce.define('edit-time', EditTime, { extends: 'time' });
 	ce.define('edit-title', EditTitle, { extends: 'h2' });
