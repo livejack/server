@@ -20,7 +20,7 @@ exports.up = async function (knex) {
 			.onDelete('CASCADE');
 	});
 	await knex.schema.createTable('messages_hrefs', (table) => {
-		table.primary('message_id', 'href_id');
+		table.primary(['message_id', 'href_id']);
 		table.integer('message_id')
 			.notNullable().index().unsigned()
 			.references('id').inTable('messages')
