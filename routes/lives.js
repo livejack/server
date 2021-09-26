@@ -2,7 +2,7 @@ const {Models} = require('objection');
 
 exports.GET = async (req, res, next) => {
 	let domains = req.query.domains || [];
-	if (typeof domains == "string") domains = domains.split(',').map(function(val) {
+	if (typeof domains == "string") domains = domains.split(',').map((val) => {
 		return val.trim();
 	});
 	const now = new Date();
@@ -18,7 +18,7 @@ exports.GET = async (req, res, next) => {
 		})
 		.whereRaw('length(title) > 0');
 	if (domains.length) pages.whereIn('domain', domains);
-	const items = pages.map(function(page) {
+	const items = pages.map((page) => {
 		// keep legacy API
 		page.last = page.updated_at;
 		delete page.updated_at;

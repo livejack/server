@@ -42,9 +42,9 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 
 	let nassets = [];
 	if (obj.categorie) {
-		obj.categorie.forEach(function(categorie) {
-			var titre = categorie.titre ? categorie.titre.toString() : null;
-			if (categorie.media) categorie.media.forEach(function (asset) {
+		obj.categorie.forEach((categorie) => {
+			const titre = categorie.titre ? categorie.titre.toString() : null;
+			if (categorie.media) categorie.media.forEach((asset) => {
 				if (titre && !asset.tags) asset.tags = [titre];
 				nassets.push(asset);
 			});
@@ -55,7 +55,7 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 		return;
 	}
 
-	nassets = nassets.map(function (item) {
+	nassets = nassets.map((item) => {
 		const asset = {
 			url: item.url,
 			origin: 'external',
@@ -74,18 +74,18 @@ exports.syncAssets = async (req, remoteUrl, type) => {
 	const diff = DiffList(assets, nassets, {
 		key: 'url',
 		equal: function(a, b) {
-			var isEqual = a.meta.title == b.meta.title && a.meta.author == b.meta.author && a.type == b.type;
+			const isEqual = a.meta.title == b.meta.title && a.meta.author == b.meta.author && a.type == b.type;
 			b.id = a.id; // we compared on url, but id is missing
 			return isEqual;
 		}
 	});
-	for (let asset of diff.put) {
+	for (const asset of diff.put) {
 		await page.$relatedQuery('hrefs').patchById(asset.id, asset);
 	}
-	for (let asset of diff.post) {
+	for (const asset of diff.post) {
 		await page.$relatedQuery('hrefs').insert(asset);
 	}
-	for (let asset of diff.del) {
+	for (const asset of diff.del) {
 		await page.$relatedQuery('hrefs').deleteById(asset.id);
 	}
 };

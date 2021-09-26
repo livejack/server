@@ -6,7 +6,7 @@ const path = require('path');
 	const modules = {};
 
 	files.forEach((file) => {
-		var filepath = path.join(dirname, file);
+		const filepath = path.join(dirname, file);
 		if (fs.statSync(filepath).isDirectory()) {
 			modules[file] = requireAll(filepath);
 		} else {
