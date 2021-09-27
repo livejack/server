@@ -121,20 +121,6 @@ config.live.version = require('@livejack/client/package.json').version;
 		next();
 	});
 
-	app.get('/:domain/:key', (req, res, next) => {
-		if (req.query.write !== undefined || req.legacyHost) {
-			delete req.query.write;
-			return res.redirect(URL.format({
-				protocol: config.site.protocol,
-				host: config.site.host,
-				pathname: req.path + '/write',
-				query: req.query
-			}));
-		} else {
-			next('route');
-		}
-	});
-
 	// envoi des notifications de mise à jour vers BO-site qui en retour appelle Front-Live
 	app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
 	// appelé par BO site pour synchroniser les pictos
