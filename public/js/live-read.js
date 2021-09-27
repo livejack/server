@@ -1,15 +1,37 @@
-import Live from './live.js';
 import req from "./req.js";
 import { ready, visible } from './doc-events.js';
 import { fromScript, toScript } from "./template.js";
 import { LiveJack } from "/node_modules/@livejack/client";
 
-class LiveRead extends Live {
-	#lastError
+import { Matchdom } from "/node_modules/matchdom";
+import * as DatePlugin from "./date-plugin.js";
+import "./array-like.js";
+import '/node_modules/@ungap/custom-elements';
+
+import { LiveAsset, LiveIcon } from "./elements/live-asset.js";
+
+import filters from "./filters.js";
+
+const refs = {};
+
+class LiveRead extends LiveJack {
 	static #persistProps = ['title', 'backtrack', 'start', 'stop'];
 
 	constructor() {
 		super();
+		this.hrefs = {};
+		this.matchdom = new Matchdom({
+			hooks: {
+				beforeEach: (val) => {
+					if (val && val.hrefs && Array.isArray(val.hrefs)) {
+						// FIXME those should just go to live-article (the parent merging msg)
+						this.set(val.hrefs);
+					}
+				}
+			}
+		}).extend([DatePlugin, { filters }]);
+		this.adopt(LiveAsset);
+
 		this.channels = {};
 		this.matchdom.extend({
 			filters: {
@@ -66,6 +88,55 @@ class LiveRead extends Live {
 			return true;
 		}
 	}
+
+	get(url) {
+		return refs[url];
+	}
+	set(list) {
+		if (!Array.isArray(list)) list = [list];
+		for (const item of list) {
+			if (refs[item.url]) Object.assign(refs[item.url], item);
+			else refs[item.url] = item;
+		}
+	}
+
+	adopt(Class) {
+		if (Object.getOwnPropertyDescriptor(Class.prototype, "live")) return;
+		Object.defineProperty(Class.prototype, "live", {
+			value: this,
+			writable: false,
+			enumerable: false,
+			configurable: false
+		});
+	}
+
+	findAll() {
+		const vars = {};
+		const pre = "live";
+		for (const meta of document.querySelectorAll(`meta[name^="${pre}-"]`)) {
+			vars[meta.name.substring(pre.length + 1)] = meta.content;
+		}
+		this.vars = vars;
+		this.rooms = {};
+		const roots = document.querySelectorAll('[data-live]').map((node) => {
+			const names = node.dataset.live.split(' ');
+			for (const name of names) {
+				const mtime = this.vars[`update-${name}`];
+				if (mtime) this.rooms[name] = mtime;
+			}
+			return { node, names };
+		});
+		return roots;
+	}
+
+	merge(node, data = {}) {
+		if (data.assets && data.assets.hrefs) {
+			// we need these before the ones in each message
+			this.set(data.assets.hrefs);
+		}
+		return this.matchdom.merge(node, data, {live: this});
+	}
+
 	async fetch(name) {
 		let chan = this.channels[name];
 		if (!chan) {
@@ -105,34 +176,16 @@ class LiveRead extends Live {
 		}
 	}
 
-	#redispatch(type) {
-		this.dispatchEvent(new CustomEvent("io", {
-			view: window,
-			bubbles: true,
-			cancelable: true,
-			detail: type
-		}));
-	}
-
 	async setup() {
 		this.matchdom.visitor = this.visitorSetup;
-		const jack = new LiveJack(this.vars);
-		await jack.init();
-		jack.io.on('disconnect', (e) => {
-			this.#lastError = e;
-			this.#redispatch('disconnect');
-		});
-		jack.io.on('connect', (e) => {
-			if (this.#lastError) {
-				this.#redispatch('reconnect');
-				this.#lastError = null;
-			}
-		});
+
+		await this.init(this.vars);
 
 		const roots = this.findAll();
 		for (const root of roots) this.setupRoot(root.node);
+
 		for (const [room, mtime] of Object.entries(this.rooms)) {
-			jack.join(this.vars.base + '/' + room, mtime, (e) => {
+			this.join(this.vars.base + '/' + room, mtime, (e) => {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
 				if (!data) {
@@ -172,14 +225,20 @@ class LiveRead extends Live {
 }
 
 const live = new LiveRead();
+live.LiveAsset = LiveAsset;
 
 export default live;
 
 ready(async () => {
-	live.init();
+	if (!window.customElements.get('live-asset')) {
+		window.customElements.define('live-asset', live.LiveAsset);
+	}
+	if (!window.customElements.get('live-icon')) {
+		window.customElements.define('live-icon', LiveIcon);
+	}
 	await live.build();
 	await visible();
-	await live.setup();
+	live.setup();
 }).catch((err) => {
 	console.error(err); // eslint-disable-line
 });

@@ -6,12 +6,12 @@ export default class EditError extends HTMLDivElement {
 	}
 	connectedCallback() {
 		this.addEventListener('click', this);
-		this.live?.addEventListener('io', this);
+		this.live?.addEventListener('ioerror', this);
 		window.addEventListener('unhandledrejection', this);
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
-		this.live?.removeEventListener('io', this);
+		this.live?.removeEventListener('ioerror', this);
 		window.removeEventListener('unhandledrejection', this);
 	}
 	handleEvent(e) {
@@ -35,9 +35,13 @@ export default class EditError extends HTMLDivElement {
 				}
 			}
 			this.live.matchdom.merge(this, { error });
-		} else if (e.type == "io") {
-			this.live.matchdom.merge(this, { error: this.dataset[e.detail] });
-			if (e.detail == "reconnect") this.#autohide();
+		} else if (e.type == "ioerror") {
+			this.hidden = false;
+			const msg = e.detail?.message;
+			if (msg) {
+				this.live.matchdom.merge(this, { error: this.dataset[msg] });
+				if (msg == "reconnect") this.#autohide();
+			}
 		}
 	}
 	#autohide(seconds = 5000) {
