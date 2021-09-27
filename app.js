@@ -3,7 +3,6 @@ process.chdir(__dirname);
 const cors = require('cors');
 const morgan = require('morgan');
 const rewrite = require('express-urlrewrite');
-const URL = require('url');
 const Path = require('path');
 const serveStatic = require('serve-static');
 const got = require('got');
@@ -41,8 +40,8 @@ config.live.version = require('@livejack/client/package.json').version;
 	});
 
 	app.set('statics', Path.resolve('public'));
-
-	config.site = URL.parse(config.site);
+	if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
+	config.site = new URL(config.site);
 	config.site.port = config.site.port || 80;
 	config.listen = config.listen || config.site.port;
 
