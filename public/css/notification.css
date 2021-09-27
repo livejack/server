@@ -1,17 +1,17 @@
 .notification {
-	position:fixed;
+	position: absolute;
 	bottom:0;
-	right:30%;
 	background-color:#E50;
-	border-radius: 0.4em;
 	padding-right: 2em;
 	padding-left: 1em;
 	z-index:99;
 	color:black;
-	min-width:20%;
-	max-width:65%;
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
+	width: 100%;
+	left: 0;
+}
+.notification.ok {
+	background-color: darkgreen;
+	color:white;
 }
 .notification[hidden] {
 	display:none;

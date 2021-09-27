@@ -90,6 +90,22 @@
 		</div>
 	</div>
 	<div id="control" hidden is="edit-control">
+		<div is="edit-error" class="notification"
+			data-disconnect="Live déconnecté"
+			data-reconnect="Live reconnecté"
+			data-offline="Live indisponible"
+			data-server="Erreur serveur %d"
+			data-notfound="Ressource introuvable"
+			data-conflict="Conflit"
+			data-auth="Authentification périmée"
+			data-other="Erreur %d - veuillez recharger la page">
+			<div class="content">
+				<template data-mode="replace">
+					<p class="message">[error]</p>
+				</template>
+			</div>
+			<div class="icon">✕</div>
+		</div>
 		<header data-live="page">
 			<template data-mode="replace">
 				<a href="[page.backtrack]" target="_blank" class="tiled" title="Voir le site[page.backtrack|ifAt:]">
@@ -159,22 +175,6 @@
 				<live-icon class="hide" data-url="[hrefs|repeat:*:asset|.url]" />
 			</template>
 		</div>
-	</div>
-	<div is="edit-error" class="notification"
-		data-disconnect="Erreur de connexion"
-		data-reconnect="Reconnecté"
-		data-offline="Service interrompu"
-		data-server="Erreur serveur %d"
-		data-notfound="Ressource introuvable"
-		data-conflict="Conflit"
-		data-auth="Authentification périmée"
-		data-other="Erreur %d - veuillez recharger la page">
-		<div class="content">
-			<template data-mode="replace">
-				<p class="message">[error]</p>
-			</template>
-		</div>
-		<div class="icon">✕</div>
 	</div>
 </body>
 

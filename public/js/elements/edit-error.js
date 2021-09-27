@@ -40,7 +40,10 @@ export default class EditError extends HTMLDivElement {
 			const msg = e.detail?.message;
 			if (msg) {
 				this.live.matchdom.merge(this, { error: this.dataset[msg] });
-				if (msg == "reconnect") this.#autohide();
+				if (msg == "reconnect") {
+					this.classList.add('ok');
+					this.#autohide();
+				}
 			}
 		}
 	}
@@ -50,6 +53,7 @@ export default class EditError extends HTMLDivElement {
 		}
 		this.#tob = window.setTimeout(() => {
 			this.hidden = true;
+			this.classList.remove('ok');
 		}, 5000);
 	}
 }
