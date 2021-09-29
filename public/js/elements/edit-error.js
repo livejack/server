@@ -7,20 +7,23 @@ export default class EditError extends HTMLDivElement {
 	connectedCallback() {
 		this.addEventListener('click', this);
 		this.live?.addEventListener('ioerror', this);
+		window.addEventListener('error', this);
 		window.addEventListener('unhandledrejection', this);
+		this.hidden = true;
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
 		this.live?.removeEventListener('ioerror', this);
+		window.removeEventListener('error', this);
 		window.removeEventListener('unhandledrejection', this);
 	}
 	handleEvent(e) {
 		if (e.type == "click") {
 			this.hidden = true;
-		} else if (e.type == "unhandledrejection") {
+		} else if (e.type == "unhandledrejection" || e.type == "error") {
 			this.hidden = false;
-			let error = e.reason.message;
-			const code = Number.parseInt(e.reason);
+			let error = e.reason?.message ?? e.message;
+			const code = Number.parseInt(error);
 			if (Number.isInteger(code)) {
 				if (code >= 500 && code < 600) {
 					error = this.dataset.server.replace('%d', code);
