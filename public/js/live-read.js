@@ -189,7 +189,6 @@ class LiveRead extends LiveJack {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
 				if (!data) {
-					// eslint-disable-next-line no-console
 					console.warn("ignoring message without data", e.detail);
 					return;
 				}
@@ -240,5 +239,5 @@ ready(async () => {
 	await visible();
 	live.setup();
 }).catch((err) => {
-	console.error(err); // eslint-disable-line
+	console.error(err);
 });

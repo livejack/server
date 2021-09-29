@@ -46,7 +46,6 @@ export default class EditFilter extends HTMLFormElement {
 				const url = node.dataset.url;
 				const item = this.live.get(url);
 				if (!item) {
-					// eslint-disable-next-line no-console
 					console.error("Missing item", url);
 				} else {
 					let words = item.meta.keywords || [];

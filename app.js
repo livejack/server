@@ -36,7 +36,7 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	process.title = config.name + '-' + config.version;
 	process.on('uncaughtException', (err) => {
-		console.error(err); // eslint-disable-line
+		console.error(err);
 		process.exit(1);
 	});
 
@@ -188,7 +188,7 @@ config.live.version = require('@livejack/client/package.json').version;
 			code = objection.errorStatus(err);
 		}
 		if (typeof code != 'number' || code == 500) {
-			console.error(err); // eslint-disable-line
+			console.error(err);
 			code = 500;
 		} else if (process.env.NODE_ENV != "production") {
 			console.error(err);

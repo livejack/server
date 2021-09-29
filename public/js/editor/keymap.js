@@ -11,7 +11,6 @@ import {
 	undoInputRule
 } from "/node_modules/@livejack/prosemirror";
 
-// eslint-disable-next-line no-undef
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
 // :: (Schema, ?Object) → Object
