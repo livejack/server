@@ -50,10 +50,22 @@ form[is="edit-upload"] > label::after {
 	top: 50%;
 	margin-top: -1em;
 }
+#control > #assets > .helper {
+	display:none;
+}
+#control[data-mode="link"] > #assets > .helper {
+	display: block;
+	position:absolute;
+	z-index: 1;
+	text-align: center;
+	left: 0.2rem;
+	width: calc(100% - 0.4rem);
+	padding: 0.5em 0.5rem;
+	margin-top: 0.3em;
+}
 #control[data-mode="link"] form[is="edit-upload"] {
-	opacity: 0.2;
+	opacity: 0;
 	pointer-events: none;
-	filter: blur(2px);
 }
 form[is="edit-upload"] > label {
 	cursor: pointer;

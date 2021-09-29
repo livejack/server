@@ -296,14 +296,6 @@ live-asset > .meta > p > em {
 	background-color: var(--tilebg);
 }
 
-
-#control[data-mode="link"] > header {
-	opacity: 0.2;
-	pointer-events: none;
-	position: relative;
-	filter: blur(2px);
-}
-
 #control[data-mode="link"] > [is="edit-upload"] {
 	opacity: 0;
 	pointer-events: none;
