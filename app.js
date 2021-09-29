@@ -43,8 +43,6 @@ config.live.version = require('@livejack/client/package.json').version;
 	app.set('statics', Path.resolve('public'));
 	if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
 	config.site = new URL(config.site);
-	config.site.port = config.site.port || 80;
-	config.listen = config.listen || config.site.port;
 
 	global.livejack = new LiveJack({
 		servers: config.live.servers.split(' '),
