@@ -12,7 +12,7 @@ const LiveJack = require('@livejack/client/node');
 
 const Upcache = require('upcache');
 const tag = {
-	app: tag.app,
+	app: Upcache.tag('app'),
 	page: Upcache.tag('app', 'data-:domain-:key'),
 	domain: Upcache.tag('app', 'data-:domain'),
 	all: Upcache.tag('app', 'data')
