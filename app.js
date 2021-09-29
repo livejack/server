@@ -12,6 +12,7 @@ const LiveJack = require('@livejack/client/node');
 
 const Upcache = require('upcache');
 const tag = {
+	app: tag.app,
 	page: Upcache.tag('app', 'data-:domain-:key'),
 	domain: Upcache.tag('app', 'data-:domain'),
 	all: Upcache.tag('app', 'data')
@@ -78,7 +79,7 @@ config.live.version = require('@livejack/client/package.json').version;
 		return 204;
 	});
 
-	app.post('/.well-known/upcache', Upcache.tag('app'), (req) => {
+	app.post('/.well-known/upcache', tag.app, (req) => {
 		return 204;
 	});
 
@@ -87,21 +88,21 @@ config.live.version = require('@livejack/client/package.json').version;
 	auth.init(app);
 
 	app.route("/robots.txt").get(
-		Upcache.tag('app'),
+		tag.app,
 		(req, res) => {
 			res.type('text/plain').send("User-agent: *\nDisallow: /\n");
 		}
 	);
 
 	app.route("/favicon.ico").get(
-		Upcache.tag('app'),
+		tag.app,
 		() => 404
 	);
 
-	app.use("/node_modules/", Upcache.tag('app'), serveModule());
+	app.use("/node_modules/", tag.app, serveModule());
 
 	app.route(/\/js|css|img|dist\//).get(
-		Upcache.tag('app'),
+		tag.app,
 		serveStatic(app.get('statics'), {
 			index: false,
 			redirect: false,
