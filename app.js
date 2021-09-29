@@ -206,14 +206,20 @@ config.live.version = require('@livejack/client/package.json').version;
 	);
 	await auth.keygen(config);
 	require('http').createServer(app).listen(config.listen, async () => {
-		console.info("Listening on port", config.listen); // eslint-disable-line
-		await got.post(`${config.site.href}.well-known/upcache`, {
-			retry: {
-				limit: Math.Infinity,
-				methods: ["POST"]
-			}
-		});
-		console.info("Cache invalidated");
+		console.info("Listening on port", config.listen);
+		const upcacheUrl = new URL(config.site);
+		upcacheUrl.pathname = ".well-known/upcache";
+		try {
+			await got.post(upcacheUrl, {
+				retry: {
+					limit: Math.Infinity,
+					methods: ["POST"]
+				}
+			});
+			console.info("Cache invalidated");
+		} catch(err) {
+			console.error(upcacheUrl.href, err);
+		}
 	});
 
 })().catch((err) => {
