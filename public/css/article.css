@@ -120,8 +120,8 @@
 	display: block;
 }
 
-.live-message:not([data-id]) > [title][is]:empty::before {
-	content: attr(title);
+.live-message:not([data-id]) > [data-placeholder][is]:empty::before {
+	content: attr(data-placeholder);
 	font-style: italic;
 	opacity: 0.5;
 }
