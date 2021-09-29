@@ -1,22 +1,17 @@
 div.toolbar {
-	width: calc(100% + 2rem);
 	display: flex;
 	justify-content: flex-end;
-	position: absolute;
-	background-color: inherit;
-	left: -1rem;
-	z-index: 1;
 	font-size: 0.85rem;
-	padding-right: 1rem;
-	bottom: -17px;
-	padding-bottom: 0.2em;
+	flex-wrap: wrap;
 }
-div.toolbar > * {
-	border-radius: 4px;
+div.toolbar > [name],
+div.toolbar > button {
+	border-radius: 0.2em;
 	padding: 0.3em 0.4em;
 	background-color: #EEE;
 	margin: 0.2em;
 	border: 1px solid gray;
+	line-height: 1.4em;
 }
 div.toolbar > button:hover:not([disabled]),
 div.toolbar > button:focus {
@@ -48,10 +43,32 @@ div.toolbar button[name="del"] {
 	display:none;
 }
 
+.prosemirror-menu {
+	background-color: #EEE;
+	align-self: center;
+	margin-left: 1rem;
+	margin-right: auto;
+	border:1px solid grey;
+	border-radius: 0.2em;
+	margin-top: 0.2em;
+}
+.prosemirror-menu.floating {
+	position:fixed;
+	z-index: 2;
+	margin-left:0;
+	margin-right:0;
+	margin-top:0.5em;
+}
+
+@media screen and (min-width: 800px) {
+	.prosemirror-menu {
+		margin-left: calc(87px + 1rem);
+	}
+}
 
 .ProseMirror-menuitem {
 	margin: 0;
 }
 .ProseMirror-menuitem > .ProseMirror-icon {
-	padding: 0.6em;
+	padding: 0.5em 0.7em;
 }

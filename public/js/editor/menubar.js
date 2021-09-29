@@ -3,7 +3,7 @@ import { Plugin } from "/node_modules/@livejack/prosemirror";
 import { renderGrouped } from "./menu.js";
 
 class MenuBarView {
-	#hidden
+	#ticking = false
 	constructor(view, options) {
 		this.view = view;
 		this.options = options;
@@ -14,9 +14,8 @@ class MenuBarView {
 		this.menu.append(dom);
 
 		this.contentUpdate = update;
-		view.dom.before(this.menu);
+		view.dom.parentNode.querySelector('.toolbar').prepend(this.menu);
 
-		this.ticking = false;
 		document.addEventListener('mousedown', this);
 		document.addEventListener('mouseup', this);
 		document.getElementById('live').addEventListener('scroll', this);
@@ -30,37 +29,38 @@ class MenuBarView {
 	}
 
 	handleEvent(e) {
-		if (e.type == "mousedown" && this.view.dom.contains(e.target)) this.#hidden = true;
-		else if (e.type == "mouseup") this.#hidden = false;
 		this.requestMove();
 	}
 
 	requestMove() {
-		if (this.ticking) return;
+		if (this.#ticking) return;
 		window.requestAnimationFrame(() => {
 			this.move();
-			this.ticking = false;
+			this.#ticking = false;
 		});
-		this.ticking = true;
+		this.#ticking = true;
 	}
+
 	move() {
 		const sel = this.view.state.selection;
 		const style = this.menu.style;
-		if (!this.view.docView || sel.empty || sel.node && sel.node.type.name == "asset" || this.#hidden) {
-			style.display = "none";
+		const dom = this.view.dom;
+		// floating if !sel.empty
+		// else show at bottom
+		if (!this.view.docView || !this.view.focused || sel.empty || sel.node && sel.node.type.name == "asset") {
+			this.menu.classList.remove('floating');
+			style.top = null;
+			style.left = null;
 		} else {
 			const aft = this.view.coordsAtPos(sel.to, 1);
-			style.display = null;
-			style.position = "fixed";
+			this.menu.classList.add('floating');
 			style.top = `calc(${parseInt(aft.top)}px + 1.5em)`;
 			style.left = Math.round(Math.max(
 				aft.left - this.menu.offsetWidth / 2,
-				this.view.dom.offsetLeft
+				dom.offsetLeft
 			)) + 'px';
-			style.right = "auto";
 		}
 	}
-
 
 	destroy() {
 		document.removeEventListener('mousedown', this);
