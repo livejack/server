@@ -1,0 +1,27 @@
+:root {
+	--back-color-rgb: 255, 255, 255;
+	--back-color: rgb(var(--back-color-rgb));
+	--text-color: black;
+	--back-low-color: #EEE;
+	--text-low-color: #666;
+	--middle-color: #888;
+	--warn-rgb: 184, 0, 0;
+	--bgselcolor:#4165A0;
+	--selcolor:white;
+	/* semantic */
+	--bg: var(--back-color);
+	--tilebg: var(--back-low-color);
+	--tilebghover: var(--back-color);
+	--btncolor: var(--text-low-color);
+	--btncolorhover: var(--text-color);
+	--border: 1px solid var(--middle-color);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--text-color: white;
+		--back-color-rgb: 48, 48, 48;
+		--text-low-color: #EEE;
+		--back-low-color: #555;
+	}
+}
