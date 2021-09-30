@@ -70,11 +70,34 @@ function linkItem(markType) {
 	});
 }
 
-export function buildMenuItems(schema, promptUrl) {
+function assetItem(nodeType) {
+	return new MenuItem({
+		title: "Insert asset",
+		icon: icons.asset,
+		select(state) {
+			return state.selection.empty;
+		},
+		enable(state) {
+			const sel = state.selection;
+			if (!sel.empty) return false;
+			const $from = state.selection.$from;
+			for (let d = $from.depth; d >= 0; d--) {
+				const index = $from.index(d);
+				if ($from.node(d).canReplaceWith(index, index, nodeType)) return true;
+			}
+			return false;
+		},
+		run(state, dispatch, view) {
+			view.dom.queryAssets('link');
+		}
+	});
+}
+
+export function buildMenuItems(schema) {
 	const r = {};
 	let type;
 	if ((type = schema.marks.link)) {
-		r.toggleLink = linkItem(type, promptUrl);
+		r.toggleLink = linkItem(type);
 	}
 	if ((type = schema.marks.strong)) {
 		r.toggleStrong = markItem(type, { icon: icons.strong });
@@ -113,11 +136,14 @@ export function buildMenuItems(schema, promptUrl) {
 			label: "Plain"
 		});
 	}
+	if ((type = schema.nodes.asset)) {
+		r.insertAsset = assetItem(type);
+	}
 
 	const cut = arr => arr.filter(x => x);
 	r.inlineMenu = [cut([r.toggleLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
 	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
-	r.fullMenu = r.inlineMenu.concat(r.blockMenu);
+	r.fullMenu = [cut([r.insertAsset])].concat(r.inlineMenu, r.blockMenu);
 
 	return r;
 }
