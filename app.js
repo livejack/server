@@ -113,7 +113,7 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	app.use(morgan(':method :status :response-time ms :url - :res[content-length]'));
 
-	app.get('/lives.json', Upcache.tag('data'), routes.lives.GET);
+	app.get('/lives.json', tag.all, routes.lives.GET);
 
 	app.param('domain', (req, res, next, domain) => {
 		req.domain = req.app.settings.domains[req.params.domain];
