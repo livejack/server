@@ -5,7 +5,7 @@ const prerender = require('../lib/prerender');
 exports.GET = async function(req, res, next) {
 	const {domain, key} = req.params;
 	try {
-		if (!req.domain) throw new HttpError.BadRequest("No domain");
+		if (!domain) throw new HttpError.BadRequest("No domain");
 		await Models.Page.query().findOne({ domain, key }).throwIfNotFound();
 		// never do a full prerendering - it's simple this way and useless to do otherwise
 		req.query.develop = null;
