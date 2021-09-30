@@ -3,6 +3,7 @@ div.toolbar {
 	justify-content: flex-end;
 	font-size: 0.85rem;
 	flex-wrap: wrap;
+	margin-bottom: -1.4rem;
 }
 div.toolbar > [name],
 div.toolbar > button {
