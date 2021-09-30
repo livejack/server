@@ -9,14 +9,7 @@ const got = require('got');
 
 const serveModule = require("@webmodule/serve");
 const LiveJack = require('@livejack/client/node');
-
 const Upcache = require('upcache');
-const tag = {
-	app: Upcache.tag('app'),
-	page: Upcache.tag('app', 'data-:domain-:key'),
-	domain: Upcache.tag('app', 'data-:domain'),
-	all: Upcache.tag('app', 'data')
-};
 
 const ini = require('./lib/express-ini');
 
@@ -31,6 +24,16 @@ const jsonParser = express.json({
 const config = ini(app);
 
 config.live.version = require('@livejack/client/package.json').version;
+
+const tag = {
+	app: Upcache.tag('app'),
+	page: Upcache.tag('app', 'data-:domain-:key'),
+	domain: Upcache.tag('app', 'data-:domain'),
+	all: Upcache.tag('app', 'data')
+};
+if (config.env == "development") {
+	tag.app = tag.page = tag.domain = tag.all = Upcache.tag.disable();
+}
 
 (async () => {
 
