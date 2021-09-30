@@ -3,7 +3,7 @@ const {Page} = Models;
 
 exports.GET = async (req, res, next) => {
 	const {domain} = req.params;
-	const pages = await Page.query().find({ domain }).orderBy('updated_at', 'desc').limit(10);
+	const pages = await Page.query().where({ domain }).orderBy('updated_at', 'desc').limit(10);
 	res.json(pages);
 };
 
