@@ -3,7 +3,7 @@ const prerender = require('../lib/prerender');
 
 // ouverture de la page
 exports.GET = async function(req, res, next) {
-	const {domain, key} = req.params;
+	const { domain, key } = req.params;
 	try {
 		if (!domain) throw new HttpError.BadRequest("No domain");
 		await Models.Page.query().findOne({ domain, key }).throwIfNotFound();
@@ -18,8 +18,8 @@ exports.GET = async function(req, res, next) {
 // TODO: move this to pages collection resource
 // création de la page à partir de l'URL
 exports.PUT = async function(req, res, next) {
-	const {domain, key} = req.params;
-	await Models.Page.query().findOne({domain, key}).throwIfNotFound().patch(req.body);
+	const { domain, key } = req.params;
+	await Models.Page.query().findOne({ domain, key }).throwIfNotFound().patch(req.body);
 	try {
 		await require('../resources/synchro').syncAssets(
 			req,
