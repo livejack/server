@@ -157,7 +157,8 @@ config.live.version = require('@livejack/client/package.json').version;
 
 	app.route('/:domain/:key/page')
 		.get(tag.page, resources.page.GET)
-		.put(tag.page, tag.domain, tag.all, domainLock, jsonParser, resources.page.PUT);
+		.put(tag.page, tag.domain, tag.all, domainLock, jsonParser, resources.page.PUT)
+		.delete(domainLock, tag.page, tag.domain, tag.all, jsonParser, resources.page.DELETE);
 
 	app.route('/:domain/:key/messages/:id?')
 		.get(tag.page, resources.message.GET)

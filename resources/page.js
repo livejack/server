@@ -41,3 +41,16 @@ exports.PUT = async (req) => {
 		return page;
 	});
 };
+
+exports.DELETE = async (req) => {
+	const { domain, key } = req.params;
+
+	return Page.transaction(async trx => {
+		const count = await Page.query(trx).findOne({ domain, key }).delete().throwIfNotFound();
+		global.livejack.send({
+			room: `/${domain}/${key}/page`,
+			data: null
+		});
+		return { count };
+	});
+};
