@@ -130,6 +130,9 @@ config.live.version = require('@livejack/client/package.json').version;
 	// this route needs its own extension
 	app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
 
+	app.get('/:domain', domainLock, tag.domain, routes.domain.GET);
+	app.get('/.api/:domain', domainLock, tag.domain, jsonParser, resources.pages.GET);
+
 	// below all routes can be .json or .html or nothing
 	app.use(require('express-extension-to-accept')(['html', 'json']));
 
@@ -176,8 +179,6 @@ config.live.version = require('@livejack/client/package.json').version;
 		.get(domainLock, tag.page, routes.write.GET)
 		.put(domainLock, tag.page, tag.domain, jsonParser, routes.write.PUT)
 		.delete(domainLock, tag.page, jsonParser, routes.write.DELETE);
-
-	app.get('/:domain', domainLock, tag.domain, prerender('domain'));
 
 	app.use((err, req, res, next) => {
 		let code;

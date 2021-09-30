@@ -1,0 +1,12 @@
+@import "/node_modules/modern-normalize";
+
+@import "./theme.css";
+
+.items {
+	margin:1rem;
+}
+
+.items > .item {
+	margin:1rem;
+	background-color: var(--tilebg);
+}
