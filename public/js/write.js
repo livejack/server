@@ -1,5 +1,5 @@
 import registerWrite from "./elements/write.js";
-import liveRead from './live-read.js';
+import liveRead from './read.js';
 registerWrite(liveRead);
 
 import { ready, visible } from './doc-events.js';

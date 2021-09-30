@@ -222,7 +222,7 @@ export default class EditAsset extends LiveAsset {
 		const iframe = this.lastElementChild;
 		iframe.onload = () => {
 			const doc = iframe.contentDocument;
-			// get live-read.css
+			// get read.css
 			doc.head.appendChild(
 				doc.importNode(document.head.querySelector('link[rel="stylesheet"]'))
 			);

@@ -82,10 +82,10 @@
   },
   "scripts": {
     "start": "NODE_ENV=development node app.js",
-    "bundle": "webmodule-bundle --root public --concatenate --css dist/live-${npm_config_name}-${npm_package_version}.css --js dist/live-${npm_config_name}-${npm_package_version}.js public/live-${npm_config_name}.html",
-    "bundle-all": "npm run bundle --name=read && npm run bundle --name=write",
-    "minify": "webmodule-bundle --root public --css dist/live-${npm_config_name}-${npm_package_version}.min.css --js dist/live-${npm_config_name}-${npm_package_version}.min.js public/live-${npm_config_name}.html",
-    "minify-all": "npm run minify --name=read && npm run minify --name=write",
+    "bundle": "webmodule-bundle --root public --concatenate --css dist/${npm_config_name}-${npm_package_version}.css --js dist/${npm_config_name}-${npm_package_version}.js public/${npm_config_name}.html",
+    "bundle-all": "npm run bundle --name=read && npm run bundle --name=write && npm run bundle --name=domain",
+    "minify": "webmodule-bundle --root public --css dist/${npm_config_name}-${npm_package_version}.min.css --js dist/${npm_config_name}-${npm_package_version}.min.js public/${npm_config_name}.html",
+    "minify-all": "npm run minify --name=read && npm run minify --name=write && npm run minify --name=domain",
     "dist": "npm run bundle-all && npm run minify-all"
   },
   "browserslist": [

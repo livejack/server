@@ -9,7 +9,7 @@ exports.GET = async function(req, res, next) {
 			domain, key,
 			view: req.domain.view
 		});
-		prerender(`live-read`)(req, res, next);
+		prerender(`read`)(req, res, next);
 	} catch (err) {
 		next(err);
 	}
