@@ -171,7 +171,7 @@ class LiveRead extends LiveJack {
 		if (first) {
 			document.head.insertAdjacentHTML(
 				'beforeEnd',
-				'	<meta name="live-update-[rooms|as:entries|repeat:*|.key]" content="[.value]">\n'
+				'	<meta name="live-update-[rooms|as:entries|repeat:|.key]" content="[.value]">\n'
 			);
 			this.merge(document.head, { rooms: this.rooms });
 		}
