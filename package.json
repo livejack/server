@@ -23,7 +23,7 @@
     "method-override": "^3.0.0",
     "modern-normalize": "^1.1.0",
     "morgan": "^1.10.0",
-    "objection": "^2.2.16",
+    "objection": "^2.2.17",
     "objection-db-errors": "^1.1.2",
     "p-queue": "^6.6.2",
     "passwd-user": "^3.0.0",
