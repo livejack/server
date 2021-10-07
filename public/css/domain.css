@@ -2,11 +2,15 @@
 
 @import "./theme.css";
 
-.items {
-	margin:1rem;
-}
-
-.items > .item {
-	margin:1rem;
+table {
+	max-width:800px;
+	width:100%;
+	margin:2rem auto;
 	background-color: var(--tilebg);
+	border-collapse: collapse;
+}
+table td {
+	padding:0.5em;
+	border:var(--border);
+	white-space:nowrap;
 }
