@@ -49,11 +49,11 @@
 				</div>
 				<div class="live-status">
 					<template data-mode="replace">
-						<p class="before [page|when:before|ifAt:*]">A VENIR : Début du direct : <time class="stamp"
+						<p class="before [page|when:before|prune:*]">A VENIR : Début du direct : <time class="stamp"
 								datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
-						<p class="during [page|when:during|ifAt:*]">EN COURS : Mis à jour <time class="stamp"
+						<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp"
 								datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-						<p class="after [page|when:after|ifAt:*]">TERMINE : Fin du direct : <time class="stamp"
+						<p class="after [page|when:after|prune:*]">TERMINE : Fin du direct : <time class="stamp"
 								itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
 					</template>
 				</div>
@@ -73,12 +73,12 @@
 					<article
 					is="edit-article"
 					data-id="[msg.id]"
-					id="t[page.messages|blank:push:date=now|repeat:*:msg:place|.date|date:time]"
+					id="t[page.messages|blank:push:date=now|repeat:msg:place|.date|date:time]"
 					class="live-message [msg.style] [msg|unhide:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 					itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
 						<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
-						<meta itemprop="mainEntityOfPage" content="[page.backtrack|orAt:*]" />
+						<meta itemprop="mainEntityOfPage" content="[page.backtrack|else:at:*]" />
 						<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
 							datetime="[msg.date|date:iso]" tabindex="[msg.id]1">[msg.date|date:rel|as:text]</time>
 						<h2 name="title" is="edit-title" itemprop="headline" class="live-title" tabindex="[msg.id]2" data-placeholder="Titre">[msg.title]</h2>
@@ -108,26 +108,26 @@
 		</div>
 		<header data-live="page">
 			<template data-mode="replace">
-				<a href="[page.backtrack]" target="_blank" class="tiled" title="Voir le site[page.backtrack|ifAt:]">
-					<img src="[shortcut-icon|orAt:*]" />
+				<a href="[page.backtrack]" target="_blank" class="tiled" title="Voir le site[page.backtrack|prune:-]">
+					<img src="[shortcut-icon|else:at:*]" />
 					[page.title|or:Sans titre]
 				</a>
 				<form is="edit-status">
 					<div class="tiled start active">
-						Commencer<br>le live[page|when:before|ifAt:div]
+						Commencer<br>le live[page|when:before|prune:div]
 					</div>
 					<div class="tiled start">
-						Commencé<br>[page.start|then:date:cal|orAt:div]
+						Commencé<br>[page.start|then:date:cal|else:at:div]
 					</div>
 					<label class="toggle-switch">
 						<input name="status" value="on" checked="[page|when:during]" id="live-status" type="checkbox" />
 						<label for="live-status"></label>
 					</label>
 					<div class="tiled stop active">
-						Terminer<br>le live[page|when:during|ifAt:div]
+						Terminer<br>le live[page|when:during|prune:div]
 					</div>
 					<div class="tiled stop">
-						Terminé<br>[page.stop|then:date:cal|orAt:div]
+						Terminé<br>[page.stop|then:date:cal|else:at:div]
 					</div>
 				</form>
 			</template>
@@ -155,11 +155,11 @@
 				</div>
 				<div class="list">
 					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
-					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|repeat:label:filter]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
-				<live-asset data-id="[assets.hrefs|repeat:*:it:place|.id]" data-url="[it.url]" />
+				<live-asset data-id="[assets.hrefs|repeat:it:place|.id]" data-url="[it.url]" />
 			</template>
 		</div>
 		<div id="icons">
@@ -171,11 +171,11 @@
 				</div>
 				<div class="list">
 					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
-					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|repeat:label:filter]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
 			<template data-mode="insert">
-				<live-icon class="hide" data-url="[hrefs|repeat:*:asset|.url]" />
+				<live-icon class="hide" data-url="[hrefs|repeat:asset|.url]" />
 			</template>
 		</div>
 	</div>

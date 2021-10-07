@@ -19,7 +19,7 @@
     "got": "^11.8.2",
     "http-errors": "^1.8.0",
     "knex": "^0.21.19",
-    "matchdom": "^7.0.0-beta.16",
+    "matchdom": "^7.0.1",
     "method-override": "^3.0.0",
     "modern-normalize": "^1.1.0",
     "morgan": "^1.10.0",

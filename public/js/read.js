@@ -22,11 +22,12 @@ class LiveRead extends LiveJack {
 		this.hrefs = {};
 		this.matchdom = new Matchdom({
 			hooks: {
-				beforeEach: (val) => {
+				beforeEach: (ctx, val) => {
 					if (val && val.hrefs && Array.isArray(val.hrefs)) {
 						// FIXME those should just go to live-article (the parent merging msg)
 						this.set(val.hrefs);
 					}
+					return val;
 				}
 			}
 		}).extend([DatePlugin, { filters }]);

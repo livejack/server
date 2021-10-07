@@ -33,9 +33,9 @@
 			</div>
 			<div class="live-status">
 				<template data-mode="replace">
-					<p class="before [page|when:before|ifAt:*]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
-					<p class="during [page|when:during|ifAt:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-					<p class="after [page|when:after|ifAt:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
+					<p class="before [page|when:before|prune:*]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
+					<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
+					<p class="after [page|when:after|prune:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
 				</template>
 			</div>
 			<div class="hide">
@@ -54,13 +54,13 @@
 			<template data-mode="insert">
 				<article
 				data-id="[msg.id]"
-				id="t[page.messages|repeat:*:msg:place|.date|date:time]"
+				id="t[page.messages|repeat:msg:place|.date|date:time]"
 				class="live-message [msg.style] [msg|unhide:] [msg.mark|and:|or:no-live-icons]"
 				itemprop="liveBlogUpdate" itemscope
 				itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 					<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
 					<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
-					<meta itemprop="mainEntityOfPage" content="[page.backtrack|orAt:*]" />
+					<meta itemprop="mainEntityOfPage" content="[page.backtrack|else:at:*]" />
 					<time is="live-time" itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>
 					<h2 itemprop="headline" class="live-title">[msg.title]</h2>
 					<div class="live-icons">[msg.mark|as:html]</div>

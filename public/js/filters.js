@@ -1,7 +1,5 @@
 export default {
-	place(ctx, item) {
-		const cursor = ctx.src.node;
-		const node = ctx.dest.node;
+	place(ctx, item, cursor, frag) {
 		const list = cursor.parentNode;
 		const old = list.querySelector(`[data-id="${item.id}"]`);
 		const date = item.date || item.created_at;
@@ -21,6 +19,7 @@ export default {
 			}
 			return (old || cursor).nextElementSibling;
 		})();
+		const node = frag.firstElementChild;
 		if (!item.id) {
 			// special case
 			const list = document.querySelector('#live-messages > .live-list');

@@ -27,12 +27,12 @@ const codeTemplate = `<div class="header">
 </div>
 <code class="content">
 	[html|as:text]
-	<span><br>&lt;script src="[script|orAt:*]"&gt;&lt;/script&gt;</span>
+	<span><br>&lt;script src="[script|else:at:*]"&gt;&lt;/script&gt;</span>
 </code>`;
 
 const assetTemplate = `<div class="header" title="[meta.site]">
-	<img src="[meta.icon|orAt:*]" class="favicon" />
-	<a href="[url]">[meta.title]</a>
+	<img src="[meta.icon|else:at:*]" class="favicon" />
+	<a href="[url|else:at:-]">[meta.title]</a>
 	<button name="save">🗘</button>
 	<button name="preview">⯈</button>
 	<button name="del">✕</button>
@@ -43,12 +43,12 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 		<em>[meta.date|else:get:date|date:date]</em>
 		<span><br>[meta.author|or:&nbsp;]</span>
 	</p>
-	<p>[meta.description|orAt:*]</p>
+	<p>[meta.description|else:at:*]</p>
 </div>
 <div class="thumbnail">
-	<img src="[meta.thumbnail|orAt:**]" />
+	<img src="[meta.thumbnail|else:at:**]" />
 </div>
-<form data-type="[type|eq:image|ifAt:*]" autocomplete="off" draggable="false">
+<form data-type="[type|eq:image|prune:*]" autocomplete="off" draggable="false">
 	<label>
 		<span>Title</span>
 		<input name="title" value="[title]">
@@ -59,7 +59,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	</label>
 </form>`;
 const assetPreviewTemplate = `<div class="header" title="[meta.site]">
-	<img src="[meta.icon|orAt:*]" class="favicon" />
+	<img src="[meta.icon|else:at:*]" class="favicon" />
 	<a href="[url]">[meta.title]</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
