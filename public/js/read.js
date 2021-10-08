@@ -15,7 +15,7 @@ import filters from "./filters.js";
 const refs = {};
 
 class LiveRead extends LiveJack {
-	static #persistProps = ['title', 'backtrack', 'start', 'stop'];
+	static metas = ['start', 'stop'];
 
 	constructor() {
 		super();
@@ -49,13 +49,6 @@ class LiveRead extends LiveJack {
 
 	visitorBuild(node, iter, data, scope) {
 		if (node.nodeName == "TEMPLATE" && node.content) {
-			if (data.page) {
-				// persist minimal page data from build to setup
-				for (const str of LiveRead.#persistProps) {
-					if (data.page[str] != null) node.dataset[str] = data.page[str];
-					else node.removeAttribute('data-' + str);
-				}
-			}
 			// jump to next node so we can insert before
 			iter.nextNode();
 			let sub = node.content.cloneNode(true);
@@ -72,12 +65,6 @@ class LiveRead extends LiveJack {
 			// see live-build visitor
 			const mode = node.dataset.mode;
 			const parent = node.parentNode;
-			if (!data.page) data.page = {};
-			for (const str of LiveRead.#persistProps) {
-				if (data.page[str] === undefined && node.dataset[str] != null) {
-					data.page[str] = node.dataset[str];
-				}
-			}
 			if (mode == "replace") {
 				while (node.nextSibling) parent.removeChild(node.nextSibling);
 				parent.appendChild(node.content.cloneNode(true));
@@ -101,6 +88,14 @@ class LiveRead extends LiveJack {
 		}
 	}
 
+	roomPath(name) {
+		return `${this.vars.base}/${name}`;
+	}
+
+	roomName(room) {
+		return room.split('/').pop();
+	}
+
 	adopt(Class) {
 		if (Object.getOwnPropertyDescriptor(Class.prototype, "live")) return;
 		Object.defineProperty(Class.prototype, "live", {
@@ -114,16 +109,21 @@ class LiveRead extends LiveJack {
 	findAll() {
 		const vars = {};
 		const pre = "live";
+		this.page = {};
 		for (const meta of document.querySelectorAll(`meta[name^="${pre}-"]`)) {
-			vars[meta.name.substring(pre.length + 1)] = meta.content;
+			const key = meta.name.substring(pre.length + 1);
+			const prop = key.startsWith('page-') ? key.substring(5) : null;
+			if (prop) this.page[prop] = meta.content;
+			else vars[key] = meta.content;
 		}
+		this.page.updated_at ??= vars['update-page'];
 		this.vars = vars;
 		this.rooms = {};
 		const roots = document.querySelectorAll('[data-live]').map((node) => {
 			const names = node.dataset.live.split(' ');
 			for (const name of names) {
 				const mtime = this.vars[`update-${name}`];
-				if (mtime) this.rooms[name] = mtime;
+				if (mtime) this.rooms[this.roomPath(name)] = mtime;
 			}
 			return { node, names };
 		});
@@ -135,7 +135,13 @@ class LiveRead extends LiveJack {
 			// we need these before the ones in each message
 			this.set(data.assets.hrefs);
 		}
-		return this.matchdom.merge(node, data, {live: this});
+		if (data.page) {
+			for (const key of Object.keys(this.page)) {
+				if (data.page[key] != null) this.page[key] = data.page[key];
+				else data.page[key] = this.page[key];
+			}
+		}
+		return this.matchdom.merge(node, data, { live: this });
 	}
 
 	async fetch(name) {
@@ -152,13 +158,14 @@ class LiveRead extends LiveJack {
 		this.matchdom.visitor = this.visitorBuild;
 		const roots = this.findAll();
 		let first = false;
+		const datas = {};
 		await Promise.all(roots.map(async ({ node, names }) => {
-			const datas = {};
 			await Promise.all(names.map(async (name) => {
-				if (!this.rooms[name]) {
+				const room = this.roomPath(name);
+				if (!this.rooms[room]) {
 					const data = await this.fetch(name);
 					datas[name] = data;
-					if (data.updated_at) this.rooms[name] = data.updated_at;
+					if (data.updated_at) this.rooms[room] = data.updated_at;
 					else console.info("missing updated_at in", data);
 					first = true;
 				}
@@ -171,9 +178,16 @@ class LiveRead extends LiveJack {
 		if (first) {
 			document.head.insertAdjacentHTML(
 				'beforeEnd',
-				'	<meta name="live-update-[rooms|as:entries|repeat:|.key]" content="[.value]">\n'
+				'	<meta name="[metas|repeat:|.name]" content="[.val]">\n'
 			);
-			this.merge(document.head, { rooms: this.rooms });
+			const metas = Object.keys(this.rooms).map((room) => {
+				return { name: `live-update-${this.roomName(room)}`, val: this.rooms[room] };
+			});
+			const page = datas.page;
+			for (const name of LiveRead.metas) {
+				if (page[name]) metas.push({name: `live-page-${name}`, val: page[name] });
+			}
+			this.merge(document.head, { metas });
 		}
 	}
 
@@ -186,7 +200,7 @@ class LiveRead extends LiveJack {
 		for (const root of roots) this.setupRoot(root.node);
 
 		for (const [room, mtime] of Object.entries(this.rooms)) {
-			this.join(this.vars.base + '/' + room, mtime, (e) => {
+			this.join(room, mtime, (e) => {
 				if (!e.detail) return; // ignore
 				const data = e.detail.data;
 				if (!data) {
@@ -195,9 +209,10 @@ class LiveRead extends LiveJack {
 				}
 				if (data.updated_at) this.rooms[room] = data.updated_at;
 				else console.info("missing updated_at in", data);
+				const name = this.roomName(room);
 				for (const { node, names } of roots) {
-					if (names.includes(room)) {
-						this.merge(node, { [room]: data });
+					if (names.includes(name)) {
+						this.merge(node, { [name]: data });
 					}
 				}
 			});

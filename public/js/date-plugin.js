@@ -15,9 +15,9 @@ export const filters = {
 			return `le ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} à ${getTimeStr(date)}`;
 		} else if (fmt == "rel") {
 			let sameDay = false;
-			const live = ctx.scope.live;
-			if (live && live.rooms && live.rooms.page) {
-				const ref = new Date(live.rooms.page);
+			const page = ctx.scope.live?.page;
+			if (page) {
+				const ref = new Date(page.stop || page.updated_at || page.start);
 				sameDay = date.toISOString().split('T')[0] === ref.toISOString().split('T')[0];
 			}
 			const time = getTimeStr(date);

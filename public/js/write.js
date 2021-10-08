@@ -1,5 +1,6 @@
 import registerWrite from "./elements/write.js";
 import liveRead from './read.js';
+liveRead.constructor.metas.push('title', 'backtrack');
 registerWrite(liveRead);
 
 import { ready, visible } from './doc-events.js';
