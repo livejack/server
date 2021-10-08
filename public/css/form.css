@@ -91,7 +91,6 @@ form[is="edit-filter"] {
 [is="edit-filter"] .list {
 	display:flex;
 	flex-wrap:wrap;
-	border-radius: 4px;
 	border: 1px solid var(--middle-color);
 	overflow: hidden;
 }
