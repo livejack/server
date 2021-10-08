@@ -37,12 +37,12 @@ export default class EditError extends HTMLDivElement {
 					error = this.dataset.other.replace('%d', code);
 				}
 			}
-			this.live.matchdom.merge(this, { error });
+			this.live.merge(this, { error });
 		} else if (e.type == "ioerror") {
 			this.hidden = false;
 			const msg = e.detail?.message;
 			if (msg) {
-				this.live.matchdom.merge(this, { error: this.dataset[msg] });
+				this.live.merge(this, { error: this.dataset[msg] });
 				if (msg == "reconnect") {
 					this.classList.add('ok');
 					this.#autohide();
