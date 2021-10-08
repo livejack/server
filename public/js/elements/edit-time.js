@@ -6,6 +6,7 @@ flatpickr.localize(flatLocale.French);
 export default class EditTime extends HTMLTimeElement {
 	#defaultValue
 	#tick
+	#changed
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-time');
@@ -25,6 +26,7 @@ export default class EditTime extends HTMLTimeElement {
 		}
 	}
 	set value(val) {
+		if (val == this.#defaultValue) this.#changed = false;
 		this.dateTime = val;
 		this.innerHTML = '[date|date:rel|as:text]';
 		this.live.merge(this, { date: val });
@@ -33,6 +35,7 @@ export default class EditTime extends HTMLTimeElement {
 		return this.#defaultValue;
 	}
 	set defaultValue(val) {
+		this.#changed = false;
 		this.#defaultValue = val;
 	}
 	get article() {
@@ -45,7 +48,7 @@ export default class EditTime extends HTMLTimeElement {
 		if (art && !art.dataset.id) {
 			// blank node, update time
 			this.#tick = setInterval(() => {
-				this.value = (new Date()).toISOString();
+				if (!this.#changed) this.value = (new Date()).toISOString();
 			}, 1000);
 		}
 	}
@@ -80,6 +83,7 @@ export default class EditTime extends HTMLTimeElement {
 				this.stop();
 			},
 			onChange: (sel, dateStr) => {
+				this.#changed = true;
 				this.value = dateStr;
 			}
 		});
