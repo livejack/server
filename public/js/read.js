@@ -137,7 +137,7 @@ class LiveRead extends LiveJack {
 		}
 		if (data.page) {
 			for (const key of Object.keys(this.page)) {
-				if (data.page[key] != null) this.page[key] = data.page[key];
+				if (data.page[key] !== undefined) this.page[key] = data.page[key];
 				else data.page[key] = this.page[key];
 			}
 		} else {
