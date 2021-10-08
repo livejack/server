@@ -209,8 +209,7 @@ class LiveRead extends LiveJack {
 					console.warn("ignoring message without data", e.detail);
 					return;
 				}
-				if (data.updated_at) this.rooms[room] = data.updated_at;
-				else console.info("missing updated_at in", data);
+				this.rooms[room] ??= data.updated_at ?? e.detail.mtime;
 				const name = this.roomName(room);
 				for (const { node, names } of roots) {
 					if (names.includes(name)) {
