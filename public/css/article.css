@@ -15,6 +15,10 @@
 	transition-duration: 0.5s;
 	transition-property: background-color, box-shadow, opacity;
 }
+.live-message:not([data-id]) {
+	border-top:0;
+	border-bottom:1px solid #CCC;
+}
 .live-message:not([data-id]):not(.active) > [is] {
 	opacity:0.5;
 }
