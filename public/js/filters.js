@@ -1,5 +1,21 @@
 export default {
-	place(ctx, item, cursor, frag) {
+	template(ctx, data, mode) {
+		const { node } = ctx.dest;
+		const parent = node.parentNode;
+		if (mode == "replace") {
+			const frag = ctx.scope.live.merge(node.content.cloneNode(true), data);
+			while (node.nextSibling) parent.removeChild(node.nextSibling);
+			parent.appendChild(frag);
+		} else if (mode == "insert") {
+			ctx.matchdom.merge(
+				node.content.cloneNode(true),
+				data,
+				{ template: node }
+			);
+		}
+	},
+	place(ctx, item, incursor, frag) {
+		const cursor = ctx.scope.template;
 		const list = cursor.parentNode;
 		const old = list.querySelector(`[data-id="${item.id}"]`);
 		const date = item.date || item.created_at;
@@ -7,22 +23,24 @@ export default {
 		const refPin = item.style == "pinned";
 		const next = (() => {
 			if (!refTime) return null;
-			let child = cursor;
-			while ((child = child.nextElementSibling)) {
+			let child = list.firstElementChild;
+			while (child) {
 				let time = child.querySelector('time');
-				if (!time) return (old || cursor).nextElementSibling;
+				if (!time) {
+					return (old || cursor);
+				}
 				time = Date.parse(time.getAttribute('datetime'));
 				const pin = child.classList.contains('pinned');
-				if (refPin && (!pin || refTime > time) || !pin && refTime > time) {
+				if (refPin && (!pin || refTime > time) || !pin && (refTime > time)) {
 					return child;
 				}
+				child = child.nextElementSibling;
 			}
-			return (old || cursor).nextElementSibling;
+			return (old || cursor);
 		})();
 		const node = frag.firstElementChild;
 		if (!item.id) {
 			// special case
-			const list = document.querySelector('#live-messages > .live-list');
 			list.parentNode.insertBefore(node, list);
 		} else if (old) {
 			if (old.nextElementSibling == next && refTime) {

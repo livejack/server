@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	<div id="live" hidden>
-		<div id="live-messages" class="live-messages" data-live="page assets">
+		<div id="live-messages" class="live-messages">
 			<header>
 				<div class="live-controls">
 					<div class="filter">
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="live-status">
-					<template data-mode="replace">
+					<template data-mode="[template:replace]" data-live="page">
 						<p class="before [page|when:before|prune:*]">A VENIR : Début du direct : <time class="stamp"
 								datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
 						<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp"
@@ -69,11 +69,11 @@
 				</div>
 			</header>
 			<div class="live-list">
-				<template data-mode="insert">
+				<template data-mode="[template:insert]" data-live="page">
 					<article
 					is="edit-article"
-					data-id="[msg.id]"
-					id="t[page.messages|blank:push:date=now|repeat:msg:place|.date|date:time]"
+					data-id="[page.messages|blank:push:date=now|repeat:msg:place|.id]"
+					id="t[msg.date|date:time]"
 					class="live-message [msg.style] [msg|unhide:] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 					itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
 						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
@@ -100,14 +100,14 @@
 			data-auth="Authentification périmée"
 			data-other="Erreur %d - veuillez recharger la page">
 			<div class="content">
-				<template data-mode="replace">
+				<template data-mode="[template:replace]">
 					<p class="message">[error]</p>
 				</template>
 			</div>
 			<div class="icon">✕</div>
 		</div>
-		<header data-live="page">
-			<template data-mode="replace">
+		<header>
+			<template data-mode="[template:replace]" data-live="page">
 				<a href="[page.backtrack]" target="_blank" class="tiled" title="Voir le site[page.backtrack|prune:-]">
 					<img src="[shortcut-icon|else:at:*]" />
 					[page.title|or:Sans titre]
@@ -132,7 +132,7 @@
 				</form>
 			</template>
 		</header>
-		<div data-live="assets" id="assets">
+		<div id="assets">
 			<div class="helper">
 				Insérer ou sélectionner un lien
 			</div>
@@ -147,7 +147,7 @@
 					<input class="tiled" placeholder="Coller une URL de vidéo, tweet, ..." />
 				</label>
 			</form>
-			<form is="edit-filter" method="get" data-for="text" data-default="unused">
+			<form is="edit-filter" method="get" data-for="text" data-default="unused" data-live="assets">
 				<div class="mode">
 					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
@@ -158,12 +158,12 @@
 					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
-			<template data-mode="insert">
+			<template data-mode="[template:insert]" data-live="assets">
 				<live-asset data-id="[assets.hrefs|repeat:it:place|.id]" data-url="[it.url]" />
 			</template>
 		</div>
 		<div id="icons">
-			<form is="edit-filter" method="get" data-for="mark" data-default="used">
+			<form is="edit-filter" method="get" data-for="mark" data-default="used" data-live="assets">
 				<div class="mode">
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
 					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
@@ -171,11 +171,11 @@
 				</div>
 				<div class="list">
 					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
-					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
-			<template data-mode="insert">
-				<live-icon class="hide" data-url="[hrefs|repeat:asset|.url]" />
+			<template data-mode="[template:insert]" data-live="assets">
+				<live-icon class="hide" data-url="[assets.hrefs|repeat:asset|.url]" />
 			</template>
 		</div>
 	</div>

@@ -47,36 +47,6 @@ class LiveRead extends LiveJack {
 		});
 	}
 
-	visitorBuild(node, iter, data, scope) {
-		if (node.nodeName == "TEMPLATE" && node.content) {
-			// jump to next node so we can insert before
-			iter.nextNode();
-			let sub = node.content.cloneNode(true);
-			sub = scope.live.merge(sub, data, scope);
-			node.parentNode.insertBefore(sub, node.nextSibling);
-			toScript(node);
-			return false;
-		} else {
-			return true;
-		}
-	}
-	visitorSetup(node, iter, data, scope) {
-		if (node.nodeName == "TEMPLATE") {
-			// see live-build visitor
-			const mode = node.dataset.mode;
-			const parent = node.parentNode;
-			if (mode == "replace") {
-				while (node.nextSibling) parent.removeChild(node.nextSibling);
-				parent.appendChild(node.content.cloneNode(true));
-			} else if (mode == "insert") {
-				parent.insertBefore(node.content.cloneNode(true), node.nextSibling);
-			}
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	get(url) {
 		return refs[url];
 	}
@@ -157,12 +127,11 @@ class LiveRead extends LiveJack {
 	}
 
 	async build() {
-		this.matchdom.visitor = this.visitorBuild;
 		const roots = this.findAll();
 		let first = false;
 		const datas = {};
-		await Promise.all(roots.map(async ({ node, names }) => {
-			await Promise.all(names.map(async (name) => {
+		await Promise.all(roots.map(async (root) => {
+			await Promise.all(root.names.map(async (name) => {
 				const room = this.roomPath(name);
 				if (!this.rooms[room]) {
 					const data = await this.fetch(name);
@@ -173,9 +142,12 @@ class LiveRead extends LiveJack {
 				}
 			}));
 			if (first) {
-				this.merge(node, datas);
+				this.merge(root.node, datas);
+				if (root.node.nodeName == "TEMPLATE" && root.node.content) {
+					root.node = toScript(root.node);
+				}
 			}
-			return node;
+			return root;
 		}));
 		if (first) {
 			document.head.insertAdjacentHTML(
@@ -194,12 +166,10 @@ class LiveRead extends LiveJack {
 	}
 
 	async setup() {
-		this.matchdom.visitor = this.visitorSetup;
-
 		await this.init(this.vars);
 
 		const roots = this.findAll();
-		for (const root of roots) this.setupRoot(root.node);
+		for (const root of roots) this.setupRoot(root);
 
 		for (const [room, mtime] of Object.entries(this.rooms)) {
 			this.join(room, mtime, (e) => {
@@ -221,10 +191,10 @@ class LiveRead extends LiveJack {
 	}
 
 	setupRoot(root) {
-		for (const script of root.querySelectorAll('script[type="text/html"]')) {
-			fromScript(script);
+		if (root.node.nodeName == "SCRIPT" && root.node.type == "text/html") {
+			root.node = fromScript(root.node);
 		}
-		for (const node of root.querySelectorAll('.live-controls')) {
+		for (const node of root.node.querySelectorAll('.live-controls')) {
 			node.addEventListener('change', this, false);
 		}
 	}

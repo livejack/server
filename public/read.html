@@ -11,7 +11,7 @@
 	<title data-live="page">[page.title|or:Sans titre]</title>
 </head>
 <body>
-	<div id="live-messages" class="live-messages" data-live="page">
+	<div id="live-messages" class="live-messages">
 		<header>
 			<div class="live-controls">
 				<div class="filter">
@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="live-status">
-				<template data-mode="replace">
+				<template data-mode="[template:replace]" data-live="page">
 					<p class="before [page|when:before|prune:*]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
 					<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
 					<p class="after [page|when:after|prune:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
@@ -51,10 +51,10 @@
 			</div>
 		</header>
 		<div class="live-list">
-			<template data-mode="insert">
+			<template data-mode="[template:insert]" data-live="page">
 				<article
-				data-id="[msg.id]"
-				id="t[page.messages|repeat:msg:place|.date|date:time]"
+				data-id="[page.messages|repeat:msg:place|.id]"
+				id="t[msg.date|date:time]"
 				class="live-message [msg.style] [msg|unhide:] [msg.mark|and:|or:no-live-icons]"
 				itemprop="liveBlogUpdate" itemscope
 				itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
