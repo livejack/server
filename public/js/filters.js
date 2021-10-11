@@ -23,11 +23,12 @@ export default {
 		const refPin = item.style == "pinned";
 		const next = (() => {
 			if (!refTime) return null;
-			let child = list.firstElementChild;
+			const first = list.firstElementChild;
+			let child = first;
 			while (child) {
 				let time = child.querySelector('time');
 				if (!time) {
-					return (old || cursor);
+					return (old || first);
 				}
 				time = Date.parse(time.getAttribute('datetime'));
 				const pin = child.classList.contains('pinned');
@@ -36,7 +37,7 @@ export default {
 				}
 				child = child.nextElementSibling;
 			}
-			return (old || cursor);
+			return (old || first);
 		})();
 		const node = frag.firstElementChild;
 		if (!item.id) {
