@@ -134,7 +134,7 @@ if (config.env == "development") {
 	app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
 
 	app.get('/:domain', domainLock, tag.domain, routes.domain.GET);
-	app.get('/.api/:domain', domainLock, tag.domain, jsonParser, resources.pages.GET);
+	app.get('/.api/:domain/pages', domainLock, tag.domain, jsonParser, resources.pages.GET);
 
 	// below all routes can be .json or .html or nothing
 	app.use(require('express-extension-to-accept')(['html', 'json']));
