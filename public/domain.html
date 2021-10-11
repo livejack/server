@@ -10,12 +10,12 @@
 
 	<script type="module" src="/js/domain.js"></script>
 
-	<title data-live="page" data-text="[page.title|or:Sans titre|to:-]">Domaine</title>
+	<title>Derniers lives</title>
 </head>
 
 <body hidden>
-	<table>
-		<tbody>
+	<template data-mode="[template:replace]">
+		<table><tbody>
 			<tr class="live-messages">
 				<td><a href="/[page.domain]/[page.key]/write">[pages|at:tr|repeat:page|.title|else:get:page.key]</a></td>
 				<td><div class="live-status">
@@ -24,14 +24,14 @@
 					<p class="after [page|when:after|prune:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
 				</div></td>
 				<td>
-					<form is="element-form" method="delete" action="/[page.domain]/[page.key]/page[page.backtrack|not:prune:*]">
+					<form is="element-form" data-method="delete" action="/[page.domain]/[page.key]/page[page.backtrack|not:prune:*]">
 						<button type="submit">Supprimer</button>
 					</form>
 					<a href="[page.backtrack|else:at:*]">Voir le site</a>
 				</td>
 			</tr>
-		</tbody>
-		</table>
+		</tbody></table>
+	</template>
 </body>
 
 </html>

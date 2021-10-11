@@ -7,11 +7,17 @@ import '/node_modules/@ungap/custom-elements';
 import req from "./req.js";
 import './elements/form.js';
 
-ready(async () => {
+document.body.reload = async () => {
 	const url = new URL(document.location);
 	url.pathname = "/.api" + url.pathname;
 	const pages = await req(url.pathname);
 	const md = new Matchdom().extend([DatePlugin, { filters }]);
-	md.merge(document.body, { pages });
+	for (const node of document.body.querySelectorAll('template')) {
+		md.merge(node, { pages });
+	}
 	document.body.hidden = false;
+};
+
+ready(async () => {
+	return document.body.reload();
 });
