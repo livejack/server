@@ -3,7 +3,7 @@ export default {
 		const { node } = ctx.dest;
 		const parent = node.parentNode;
 		if (mode == "replace") {
-			const frag = ctx.scope.live.merge(node.content.cloneNode(true), data);
+			const frag = ctx.matchdom.merge(node.content.cloneNode(true), data, ctx.scope);
 			while (node.nextSibling) parent.removeChild(node.nextSibling);
 			parent.appendChild(frag);
 		} else if (mode == "insert") {
