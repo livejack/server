@@ -255,8 +255,10 @@ live-asset > .meta > p > em {
 #control > #icons {
 	display:none;
 }
-
 #control[data-mode="mark"] > #icons {
+	display:block;
+}
+#control[data-mode="mark"] > #icons > .list {
 	display:flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -264,7 +266,7 @@ live-asset > .meta > p > em {
 }
 #control live-icon {
 	display: flex;
-	width:calc(20% - 0.2rem);
+	width: calc(20% - 0.2rem);
 	border: 1px solid var(--middle-color);
 	border-radius: 4px;
 	padding: 0.2em;

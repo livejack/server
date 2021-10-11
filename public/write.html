@@ -158,12 +158,14 @@
 					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
-			<template data-mode="[template:insert]" data-live="assets">
-				<live-asset data-id="[assets.hrefs|repeat:it:place|.id]" data-url="[it.url]" />
-			</template>
+			<div class="list">
+				<template data-mode="[template:insert]" data-live="assets">
+					<live-asset data-id="[assets.hrefs|repeat:it:place|.id]" data-url="[it.url]" />
+				</template>
+			</div>
 		</div>
 		<div id="icons">
-			<form is="edit-filter" method="get" data-for="mark" data-default="used" data-live="assets">
+			<form is="edit-filter" method="get" data-for="mark" data-default="used">
 				<div class="mode">
 					<label><input name="mode" value="used" type="radio" /><span>Utilisés</span></label>
 					<label><input name="mode" value="unused" type="radio" /><span>Tous</span></label>
@@ -171,12 +173,14 @@
 				</div>
 				<div class="list">
 					<label><input name="filter" type="checkbox" value="-" /><span>n/a</span></label>
-					<label><input name="filter" type="checkbox" value="[assets.hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
+					<label><input name="filter" type="checkbox" value="[hrefs|filters:meta.keywords|at:label|repeat:filter]" /><span>[filter]</span></label>
 				</div>
 			</form>
-			<template data-mode="[template:insert]" data-live="assets">
-				<live-icon class="hide" data-url="[assets.hrefs|repeat:asset|.url]" />
-			</template>
+			<div class="list">
+				<template data-mode="[template:insert]">
+					<live-icon class="hide" data-url="[hrefs|repeat:asset:place|.url]" />
+				</template>
+			</div>
 		</div>
 	</div>
 </body>
