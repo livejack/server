@@ -47,7 +47,7 @@ export default class EditControl extends HTMLDivElement {
 		if (name == "mark") {
 			if (!this.#loaded) {
 				this.#loaded = true;
-				const icons = await req('../pictos/assets.json');
+				const icons = await req('../pictos/assets');
 				this.live.merge(this.#icons, icons);
 			}
 			this.querySelector('#icons > [is="edit-filter"]').update();
