@@ -1,6 +1,9 @@
 export default async function req(url, method = "get", params = {}) {
 	method = method.toLowerCase();
-	const opts = { method };
+	const opts = {
+		method,
+		credentials: 'same-origin'
+	};
 	if (method == "get") {
 		const queryStr = Object.keys(params).map(k => {
 			const val = params[k] == null ? "" : params[k];
