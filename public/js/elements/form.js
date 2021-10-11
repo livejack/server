@@ -15,8 +15,8 @@ class ElementForm extends HTMLFormElement {
 		if (e.type != "submit") return;
 		e.preventDefault();
 		const node = e.target;
-		await req(node.action, "delete");
-		node.closest('tr').remove();
+		await req(node.action, node.dataset.method);
+		return document.body.reload();
 	}
 }
 
