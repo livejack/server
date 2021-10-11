@@ -169,7 +169,14 @@ class LiveRead extends LiveJack {
 		await this.init(this.vars);
 
 		const roots = this.findAll();
-		for (const root of roots) this.setupRoot(root);
+		for (const root of roots) {
+			if (root.node.nodeName == "SCRIPT" && root.node.type == "text/html") {
+				root.node = fromScript(root.node);
+			}
+		}
+
+		const controls = document.querySelector('#live-messages .live-controls');
+		if (controls) controls.addEventListener('change', this, false);
 
 		for (const [room, mtime] of Object.entries(this.rooms)) {
 			this.join(room, mtime, (e) => {
@@ -190,18 +197,9 @@ class LiveRead extends LiveJack {
 		}
 	}
 
-	setupRoot(root) {
-		if (root.node.nodeName == "SCRIPT" && root.node.type == "text/html") {
-			root.node = fromScript(root.node);
-		}
-		for (const node of root.node.querySelectorAll('.live-controls')) {
-			node.addEventListener('change', this, false);
-		}
-	}
-
 	handleEvent(e) {
 		const node = e.target;
-		const root = node.closest('[data-live]');
+		const root = node.closest('.live-messages');
 		if (node.name == "filter") {
 			root.classList.toggle("essentiel", node.value == "essentiel");
 		} else if (node.name == "reverse") {
