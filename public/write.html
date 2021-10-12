@@ -108,9 +108,10 @@
 		</div>
 		<header>
 			<template data-mode="[template:replace]" data-live="page">
-				<a href="[page.backtrack]" target="_blank" class="tiled" title="Voir le site[page.backtrack|prune:-]">
+				<a href="[page.backtrack]" target="_blank" class="tiled">
 					<img src="[shortcut-icon|else:at:*]" />
 					[page.title|or:Sans titre]
+					<br><span class="extern"> Voir le site[page.backtrack|prune:+*]</span>
 				</a>
 				<form is="edit-status">
 					<div class="tiled start active">
