@@ -22,3 +22,14 @@ table td {
 table td:first-of-type {
 	max-width: 35vw;
 }
+
+
+body > cite {
+	font-size: 0.8rem;
+	font-style: normal;
+}
+
+.centered {
+	display: block;
+	text-align: center;
+}
