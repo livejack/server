@@ -67,7 +67,7 @@ export default class EditArticle extends HTMLElement {
 		}
 	}
 	start() {
-		const prev = this.constructor.current;
+		const prev = EditArticle.current;
 		if (prev && prev != this) {
 			if (prev.unsaved) {
 				prev.blink();
@@ -76,7 +76,7 @@ export default class EditArticle extends HTMLElement {
 				prev.stop();
 			}
 		}
-		this.constructor.current = this;
+		EditArticle.current = this;
 		if (!this.active) {
 			this.#active = true;
 			this.classList.add('active');
