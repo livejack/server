@@ -7,7 +7,6 @@ function updateDOM(from, to) {
 	dd.apply(from, dd.diff(from, to));
 }
 
-let dragImage;
 const searchTemplate = `<div class="header">
 	<span class="favicon">🔍</span>
 	<a href="url">[url]</a>
@@ -111,16 +110,16 @@ export default class EditAsset extends LiveAsset {
 			if (!this.closest('.live-message')) {
 				e.preventDefault();
 			} else {
-				dragImage = document.createElement("div");
-				dragImage.innerText = this.querySelector('.header > a').textContent;
-				dragImage.className = 'handle';
-				document.body.appendChild(dragImage);
+				EditAsset.dragImage = document.createElement("div");
+				EditAsset.dragImage.innerText = this.querySelector('.header > a').textContent;
+				EditAsset.dragImage.className = 'handle';
+				document.body.appendChild(EditAsset.dragImage);
 				this.classList.add('dragging');
-				e.dataTransfer.setDragImage(dragImage, 0, 0);
+				e.dataTransfer.setDragImage(EditAsset.dragImage, 0, 0);
 			}
 		} else if (e.type == "dragend") {
 			this.classList.remove('dragging');
-			if (dragImage) document.body.removeChild(dragImage);
+			if (EditAsset.dragImage) document.body.removeChild(EditAsset.dragImage);
 		} else if (e.type == "click") {
 			if (e.target.name == "save") {
 				e.stopPropagation();
