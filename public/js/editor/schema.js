@@ -131,29 +131,41 @@ export const nodes = {
 		selectable: false,
 		parseDOM: [{ tag: "br" }],
 		toDOM() { return ["br"]; }
-	}
-};
+	},
 
-export const marks = {
 	link: {
+		inline: true,
+		group: "inline",
+		atom: true,
 		attrs: {
-			href: {}
+			title: {
+				default: null
+			},
+			url: {
+				default: null
+			}
 		},
-		inclusive: false,
 		parseDOM: [{
-			tag: "a[href]",
+			tag: 'a',
 			getAttrs(dom) {
 				return {
-					href: dom.getAttribute("href")
+					url: dom.getAttribute('href'),
+					title: dom.textContent
 				};
 			}
 		}],
 		toDOM(node) {
-			const { href } = node.attrs;
-			return ["a", { href }, 0];
-		}
-	},
+			const { url, title } = node.attrs;
+			const dom = document.createElement('a');
+			dom.setAttribute('href', url);
+			dom.textContent = title;
+			return dom;
+		},
+		View: AssetView
+	}
+};
 
+export const marks = {
 	em: {
 		parseDOM: [{ tag: "i" }, { tag: "em" }, { style: "font-style=italic" }],
 		toDOM() { return ["em", 0]; }
