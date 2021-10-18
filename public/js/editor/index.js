@@ -20,9 +20,9 @@ import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
 import nodeViewSelect from "./nodeviewselect.js";
 
-function getPlugins({ schema, menu, table }) {
+function getPlugins({ schema, menu, table, quotes }) {
 	const plugins = [
-		buildInputRules(schema),
+		buildInputRules(schema, { quotes }),
 		keymap(buildKeymap(schema)),
 		keymap(baseKeymap),
 		dropCursor(),
@@ -47,7 +47,7 @@ export class Editor extends EditorView {
 	#serializer
 	#parser
 	#content
-	constructor(place, { nodes, marks, list, menu, table, assets = [] }) {
+	constructor(place, { nodes, marks, list, menu, table, quotes, assets = [] }) {
 		const nodeViews = {};
 		if (nodes) for (const [name, node] of Object.entries(nodes)) {
 			if (node.View) nodeViews[name] = (child, view, getPos) => {
@@ -81,7 +81,7 @@ export class Editor extends EditorView {
 		super({ mount: place }, {
 			state: EditorState.create({
 				doc: parser.parse(place),
-				plugins: getPlugins({ schema, menu })
+				plugins: getPlugins({ schema, menu, quotes })
 			}),
 			dispatchTransaction: (tr) => {
 				if (tr.docChanged) {

@@ -11,6 +11,9 @@ class HtmlEditor extends Editor {
 	}
 }
 class EditHtml {
+	static options = {
+		quotes: [`‘`, `’`, `«`, `»`]
+	}
 	connectedCallback() {
 		this.defaultValue = this.value;
 		this.addEventListener('click', this, true);
@@ -72,7 +75,9 @@ class EditHtml {
 	}
 	start(coords) {
 		if (!this.view) {
-			this.view = new HtmlEditor(this, this.options);
+			this.view = new HtmlEditor(
+				this, Object.assign({}, EditHtml.options, this.options)
+			);
 			if (coords.node.nodeName == "INPUT") {
 				coords.node.select();
 				// const asset = coords.node.closest('live-asset');
