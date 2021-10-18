@@ -32,6 +32,7 @@ const tag = {
 	all: Upcache.tag('app', 'data')
 };
 if (config.cache === false) {
+	console.info("Cache disabled");
 	tag.app = tag.page = tag.domain = tag.all = Upcache.tag.disable();
 }
 
