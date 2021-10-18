@@ -6,6 +6,7 @@
 	max-width: 1024px;
 	width: 100%;
 	margin: 2rem auto;
+	text-align: center;
 }
 table {
 	background-color: var(--tilebg);
@@ -18,6 +19,7 @@ table td {
 	white-space:nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	text-align: left;
 }
 table td:first-of-type {
 	max-width: 35vw;
