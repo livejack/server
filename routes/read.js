@@ -1,5 +1,4 @@
 const {Models} = require('objection');
-const prerender = require('../lib/prerender');
 
 exports.GET = async function(req, res, next) {
 	const { domain, key } = req.params;
@@ -9,7 +8,7 @@ exports.GET = async function(req, res, next) {
 			domain, key,
 			view: req.domain.view
 		});
-		prerender(`read`)(req, res, next);
+		res.prerender('read.html');
 	} catch (err) {
 		next(err);
 	}

@@ -43,7 +43,6 @@ if (config.env == "development") {
 		process.exit(1);
 	});
 
-	app.set('statics', Path.resolve('public'));
 	if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
 	config.site = new URL(config.site);
 
@@ -53,8 +52,14 @@ if (config.env == "development") {
 		token: config.live.token
 	});
 
+	app.set('views', Path.resolve('public'));
+
 	const prerender = require('./lib/prerender');
 	prerender.configure(config);
+
+	express.response.prerender = function (path, opts) {
+		prerender(path, opts)(this.req, this, this.req.next);
+	};
 
 	const objection = require('./models')(app);
 	await objection.BaseModel.knex().migrate.latest({
@@ -104,7 +109,7 @@ if (config.env == "development") {
 
 	app.route(/\/js|css|img|dist\//).get(
 		tag.app,
-		serveStatic(app.get('statics'), {
+		serveStatic(app.get('views'), {
 			index: false,
 			redirect: false,
 			dotfiles: 'ignore',
