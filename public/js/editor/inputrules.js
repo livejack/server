@@ -1,6 +1,6 @@
 import {
 	inputRules, wrappingInputRule,
-	smartQuotes, emDash, ellipsis
+	emDash, ellipsis, InputRule
 } from "/node_modules/@livejack/prosemirror";
 
 export function blockQuoteRule(nodeType) {
@@ -19,8 +19,28 @@ export function bulletListRule(nodeType) {
 	return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
 }
 
-export function buildInputRules(schema) {
-	const rules = smartQuotes.concat(ellipsis, emDash);
+function buildSmartQuotes([singleOpen, singleClose, doubleOpen, doubleClose]) {
+	return [
+		new InputRule(
+			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(")`),
+			doubleOpen
+		),
+		new InputRule(
+			/"$/, doubleClose
+		),
+		new InputRule(
+			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(')`),
+			singleOpen
+		),
+		new InputRule(
+			/'$/, singleClose
+		)
+	];
+}
+
+export function buildInputRules(schema, { quotes }) {
+	const rules = [ellipsis, emDash];
+	if (quotes) rules.push(...buildSmartQuotes(quotes));
 	let type;
 	if ((type = schema.nodes.blockquote)) rules.push(blockQuoteRule(type));
 	if ((type = schema.nodes.ordered_list)) rules.push(orderedListRule(type));
