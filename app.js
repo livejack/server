@@ -31,7 +31,7 @@ const tag = {
 	domain: Upcache.tag('app', 'data-:domain'),
 	all: Upcache.tag('app', 'data')
 };
-if (config.env == "development") {
+if (config.cache === false) {
 	tag.app = tag.page = tag.domain = tag.all = Upcache.tag.disable();
 }
 
