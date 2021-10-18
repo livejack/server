@@ -91,7 +91,6 @@ if (config.env == "development") {
 
 	const auth = require('./lib/auth');
 	const domainLock = auth.lock('write-:domain');
-	auth.init(app);
 
 	app.route("/robots.txt").get(
 		tag.app,
