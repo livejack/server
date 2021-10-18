@@ -9,18 +9,18 @@ function updateDOM(from, to) {
 
 const searchTemplate = `<div class="header">
 	<span class="favicon">🔍</span>
-	<a href="url">[url]</a>
+	<a href="url" class="title">[url]</a>
 </div>`;
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
-	<a>HTML Embed</a>
+	<a class="title">HTML Embed</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
-<a>HTML Embed</a>
+<a class="title">HTML Embed</a>
 <button name="preview">⯈</button>
 <button name="del">✕</button>
 </div>
@@ -31,7 +31,7 @@ const codeTemplate = `<div class="header">
 
 const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|else:at:*]" class="favicon" />
-	<a href="[url|else:at:-]">[meta.title]</a>
+	<a href="[url|else:at:-]" class="title">[meta.title]</a>
 	<button name="save">🗘</button>
 	<button name="preview">⯈</button>
 	<button name="del">✕</button>
@@ -47,7 +47,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 <div class="thumbnail">
 	<img src="[meta.thumbnail|else:at:**]" />
 </div>
-<form data-type="[type|eq:image|prune:*]" autocomplete="off" draggable="false">
+<form class="asset" data-type="[type|eq:image|prune:*]" autocomplete="off" draggable="false">
 	<label>
 		<span>Title</span>
 		<input name="title" value="[title]">
@@ -59,7 +59,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 </form>`;
 const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|else:at:*]" class="favicon" />
-	<a href="[url]">[meta.title]</a>
+	<a href="[url]" class="title">[meta.title]</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>

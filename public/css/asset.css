@@ -30,7 +30,8 @@ live-asset > .header {
 	height: 2.3em;
 	align-items: flex-start;
 }
-live-asset > .header > a {
+
+live-asset > .header > .title {
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
@@ -171,30 +172,30 @@ live-asset > .meta > p + p::after {
 #control live-asset > form {
 	display:none;
 }
-live-asset > form {
+form.asset {
 	display:flex;
 	flex-wrap: wrap;
 }
 
-live-asset > form > label:first-of-type {
+form.asset > label:first-of-type {
 	flex:3 1 auto;
 }
-live-asset > form > label:last-of-type {
+form.asset > label:last-of-type {
 	flex:1 1 auto;
 }
-live-asset > form > label {
+form.asset > label {
 	display:flex;
 	border: 1px solid var(--middle-color);
 	border-radius: 0;
 	overflow: hidden;
 }
-live-asset > form > label > span {
+form.asset > label > span {
 	color:var(--middle-color);
 	background-color:var(--back-low-color);
 	padding:0.2em;
 	margin-right: 0.2em;
 }
-live-asset > form > label > input {
+form.asset > label > input {
 	flex:1 0 auto;
 	border-radius: 0;
 	border: none;
