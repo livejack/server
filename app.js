@@ -127,6 +127,10 @@ if (config.env == "development") {
 		next();
 	});
 
+	app.get('/', tag.app, (req, res, next) => {
+		res.prerender("index.html", { render: false });
+	});
+
 	// envoi des notifications de mise à jour vers BO-site qui en retour appelle Front-Live
 	app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
 	// appelé par BO site pour synchroniser les pictos
