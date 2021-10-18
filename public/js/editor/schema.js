@@ -1,4 +1,4 @@
-import { AssetView } from './views.js';
+import { createView } from './views.js';
 
 export const nodes = {
 	doc: {
@@ -113,7 +113,7 @@ export const nodes = {
 			}
 			return ["live-asset", data];
 		},
-		View: AssetView
+		View: createView('live-asset')
 	},
 		}
 	},
@@ -161,7 +161,7 @@ export const nodes = {
 			dom.textContent = title;
 			return dom;
 		},
-		View: AssetView
+		View: createView('a', 'edit-anchor')
 	}
 };
 

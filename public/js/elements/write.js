@@ -9,6 +9,7 @@ import EditTime from './edit-time.js';
 import EditSelect from './edit-select.js';
 import { EditTitle, EditMark, EditText } from './edit-html.js';
 import EditAsset from './edit-asset.js';
+import EditAnchor from './edit-anchor.js';
 
 export default function register(live) {
 	const ce = window.customElements;
@@ -19,6 +20,7 @@ export default function register(live) {
 	live.adopt(EditAsset);
 	live.adopt(EditTime);
 	live.adopt(EditControl);
+	live.adopt(EditAnchor);
 
 	ce.define('edit-error', EditError, { extends: 'div' });
 	ce.define('edit-article', EditArticle, { extends: 'article' });
@@ -32,4 +34,5 @@ export default function register(live) {
 	ce.define('edit-status', EditStatus, { extends: 'form' });
 	ce.define('edit-control', EditControl, { extends: 'div' });
 	ce.define('edit-filter', EditFilter, { extends: 'form' });
+	ce.define('edit-anchor', EditAnchor, { extends: 'a' });
 }

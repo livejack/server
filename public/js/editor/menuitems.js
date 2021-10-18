@@ -73,7 +73,7 @@ function linkItem(markType) {
 function assetItem(nodeType) {
 	return new MenuItem({
 		title: "Insert asset",
-		icon: icons.asset,
+		icon: icons[nodeType.name],
 		select(state) {
 			return state.selection.empty;
 		},
@@ -96,8 +96,8 @@ function assetItem(nodeType) {
 export function buildMenuItems(schema) {
 	const r = {};
 	let type;
-	if ((type = schema.marks.link)) {
-		r.toggleLink = linkItem(type);
+	if ((type = schema.nodes.link)) {
+		r.insertLink = assetItem(type);
 	}
 	if ((type = schema.marks.strong)) {
 		r.toggleStrong = markItem(type, { icon: icons.strong });
@@ -141,8 +141,8 @@ export function buildMenuItems(schema) {
 	}
 
 	const cut = arr => arr.filter(x => x);
-	r.inlineMenu = [cut([r.toggleLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
 	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
+	r.inlineMenu = [cut([r.insertLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
 	r.fullMenu = [cut([r.insertAsset])].concat(r.inlineMenu, r.blockMenu);
 
 	return r;
