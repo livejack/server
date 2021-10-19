@@ -16,7 +16,12 @@ exports.GET = async function(req, res, next) {
 // création de la page à partir de l'URL
 exports.PUT = async function(req, res, next) {
 	const { domain, key } = req.params;
-	await Models.Page.query().findOne({ domain, key }).throwIfNotFound().patch(req.body);
+	if (!req.domain) throw new HttpError.BadRequest("No domain");
+	const page = await Models.Page.have({
+		domain, key,
+		view: req.domain.view
+	});
+	await page.$query().patch(req.body);
 	try {
 		await require('../resources/synchro').syncAssets(
 			req,
