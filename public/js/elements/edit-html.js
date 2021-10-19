@@ -12,7 +12,7 @@ class HtmlEditor extends Editor {
 }
 class EditHtml {
 	static options = {
-		quotes: [`‘`, `’`, `«`, `»`]
+		quotes: [`’`, `‹`, `›`, `«`, `»`]
 	}
 	connectedCallback() {
 		this.defaultValue = this.value;

@@ -19,21 +19,24 @@ export function bulletListRule(nodeType) {
 	return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
 }
 
-function buildSmartQuotes([singleOpen, singleClose, doubleOpen, doubleClose]) {
+function buildSmartQuotes([apostrophe, singleOpen, singleClose, doubleOpen, doubleClose]) {
 	return [
 		new InputRule(
-			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(")`),
+			/(?:\p{Letter})(')\p{Letter}$/u, apostrophe
+		),
+		new InputRule(
+			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(")$`),
 			doubleOpen
 		),
 		new InputRule(
 			/"$/, doubleClose
 		),
 		new InputRule(
-			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(')`),
+			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(')$`),
 			singleOpen
 		),
 		new InputRule(
-			/'$/, singleClose
+			/(?:\p{Letter})(')[^\p{Letter}]$/u, singleClose
 		)
 	];
 }
