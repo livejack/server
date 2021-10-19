@@ -115,15 +115,6 @@ export const nodes = {
 		},
 		View: createView('live-asset')
 	},
-		}
-	},
-	blockquote: {
-		content: "block+",
-		group: "block",
-		defining: true,
-		parseDOM: [{ tag: "blockquote" }],
-		toDOM() { return ["blockquote", 0]; }
-	},
 
 	hard_break: {
 		inline: true,
