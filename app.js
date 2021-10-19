@@ -135,9 +135,9 @@ if (config.cache === false) {
 	// envoi des notifications de mise à jour vers BO-site qui en retour appelle Front-Live
 	app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
 	// appelé par BO site pour synchroniser les pictos
-	app.get('/:domain/:key(pictos)/synchro', domainLock, resources.synchro.pictos);
+	app.get('/:domain/:key(pictos)/synchro', resources.synchro.pictos);
 	// appelé par BO site pour synchroniser un live
-	app.get('/:domain/:key/synchro', domainLock, resources.synchro.GET);
+	app.get('/:domain/:key/synchro', resources.synchro.GET);
 
 	// this route needs its own extension
 	app.get('/:domain/:key/messages.html', rewrite('/:domain/:key/read?fragment=.live-messages'));
