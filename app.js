@@ -117,7 +117,7 @@ if (config.cache === false) {
 		})
 	);
 
-	app.options('*', cors());
+	app.use(cors());
 
 	app.use(morgan(':method :status :response-time ms :url - :res[content-length]'));
 
