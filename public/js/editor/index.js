@@ -15,7 +15,6 @@ import {
 import { HTML as parseHTML } from "/node_modules/matchdom";
 
 import { menuBar } from "./menubar.js";
-import { buildMenuItems } from "./menuitems.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
 import nodeViewSelect from "./nodeviewselect.js";
@@ -31,9 +30,7 @@ function getPlugins({ schema, menu, table, quotes }) {
 		history()
 	];
 	if (menu !== false) {
-		plugins.push(menuBar({
-			content: buildMenuItems(schema).fullMenu
-		}));
+		plugins.push(menuBar(schema));
 	}
 	if (table !== false) {
 		plugins.push(

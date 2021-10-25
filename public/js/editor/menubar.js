@@ -2,13 +2,13 @@ import { Plugin } from "/node_modules/@livejack/prosemirror";
 
 import { renderGrouped } from "./menu.js";
 
+import { buildMenuItems } from "./menuitems.js";
+
 class MenuBarView {
 	#ticking = false
-	constructor(view, options) {
+	constructor(view, schema) {
 		this.view = view;
-		this.options = options;
-
-		const { dom, update } = renderGrouped(view, this.options.content);
+		const { dom, update } = renderGrouped(view, buildMenuItems(schema).fullMenu);
 		this.menu = document.createElement('div');
 		this.menu.className = "prosemirror-menu";
 		this.menu.append(dom);
@@ -16,38 +16,32 @@ class MenuBarView {
 		this.contentUpdate = update;
 		view.dom.parentNode.querySelector('.toolbar').prepend(this.menu);
 
-		document.addEventListener('mousedown', this);
-		document.addEventListener('mouseup', this);
-		document.getElementById('live').addEventListener('scroll', this);
+		view.dom.addEventListener('focus', this);
+		view.dom.addEventListener('blur', this);
+	}
 
+	handleEvent(e) {
 		this.update();
 	}
 
 	update() {
-		this.contentUpdate(this.view.state, this.view);
-		this.requestMove();
-	}
-
-	handleEvent(e) {
-		this.requestMove();
-	}
-
-	requestMove() {
 		if (this.#ticking) return;
 		window.requestAnimationFrame(() => {
-			this.move();
+			this.doUpdate();
 			this.#ticking = false;
 		});
 		this.#ticking = true;
 	}
 
-	move() {
+	doUpdate() {
+		const focused = this.view.hasFocus();
+		this.menu.classList.toggle('disabled', !focused);
+		this.contentUpdate(this.view.state, this.view);
 		const sel = this.view.state.selection;
+
 		const style = this.menu.style;
 		const dom = this.view.dom;
-		// floating if !sel.empty
-		// else show at bottom
-		if (!this.view.docView || !this.view.focused || sel.empty || sel.node && sel.node.type.name == "asset") {
+		if (!this.view.docView || !focused || sel.node) {
 			this.menu.classList.remove('floating');
 			style.top = null;
 			style.left = null;
@@ -63,17 +57,16 @@ class MenuBarView {
 	}
 
 	destroy() {
-		document.removeEventListener('mousedown', this);
-		document.removeEventListener('mouseup', this);
-		document.getElementById('live').removeEventListener('scroll', this);
+		this.view.dom.removeEventListener('focus', this);
+		this.view.dom.removeEventListener('blur', this);
 		this.menu.remove();
 	}
 }
 
-export function menuBar(options) {
+export function menuBar(schema) {
 	return new Plugin({
 		view(editorView) {
-			return new MenuBarView(editorView, options);
+			return new MenuBarView(editorView, schema);
 		}
 	});
 }
