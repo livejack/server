@@ -13,30 +13,22 @@ import { getIcon } from "./icons.js";
 
 const prefix = "ProseMirror-menu";
 
-// ::- An icon or label that, when clicked, executes a command.
 export class MenuItem {
-	// :: (MenuItemSpec)
 	constructor(spec) {
-		// :: MenuItemSpec
-		// The spec used to create the menu item.
 		this.spec = spec;
 	}
 
-	// :: (EditorView) → {dom: dom.Node, update: (EditorState) → bool}
-	// Renders the icon according to its [display
-	// spec](#menu.MenuItemSpec.display), and adds an event handler which
-	// executes the command when the representation is clicked.
 	render(view) {
 		const spec = this.spec;
 		const dom = (() => {
 			if (spec.render) return spec.render(view);
 			if (spec.icon) return getIconState(spec.icon);
-			if (spec.label) return crel("div", null, translate(view, spec.label));
+			if (spec.label) return crel("div", null, spec.label);
 		})();
 		if (!dom) throw new RangeError("MenuItem without icon or label property");
 		if (spec.title) {
 			const title = (typeof spec.title === "function" ? spec.title(view.state) : spec.title);
-			dom.setAttribute("title", translate(view, title));
+			dom.setAttribute("title", title);
 		}
 		if (spec.class) dom.classList.add(spec.class);
 		if (spec.css) dom.style.cssText += spec.css;
@@ -56,11 +48,11 @@ export class MenuItem {
 			let enabled = true;
 			if (spec.enable) {
 				enabled = spec.enable(state, view) || false;
-				setClass(dom, prefix + "-disabled", !enabled);
+				dom.classList.toggle(prefix + "-disabled", !enabled);
 			}
 			if (spec.active) {
 				const active = enabled && spec.active(state, view) || false;
-				setClass(dom, prefix + "-active", active);
+				dom.classList.toggle(prefix + "-active", active);
 			}
 			return true;
 		}
@@ -81,60 +73,6 @@ function getIconState(icon) {
 	}
 }
 
-function translate(view, text) {
-	return view._props.translate ? view._props.translate(text) : text;
-}
-
-// MenuItemSpec:: interface
-// The configuration object passed to the `MenuItem` constructor.
-//
-//   run:: (EditorState, (Transaction), EditorView, dom.Event)
-//   The function to execute when the menu item is activated.
-//
-//   select:: ?(EditorState) → bool
-//   Optional function that is used to determine whether the item is
-//   appropriate at the moment. Deselected items will be hidden.
-//
-//   enable:: ?(EditorState) → bool
-//   Function that is used to determine if the item is enabled. If
-//   given and returning false, the item will be given a disabled
-//   styling.
-//
-//   active:: ?(EditorState) → bool
-//   A predicate function to determine whether the item is 'active' (for
-//   example, the item for toggling the strong mark might be active then
-//   the cursor is in strong text).
-//
-//   render:: ?(EditorView) → dom.Node
-//   A function that renders the item. You must provide either this,
-//   [`icon`](#menu.MenuItemSpec.icon), or [`label`](#MenuItemSpec.label).
-//
-//   icon:: ?Object
-//   Describes an icon to show for this item. The object may specify
-//   an SVG icon, in which case its `path` property should be an [SVG
-//   path
-//   spec](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d),
-//   and `width` and `height` should provide the viewbox in which that
-//   path exists. Alternatively, it may have a `text` property
-//   specifying a string of text that makes up the icon, with an
-//   optional `css` property giving additional CSS styling for the
-//   text. _Or_ it may contain `dom` property containing a DOM node.
-//
-//   label:: ?string
-//   Makes the item show up as a text label. Mostly useful for items
-//   wrapped in a [drop-down](#menu.Dropdown) or similar menu. The object
-//   should have a `label` property providing the text to display.
-//
-//   title:: ?union<string, (EditorState) → string>
-//   Defines DOM title (mouseover) text for the item.
-//
-//   class:: ?string
-//   Optionally adds a CSS class to the item's DOM representation.
-//
-//   css:: ?string
-//   Optionally adds a string of inline CSS to the item's DOM
-//   representation.
-
 function combineUpdates(updates, nodes) {
 	return (state, view) => {
 		let something = false;
@@ -147,11 +85,6 @@ function combineUpdates(updates, nodes) {
 	};
 }
 
-// :: (EditorView, [union<MenuElement, [MenuElement]>]) → {dom: ?dom.DocumentFragment, update: (EditorState) → bool}
-// Render the given, possibly nested, array of menu elements into a
-// document fragment, placing separators between them (and ensuring no
-// superfluous separators appear when some of the groups turn out to
-// be empty).
 export function renderGrouped(view, content) {
 	const result = document.createDocumentFragment();
 	const updates = [], separators = [];
@@ -166,8 +99,9 @@ export function renderGrouped(view, content) {
 		}
 		if (localUpdates.length) {
 			updates.push(combineUpdates(localUpdates, localNodes));
-			if (i < content.length - 1)
+			if (i < content.length - 1) {
 				separators.push(result.appendChild(separator()));
+			}
 		}
 	}
 
@@ -175,9 +109,13 @@ export function renderGrouped(view, content) {
 		let something = false, needSep = false;
 		for (let i = 0; i < updates.length; i++) {
 			const hasContent = updates[i](state, view);
-			if (i) separators[i - 1].style.display = needSep && hasContent ? "" : "none";
+			if (i) {
+				separators[i - 1].style.display = needSep && hasContent ? "" : "none";
+			}
 			needSep = hasContent;
-			if (hasContent) something = true;
+			if (hasContent) {
+				something = true;
+			}
 		}
 		return something;
 	}
@@ -188,12 +126,6 @@ function separator() {
 	return crel("span", { class: prefix + "separator" });
 }
 
-// :: Object
-// A set of basic editor-related icons. Contains the properties
-// `join`, `lift`, `selectParentNode`, `undo`, `redo`, `strong`, `em`,
-// `code`, `link`, `bulletList`, `orderedList`, and `blockquote`, each
-// holding an object that can be used as the `icon` option to
-// `MenuItem`.
 export const icons = {
 	join: {
 		width: 800, height: 900,
@@ -258,8 +190,6 @@ export const icons = {
 	}
 };
 
-// :: MenuItem
-// Menu item for the `joinUp` command.
 export const joinUpItem = new MenuItem({
 	title: "Join with above block",
 	run: joinUp,
@@ -267,8 +197,6 @@ export const joinUpItem = new MenuItem({
 	icon: icons.join
 });
 
-// :: MenuItem
-// Menu item for the `lift` command.
 export const liftItem = new MenuItem({
 	title: "Lift out of enclosing block",
 	run: lift,
@@ -276,8 +204,6 @@ export const liftItem = new MenuItem({
 	icon: icons.lift
 });
 
-// :: MenuItem
-// Menu item for the `selectParentNode` command.
 export const selectParentNodeItem = new MenuItem({
 	title: "Select parent node",
 	run: selectParentNode,
@@ -285,8 +211,6 @@ export const selectParentNodeItem = new MenuItem({
 	icon: icons.selectParentNode
 });
 
-// :: MenuItem
-// Menu item for the `undo` command.
 export const undoItem = new MenuItem({
 	title: "Undo last change",
 	run: undo,
@@ -294,8 +218,6 @@ export const undoItem = new MenuItem({
 	icon: icons.undo
 });
 
-// :: MenuItem
-// Menu item for the `redo` command.
 export const redoItem = new MenuItem({
 	title: "Redo last undone change",
 	run: redo,
@@ -303,10 +225,6 @@ export const redoItem = new MenuItem({
 	icon: icons.redo
 });
 
-// :: (NodeType, Object) → MenuItem
-// Build a menu item for wrapping the selection in a given node type.
-// Adds `run` and `select` properties to the ones present in
-// `options`. `options.attrs` may be an object or a function.
 export function wrapItem(nodeType, options) {
 	const passedOptions = {
 		run(state, dispatch) {
@@ -321,11 +239,6 @@ export function wrapItem(nodeType, options) {
 	return new MenuItem(passedOptions);
 }
 
-// :: (NodeType, Object) → MenuItem
-// Build a menu item for changing the type of the textblock around the
-// selection to the given type. Provides `run`, `active`, and `select`
-// properties. Others must be given in `options`. `options.attrs` may
-// be an object to provide the attributes for the textblock node.
 export function blockTypeItem(nodeType, options) {
 	const command = setBlockType(nodeType, options.attrs);
 	const passedOptions = {
@@ -341,8 +254,28 @@ export function blockTypeItem(nodeType, options) {
 	return new MenuItem(passedOptions);
 }
 
-// Work around classList.toggle being broken in IE11
-function setClass(dom, cls, on) {
-	if (on) dom.classList.add(cls);
-	else dom.classList.remove(cls);
+function canInsert(state, nodeType) {
+	const $from = state.selection.$from;
+	for (let d = $from.depth; d >= 0; d--) {
+		const index = $from.index(d);
+		if ($from.node(d).canReplaceWith(index, index, nodeType)) return true;
+	}
+	return false;
 }
+export function insertTypeItem(nodeType, options) {
+	const passedOptions = {
+		run(state, dispatch) {
+			dispatch(state.tr.replaceSelectionWith(nodeType.createAndFill({})));
+		},
+		enable(state) {
+			return canInsert(state, nodeType);
+		},
+		active(state) {
+			const { $from, to, node } = state.selection;
+			if (node) return node.hasMarkup(nodeType, options.attrs);
+			return to <= $from.end() && $from.parent.hasMarkup(nodeType, options.attrs);
+		}
+	};
+	return new MenuItem(Object.assign(passedOptions, options));
+}
+
