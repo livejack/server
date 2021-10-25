@@ -96,8 +96,11 @@ function assetItem(nodeType) {
 export function buildMenuItems(schema) {
 	const r = {};
 	let type;
-	if ((type = schema.nodes.link)) {
-		r.insertLink = assetItem(type);
+	if ((type = schema.marks.link)) {
+		r.toggleLink = markItem(type, { icon: {
+			active: icons.unlink,
+			inactive: icons.link
+		}});
 	}
 	if ((type = schema.marks.strong)) {
 		r.toggleStrong = markItem(type, { icon: icons.strong });
@@ -141,8 +144,8 @@ export function buildMenuItems(schema) {
 	}
 
 	const cut = arr => arr.filter(x => x);
-	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.wrapBlockQuote])];
-	r.inlineMenu = [cut([r.insertLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
+	r.inlineMenu = [cut([r.toggleLink, r.toggleStrong, r.toggleEm, r.toggleSup, r.toggleSub])];
+	r.blockMenu = [cut([r.wrapBulletList, r.wrapOrderedList, liftItem, r.insertBlockQuote])];
 	r.fullMenu = [cut([r.insertAsset])].concat(r.inlineMenu, r.blockMenu);
 
 	return r;
