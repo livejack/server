@@ -113,7 +113,6 @@ export class Editor extends EditorView {
 			domSerializer: DOMSerializer.fromSchema(schema)
 		});
 		this.#content = nodes.doc.content.replace('*', '');
-		this.#parser = parser;
 	}
 	convertSnippets(frag) {
 		if (frag.nodeType == Node.ELEMENT_NODE) {
