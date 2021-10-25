@@ -41,7 +41,6 @@ function getPlugins({ schema, menu, table, quotes }) {
 }
 
 export class Editor extends EditorView {
-	#serializer
 	#parser
 	#content
 	constructor(place, { nodes, marks, list, menu, table, quotes, assets = [] }) {
@@ -110,11 +109,11 @@ export class Editor extends EditorView {
 						context: $pos
 					});
 				}
-			}
+			},
+			domSerializer: DOMSerializer.fromSchema(schema)
 		});
 		this.#content = nodes.doc.content.replace('*', '');
 		this.#parser = parser;
-		this.#serializer = DOMSerializer.fromSchema(schema);
 	}
 	convertSnippets(frag) {
 		if (frag.nodeType == Node.ELEMENT_NODE) {
@@ -216,9 +215,10 @@ export class Editor extends EditorView {
 		}
 		this.dispatch(tr);
 	}
-	toDOM() {
-		const frag = this.#serializer.serializeFragment(this.state.doc.content);
-		for (const node of frag.querySelectorAll('x-empty')) node.remove();
+	toDOM(node) {
+		if (!node) node = this.state.doc;
+		const frag = this.props.domSerializer.serializeFragment(node.content);
+		for (const dom of frag.querySelectorAll('x-empty')) dom.remove();
 		return frag;
 	}
 	initCursor({ left, top }) {
