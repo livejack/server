@@ -122,16 +122,12 @@ export const nodes = {
 		selectable: false,
 		parseDOM: [{ tag: "br" }],
 		toDOM() { return ["br"]; }
-	},
+	}
+};
 
+export const marks = {
 	link: {
-		inline: true,
-		group: "inline",
-		atom: true,
 		attrs: {
-			title: {
-				default: null
-			},
 			url: {
 				default: null
 			}
@@ -140,23 +136,16 @@ export const nodes = {
 			tag: 'a',
 			getAttrs(dom) {
 				return {
-					url: dom.getAttribute('href'),
-					title: dom.textContent
+					url: dom.getAttribute('href')
 				};
 			}
 		}],
 		toDOM(node) {
-			const { url, title } = node.attrs;
-			const dom = document.createElement('a');
-			dom.setAttribute('href', url);
-			dom.textContent = title;
-			return dom;
+			return ['a', { href: node.attrs.url }, 0];
 		},
 		View: createView('a', 'edit-anchor')
-	}
-};
+	},
 
-export const marks = {
 	em: {
 		parseDOM: [{ tag: "i" }, { tag: "em" }, { style: "font-style=italic" }],
 		toDOM() { return ["em", 0]; }
