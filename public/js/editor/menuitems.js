@@ -70,6 +70,17 @@ function linkItem(markType) {
 	});
 }
 
+function canInsert(state, type) {
+	const sel = state.selection;
+	if (!sel.empty) return false;
+	const $from = state.selection.$from;
+	for (let d = $from.depth; d >= 0; d--) {
+		const index = $from.index(d);
+		if ($from.node(d).canReplaceWith(index, index, type)) return true;
+	}
+	return false;
+}
+
 function assetItem(nodeType) {
 	return new MenuItem({
 		title: "Insert asset",
@@ -78,14 +89,7 @@ function assetItem(nodeType) {
 			return state.selection.empty;
 		},
 		enable(state) {
-			const sel = state.selection;
-			if (!sel.empty) return false;
-			const $from = state.selection.$from;
-			for (let d = $from.depth; d >= 0; d--) {
-				const index = $from.index(d);
-				if ($from.node(d).canReplaceWith(index, index, nodeType)) return true;
-			}
-			return false;
+			return canInsert(state, nodeType);
 		},
 		run(state, dispatch, view) {
 			view.dom.queryAssets('link');
