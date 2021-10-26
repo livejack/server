@@ -10,6 +10,7 @@ const got = require('got');
 const serveModule = require("@webmodule/serve");
 const LiveJack = require('@livejack/client/node');
 const Upcache = require('upcache');
+const WellKnownUpcache = "/.well-known/upcache";
 
 const ini = require('./lib/express-ini');
 
@@ -86,7 +87,7 @@ if (config.cache === false) {
 		return 204;
 	});
 
-	app.post('/.well-known/upcache', tag.app, (req) => {
+	app.post(WellKnownUpcache, tag.app, (req) => {
 		return 204;
 	});
 
@@ -222,7 +223,7 @@ if (config.cache === false) {
 	require('http').createServer(app).listen(config.listen, async () => {
 		console.info("Listening on port", config.listen);
 		const upcacheUrl = new URL(config.site);
-		upcacheUrl.pathname = ".well-known/upcache";
+		upcacheUrl.pathname = WellKnownUpcache;
 		try {
 			await got.post(upcacheUrl, {
 				retry: {
