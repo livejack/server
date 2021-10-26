@@ -58,6 +58,7 @@ div.toolbar button[name="del"] {
 	z-index: 1;
 	margin-top:0.5em;
 	transition: top, left 0.1s, 0.1s;
+	box-shadow: 0 1px 10px 0px white;
 }
 .prosemirror-menu.disabled {
 	opacity:0.5;
