@@ -9,7 +9,14 @@ export function createView(tag, is) {
 		}
 		change(attrs) {
 			const tr = this.view.state.tr;
-			tr.setNodeMarkup(this.getPos(), null, Object.assign({}, this.node.attrs, attrs));
+			const sel = tr.selection;
+			const jsel = sel.toJSON();
+			tr.setNodeMarkup(
+				this.getPos(),
+				null,
+				Object.assign({}, this.node.attrs, attrs)
+			);
+			tr.setSelection(sel.constructor.fromJSON(tr.doc, jsel));
 			this.view.dispatch(tr);
 		}
 		stopEvent(e) {
