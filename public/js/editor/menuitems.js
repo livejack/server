@@ -74,6 +74,7 @@ export function buildMenuItems(schema) {
 	let type;
 	if ((type = schema.marks.link)) {
 		r.toggleLink = markItem(type, {
+			enable(state) { return !state.selection.empty; },
 			icon: {
 				active: icons.unlink,
 				inactive: icons.link
