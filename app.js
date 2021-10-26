@@ -133,6 +133,7 @@ if (config.cache === false && !apiCall) {
 
 	app.param('domain', (req, res, next, domain) => {
 		req.domain = req.app.settings.domains[req.params.domain];
+		if (req.domain) req.params.view = req.domain.view;
 		next();
 	});
 
