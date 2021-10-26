@@ -1,5 +1,6 @@
 // always resolve paths relative to app.js directory
 process.chdir(__dirname);
+const { once } = require('events');
 const cors = require('cors');
 const morgan = require('morgan');
 const rewrite = require('express-urlrewrite');
@@ -220,24 +221,23 @@ if (config.cache === false) {
 		})
 	);
 	await auth.keygen(config);
-	require('http').createServer(app).listen(config.listen, async () => {
-		console.info("Listening on port", config.listen);
-		const upcacheUrl = new URL(config.site);
-		upcacheUrl.pathname = WellKnownUpcache;
-		try {
-			await got.post(upcacheUrl, {
-				retry: {
-					limit: Math.Infinity,
-					methods: ["POST"]
-				}
-			});
-			console.info("Cache invalidated");
-		} catch(err) {
-			console.error(upcacheUrl.href, err);
-		}
-	});
-
 })().catch((err) => {
+	const server = require('http').createServer(app).listen(config.listen);
+	await once(server, 'listening');
+	console.info("Listening on port", config.listen);
+	const upcacheUrl = new URL(config.site);
+	upcacheUrl.pathname = WellKnownUpcache;
+	try {
+		await got.post(upcacheUrl, {
+			retry: {
+				limit: Math.Infinity,
+				methods: ["POST"]
+			}
+		});
+		console.info("Cache invalidated");
+	} catch (err) {
+		console.error(upcacheUrl.href, err);
+	}
 	console.error(err);
 	process.exit(1);
 });
