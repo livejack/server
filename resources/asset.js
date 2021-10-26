@@ -76,7 +76,6 @@ async function prepareAsset(item) {
 		console.error(meta.thumbnail);
 		console.error(err.toString());
 		console.groupEnd();
-		/* eslint-enable no-console */
 		delete meta.thumbnail;
 	}
 	if (!item.meta) item.meta = {};
