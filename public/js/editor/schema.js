@@ -127,6 +127,7 @@ export const nodes = {
 
 export const marks = {
 	link: {
+		inclusive: false,
 		attrs: {
 			url: {
 				default: null
