@@ -31,6 +31,7 @@ export function createView(tag, is) {
 				if (val == null) delete dom.dataset[key];
 				else dom.dataset[key] = val;
 			}
+			if (dom.update) dom.update();
 			return true;
 		}
 		ignoreMutation(record) {

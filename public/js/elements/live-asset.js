@@ -28,13 +28,13 @@ export class LiveAsset extends HTMLElement {
 		return `${pair[0]}-${pair[1]}`;
 	}
 	connectedCallback() {
-		this.populate();
+		this.update();
 		observer.observe(this);
 	}
 	disconnectedCallback() {
 		observer.unobserve(this);
 	}
-	populate() {
+	update() {
 		if (this.children.length) return;
 		const { url } = this.dataset;
 		const {
@@ -96,13 +96,13 @@ export class LiveAsset extends HTMLElement {
 
 export class LiveIcon extends HTMLElement {
 	connectedCallback() {
-		this.populate();
+		this.update();
 		observer.observe(this);
 	}
 	disconnectedCallback() {
 		observer.unobserve(this);
 	}
-	populate() {
+	update() {
 		if (this.children.length) return;
 		this.dataset.ratio = '1-1';
 		this.insertAdjacentHTML('afterbegin', `<img />`);

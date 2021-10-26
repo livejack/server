@@ -129,7 +129,7 @@ export default class EditAsset extends LiveAsset {
 				e.stopPropagation();
 				e.preventDefault();
 				this.#preview = !this.#preview;
-				this.populate();
+				this.update();
 				this.reveal();
 			}
 		} else if (e.type == "mousemove") {
@@ -175,14 +175,14 @@ export default class EditAsset extends LiveAsset {
 			delete this.dataset.html;
 			// keep dataset.script
 			this.dataset.url = url;
-			this.populate();
+			this.update();
 		} else {
 			this.remove();
 		}
 	}
 
-	populate() {
 		const url = this.dataset.url;
+	update() {
 		const data = {};
 		if (url) {
 			const asset = this.live.get(url);
@@ -223,7 +223,7 @@ export default class EditAsset extends LiveAsset {
 			Object.assign(liveAsset.dataset, this.dataset);
 			doc.body.firstElementChild.appendChild(liveAsset);
 			liveAsset.live = this.live;
-			LiveAsset.prototype.populate.call(liveAsset);
+			LiveAsset.prototype.update.call(liveAsset);
 			LiveAsset.prototype.reveal.call(liveAsset);
 
 			this.#watchFrame = setInterval(() => {
