@@ -5,6 +5,9 @@ export function createView(tag, is) {
 			this.view = view;
 			this.getPos = getPos;
 			this.dom = view.root.createElement(tag, { is: is });
+			if (!node.type.isAtom) {
+				this.contentDOM = this.dom.content;
+			}
 			this.update(node);
 		}
 		change(attrs) {
@@ -42,8 +45,11 @@ export function createView(tag, is) {
 			return true;
 		}
 		ignoreMutation(record) {
-			if (record.target == this.dom && record.type == "attributes" && record.attributeName.startsWith('data-')) {
-				Object.assign(this.node.attrs, record.target.dataset);
+			if (record.type == "selection") return true;
+			if (record.addedNodes && record.addedNodes.length && record.addedNodes.some((node) => {
+				return !node.isContentEditable;
+			})) return true;
+			else if (record.target == this.dom && (record.type == "attributes" && record.attributeName.startsWith('data-'))) {
 				return false;
 			} else {
 				return true;
