@@ -111,7 +111,7 @@ class LiveRead extends LiveJack {
 				else data.page[key] = this.page[key];
 			}
 		} else {
-			data.page = this.page;
+			data = Object.assign({}, data, { page: this.page });
 		}
 		return this.matchdom.merge(node, data, { live: this });
 	}
