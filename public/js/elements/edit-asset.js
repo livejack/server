@@ -7,14 +7,14 @@ const searchTemplate = `<div class="header">
 </div>`;
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮❯</span>
-	<a class="title">HTML Embed</a>
+	<a class="title">Embed HTML</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮❯</span>
-<a class="title">HTML Embed</a>
+<a class="title">Embed HTML</a>
 <button name="preview">⯈</button>
 <button name="del">✕</button>
 </div>
@@ -43,11 +43,11 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 </div>
 <form class="asset" data-type="[type|eq:image|prune:*]" autocomplete="off" draggable="false">
 	<label>
-		<span>Title</span>
+		<span>Titre</span>
 		<input name="title" value="[title]">
 	</label>
 	<label>
-		<span>Author</span>
+		<span>Auteur</span>
 		<input name="author" value="[author]">
 	</label>
 </form>`;
