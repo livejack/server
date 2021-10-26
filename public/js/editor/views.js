@@ -32,9 +32,8 @@ export function createView(tag, is) {
 				return true;
 			}
 		}
-		update({ attrs }) {
-			if (attrs.url !== this.node.attrs.url) return;
-			this.node.attrs = attrs;
+		update(node) {
+			const { attrs } = node;
 			const dom = this.dom;
 			for (const key in attrs) {
 				const val = attrs[key];
