@@ -36,6 +36,8 @@ class MenuBarView {
 			this.#left = null;
 		} else if (this.menu.contains(e.target)) {
 			this.#keep = e.type == "focusin";
+		} else if (e.relatedTarget?.closest('.list > live-asset')) {
+			this.#keep = e.type == "focusout";
 		}
 		this.#reposition();
 	}
