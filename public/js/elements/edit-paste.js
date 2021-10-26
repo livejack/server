@@ -83,6 +83,9 @@ export default class EditPaste extends HTMLFormElement {
 		if (item) this.change(item.url);
 		return item;
 	}
+	set(url) {
+		if (this.#input) this.#input.value = url;
+	}
 	update() {
 		if (this.#input) this.querySelector('.buttons')
 			.classList.toggle('hide', !this.#input.value);
