@@ -124,6 +124,16 @@ export const nodes = {
 		toDOM() { return ["br"]; }
 	}
 };
+const linkTpl = `<form is="edit-paste" method="post" action="assets" class="asset">
+<label>
+	<input class="tiled" placeholder="Coller une URL..." value="[url]">
+</label>
+<div class="buttons hide">
+	<button type="reset">Annuler</button>
+	<button type="submit">Valider</button>
+</div>
+<live-asset data-type="link" data-url="[url]"></live-asset>
+</form>`;
 
 export const marks = {
 	link: {
@@ -141,8 +151,8 @@ export const marks = {
 				};
 			}
 		}],
-		toDOM(node) {
-			return ['a', { href: node.attrs.url || "#" }, 0];
+		toDOM({attrs}) {
+			return ['a', { href: attrs.url || "#" }, 0];
 		},
 		menu(menu, view, mark) {
 			let form = menu.querySelector('form');
@@ -151,33 +161,25 @@ export const marks = {
 				return;
 			}
 			if (!form) {
-				form = view.dom.live.merge(`<form is="edit-paste" method="post" action="assets" class="asset">
-					<label>
-						<input class="tiled" placeholder="Coller une URL..." value="[url]">
-					</label>
-					<div class="buttons hide">
-						<button type="reset">Annuler</button>
-						<button type="submit">Valider</button>
-					</div>
-					<live-asset data-type="link" data-url="[url]"></live-asset>
-				</form>`, mark.attrs);
+				form = view.dom.live.merge(linkTpl, mark.attrs);
 				menu.append(form);
 			}
 			form.change = function (url) {
-				let { tr } = view.state;
+				const { tr } = view.state;
 				let { from, to } = tr.selection;
 				while (tr.doc.rangeHasMark(from - 1, from, mark)) from--;
 				while (tr.doc.rangeHasMark(to, to + 1, mark)) to++;
-				tr = tr.removeMark(mark, from, to);
+				tr.removeMark(from, to, mark);
 				const copy = mark.type.create(Object.assign({}, mark.attrs, { url }));
-				tr = tr.addMark(copy, from, to);
+				tr.addMark(from, to, copy);
 				const sel = tr.selection.constructor.fromJSON(tr.doc, {
 					type: 'text',
 					anchor: from,
 					head: to
 				});
+				tr.setSelection(sel);
+				view.dispatch(tr);
 				view.focus();
-				view.dispatch(tr.setSelection(sel));
 			};
 			const url = mark.attrs.url || "";
 			form.set?.(url);
