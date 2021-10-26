@@ -54,5 +54,15 @@ export function createView(tag, is) {
 				return true;
 			}
 		}
+		selectNode() {
+			const { dom } = this;
+			dom.classList.add("ProseMirror-selectednode");
+			dom.select?.();
+		}
+		deselectNode() {
+			const { dom } = this;
+			dom.deselect?.();
+			dom.classList.remove("ProseMirror-selectednode");
+		}
 	};
 }
