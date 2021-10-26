@@ -24,6 +24,7 @@ const jsonParser = express.json({
 	limit: "100kb"
 });
 const config = ini(app);
+const apiCall = process.argv.length == 3 ? process.argv[2] : null;
 
 config.live.version = require('@livejack/client/package.json').version;
 
@@ -33,7 +34,7 @@ const tag = {
 	domain: Upcache.tag('app', 'data-:domain'),
 	all: Upcache.tag('app', 'data')
 };
-if (config.cache === false) {
+if (config.cache === false && !apiCall) {
 	console.info("Cache disabled");
 	tag.app = tag.page = tag.domain = tag.all = Upcache.tag.disable();
 }
@@ -65,9 +66,14 @@ if (config.cache === false) {
 	};
 
 	const objection = require('./models')(app);
-	await objection.BaseModel.knex().migrate.latest({
-		directory: "migrations/"
-	});
+
+	if (apiCall == "migrate") {
+		await objection.BaseModel.knex().migrate.latest({
+			directory: "migrations/"
+		});
+		return;
+	}
+
 	const resources = require('./resources/*');
 	const routes = require('./routes/*');
 
@@ -215,13 +221,19 @@ if (config.cache === false) {
 
 	await ini.async(config);
 
-	await objection.Models.User.populate(
-		Object.entries(config.domains).map(([domain, obj]) => {
-			return { domain, token: obj.password };
-		})
-	);
+	if (apiCall == "populate") {
+		await objection.Models.User.populate(
+			Object.entries(config.domains).map(([domain, obj]) => {
+				return { domain, token: obj.password };
+			})
+		);
+		return;
+	}
 	await auth.keygen(config);
-})().catch((err) => {
+	if (apiCall) {
+		throw new Error(`Unknown api call: ${apiCall}`);
+	}
+
 	const server = require('http').createServer(app).listen(config.listen);
 	await once(server, 'listening');
 	console.info("Listening on port", config.listen);
@@ -238,7 +250,11 @@ if (config.cache === false) {
 	} catch (err) {
 		console.error(upcacheUrl.href, err);
 	}
+})().then(() => {
+	if (apiCall) {
+		process.exit(0);
+	}
+}).catch((err) => {
 	console.error(err);
 	process.exit(1);
 });
-
