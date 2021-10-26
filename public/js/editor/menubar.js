@@ -6,41 +6,73 @@ import { buildMenuItems } from "./menuitems.js";
 
 class MenuBarView {
 	#ticking = false
+	#keep = false
+	#left;
 	constructor(view, schema) {
 		this.view = view;
-		const { dom, update } = renderGrouped(view, buildMenuItems(schema).fullMenu);
 		this.menu = document.createElement('div');
 		this.menu.className = "prosemirror-menu";
-		this.menu.append(dom);
+		this.items = document.createElement('div');
+		this.menu.append(this.items);
+		const { dom, update } = renderGrouped(
+			view, this.menu,
+			buildMenuItems(schema).fullMenu
+		);
+		this.items.append(dom);
 
 		this.contentUpdate = update;
 		view.dom.parentNode.querySelector('.toolbar').prepend(this.menu);
 
-		view.dom.addEventListener('focus', this);
-		view.dom.addEventListener('blur', this);
+		view.dom.addEventListener('focusin', this);
+		view.dom.addEventListener('focusout', this);
+		this.menu.addEventListener('mousedown', this);
+		document.documentElement.addEventListener('scroll', this, true);
+		window.addEventListener('resize', this);
 	}
 
 	handleEvent(e) {
-		this.update();
+		if (e.type == "scroll") {
+			this.#reposition();
+		} else if (e.type == "resize") {
+			this.#left = null;
+			this.#reposition();
+		} else if (e.type == "mousedown") {
+			this.#keep = true;
+		} else if (this.#keep) {
+			this.#keep = false;
+		} else {
+			this.#reposition();
+		}
 	}
 
 	update() {
+		const focused = this.view.hasFocus();
+		this.menu.classList.toggle('disabled', !focused);
+		this.contentUpdate(this.view.state, this.view);
+		this.#reposition();
+	}
+
+	#reposition() {
 		if (this.#ticking) return;
 		window.requestAnimationFrame(() => {
-			this.doUpdate();
+			this.#position();
 			this.#ticking = false;
 		});
 		this.#ticking = true;
 	}
 
-	doUpdate() {
+	#position() {
 		const focused = this.view.hasFocus();
 		this.menu.classList.toggle('disabled', !focused);
-		this.contentUpdate(this.view.state, this.view);
 		const sel = this.view.state.selection;
-
 		const style = this.menu.style;
-		const dom = this.view.dom;
+		if (this.#left == null) {
+			let parent = this.menu.parentNode;
+			this.#left = 0;
+			do {
+				this.#left += parent.offsetLeft || 0;
+			} while ((parent = parent.offsetParent));
+		}
 		if (!this.view.docView || !focused || sel.node) {
 			this.menu.classList.remove('floating');
 			style.top = null;
@@ -49,16 +81,17 @@ class MenuBarView {
 			const aft = this.view.coordsAtPos(sel.to, 1);
 			this.menu.classList.add('floating');
 			style.top = `calc(${parseInt(aft.top)}px + 1.5em)`;
-			style.left = Math.round(Math.max(
-				aft.left - this.menu.offsetWidth / 2,
-				dom.offsetLeft
-			)) + 'px';
+			style.left = `calc(${this.#left}px + 0.2em)`;
+			style.maxWidth = `calc(${this.view.dom.offsetWidth}px - 0.4em)`;
 		}
 	}
 
 	destroy() {
-		this.view.dom.removeEventListener('focus', this);
-		this.view.dom.removeEventListener('blur', this);
+		document.documentElement.removeEventListener('scroll', this, true);
+		window.removeEventListener('resize', this);
+		this.view.dom.removeEventListener('focusin', this);
+		this.view.dom.removeEventListener('focusout', this);
+		this.menu.removeEventListener('mousedown', this);
 		this.menu.remove();
 	}
 }

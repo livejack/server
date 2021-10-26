@@ -169,12 +169,26 @@ live-asset > .meta > p + p::after {
 	background:linear-gradient(to right, rgba(var(--back-color-rgb), 0), rgba(var(--back-color-rgb), 1));
 }
 
+form.asset > live-asset {
+	font-size:0.8rem;
+	border-radius: 0;
+	box-shadow: none;
+	border: var(--border);
+	margin: 0;
+}
+form.asset > live-asset .header > button {
+	display:none;
+}
+
 #control live-asset > form {
 	display:none;
 }
 form.asset {
 	display:flex;
 	flex-wrap: wrap;
+}
+form.asset live-asset .header ~ * {
+	display:none;
 }
 
 form.asset > label:first-of-type {
@@ -185,7 +199,6 @@ form.asset > label:last-of-type {
 }
 form.asset > label {
 	display:flex;
-	border: 1px solid var(--middle-color);
 	border-radius: 0;
 	overflow: hidden;
 }
@@ -193,12 +206,11 @@ form.asset > label > span {
 	color:var(--middle-color);
 	background-color:var(--back-low-color);
 	padding:0.2em;
-	margin-right: 0.2em;
 }
 form.asset > label > input {
 	flex:1 0 auto;
-	border-radius: 0;
-	border: none;
+	border: var(--border);
+	border-bottom: none;
 }
 
 @media screen and (max-width: 1280px) {
@@ -218,8 +230,7 @@ live-asset > .meta > p > em {
 .live-message live-asset {
 	display:flex;
 	cursor:grab;
-	white-space: normal;
-	margin: 1em;
+	margin: 1rem 0.2em;
 	width: auto;
 	height: auto;
 }
@@ -227,6 +238,7 @@ live-asset > .meta > p > em {
 	height: 6em;
 	flex-basis: 7%;
 }
+
 .live-message live-asset > .meta > p + p {
 	white-space: normal;
 	text-align:left;
@@ -315,4 +327,9 @@ live-asset > .meta > p > em {
 #control[data-mode="link"] live-asset:hover > .header {
 	--btncolor: var(--bgselcolor);
 	--bg: var(--selcolor);
+}
+
+.ProseMirror [contenteditable="false"] {
+	word-wrap: normal;
+	white-space: normal;
 }

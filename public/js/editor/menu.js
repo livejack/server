@@ -18,7 +18,7 @@ export class MenuItem {
 		this.spec = spec;
 	}
 
-	render(view) {
+	render(view, menu) {
 		const spec = this.spec;
 		const dom = (() => {
 			if (spec.render) return spec.render(view);
@@ -50,9 +50,15 @@ export class MenuItem {
 				enabled = spec.enable(state, view) || false;
 				dom.classList.toggle(prefix + "-disabled", !enabled);
 			}
+			let active = enabled;
 			if (spec.active) {
-				const active = enabled && spec.active(state, view) || false;
+				active = enabled && spec.active(state, view) || false;
 				dom.classList.toggle(prefix + "-active", active);
+			}
+			if (spec.menu) {
+				const marks = (state.selection.$from.marksAcross(state.selection.$to) || []).filter((mark) => mark.type.name == spec.type);
+				const mark = marks.length == 1 ? marks[0] : null;
+				spec.menu(menu, view, mark);
 			}
 			return true;
 		}
@@ -85,13 +91,13 @@ function combineUpdates(updates, nodes) {
 	};
 }
 
-export function renderGrouped(view, content) {
+export function renderGrouped(view, menu, content) {
 	const result = document.createDocumentFragment();
 	const updates = [], separators = [];
 	for (let i = 0; i < content.length; i++) {
 		const items = content[i], localUpdates = [], localNodes = [];
 		for (let j = 0; j < items.length; j++) {
-			const { dom, update } = items[j].render(view);
+			const { dom, update } = items[j].render(view, menu);
 			const span = crel("span", { class: prefix + "item" }, dom);
 			result.appendChild(span);
 			localNodes.push(span);

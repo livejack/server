@@ -55,10 +55,13 @@ div.toolbar button[name="del"] {
 }
 .prosemirror-menu.floating {
 	position:fixed;
-	z-index: 2;
-	margin-left:0;
-	margin-right:0;
+	z-index: 1;
 	margin-top:0.5em;
+	transition: top, left 0.1s, 0.1s;
+}
+.prosemirror-menu.disabled {
+	opacity:0.5;
+	pointer-events:none;
 }
 
 @media screen and (min-width: 800px) {
@@ -72,4 +75,13 @@ div.toolbar button[name="del"] {
 }
 .ProseMirror-menuitem > .ProseMirror-icon {
 	padding: 0.4em 0.7em;
+}
+
+
+.ProseMirror-menu-active {
+	background-color: lightgray;
+}
+
+.prosemirror-menu:not(.floating) > form {
+	display:none;
 }

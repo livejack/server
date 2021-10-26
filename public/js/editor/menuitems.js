@@ -4,7 +4,7 @@ import {
 } from "/node_modules/@livejack/prosemirror";
 
 import {
-	wrapItem, blockTypeItem, icons, MenuItem, liftItem
+	blockTypeItem, insertTypeItem, icons, MenuItem, liftItem, wrapItem
 } from "./menu.js";
 
 function cmdItem(cmd, options) {
@@ -27,8 +27,12 @@ function markActive(state, type) {
 
 function markItem(markType, options) {
 	const passedOptions = {
-		active(state) { return markActive(state, markType); },
-		enable: true
+		active(state) {
+			return markActive(state, markType);
+		},
+		enable: true,
+		menu: markType.spec.menu,
+		type: markType.name
 	};
 	for (const prop in options) passedOptions[prop] = options[prop];
 	return cmdItem(toggleMark(markType), passedOptions);
@@ -36,38 +40,6 @@ function markItem(markType, options) {
 
 function wrapListItem(nodeType, options) {
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
-}
-
-function linkItem(markType) {
-	return new MenuItem({
-		title: "Add or remove link",
-		icon: {
-			active: icons.unlink,
-			inactive: icons.link
-		},
-		active(state) {
-			return markActive(state, markType);
-		},
-		enable(state, view) {
-			const sel = state.selection;
-			if (sel.empty) return false;
-			let can = false;
-			state.doc.nodesBetween(sel.from, sel.to, (node, pos) => {
-				if (can) return false;
-				can = node.inlineContent && node.type.allowsMarkType(markType);
-			});
-			if (!can) return false;
-			view.dom.queryAssets();
-			return true;
-		},
-		run(state, dispatch, view) {
-			if (markActive(state, markType)) {
-				toggleMark(markType)(state, dispatch);
-				return true;
-			}
-			view.dom.queryAssets('link');
-		}
-	});
 }
 
 function canInsert(state, type) {
@@ -101,10 +73,12 @@ export function buildMenuItems(schema) {
 	const r = {};
 	let type;
 	if ((type = schema.marks.link)) {
-		r.toggleLink = markItem(type, { icon: {
-			active: icons.unlink,
-			inactive: icons.link
-		}});
+		r.toggleLink = markItem(type, {
+			icon: {
+				active: icons.unlink,
+				inactive: icons.link
+			}
+		});
 	}
 	if ((type = schema.marks.strong)) {
 		r.toggleStrong = markItem(type, { icon: icons.strong });

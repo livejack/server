@@ -143,6 +143,45 @@ export const marks = {
 		toDOM(node) {
 			return ['a', { href: node.attrs.url || "#" }, 0];
 		},
+		menu(menu, view, mark) {
+			let form = menu.querySelector('form');
+			if (!mark) {
+				form?.remove();
+				return;
+			}
+			if (!form) {
+				form = view.dom.live.merge(`<form is="edit-paste" method="post" action="assets" class="asset">
+					<label>
+						<input class="tiled" placeholder="Coller une URL..." value="[url]">
+					</label>
+					<div class="buttons hide">
+						<button type="reset">Annuler</button>
+						<button type="submit">Valider</button>
+					</div>
+					<live-asset data-type="link" data-url="[url]"></live-asset>
+				</form>`, mark.attrs);
+				menu.append(form);
+			}
+			form.change = function (url) {
+				let { tr } = view.state;
+				const { from, to } = tr.selection;
+				tr = tr.removeMark(mark, from, to);
+				const copy = mark.type.create(Object.assign({}, mark.attrs, { url }));
+				tr = tr.addMark(copy, from, to);
+				const sel = tr.selection.constructor.fromJSON(tr.doc, {
+					type: 'text',
+					anchor: from,
+					head: to
+				});
+				view.focus();
+				view.dispatch(tr.setSelection(sel));
+			};
+			const url = mark.attrs.url || "";
+			form.querySelector('input').value = url;
+			const asset = form.querySelector('live-asset');
+			asset.dataset.url = url;
+			asset.update();
+		}
 	},
 
 	em: {

@@ -18,25 +18,28 @@ form[is] > label > input {
 	cursor: pointer;
 }
 
-form[is] > label > input:hover {
-	color:var(--bg);
-	background-color: var(--btncolor);
+form[is] > label > input:hover,
+form[is] > label > input:hover::placeholder {
+	color:var(--btncolorhover);
 }
 form[is] > label > input::placeholder {
 	color:var(--btncolor);
+	transition:color 0.2s;
 }
-form[is] > label > input:hover::placeholder {
-	color:var(--bg);
+form[is] > label > input:focus::placeholder {
+	color:transparent;
 }
+
 form[is="edit-paste"] > label::after {
 	content: '';
-	width: 2em;
-	height: 2em;
+	width: 1.8em;
+	height: 1.8em;
 	position: absolute;
-	right: 1rem;
+	right: 0.9rem;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 561 561' height='100%'%3E%3Cpath d='M459 51H351.9c-10.2-30.6-38.25-51-71.4-51-33.15 0-61.2 20.4-71.4 51H102c-28.05 0-51 22.95-51 51v408c0 28.05 22.95 51 51 51h357c28.05 0 51-22.95 51-51V102c0-28.05-22.95-51-51-51zm-178.5 0c15.3 0 25.5 10.2 25.5 25.5S295.8 102 280.5 102 255 91.8 255 76.5 265.2 51 280.5 51zM459 510H102V102h51v76.5h255V102h51v408z'/%3E%3C/svg%3E");
+	background-repeat:no-repeat;
 	top: 50%;
-	margin-top: -1em;
+	margin-top: -0.9em;
 }
 
 form[is="edit-upload"] > label::after {
@@ -46,9 +49,22 @@ form[is="edit-upload"] > label::after {
 	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M20.342 2.907a.82.82 0 0 0-.747-.885c-1.97-.168-3.892.635-5.738 2.353-1.62 1.507-2.522 3.825-2.741 6.927L9.72 10.007l-.09-.082a.82.82 0 0 0-1.095 1.213l2.753 2.718.095.086a.82.82 0 0 0 1.028-.027l3.196-2.687.087-.085a.82.82 0 0 0-1.147-1.163l-1.803 1.499c.184-2.746.939-4.705 2.227-5.904 1.531-1.425 3.017-2.046 4.484-1.92a.82.82 0 0 0 .886-.748zM4.5 3.75a.75.75 0 0 0-.75.75v15c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-1.5 0v6.75H5.25V5.25h3.34a.75.75 0 0 0 0-1.5H4.5z'/%3E%3C/svg%3E");
 	background-size: cover;
 	position: absolute;
-	right: 1rem;
+	right: 0.8rem;
 	top: 50%;
 	margin-top: -1em;
+}
+.prosemirror-menu > form {
+	flex-direction:column;
+	font-size: 0.8rem;
+	margin: 0;
+	width: 800px;
+	max-width: 100%;
+}
+.prosemirror-menu > form > live-asset,
+.prosemirror-menu > form > label > input {
+	border-left:0;
+	border-right:0;
+	border-bottom:0;
 }
 #control > #assets > .helper {
 	display:none;
@@ -134,4 +150,24 @@ form[is="edit-filter"] {
 
 [is="edit-filter"].notags > .list {
 	display: none;
+}
+
+
+form[is] .buttons {
+	display: flex;
+}
+
+form[is] .buttons button {
+	flex: 1 1 auto;
+	color: var(--btncolor);
+	padding: 0.4em 0;
+}
+
+form[is] .buttons button:hover {
+	color: var(--btncolorhover);
+}
+
+input.tiled:focus {
+	outline: none;
+	border-color: black;
 }
