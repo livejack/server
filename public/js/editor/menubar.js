@@ -56,7 +56,6 @@ class MenuBarView {
 
 	#position() {
 		const focused = this.view.hasFocus() || this.#keep;
-		this.menu.classList.toggle('disabled', !focused);
 		const sel = this.view.state.selection;
 		const style = this.menu.style;
 		if (this.#left == null) {
