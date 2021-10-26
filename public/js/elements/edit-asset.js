@@ -1,11 +1,5 @@
 import req from "../req.js";
 import { LiveAsset } from "./live-asset.js";
-import { DiffDOM } from "/node_modules/diff-dom";
-
-function updateDOM(from, to) {
-	const dd = new DiffDOM();
-	dd.apply(from, dd.diff(from, to));
-}
 
 const searchTemplate = `<div class="header">
 	<span class="favicon">🔍</span>
@@ -214,7 +208,7 @@ export default class EditAsset extends LiveAsset {
 		const node = this.live.merge(tpl, data);
 		const frag = this.cloneNode(false);
 		frag.appendChild(node);
-		updateDOM(this, frag);
+		this.live.patchDOM(this, frag);
 	}
 	reveal() {
 		if (!this.#preview) return;

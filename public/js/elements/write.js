@@ -10,10 +10,15 @@ import EditSelect from './edit-select.js';
 import { EditTitle, EditMark, EditText } from './edit-html.js';
 import EditAsset from './edit-asset.js';
 import EditAnchor from './edit-anchor.js';
+import { DiffDOM } from "/node_modules/diff-dom";
 
 export default function register(live) {
 	const ce = window.customElements;
 	live.LiveAsset = EditAsset;
+	live.patchDOM = function (from, to) {
+		const dd = new DiffDOM();
+		dd.apply(from, dd.diff(from, to));
+	};
 	live.adopt(EditError);
 	live.adopt(EditText);
 	live.adopt(EditFilter);
