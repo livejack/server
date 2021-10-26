@@ -143,7 +143,6 @@ export const marks = {
 		toDOM(node) {
 			return ['a', { href: node.attrs.url }, 0];
 		},
-		View: createView('a', 'edit-anchor')
 	},
 
 	em: {
