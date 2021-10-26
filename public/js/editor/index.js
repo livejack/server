@@ -185,13 +185,30 @@ export class Editor extends EditorView {
 		const slice = this.#parser.parseSlice(frag);
 		const tr = this.state.tr;
 		const sel = tr.selection;
+		let { from, to } = sel;
 
 		if (sel.node) {
 			if (this.#content == "inline") {
 				// insert after
-				tr.setSelection(TextSelection.create(tr.doc, sel.to, sel.to));
+				tr.setSelection(TextSelection.create(tr.doc, to, to));
 			}
 			tr.replaceSelection(slice);
+		} else if (frag.querySelector('a')) {
+			// apply marks
+			const marks = [];
+			slice.content.descendants((node) => {
+				if (node.marks.length > 0) marks.push(...node.marks);
+			});
+			if (marks.length == 1) {
+				const mark = marks[0];
+				while (tr.doc.rangeHasMark(from - 1, from, mark.type)) from--;
+				while (tr.doc.rangeHasMark(to, to + 1, mark.type)) to++;
+				tr.addMark(from, to, mark);
+			} else {
+				for (const mark of marks) tr.addMark(from, to, mark);
+			}
+			// reselect text
+			tr.setSelection(TextSelection.create(tr.doc, from, to));
 		} else if (sel.empty) {
 			const $pos = sel.$from;
 			const parent = $pos.parent;
@@ -201,15 +218,6 @@ export class Editor extends EditorView {
 			}
 
 			tr.replaceSelection(slice);
-		} else if (frag.querySelector('a')) {
-			// apply marks
-			const marks = [];
-			slice.content.descendants((node) => {
-				if (node.marks.length > 0) marks.push(...node.marks);
-			});
-			for (const mark of marks) tr.addMark(sel.from, sel.to, mark);
-			// reselect text
-			tr.setSelection(TextSelection.create(tr.doc, sel.from, sel.to));
 		} else {
 			tr.replaceSelection(slice);
 		}
