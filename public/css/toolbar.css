@@ -4,36 +4,47 @@ div.toolbar {
 	font-size: 0.85rem;
 	flex-wrap: wrap;
 	margin-bottom: -1.4rem;
+	margin-left:1rem;
+	align-items: start;
 }
-div.toolbar > [name],
-div.toolbar > button {
+div.toolbar > div > [name],
+div.toolbar > div > button {
 	border-radius: 0.2em;
 	padding: 0.3em 0.4em;
 	background-color: #EEE;
 	margin: 0.2em;
 	border: 1px solid gray;
-	line-height: 1.4em;
+	height: 2.05em;
 }
-div.toolbar > button:hover:not([disabled]),
-div.toolbar > button:focus {
+div.toolbar > div > button:last-of-type {
+	margin-right:0;
+}
+div.toolbar > div > button:hover:not([disabled]),
+div.toolbar > div > button:focus {
 	border-color:black;
 	background-color:#CCC;
 }
-div.toolbar > button > i,
-div.toolbar > label > span {
+div.toolbar > div > button > i,
+div.toolbar > div > label > span {
 	font-size:1.4em;
 }
-
-div.toolbar.editor {
-	left:97px;
-	right:auto;
-	text-align:left;
-	z-index:2;
+div.toolbar > div:first-child {
+	margin-top:0.2em;
+	flex:0 0 auto;
 }
-div.toolbar.article label {
-	display:inline-block; /* fix horizontal whitespace */
+div.toolbar > div:not(.menutool) {
+	max-width: none;
+	width: auto;
 }
-div.toolbar button[name="del"] {
+div.toolbar > div.menutool {
+	flex: 1 0 auto;
+}
+div.toolbar > div:last-child {
+	max-width: 338px;
+	min-width: 338px;
+	text-align: right;
+}
+div.toolbar > div > button[name="del"] {
 	margin-right:2em;
 }
 .ProseMirror-icon {
@@ -46,12 +57,9 @@ div.toolbar button[name="del"] {
 
 .prosemirror-menu {
 	background-color: #EEE;
-	align-self: center;
-	margin-left: 1rem;
 	margin-right: auto;
 	border:1px solid grey;
 	border-radius: 0.2em;
-	margin-top: 0.2em;
 }
 .prosemirror-menu.floating {
 	position:fixed;
@@ -59,6 +67,8 @@ div.toolbar button[name="del"] {
 	margin-top:0.5em;
 	transition: top, left 0.1s, 0.1s;
 	box-shadow: 0 1px 10px 0px white;
+	min-width: auto;
+	width: 100%;
 }
 .prosemirror-menu.disabled {
 	opacity:0.5;
@@ -66,7 +76,7 @@ div.toolbar button[name="del"] {
 }
 
 @media screen and (min-width: 800px) {
-	.prosemirror-menu {
+	div.toolbar {
 		margin-left: calc(87px + 1rem);
 	}
 }
@@ -81,8 +91,4 @@ div.toolbar button[name="del"] {
 
 .ProseMirror-menu-active {
 	background-color: lightgray;
-}
-
-.prosemirror-menu:not(.floating) > form {
-	display:none;
 }

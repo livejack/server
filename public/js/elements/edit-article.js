@@ -81,7 +81,7 @@ export default class EditArticle extends HTMLElement {
 		if (!this.active) {
 			this.#active = true;
 			this.classList.add('active');
-			this.toolbar = document.querySelector('#gui > .article.toolbar').cloneNode(true);
+			this.toolbar = document.querySelector('#gui > .toolbar').cloneNode(true);
 			this.unsaved = false;
 			this.appendChild(this.toolbar);
 		}

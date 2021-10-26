@@ -58,6 +58,7 @@ export class MenuItem {
 			if (spec.menu) {
 				const marks = (state.selection.$from.marksAcross(state.selection.$to) || []).filter((mark) => mark.type.name == spec.type);
 				const mark = marks.length == 1 ? marks[0] : null;
+				menu.classList.toggle('menutool', Boolean(mark));
 				spec.menu(menu, view, mark);
 			}
 			return true;

@@ -25,29 +25,22 @@ class MenuBarView {
 
 		view.dom.addEventListener('focusin', this);
 		view.dom.addEventListener('focusout', this);
-		this.menu.addEventListener('mousedown', this);
+		this.menu.addEventListener('focusin', this);
+		this.menu.addEventListener('focusout', this);
 		document.documentElement.addEventListener('scroll', this, true);
 		window.addEventListener('resize', this);
 	}
 
 	handleEvent(e) {
-		if (e.type == "scroll") {
-			this.#reposition();
-		} else if (e.type == "resize") {
+		if (e.type == "resize") {
 			this.#left = null;
-			this.#reposition();
-		} else if (e.type == "mousedown") {
-			this.#keep = true;
-		} else if (this.#keep) {
-			this.#keep = false;
-		} else {
-			this.#reposition();
+		} else if (this.menu.contains(e.target)) {
+			this.#keep = e.type == "focusin";
 		}
+		this.#reposition();
 	}
 
 	update() {
-		const focused = this.view.hasFocus();
-		this.menu.classList.toggle('disabled', !focused);
 		this.contentUpdate(this.view.state, this.view);
 		this.#reposition();
 	}
@@ -62,7 +55,7 @@ class MenuBarView {
 	}
 
 	#position() {
-		const focused = this.view.hasFocus();
+		const focused = this.view.hasFocus() || this.#keep;
 		this.menu.classList.toggle('disabled', !focused);
 		const sel = this.view.state.selection;
 		const style = this.menu.style;
@@ -73,16 +66,21 @@ class MenuBarView {
 				this.#left += parent.offsetLeft || 0;
 			} while ((parent = parent.offsetParent));
 		}
-		if (!this.view.docView || !focused || sel.node) {
+		if (!focused || sel.node || sel.empty) {
 			this.menu.classList.remove('floating');
 			style.top = null;
 			style.left = null;
+			style.maxWidth = null;
 		} else {
 			const aft = this.view.coordsAtPos(sel.to, 1);
 			this.menu.classList.add('floating');
+			if (this.menu.classList.contains('menutool')) {
+				style.maxWidth = `calc(${this.view.dom.offsetWidth}px - 0.4em)`;
+			} else {
+				style.maxWidth = null;
+			}
 			style.top = `calc(${parseInt(aft.top)}px + 1.5em)`;
 			style.left = `calc(${this.#left}px + 0.2em)`;
-			style.maxWidth = `calc(${this.view.dom.offsetWidth}px - 0.4em)`;
 		}
 	}
 
@@ -91,7 +89,8 @@ class MenuBarView {
 		window.removeEventListener('resize', this);
 		this.view.dom.removeEventListener('focusin', this);
 		this.view.dom.removeEventListener('focusout', this);
-		this.menu.removeEventListener('mousedown', this);
+		this.menu.removeEventListener('focusin', this);
+		this.menu.removeEventListener('focusout', this);
 		this.menu.remove();
 	}
 }
