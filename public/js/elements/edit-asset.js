@@ -181,8 +181,8 @@ export default class EditAsset extends LiveAsset {
 		}
 	}
 
-		const url = this.dataset.url;
 	update() {
+		const { url, type } = this.dataset;
 		const data = {};
 		if (url) {
 			const asset = this.live.get(url);
@@ -199,15 +199,19 @@ export default class EditAsset extends LiveAsset {
 		if (url) {
 			if (this.#preview) tpl = assetPreviewTemplate;
 			else tpl = assetTemplate;
+		} else if (type == "link") {
+			tpl = null;
 		} else if (this.#preview) {
 			tpl = iframeTemplate;
 		} else {
 			tpl = codeTemplate;
 		}
 
-		const node = this.live.merge(tpl, data);
 		const frag = this.cloneNode(false);
-		frag.appendChild(node);
+		if (tpl) {
+			const node = this.live.merge(tpl, data);
+			frag.appendChild(node);
+		}
 		this.live.patchDOM(this, frag);
 	}
 	reveal() {
@@ -240,4 +244,3 @@ export default class EditAsset extends LiveAsset {
 		iframe.srcdoc = docTemplate;
 	}
 }
-
