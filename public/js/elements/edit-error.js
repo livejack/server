@@ -18,6 +18,7 @@ export default class EditError extends HTMLDivElement {
 		window.removeEventListener('unhandledrejection', this);
 	}
 	handleEvent(e) {
+		this.classList.remove('ok');
 		if (e.type == "click") {
 			this.hidden = true;
 		} else if (e.type == "unhandledrejection" || e.type == "error") {
@@ -56,7 +57,6 @@ export default class EditError extends HTMLDivElement {
 		}
 		this.#tob = window.setTimeout(() => {
 			this.hidden = true;
-			this.classList.remove('ok');
 		}, 5000);
 	}
 }
