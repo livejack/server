@@ -164,7 +164,9 @@ export const marks = {
 			}
 			form.change = function (url) {
 				let { tr } = view.state;
-				const { from, to } = tr.selection;
+				let { from, to } = tr.selection;
+				while (tr.doc.rangeHasMark(from - 1, from, mark)) from--;
+				while (tr.doc.rangeHasMark(to, to + 1, mark)) to++;
 				tr = tr.removeMark(mark, from, to);
 				const copy = mark.type.create(Object.assign({}, mark.attrs, { url }));
 				tr = tr.addMark(copy, from, to);
