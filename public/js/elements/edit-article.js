@@ -18,6 +18,7 @@ export default class EditArticle extends HTMLElement {
 		return this.#active;
 	}
 	handleEvent(e) {
+		if (e.target.closest('form')) return; // not for us
 		switch (e.type) {
 			case "click":
 				e.preventDefault();
