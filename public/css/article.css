@@ -2,11 +2,14 @@
 	padding-bottom: 1em;
 	position: sticky;
 	top: 0;
-	background: white;
+	background-color: white;
 	margin-bottom: 0;
-	padding-top: 1em;
+	padding-top: 1.2em;
 	z-index: 2;
 	box-shadow: 1em 0px 0 0 white, -1em 0 0 0 white, 0 -2px 4px black;
+	margin-left: -1rem;
+	margin-right: -1rem;
+	padding-left: 1rem;
 }
 .live-messages .live-message {
 	--focus-color: #EEE;
