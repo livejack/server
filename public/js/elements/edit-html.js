@@ -118,6 +118,7 @@ export class EditTitle extends HTMLHeadingElement {
 		this.setAttribute('is', 'edit-title');
 	}
 	options = {
+		menu: false,
 		nodes: {
 			doc: { content: "text*" },
 			text: BaseSpec.nodes.text
