@@ -179,10 +179,12 @@ export const marks = {
 				view.dispatch(tr.setSelection(sel));
 			};
 			const url = mark.attrs.url || "";
-			form.querySelector('input').value = url;
+			form.set?.(url);
 			const asset = form.querySelector('live-asset');
-			asset.dataset.url = url;
-			asset.update();
+			if (asset) {
+				asset.dataset.url = url;
+				asset.update();
+			}
 		}
 	},
 
