@@ -226,6 +226,23 @@ live-asset > .meta > p > em {
 }
 .live-message live-asset > code.content {
 	padding:1em;
+	position: relative;
+	overflow: hidden;
+	display: grid;
+}
+.live-message live-asset > code.content::after {
+	content: attr(data-replicated-value) " ";
+	white-space: pre-wrap;
+	visibility: hidden;
+	grid-area: 1 / 1 / 2 / 2;
+}
+.live-message live-asset > code.content > textarea {
+	grid-area: 1 / 1 / 2 / 2;
+	border:none;
+	resize: none;
+	overflow: hidden;
+	width: 100%;
+	padding: 0;
 }
 .live-message live-asset {
 	display:flex;

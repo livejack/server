@@ -23,9 +23,9 @@ export function createView(tag, is) {
 			this.view.dispatch(tr);
 		}
 		stopEvent(e) {
-			if (e.target.nodeName == "INPUT") {
-				if (e.type == "keyup" || e.type == "change") {
-					this.change({
+			if (["TEXTAREA", "INPUT"].includes(e.target.nodeName)) {
+				if (e.type == "keyup" || e.type == "paste") {
+					if (e.target.name) this.change({
 						[e.target.name]: e.target.value
 					});
 				}

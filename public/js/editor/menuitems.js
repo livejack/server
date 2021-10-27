@@ -119,7 +119,10 @@ export function buildMenuItems(schema) {
 		});
 	}
 	if ((type = schema.nodes.asset)) {
-		r.insertAsset = assetItem(type);
+		r.insertAsset = insertTypeItem(type, {
+			title: "Embed HTML",
+			icon: icons.asset
+		});
 	}
 
 	const cut = arr => arr.filter(x => x);

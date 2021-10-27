@@ -19,9 +19,10 @@ const codeTemplate = `<div class="header">
 <button name="del">✕</button>
 </div>
 <code class="content">
-	[html|as:text]
-	<span><br>&lt;script src="[script|else:at:*]"&gt;&lt;/script&gt;</span>
-</code>`;
+	<textarea class="content" spellcheck="false">[html|as:text]
+<script src="[script|else:prune:13+-+11]"></script></textarea>
+</code>
+<input name="html" type="hidden"><input name="script" type="hidden">`;
 
 const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|else:at:*]" class="favicon" />
@@ -82,6 +83,7 @@ export class EditAsset extends LiveAsset {
 		this.addEventListener('mouseup', this);
 		this.addEventListener('mousemove', this);
 		this.addEventListener('mouseleave', this);
+		this.addEventListener('input', this);
 		this.#editable = Boolean(this.closest(".live-article"));
 	}
 	disconnectedCallback() {
@@ -92,6 +94,7 @@ export class EditAsset extends LiveAsset {
 		this.removeEventListener('mouseup', this);
 		this.removeEventListener('mousemove', this);
 		this.removeEventListener('mouseleave', this);
+		this.removeEventListener('input', this);
 		if (this.#watchFrame) {
 			clearInterval(this.#watchFrame);
 			this.#watchFrame = null;
@@ -115,7 +118,9 @@ export class EditAsset extends LiveAsset {
 			this.classList.remove('dragging');
 			if (EditAsset.dragImage) document.body.removeChild(EditAsset.dragImage);
 		} else if (e.type == "click") {
-			if (e.target.name == "save") {
+			if (e.target.nodeName == "TEXTAREA") {
+				e.target.select();
+			} else if (e.target.name == "save") {
 				e.stopPropagation();
 				this.save();
 			} else if (e.target.name == "del") {
@@ -140,6 +145,11 @@ export class EditAsset extends LiveAsset {
 			if (e.target.closest('form')) this.draggable = false;
 		} else if (e.type == "mouseup") {
 			this.draggable = true;
+		} else if (e.type == "input") {
+			if (e.target.matches('textarea')) {
+				this.autosize(e.target);
+				this.parseEmbed(e.target.value);
+			}
 		}
 	}
 	del() {
@@ -213,6 +223,38 @@ export class EditAsset extends LiveAsset {
 			frag.appendChild(node);
 		}
 		this.live.patchDOM(this, frag);
+		const ta = this.querySelector('textarea');
+		if (ta) {
+			this.autosize(ta);
+			setTimeout(() => {
+				if (this.classList.contains('ProseMirror-selectednode')) ta.focus();
+			});
+		}
+	}
+	autosize(ta) {
+		ta.parentNode.dataset.replicatedValue = ta.value;
+	}
+	parseEmbed(str) {
+		const htmlInput = this.querySelector('input[name="html"]');
+
+		const dom = document.createElement("div");
+		dom.innerHTML = str;
+		const scripts = Array.from(dom.querySelectorAll('script'));
+		const script = scripts.pop();
+		let src;
+		if (script) {
+			src = script.getAttribute('src');
+			script.remove();
+		}
+		htmlInput.value = Array.from(dom.children).map(
+			(child) => child.outerHTML
+		).join('\n');
+		htmlInput.dispatchEvent(new Event('paste', { bubbles: true }));
+		setTimeout(() => {
+			const scriptInput = this.querySelector('input[name="script"]');
+			scriptInput.value = src;
+			scriptInput.dispatchEvent(new Event('paste', { bubbles: true }));
+		});
 	}
 	reveal() {
 		if (!this.#preview) return;
