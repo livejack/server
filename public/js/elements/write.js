@@ -8,7 +8,7 @@ import EditArticle from './edit-article.js';
 import EditTime from './edit-time.js';
 import EditSelect from './edit-select.js';
 import { EditTitle, EditMark, EditText } from './edit-html.js';
-import EditAsset from './edit-asset.js';
+import { EditAsset } from './edit-asset.js';
 import { DiffDOM } from "/node_modules/diff-dom";
 
 export default function register(live) {

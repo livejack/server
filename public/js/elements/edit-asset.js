@@ -68,7 +68,7 @@ const docTemplate = `<html>
 	</body>
 </html>`;
 
-export default class EditAsset extends LiveAsset {
+export class EditAsset extends LiveAsset {
 	#editable
 	#watchFrame
 	#added
