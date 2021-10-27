@@ -28,7 +28,7 @@ form[is="edit-status"] {
 
 [is="edit-status"] > div {
 	flex: 1;
-	opacity:0.7;
+	opacity:70%;
 }
 [is="edit-status"] > .start {
 	padding-right:2em;
@@ -44,12 +44,12 @@ form[is="edit-status"] {
 }
 [is="edit-status"] > .active {
 	background-color:var(--bg);
-	opacity:1;
+	opacity:100%;
 }
 .toggle-switch > label,
 .toggle-switch > label::before,
 .toggle-switch > label::after {
-	opacity: 1;
+	opacity: 100%;
 	cursor: pointer;
 }
 

@@ -23,11 +23,11 @@
 	border-bottom:1px solid #CCC;
 }
 .live-message:not([data-id]):not(.active) > [is] {
-	opacity:0.5;
+	opacity:50%;
 }
 
 .live-message:not([data-id]):not(.active):hover > [is] {
-	opacity:1;
+	opacity:100%;
 }
 
 .live-message:not([data-id]):not(.active) {
@@ -58,7 +58,7 @@
 
 .live-messages .lazy {
 	width:100% !important;
-	opacity:1 !important;
+	opacity:100% !important;
 	background:#EEE;
 }
 
@@ -93,7 +93,7 @@
 }
 
 .active.live-message > [is]:empty::before {
-	content: '\00a0';
+	content: "\00a0";
 	color:gray;
 }
 
@@ -130,7 +130,7 @@
 .live-message:not([data-id]) > [data-placeholder][is]:empty::before {
 	content: attr(data-placeholder);
 	font-style: italic;
-	opacity: 0.5;
+	opacity: 50%;
 }
 
 .live-messages header .live-controls {

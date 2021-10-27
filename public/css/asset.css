@@ -1,11 +1,10 @@
 live-asset {
 	cursor: default;
 	display: flex;
-	flex-direction: row;
+	flex-flow: row wrap;
 	margin: 0 0.1rem;
 	text-decoration: none;
 	font-size: 0.8em;
-	flex-wrap: wrap;
 	border-radius: 4px;
 	background-color: var(--bg);
 	position:relative;
@@ -48,7 +47,7 @@ live-asset > .header > .favicon {
 	align-self: center;
 	height: 2.3em;
 	width: 2.3em;
-	background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+	background-image: linear-gradient(140deg, rgba(255 255 255 / 20%) 0%, rgba(255 255 255 / 0%) 100%);
 	line-height: 1.4;
 	white-space:nowrap;
 }
@@ -84,12 +83,12 @@ live-asset > .thumbnail {
 }
 live-asset > .thumbnail::after {
 	display: block;
-	content: '';
+	content: "";
 	clear: both;
 }
 live-asset > .thumbnail::before {
 	float:left;
-	content:'';
+	content:"";
 	padding-top: calc(9 / 16 * 100%);
 }
 
@@ -128,7 +127,7 @@ live-asset button[name="save"] {
 .live-message live-asset button[name="del"],
 #control[data-mode="text"] live-asset button[name="del"] {
 	cursor: default;
-	opacity:0.5;
+	opacity:50%;
 }
 .live-message .ProseMirror live-asset button[name="del"],
 #control[data-mode="default"] live-asset button[name="del"] {
@@ -160,13 +159,13 @@ live-asset > .meta > p + p {
 }
 
 live-asset > .meta > p + p::after {
-	content:'';
+	content:"";
 	position:absolute;
 	left:95%;
 	right:0;
 	bottom:0;
 	height: 1.2em;
-	background:linear-gradient(to right, rgba(var(--back-color-rgb), 0), rgba(var(--back-color-rgb), 1));
+	background:linear-gradient(to right, rgba(var(--back-color-rgb) / 0%), rgba(var(--back-color-rgb) / 100%));
 }
 
 form.asset > live-asset {
@@ -268,13 +267,13 @@ live-asset > .meta > p > em {
 }
 
 .dragging {
-	opacity:0.3;
+	opacity:30%;
 }
 
 .handle {
 	position:absolute;
 	background: #4165A0;
-	opacity:0.7;
+	opacity:70%;
 	border:none;
 	color:white;
 	font-size:0.8em;
@@ -290,8 +289,7 @@ live-asset > .meta > p > em {
 }
 #control[data-mode="mark"] > #icons > .list {
 	display:flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	flex-flow: row wrap;
 	user-select:none;
 }
 #control live-icon {
@@ -309,12 +307,12 @@ live-asset > .meta > p > em {
 }
 #control live-icon::after {
 	display: block;
-	content: '';
+	content: "";
 	clear: both;
 }
 #control live-icon::before {
 	float:left;
-	content:'';
+	content:"";
 	padding-top: 100%;
 }
 #control live-icon > img {
@@ -329,7 +327,7 @@ live-asset > .meta > p > em {
 }
 
 #control[data-mode="link"] > [is="edit-upload"] {
-	opacity: 0;
+	opacity: 0%;
 	pointer-events: none;
 	transition-property: opacity;
 }

@@ -2,7 +2,7 @@ form[is] {
 	font-size: 0.8em;
 	margin: 0.3rem 0;
 	transition-property: opacity;
-	opacity:1;
+	opacity:100%;
 	transition-duration: 0.25s;
 }
 
@@ -31,7 +31,7 @@ form[is] > label > input:focus::placeholder {
 }
 
 form[is="edit-paste"] > label::after {
-	content: '';
+	content: "";
 	width: 1.8em;
 	height: 1.8em;
 	position: absolute;
@@ -43,7 +43,7 @@ form[is="edit-paste"] > label::after {
 }
 
 form[is="edit-upload"] > label::after {
-	content: '';
+	content: "";
 	width: 2em;
 	height: 2em;
 	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M20.342 2.907a.82.82 0 0 0-.747-.885c-1.97-.168-3.892.635-5.738 2.353-1.62 1.507-2.522 3.825-2.741 6.927L9.72 10.007l-.09-.082a.82.82 0 0 0-1.095 1.213l2.753 2.718.095.086a.82.82 0 0 0 1.028-.027l3.196-2.687.087-.085a.82.82 0 0 0-1.147-1.163l-1.803 1.499c.184-2.746.939-4.705 2.227-5.904 1.531-1.425 3.017-2.046 4.484-1.92a.82.82 0 0 0 .886-.748zM4.5 3.75a.75.75 0 0 0-.75.75v15c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-1.5 0v6.75H5.25V5.25h3.34a.75.75 0 0 0 0-1.5H4.5z'/%3E%3C/svg%3E");
@@ -79,7 +79,7 @@ form[is="edit-upload"] > label::after {
 	margin-top: 0.3em;
 }
 #control[data-mode="link"] form[is="edit-upload"] {
-	opacity: 0;
+	opacity: 0%;
 	pointer-events: none;
 	display: none;
 }
@@ -136,7 +136,7 @@ form[is="edit-filter"] {
 	margin-left:0;
 }
 [is="edit-filter"] label > input[disabled] + span {
-	opacity:0.5;
+	opacity:50%;
 }
 [is="edit-filter"] label:hover > input:not([disabled]) + span {
 	color:var(--btncolorhover);
