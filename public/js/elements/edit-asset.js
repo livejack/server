@@ -19,7 +19,7 @@ const codeTemplate = `<div class="header">
 <button name="del">✕</button>
 </div>
 <code class="content">
-	<textarea class="content" spellcheck="false">[html|as:text]
+	<textarea class="content" spellcheck="false" placeholder="Coller un embed + script">[html|as:text]
 <script src="[script|else:prune:13+-+11]"></script></textarea>
 </code>
 <input name="html" type="hidden"><input name="script" type="hidden">`;
