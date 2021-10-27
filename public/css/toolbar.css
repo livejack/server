@@ -5,7 +5,7 @@ div.toolbar {
 	flex-wrap: wrap;
 	margin-bottom: -1.4rem;
 	margin-left:1rem;
-	align-items: start;
+	align-items: flex-start;
 }
 div.toolbar > div > [name],
 div.toolbar > div > button {
