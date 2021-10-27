@@ -35,6 +35,7 @@ export function createView(tag, is) {
 		update(node) {
 			const { attrs } = node;
 			const dom = this.dom;
+			this.node.attrs = attrs;
 			for (const key in attrs) {
 				const val = attrs[key];
 				if (val == null) delete dom.dataset[key];
