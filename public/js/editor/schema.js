@@ -174,7 +174,7 @@ export const marks = {
 				tr.addMark(from, to, copy);
 				const sel = tr.selection.constructor.fromJSON(tr.doc, {
 					type: 'text',
-					anchor: from,
+					anchor: to,
 					head: to
 				});
 				tr.setSelection(sel);
