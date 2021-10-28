@@ -148,7 +148,7 @@ export class EditAsset extends LiveAsset {
 		} else if (e.type == "input") {
 			if (e.target.matches('textarea')) {
 				this.autosize(e.target);
-				this.parseEmbed(e.target.value);
+				this.parseHTML(e.target.value);
 			}
 		}
 	}
@@ -234,27 +234,34 @@ export class EditAsset extends LiveAsset {
 	autosize(ta) {
 		ta.parentNode.dataset.replicatedValue = ta.value;
 	}
-	parseEmbed(str) {
-		const htmlInput = this.querySelector('input[name="html"]');
-
+	parseHTML(str) {
 		const dom = document.createElement("div");
 		dom.innerHTML = str;
 		const scripts = Array.from(dom.querySelectorAll('script'));
 		const script = scripts.pop();
-		let src;
-		if (script) {
-			src = script.getAttribute('src');
-			script.remove();
+		const iframe = dom.querySelector('iframe');
+		if (iframe && !script) {
+			// inspect and promote this live-asset
+			const asset = document.createElement('live-asset');
+			asset.dataset.url = iframe.getAttribute('src');
+			this.replaceWith(asset);
+		} else {
+			let src;
+			if (script) {
+				src = script.getAttribute('src');
+				script.remove();
+			}
+			const htmlInput = this.querySelector('input[name="html"]');
+			htmlInput.value = Array.from(dom.children).map(
+				(child) => child.outerHTML
+			).join('\n');
+			htmlInput.dispatchEvent(new Event('paste', { bubbles: true }));
+			setTimeout(() => {
+				const scriptInput = this.querySelector('input[name="script"]');
+				scriptInput.value = src;
+				scriptInput.dispatchEvent(new Event('paste', { bubbles: true }));
+			});
 		}
-		htmlInput.value = Array.from(dom.children).map(
-			(child) => child.outerHTML
-		).join('\n');
-		htmlInput.dispatchEvent(new Event('paste', { bubbles: true }));
-		setTimeout(() => {
-			const scriptInput = this.querySelector('input[name="script"]');
-			scriptInput.value = src;
-			scriptInput.dispatchEvent(new Event('paste', { bubbles: true }));
-		});
 	}
 	reveal() {
 		if (!this.#preview) return;
