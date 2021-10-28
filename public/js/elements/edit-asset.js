@@ -167,6 +167,7 @@ export class EditAsset extends LiveAsset {
 		if (img) return img.src;
 		else return null;
 	}
+
 	async add(url) {
 		if (this.#added) return;
 		let asset = this.live.get(url);
@@ -235,17 +236,27 @@ export class EditAsset extends LiveAsset {
 	autosize(ta) {
 		ta.parentNode.dataset.replicatedValue = ta.value;
 	}
+	#replace(url) {
+		if (!url) return;
+		delete this.dataset.html;
+		delete this.dataset.script;
+		delete this.dataset.type;
+		const asset = this.cloneNode();
+		asset.dataset.url = url;
+		this.replaceWith(asset);
+	}
+
 	parseHTML(str) {
 		const dom = document.createElement("div");
 		dom.innerHTML = str;
 		const scripts = Array.from(dom.querySelectorAll('script'));
 		const script = scripts.pop();
 		const iframe = dom.querySelector('iframe');
+		const blockquote = dom.querySelector('blockquote.twitter-tweet');
 		if (iframe && !script) {
-			// inspect and promote this live-asset
-			const asset = document.createElement('live-asset');
-			asset.dataset.url = iframe.getAttribute('src');
-			this.replaceWith(asset);
+			this.#replace(iframe.getAttribute('src'));
+		} else if (blockquote) {
+			this.#replace(Array.from(blockquote.querySelectorAll('a[href]')).pop()?.href);
 		} else {
 			let src;
 			if (script) {
