@@ -6,14 +6,14 @@ const searchTemplate = `<div class="header">
 	<a href="url" class="title">[url]</a>
 </div>`;
 const iframeTemplate = `<div class="header">
-	<span class="favicon">❮❯</span>
+	<span class="favicon">❮⧸❯</span>
 	<a class="title">Embed HTML</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 const codeTemplate = `<div class="header">
-<span class="favicon">❮❯</span>
+<span class="favicon">❮⧸❯</span>
 <a class="title">Embed HTML</a>
 <button name="preview">⯈</button>
 <button name="del">✕</button>

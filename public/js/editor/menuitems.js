@@ -121,7 +121,7 @@ export function buildMenuItems(schema) {
 	if ((type = schema.nodes.asset)) {
 		r.insertAsset = insertTypeItem(type, {
 			title: "Embed HTML",
-			icon: icons.asset
+			icon: icons.embed
 		});
 	}
 
