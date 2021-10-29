@@ -25,7 +25,7 @@ const codeTemplate = `<div class="header">
 <input name="html" type="hidden"><input name="script" type="hidden">`;
 
 const assetTemplate = `<div class="header" title="[meta.site]">
-	<img src="[meta.icon|else:at:*]" class="favicon" />
+	<img src="/favicons?url=[meta.icon|else:at:*|as:url]" class="favicon" />
 	<a href="[url|else:at:-]" class="title">[meta.title]</a>
 	<button name="save">🗘</button>
 	<button name="preview">⯈</button>
@@ -53,7 +53,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	</label>
 </form>`;
 const assetPreviewTemplate = `<div class="header" title="[meta.site]">
-	<img src="[meta.icon|else:at:*]" class="favicon" />
+	<img src="/favicons?url=[meta.icon|else:at:*|as:url]" class="favicon" />
 	<a href="[url]" class="title">[meta.title]</a>
 	<button name="preview">⯆</button>
 	<button name="del">✕</button>
