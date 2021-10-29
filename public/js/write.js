@@ -38,7 +38,11 @@ const assetPlugin = {
 			}
 			uniques.sort((a, b) => a.localeCompare(b));
 			return uniques;
-		}]
+		}],
+		proxy(ctx, url, pathname, query) {
+			if (url == null || !/^https?:/.test(url)) return url;
+			return `${pathname}?${query}=${encodeURIComponent(url)}`;
+		}
 	}
 };
 
