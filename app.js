@@ -115,7 +115,7 @@ if (config.cache === false && !apiCall) {
 
 	app.use("/node_modules/", tag.app, serveModule());
 
-	app.get("/favicons", tag.app, require('./lib/proxy'));
+	app.get("/favicons", domainLock, tag.app, require('./lib/proxy'));
 
 	app.route(/\/js|css|img|dist\//).get(
 		tag.app,
