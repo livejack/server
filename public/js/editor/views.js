@@ -1,7 +1,10 @@
 export function createView(tag, is) {
 	return class CustomView {
+		#attrs
+		#type
 		constructor(node, view, getPos) {
-			this.node = node;
+			this.#type = node.type.name;
+			this.#attrs = Object.assign({}, node.attrs);
 			this.view = view;
 			this.getPos = getPos;
 			this.dom = view.root.createElement(tag, { is: is });
@@ -17,7 +20,7 @@ export function createView(tag, is) {
 			tr.setNodeMarkup(
 				this.getPos(),
 				null,
-				Object.assign({}, this.node.attrs, attrs)
+				Object.assign({}, this.#attrs, attrs)
 			);
 			tr.setSelection(sel.constructor.fromJSON(tr.doc, jsel));
 			this.view.dispatch(tr);
@@ -34,8 +37,10 @@ export function createView(tag, is) {
 		}
 		update(node) {
 			const { attrs } = node;
+			// workaround https://github.com/ProseMirror/prosemirror/issues/1208
+			if (node.type.name != this.#type) return;
 			const dom = this.dom;
-			this.node.attrs = attrs;
+			this.#attrs = Object.assign({}, attrs);
 			for (const key in attrs) {
 				const val = attrs[key];
 				if (val == null) delete dom.dataset[key];
