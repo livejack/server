@@ -107,8 +107,8 @@ export function buildMenuItems(schema) {
 		});
 	}
 	if ((type = schema.nodes.blockquote)) {
-		r.wrapBlockQuote = wrapItem(type, {
-			title: "Wrap in block quote",
+		r.insertBlockQuote = insertTypeItem(type, {
+			title: "Insert block quote",
 			icon: icons.blockquote
 		});
 	}

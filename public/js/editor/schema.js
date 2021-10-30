@@ -116,6 +116,36 @@ export const nodes = {
 		View: createView('live-asset')
 	},
 
+	blockquote_text: {
+		content: "text*",
+		parseDOM: [{ tag: 'p.fig-quote__text' }],
+		toDOM() {
+			return ["p", { class: 'fig-quote__text' }, 0];
+		}
+	},
+
+	blockquote_credit: {
+		content: "text*",
+		parseDOM: [{ tag: 'cite.fig-quote__credit' }],
+		toDOM() {
+			return ["cite", { class: 'fig-quote__credit' }, 0];
+		}
+	},
+
+	blockquote: {
+		content: "blockquote_text blockquote_credit",
+		group: "block",
+		parseDOM: [{ tag: "blockquote" }],
+		toDOM() {
+			const dom = document.createElement('blockquote');
+			dom.className = "fig-quote";
+			dom.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48" class="fig-quote__svg"><use href="#fig-svg__quote"></use></svg><div><p class="fig-quote__text">Citation</p><cite class="fig-quote__credit">Crédit</cite></div><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48" class="fig-quote__svg fig-quote__svg--bottom"><use href="#fig-svg__quote"></use></svg>`;
+			return {
+				dom, contentDOM: dom.querySelector('div')
+			};
+		}
+	},
+
 	hard_break: {
 		inline: true,
 		group: "inline",
