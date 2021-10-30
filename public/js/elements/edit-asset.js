@@ -85,6 +85,9 @@ export class EditAsset extends LiveAsset {
 		this.addEventListener('mouseleave', this);
 		this.addEventListener('input', this);
 		this.#editable = Boolean(this.closest(".live-article"));
+		for (const input of Array.from(this.querySelectorAll('input,textarea'))) {
+			input.readOnly = !this.parentNode.isContentEditable;
+		}
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
@@ -118,8 +121,8 @@ export class EditAsset extends LiveAsset {
 			this.classList.remove('dragging');
 			if (EditAsset.dragImage) document.body.removeChild(EditAsset.dragImage);
 		} else if (e.type == "click") {
-			if (e.target.nodeName == "TEXTAREA") {
-				e.target.select();
+			if (e.target.matches('textarea,input')) {
+				if (!e.target.readOnly) e.target.select();
 			} else if (e.target.name == "save") {
 				e.stopPropagation();
 				this.save();
