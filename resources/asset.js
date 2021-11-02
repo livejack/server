@@ -1,7 +1,6 @@
 const { Models } = require('objection');
 const { Page, Href } = Models;
-const { promisify } = require('util');
-const inspector = promisify(require('url-inspector'));
+const inspector = require('url-inspector');
 const thumbnailer = require('../lib/thumbnailer');
 const providers = require('../lib/providers');
 
