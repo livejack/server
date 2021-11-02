@@ -115,7 +115,7 @@ if (config.cache === false && !apiCall) {
 
 	app.use("/node_modules/", tag.app, serveModule());
 
-	app.get("/favicons", tag.app.for('1y'), require('./lib/favicons'));
+	app.get("/favicons/:base64url", tag.app.for('1y'), require('./lib/favicons'));
 
 	app.route(/\/js|css|img|dist\//).get(
 		tag.app,

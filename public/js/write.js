@@ -41,7 +41,7 @@ const assetPlugin = {
 		}],
 		proxy(ctx, url, pathname, query) {
 			if (url == null || !/^https?:/.test(url)) return url;
-			return `${pathname}?${query}=${encodeURIComponent(url)}`;
+			return `${pathname}/${btoa(url).replace(/=+$/, '')}`;
 		}
 	}
 };
