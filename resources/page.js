@@ -20,6 +20,7 @@ exports.PUT = async (req) => {
 				break;
 			case 'start':
 				data.start = new Date().toISOString();
+				data.updated_at = data.start;
 				data.stop = null;
 				break;
 			case 'continue':
@@ -27,6 +28,7 @@ exports.PUT = async (req) => {
 				break;
 			case 'stop':
 				data.stop = new Date().toISOString();
+				data.updated_at = data.stop;
 				break;
 			default:
 				throw new HttpError.BadRequest("Bad action parameter");
