@@ -74,10 +74,6 @@ class Page extends BaseModel {
 		};
 	}
 
-	$beforeUpdate() {
-		this.updated_at = new Date().toISOString();
-	}
-
 	get when() {
 		const now = Date.now();
 		const start = Date.parse(this.start);
