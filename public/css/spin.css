@@ -3,13 +3,15 @@
 }
 .loading::after {
 	display: block;
-	width: var(--width);
+	width: var(--width, 1%);
 	height: 4px;
 	position: absolute;
-	animation: widen 2s ease-in-out infinite;
 	background-color:var(--btncolor);
 	content: "";
 	bottom: 0;
+}
+.infinite.loading::after {
+	animation: widen 2s ease-in-out infinite;
 }
 
 .error::after {

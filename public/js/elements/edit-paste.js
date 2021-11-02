@@ -67,7 +67,7 @@ export default class EditPaste extends HTMLFormElement {
 		}
 	}
 	async submit() {
-		this.classList.add('loading');
+		this.classList.add('infinite', 'loading');
 		this.#input.disabled = true;
 		let item;
 		const url = this.#input.value;
@@ -78,7 +78,7 @@ export default class EditPaste extends HTMLFormElement {
 			this.classList.add("error");
 		}
 		this.#input.disabled = false;
-		this.classList.remove('loading');
+		this.classList.remove('infinite', 'loading');
 		this.update();
 		if (item) this.change(item.url);
 		return item;
