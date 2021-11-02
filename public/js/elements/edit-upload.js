@@ -1,18 +1,35 @@
 export default class EditUpload extends HTMLFormElement {
 	#input
+	#preview
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-upload');
 	}
 	connectedCallback() {
 		this.#input = this.querySelector('input');
+		this.#preview = this.querySelector('img');
 		this.addEventListener("change", this);
+		this.addEventListener("submit", this);
+		this.addEventListener("reset", this);
 	}
 	disconnectedCallback() {
 		this.removeEventListener("change", this);
+		this.removeEventListener("sbumit", this);
+		this.removeEventListener("reset", this);
 	}
 	handleEvent(e) {
-		if (e.type == "change") {
+		if (!this.#input.value || e.type == "reset") {
+			this.querySelector('.buttons').classList.add("hide");
+			this.#preview.removeAttribute('src');
+			this.#preview.classList.add("hide");
+		} else if (e.type == "change") {
+			this.querySelector('.buttons').classList.remove("hide");
+			this.#preview.src = URL.createObjectURL(this.#input.files[0]);
+			this.#preview.classList.remove("hide");
+		} else if (e.type == "submit") {
+			e.preventDefault();
+			this.querySelector('.buttons').classList.add("hide");
+			this.#preview.classList.add("hide");
 			this.submit();
 		}
 	}
