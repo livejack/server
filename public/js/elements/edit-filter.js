@@ -49,11 +49,6 @@ export default class EditFilter extends HTMLFormElement {
 					console.error("Missing item", url);
 				} else {
 					let words = item.meta.keywords || [];
-					/*
-					(isFor == "mark")
-						? item.meta.keywords
-						: item.type.split(" ");
-					*/
 					if (words.length == 0) words = ['-'];
 					const active = words.some(tag => tags.includes(tag));
 					node.classList.toggle('hide', !active);
