@@ -28,7 +28,7 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|else:at:*|proxy:/favicons:url]" class="favicon" />
 	<a href="[url|else:at:-]" class="title">[meta.title]</a>
 	<button name="save">🗘</button>
-	<button name="preview">⯈</button>
+	<button name="preview">[type|neq:link|prune:*]⯈</button>
 	<button name="del">✕</button>
 </div>
 <div class="meta">
