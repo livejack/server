@@ -2,8 +2,6 @@
 
 @import "/node_modules/flatpickr";
 
-@import "/node_modules/toggle-switch-css";
-
 @import "/node_modules/@livejack/prosemirror/style/default.css";
 
 @import "/node_modules/@livejack/prosemirror/style/gapcursor.css";
@@ -58,17 +56,13 @@ body {
 	padding: 1em 1rem;
 	border: var(--border);
 	background-color: var(--tilebg);
-	display: block;
+	display: flex;
 	color: var(--btncolorhover);
 	background-position:center right;
 	background-repeat:no-repeat;
 	background-size: 17% 60%;
 	position: relative;
 	width: 100%;
-}
-.tiled:first-of-type {
-	border-top-left-radius: var(--border-radius);
-	border-top-right-radius: var(--border-radius);
 }
 
 #control > header {

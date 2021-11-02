@@ -110,22 +110,23 @@
 					<span class="extern"> - VOIR[page.backtrack|prune:*]</span>
 				</a>
 				<form is="edit-status">
-					<div class="tiled start active">
-						Commencer<br>le live[page|when:before|prune:div]
+					<div class="tiled [page|when:during|and:active|or:]">
+						<div class="start">
+							Live non débuté[page|when:before|prune:div]
+						</div>
+						<div class="start">
+							Débuté<br>[page.start|then:date:cal|else:at:div]
+						</div>
+						<div class="stop">
+							Terminé<br>[page.stop|then:date:cal|else:at:div]
+						</div>
 					</div>
-					<div class="tiled start">
-						Commencé<br>[page.start|then:date:cal|else:at:div]
-					</div>
-					<label class="toggle-switch">
-						<input name="status" value="on" checked="[page|when:during]" id="live-status" type="checkbox" />
-						<label for="live-status"></label>
-					</label>
-					<div class="tiled stop active">
-						Terminer<br>le live[page|when:during|prune:div]
-					</div>
-					<div class="tiled stop">
-						Terminé<br>[page.stop|then:date:cal|else:at:div]
-					</div>
+					<fieldset class="buttons">
+						<button type="submit" name="action" value="start">commencer[page|when:before|prune:*]</button>
+						<button type="submit" name="action" value="reset">réinitialiser[page|when:after|prune:*]</button>
+						<button type="submit" name="action" value="continue">continuer[page|when:after|prune:*]</button>
+						<button type="submit" name="action" value="stop">terminer[page|when:during|prune:*]</button>
+					</fieldset>
 				</form>
 			</template>
 		</header>

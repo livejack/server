@@ -5,7 +5,7 @@
 	--back-low-color: #EEE;
 	--text-low-color: #666;
 	--middle-color: #888;
-	--warn-rgb: 184, 0, 0;
+	--warn-rgb: rgb(184 0 0);
 	--bgselcolor:#4165A0;
 	--selcolor:white;
 	/* semantic */

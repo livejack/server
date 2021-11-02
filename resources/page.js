@@ -13,16 +13,25 @@ exports.PUT = async (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const data = req.body;
-		const started = data.started;
-		if (started !== undefined) {
-			delete data.started;
-			if (started) {
+		switch (data.action) {
+			case 'reset':
+				data.start = null;
 				data.stop = null;
+				break;
+			case 'start':
 				data.start = new Date().toISOString();
-			} else {
+				data.stop = null;
+				break;
+			case 'continue':
+				data.stop = null;
+				break;
+			case 'stop':
 				data.stop = new Date().toISOString();
-			}
+				break;
+			default:
+				throw new HttpError.BadRequest("Bad action parameter");
 		}
+		delete data.action;
 
 		const page = await Page.query(trx)
 			.findOne({ domain, key })

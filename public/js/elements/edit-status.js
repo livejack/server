@@ -1,28 +1,32 @@
 import req from "../req.js";
 
 export default class EditStatus extends HTMLFormElement {
-	#input
+	#fieldset
+	#button
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-status');
-		this.#input = this.querySelector('[name="status"]');
 	}
 	connectedCallback() {
-		this.addEventListener('change', this);
+		this.addEventListener('click', this);
+		this.addEventListener('submit', this);
+		this.#fieldset = this.querySelector('fieldset');
 	}
 	disconnectedCallback() {
-		this.removeEventListener('change', this);
+		this.removeEventListener('click', this);
+		this.removeEventListener('submit', this);
 	}
 	async handleEvent(e) {
-		this.#input.disabled = true;
-		const started = this.#input.checked;
-		try {
-			await req("./page", "put", { started });
-		} catch(err) {
-			this.#input.checked = !started;
-			throw err;
-		} finally {
-			this.#input.disabled = false;
+		if (e.type == "click") {
+			if (e.target.name == "action") this.#button = e.target;
+		} else {
+			e.preventDefault();
+			this.#fieldset.disabled = true;
+			try {
+				await req("./page", "put", { action: this.#button.value });
+			} finally {
+				this.#fieldset.disabled = false;
+			}
 		}
 	}
 }

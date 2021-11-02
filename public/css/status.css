@@ -3,53 +3,26 @@ form[is="edit-status"] {
 	display: flex;
 	position: relative;
 	box-shadow: 0px 2px 3px -1px var(--bg);
-}
-[is="edit-status"] .toggle-switch {
-	--switch-theme-rgb: var(--warn-rgb);
-	--bar-width:3em;
-	--switch-margin:0;
-
-	min-width: 0;
-	flex: 0;
-	z-index: 1;
-	transform: scale(-1, 1);
-	left: 0;
-	width: 100%;
-	position: absolute;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	text-align: center;
-	padding-left: calc(50% - 1.5em);
-	cursor: pointer;
-	display: inline-flex;
+	flex-flow: wrap column;
 }
 
-
-[is="edit-status"] > div {
-	flex: 1;
+[is="edit-status"] > .tiled {
 	opacity:70%;
+	border-bottom:0;
 }
-[is="edit-status"] > .start {
-	padding-right:2em;
+[is="edit-status"] > .tiled > div {
 	flex:1 1 50%;
+	text-align: center;
 }
-[is="edit-status"] > .stop {
-	border-top-left-radius:0;
-	border-bottom-left-radius:0;
-	border-left:0;
-	padding-left:2em;
+[is="edit-status"] .stop {
 	text-align: right;
-	flex:1 1 50%;
 }
-[is="edit-status"] > .active {
-	background-color:var(--bg);
+[is="edit-status"] .active {
+	background-color: var(--warn-rgb);
 	opacity:100%;
-}
-.toggle-switch > label,
-.toggle-switch > label::before,
-.toggle-switch > label::after {
-	opacity: 100%;
-	cursor: pointer;
+	color: white;
 }
 
+.tiled > div {
+	flex: 1 0 50%;
+}
