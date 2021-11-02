@@ -94,9 +94,11 @@ form[is="edit-upload"] > label:hover {
 	background-color: var(--btncolor);
 }
 form[is="edit-upload"] > img {
-	max-width:100%;
+	max-width: 100%;
 	display: block;
-	padding: 1px 0;
+	max-height: 15rem;
+	margin: 0.3rem auto;
+	box-shadow: 0 0 0.3rem 0;
 }
 
 form[is].negative > label > input {
