@@ -115,3 +115,8 @@ body {
 [contenteditable="true"] *:focus {
 	outline: none;
 }
+
+
+button {
+	line-height: 1.3;
+}
