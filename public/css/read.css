@@ -261,11 +261,12 @@ live-asset > img {
 }
 .live-messages .live-status > p {
 	margin:0;
-	padding:0 8px !important;
+	padding: 0 8px;
 	color:#323232;
 	border:1px solid #b9b9b9;
 	border-radius:3px;
 	font-size:inherit; /* override page style */
+	padding-top: 2px;
 }
 
 .live-messages .live-status > .before {
@@ -296,6 +297,7 @@ live-asset > img {
 	border-radius:2px;
 	background: #ffffff;
 	background: linear-gradient(to bottom, #ffffff 1%, #e8e8e8 100%);
+	padding-top: 2px;
 }
 .live-messages .live-controls label > input {
 	display:none;
