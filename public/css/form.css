@@ -16,7 +16,6 @@ form[is] > label > input {
 	text-align:left;
 	color:var(--btncolor);
 	width:100%;
-	cursor: pointer;
 }
 
 form[is] > label > input:hover,
