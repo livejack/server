@@ -53,6 +53,9 @@ form[is="edit-upload"] > label::after {
 	top: 50%;
 	margin-top: -1em;
 }
+form[is="edit-upload"] > label:hover::after {
+	filter:invert();
+}
 .prosemirror-menu > form {
 	flex-direction:column;
 	font-size: 0.8rem;

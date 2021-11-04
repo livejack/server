@@ -374,3 +374,7 @@ live-asset button[name="preview"]::after {
 	background-repeat:no-repeat;
 	display: inline-block;
 }
+
+live-asset button:hover::after {
+	filter:invert();
+}
