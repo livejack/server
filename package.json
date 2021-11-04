@@ -81,16 +81,21 @@
   },
   "scripts": {
     "start": "NODE_ENV=development node app.js",
-    "bundle": "webmodule-bundle --root public --concatenate --css dist/${npm_config_name}-${npm_package_version}.css --js dist/${npm_config_name}-${npm_package_version}.js public/${npm_config_name}.html",
-    "bundle-all": "npm run bundle --name=read && npm run bundle --name=write && npm run bundle --name=domain",
-    "minify": "webmodule-bundle --root public --css dist/${npm_config_name}-${npm_package_version}.min.css --js dist/${npm_config_name}-${npm_package_version}.min.js public/${npm_config_name}.html",
-    "minify-all": "npm run minify --name=read && npm run minify --name=write && npm run minify --name=domain",
+    "bundle": "BROWSERSLIST_ENV=${npm_config_env} webmodule-bundle --root public --concatenate --css dist/${npm_config_name}-${npm_package_version}.css --js dist/${npm_config_name}-${npm_package_version}.js public/${npm_config_name}.html",
+    "bundle-all": "npm run bundle --name=read --env=production && npm run bundle --name=write --env=modern && npm run bundle --name=domain --env=modern",
+    "minify": "BROWSERSLIST_ENV=${npm_config_env} webmodule-bundle --root public --css dist/${npm_config_name}-${npm_package_version}.min.css --js dist/${npm_config_name}-${npm_package_version}.min.js public/${npm_config_name}.html",
+    "minify-all": "npm run minify --name=read --env=production && npm run minify --name=write --env=modern && npm run minify --name=domain --env=modern",
     "dist": "npm run bundle-all && npm run minify-all"
   },
-  "browserslist": [
-    "> 0.25% in FR",
-    "last 2 versions",
-    "Firefox ESR",
-    "not dead"
-  ]
+  "browserslist": {
+    "production": [
+      "> 0.25% in FR",
+      "last 2 versions",
+      "Firefox ESR",
+      "not dead"
+    ],
+    "modern": [
+      "> 0.25% in FR and supports async-functions and not dead"
+    ]
+  }
 }
