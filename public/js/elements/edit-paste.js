@@ -56,6 +56,7 @@ export default class EditPaste extends HTMLFormElement {
 			});
 		} else if (e.type == "focus") {
 			this.#input.select();
+			this.update();
 		}
 	}
 	async create(url) {
@@ -92,7 +93,7 @@ export default class EditPaste extends HTMLFormElement {
 	}
 	update() {
 		if (this.#input) this.querySelector('.buttons')
-			.classList.toggle('hide', !this.#input.value);
+			.classList.toggle('hide', document.activeElement != this.#input && !this.#input.value || this.classList.contains('error'));
 	}
 	change(url) {
 		// do nothing
