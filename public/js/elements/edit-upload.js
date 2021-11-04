@@ -43,13 +43,17 @@ export default class EditUpload extends HTMLFormElement {
 		} catch (err) {
 			this.classList.add("error");
 			setTimeout(() => {
+				throw err;
+			});
+			setTimeout(() => {
 				if (this.classList.contains('error')) {
 					this.#input.value = "";
 					this.classList.remove("error");
 				}
 			}, 3000);
+		} finally {
+			this.classList.remove('loading');
 		}
-		this.classList.remove('loading');
 	}
 	set progress(percent) {
 		this.style.setProperty('--width', `${percent}%`);

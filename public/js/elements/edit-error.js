@@ -23,7 +23,7 @@ export default class EditError extends HTMLDivElement {
 			this.hidden = true;
 		} else if (e.type == "unhandledrejection" || e.type == "error") {
 			this.hidden = false;
-			let error = e.reason?.message ?? e.message;
+			let error = e.error?.message ?? e.reason?.message ?? e.message;
 			const code = Number.parseInt(error);
 			if (Number.isInteger(code)) {
 				if (code >= 500 && code < 600) {

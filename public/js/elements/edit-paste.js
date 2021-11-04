@@ -76,11 +76,15 @@ export default class EditPaste extends HTMLFormElement {
 			this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");
+			setTimeout(() => {
+				throw err;
+			});
+		} finally {
+			this.#input.disabled = false;
+			this.classList.remove('infinite', 'loading');
+			this.update();
+			if (item) this.change(item.url);
 		}
-		this.#input.disabled = false;
-		this.classList.remove('infinite', 'loading');
-		this.update();
-		if (item) this.change(item.url);
 		return item;
 	}
 	set(url) {
