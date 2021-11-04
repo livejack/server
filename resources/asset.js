@@ -28,7 +28,7 @@ exports.POST = (req) => {
 		try {
 			await prepareAsset(req.body);
 		} catch (ex) {
-			if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Invalid url");
+			if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Cannot process URL");
 			else throw ex;
 		}
 		if (req.body.id) delete req.body.id;
