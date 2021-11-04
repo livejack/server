@@ -35,7 +35,7 @@ export default class EditError extends HTMLDivElement {
 				} else if (code == 409) {
 					error = this.dataset.conflict;
 				} else if (code == 413) {
-					error = this.dataset.toolarge;
+					error = `${this.dataset.toolarge} (${error})`;
 				} else {
 					error = this.dataset.other.replace('%d', code);
 				}

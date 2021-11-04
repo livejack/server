@@ -79,7 +79,7 @@ async function upload(form, track) {
 	}
 
 	function handleError() {
-		const msg = xhr.statusText || "Connection error";
+		const msg = xhr.statusText || xhr.responseText || "Connection error";
 		const err = new Error(msg);
 		err.statusCode = xhr.status;
 		reject(err);
