@@ -8,7 +8,7 @@ const searchTemplate = `<div class="header">
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮⧸❯</span>
 	<a class="title">Embed HTML</a>
-	<button name="preview opened"></button>
+	<button name="preview" class="opened"></button>
 	<button name="del"></button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
