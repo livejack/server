@@ -221,7 +221,7 @@ export class EditAsset extends LiveAsset {
 		} else {
 			tpl = codeTemplate;
 		}
-		data.humanType = (() => {
+		data.humanType = ((type) => {
 			switch (type) {
 				case 'image':
 					return 'photo';
@@ -230,7 +230,7 @@ export class EditAsset extends LiveAsset {
 				default:
 					return type;
 			}
-		})();
+		})(data.type);
 
 		const frag = this.cloneNode(false);
 		if (tpl) {
