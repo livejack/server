@@ -8,6 +8,7 @@ export default class EditUpload extends HTMLFormElement {
 	connectedCallback() {
 		this.#input = this.querySelector('input');
 		this.#preview = this.querySelector('img');
+		this.#preview.addEventListener('error', this);
 		this.addEventListener("change", this);
 		this.addEventListener("submit", this);
 		this.addEventListener("reset", this);
@@ -18,9 +19,13 @@ export default class EditUpload extends HTMLFormElement {
 		this.removeEventListener("reset", this);
 	}
 	handleEvent(e) {
+		if (this.#preview.src) {
+			URL.revokeObjectURL(this.#preview.src);
+		}
 		if (!this.#input.value || e.type == "reset") {
 			this.querySelector('.buttons').classList.add("hide");
 			this.#preview.removeAttribute('src');
+			this.classList.remove('error');
 			this.#preview.classList.add("hide");
 		} else if (e.type == "change") {
 			this.querySelector('.buttons').classList.remove("hide");
@@ -31,6 +36,9 @@ export default class EditUpload extends HTMLFormElement {
 			this.querySelector('.buttons').classList.add("hide");
 			this.#preview.classList.add("hide");
 			this.submit();
+		} else if (e.type == "error") {
+			this.#preview.classList.add("hide");
+			this.classList.add('error');
 		}
 	}
 	async submit() {
@@ -70,6 +78,13 @@ async function upload(form, track) {
 		for (const node of inputs) node.disabled = val;
 	}
 
+	function handleError() {
+		const msg = xhr.statusText || "Connection error";
+		const err = new Error(msg);
+		err.statusCode = xhr.status;
+		reject(err);
+	}
+
 	xhr.upload.addEventListener("progress", (e) => {
 		if (e.lengthComputable) {
 			let percent = Math.round((e.loaded * 100) / e.total);
@@ -80,6 +95,7 @@ async function upload(form, track) {
 
 	xhr.addEventListener('load', () => {
 		track(100);
+		if (xhr.status >= 400) return handleError();
 		try {
 			resolve(JSON.parse(xhr.responseText));
 		} catch(ex) {
@@ -87,12 +103,7 @@ async function upload(form, track) {
 		}
 	});
 
-	xhr.addEventListener('error', (e) => {
-		const msg = xhr.statusText || "Connection error";
-		const err = new Error(msg);
-		err.statusCode = xhr.status;
-		reject(err);
-	});
+	xhr.addEventListener('error', handleError);
 
 	try {
 		xhr.open("POST", "./assets", true);
