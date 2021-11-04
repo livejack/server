@@ -26,7 +26,6 @@
     "objection": "^2.2.17",
     "objection-db-errors": "^1.1.2",
     "p-queue": "^6.6.2",
-    "passwd-user": "^3.0.0",
     "pg": "^8.7.1",
     "serve-static": "^1.14.1",
     "sharp": "^0.29.2",
