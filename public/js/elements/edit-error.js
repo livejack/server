@@ -24,7 +24,7 @@ export default class EditError extends HTMLDivElement {
 		} else if (e.type == "unhandledrejection" || e.type == "error") {
 			this.hidden = false;
 			let error = e.error?.message ?? e.reason?.message ?? e.message;
-			const code = Number.parseInt(error);
+			const code = Number.parseInt(e.error?.statusCode ?? error);
 			if (Number.isInteger(code)) {
 				if (code >= 500 && code < 600) {
 					error = this.dataset.server.replace('%d', code);
@@ -34,6 +34,8 @@ export default class EditError extends HTMLDivElement {
 					error = this.dataset.notfound;
 				} else if (code == 409) {
 					error = this.dataset.conflict;
+				} else if (code == 413) {
+					error = this.dataset.toolarge;
 				} else {
 					error = this.dataset.other.replace('%d', code);
 				}
