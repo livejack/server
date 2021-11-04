@@ -25,20 +25,14 @@ exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
-		try {
-			await prepareAsset(req.body);
-		} catch (ex) {
-			if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Cannot process URL");
-			else throw ex;
-		}
-		if (req.body.id) delete req.body.id;
-		let asset = await page.$relatedQuery('hrefs').findOne({ url: req.body.url });
+		const item = await prepareAsset(req.body.url);
+		let asset = await page.$relatedQuery('hrefs').findOne({ url: item.url });
 		if (asset) {
 			asset = await page.$relatedQuery('hrefs', trx)
-				.patchAndFetchById(asset.id, req.body)
+				.patchAndFetchById(asset.id, item)
 				.throwIfNotFound();
 		} else {
-			asset = await page.$relatedQuery('hrefs').insertAndFetch(req.body);
+			asset = await page.$relatedQuery('hrefs').insertAndFetch(item);
 		}
 		await page.$query(trx).patch({
 			updated_at: asset.updated_at
@@ -55,14 +49,23 @@ exports.POST = (req) => {
 	});
 };
 
-async function prepareAsset(item) {
-	if (!item.url) throw new HttpError.BadRequest("Missing url");
-	const meta = await inspector(item.url, {
+async function tryInspect(url) {
+	return inspector(url, {
 		nofavicon: false,
 		nosource: true,
 		file: false,
 		providers
+	}).catch((ex) => {
+		if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Cannot process URL");
+		else throw ex;
 	});
+}
+
+async function prepareAsset(url) {
+	if (!url) throw new HttpError.BadRequest("Missing url");
+	const item = { url };
+	const meta = await tryInspect(url);
+
 	if (meta.type == "image" && meta.mime != "text/html" && !meta.thumbnail) {
 		meta.thumbnail = meta.url;
 	}
@@ -70,7 +73,7 @@ async function prepareAsset(item) {
 	if (meta.thumbnail) try {
 		meta.thumbnail = await thumbnailer(meta.thumbnail);
 	} catch (err) {
-		console.group(item.url);
+		console.group(url);
 		console.error("Impossible to generate thumbnail from");
 		console.error(meta.thumbnail);
 		console.error(err.toString());
@@ -85,6 +88,7 @@ async function prepareAsset(item) {
 		// do not change original url with the discovered url
 		if (name != "url" && meta[name] != null) item[name] = meta[name];
 	});
+	return item;
 }
 
 exports.PUT = (req) => {
@@ -92,9 +96,9 @@ exports.PUT = (req) => {
 	const id = req.params.id || req.body.id;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		await prepareAsset(req.body);
+		const item = await prepareAsset(req.body.url);
 		const asset = await page.$relatedQuery('hrefs', trx)
-			.patchAndFetchById(id, req.body)
+			.patchAndFetchById(id, item)
 			.throwIfNotFound();
 		await page.$query(trx).patch({
 			updated_at: asset.updated_at
