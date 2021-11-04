@@ -124,6 +124,12 @@ live-asset button[name="save"] {
 .live-message live-asset button[name="preview"] {
 	display:initial;
 }
+.live-message live-asset button[name="del"]:hover::after {
+	filter:unset;
+}
+.live-message .ProseMirror live-asset button[name="del"]:hover::after {
+	filter:invert();
+}
 .live-message live-asset button[name="del"] {
 	cursor: default;
 	opacity:50%;
