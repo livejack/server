@@ -63,7 +63,7 @@ class EditHtml {
 		this.innerHTML = val;
 	}
 	handleEvent(e) {
-		if (e.type == "click" || e.type == "focus") {
+		if (e.target.name != "preview" && (e.type == "click" || e.type == "focus")) {
 			if (this.article.active) {
 				this.start({ left: e.pageX, top: e.pageY, node: e.target });
 			}
