@@ -47,7 +47,7 @@ export class LiveAsset extends HTMLElement {
 				<meta itemprop="width" content="[width]">
 				<meta itemprop="height" content="[height]">
 				<meta itemprop="url" content="[url]">
-				<img width="[width]" height="[height]" style="max-width:[width|else:at:*]px" />
+				<img width="[width]" height="[height]" style="max-width:[width|else:at:]px" />
 				<figcaption><span>[title|else:at:*]</span><em>[author|else:at:*]</em></figcaption>
 			</figure>`, Object.assign({}, { width, height }, this.dataset)));
 		} else if (type == "picto") {
