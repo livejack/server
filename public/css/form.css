@@ -170,7 +170,7 @@ form[is] .buttons {
 }
 
 form[is] .buttons button {
-	flex: 1 1 50%;
+	flex: 1 1 auto;
 	color: var(--btncolor);
 	padding: 0.4em 0;
 }
