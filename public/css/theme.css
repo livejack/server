@@ -2,7 +2,7 @@
 	--back-color-rgb: 255, 255, 255;
 	--back-color: rgb(var(--back-color-rgb));
 	--text-color: black;
-	--back-low-color: #EEE;
+	--back-low-color: rgb(238 238 238 / 90%);
 	--text-low-color: #666;
 	--middle-color: #888;
 	--warn-rgb: rgb(184 0 0);
