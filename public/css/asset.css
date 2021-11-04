@@ -106,7 +106,7 @@ live-asset > .thumbnail > img {
 }
 live-asset button {
 	all:unset;
-	padding: 0.4em 0.6em;
+	padding: 0.5em 0.5em;
 	height: 2em;
 	text-align:center;
 	flex: 0 0 auto;
@@ -124,8 +124,7 @@ live-asset button[name="save"] {
 .live-message live-asset button[name="preview"] {
 	display:initial;
 }
-.live-message live-asset button[name="del"],
-#control[data-mode="text"] live-asset button[name="del"] {
+.live-message live-asset button[name="del"] {
 	cursor: default;
 	opacity:50%;
 }
@@ -347,4 +346,31 @@ live-asset > .meta > p > em {
 .ProseMirror [contenteditable="false"] {
 	word-wrap: normal;
 	white-space: normal;
+}
+
+live-asset button[name="del"]::after {
+	content: "";
+	width: 1em;
+	height: 1em;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -256 1408 1536' height='100%'%3E%3Cpath d='M512 352v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V352q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V352q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V352q0-14 9-23t23-9h64q14 0 23 9t9 23zm128 724V128H256v948q0 22 7 40.5t14.5 27 10.5 8.5h832q3 0 10.5-8.5t14.5-27 7-40.5zM480 0h448l-48-117q-7-9-17-11H546q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5H288q-66 0-113-58.5T128 1080V128H32q-14 0-23-9T0 96V32Q0 18 9 9t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z'/%3E%3C/svg%3E");
+	background-repeat:no-repeat;
+	display: inline-block;
+}
+
+live-asset button[name="preview"].opened::after {
+	content: "";
+	width: 1em;
+	height: 1em;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' height='100%'%3E%3Cpath d='M12 9.463 6.156 15.14a1.29 1.29 0 0 1-1.786 0 1.203 1.203 0 0 1 0-1.736l6.737-6.546a1.29 1.29 0 0 1 1.786 0l6.737 6.546c.493.48.493 1.256 0 1.736a1.29 1.29 0 0 1-1.786 0L12 9.462Z'/%3E%3C/svg%3E");
+	background-repeat:no-repeat;
+	display: inline-block;
+}
+
+live-asset button[name="preview"]::after {
+	content: "";
+	width: 1em;
+	height: 1em;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' height='100%'%3E%3Cpath d='m12 13.537 5.844-5.678a1.29 1.29 0 0 1 1.786 0c.493.48.493 1.257 0 1.736l-6.737 6.545a1.29 1.29 0 0 1-1.786 0L4.37 9.595a1.203 1.203 0 0 1 0-1.736 1.29 1.29 0 0 1 1.786 0L12 13.537Z'/%3E%3C/svg%3E");
+	background-repeat:no-repeat;
+	display: inline-block;
 }

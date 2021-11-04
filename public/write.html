@@ -49,7 +49,7 @@
 								datetime="[page.start|date:iso]">[page.start|then:date:cal|else:prune:+*]</time></p>
 						<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp"
 								datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-						<p class="after [page|when:after|prune:*]">TERMINÉ : Fin du direct : <time class="stamp"
+						<p class="after [page|when:after|prune:*]">TERMINÉ : Fin du direct <time class="stamp"
 								itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
 					</template>
 				</div>
@@ -122,10 +122,10 @@
 						</div>
 					</div>
 					<fieldset class="buttons">
-						<button type="submit" name="action" value="start">Commencer ▶[page|when:before|prune:*]</button>
-						<button type="submit" name="action" value="reset">◀ Réinitialiser[page|when:after|prune:*]</button>
-						<button type="submit" name="action" value="continue">Continuer ▶[page|when:after|prune:*]</button>
-						<button type="submit" name="action" value="stop">◼ Terminer[page|when:during|prune:*]</button>
+						<button type="submit" name="action" value="start">Lancer le live <span class="unicode">▶</span>[page|when:before|prune:*]</button>
+						<button type="submit" name="action" value="reset"><span class="unicode">◀</span> Réinitialiser[page|when:after|prune:*]</button>
+						<button type="submit" name="action" value="continue">Poursuivre <span class="unicode">▶</span>[page|when:after|prune:*]</button>
+						<button type="submit" name="action" value="stop"><span class="unicode">◼</span> Terminer le live[page|when:during|prune:*]</button>
 					</fieldset>
 				</form>
 			</template>
@@ -137,7 +137,7 @@
 			</div>
 			<form is="edit-upload" method="post" enctype="multipart/form-data" action="assets" class="icon">
 				<label class="tiled">
-					Importer une image
+					Importer une photo
 					<input type="file" name="file" />
 				</label>
 				<img class="hide" />

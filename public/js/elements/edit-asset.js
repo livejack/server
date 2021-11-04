@@ -2,21 +2,21 @@ import req from "../req.js";
 import { LiveAsset } from "./live-asset.js";
 
 const searchTemplate = `<div class="header">
-	<span class="favicon">🔍</span>
+	<span class="favicon loading"></span>
 	<a href="url" class="title">[url]</a>
 </div>`;
 const iframeTemplate = `<div class="header">
 	<span class="favicon">❮⧸❯</span>
 	<a class="title">Embed HTML</a>
-	<button name="preview">⯆</button>
-	<button name="del">✕</button>
+	<button name="preview opened"></button>
+	<button name="del"></button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 const codeTemplate = `<div class="header">
 <span class="favicon">❮⧸❯</span>
 <a class="title">Embed HTML</a>
-<button name="preview">⯈</button>
-<button name="del">✕</button>
+<button name="preview"></button>
+<button name="del"></button>
 </div>
 <code class="content">
 	<textarea class="content" spellcheck="false" placeholder="Coller un embed + script">[html|as:text]
@@ -28,12 +28,12 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|then:proxy:/favicons:url|else:at:*]" class="favicon" />
 	<a href="[url|else:at:-]" class="title">[meta.title]</a>
 	<button name="save">🗘</button>
-	<button name="preview">[type|neq:link|prune:*]⯈</button>
-	<button name="del">✕</button>
+	<button name="preview">[type|neq:link|prune:*]</button>
+	<button name="del"></button>
 </div>
 <div class="meta">
 	<p>
-		<strong>[type]</strong>
+		<strong>[humanType]</strong>
 		<em>[meta.date|else:get:date|date:date]</em>
 		<span><br>[meta.author|or:&nbsp;]</span>
 	</p>
@@ -44,19 +44,19 @@ const assetTemplate = `<div class="header" title="[meta.site]">
 </div>
 <form class="asset" data-type="[type|eq:image|prune:*]" autocomplete="off" draggable="false">
 	<label>
-		<span>Titre</span>
+		<span>Légende</span>
 		<input name="title" value="[title]">
 	</label>
 	<label>
-		<span>Auteur</span>
+		<span>Crédit</span>
 		<input name="author" value="[author]">
 	</label>
 </form>`;
 const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 	<img src="[meta.icon|then:proxy:/favicons:url|else:at:*]" class="favicon" />
 	<a href="[url]" class="title">[meta.title]</a>
-	<button name="preview">⯆</button>
-	<button name="del">✕</button>
+	<button name="preview" class="opened"></button>
+	<button name="del"></button>
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 
@@ -221,6 +221,16 @@ export class EditAsset extends LiveAsset {
 		} else {
 			tpl = codeTemplate;
 		}
+		data.humanType = (() => {
+			switch (type) {
+				case 'image':
+					return 'photo';
+				case 'link':
+					return 'lien';
+				default:
+					return type;
+			}
+		})();
 
 		const frag = this.cloneNode(false);
 		if (tpl) {

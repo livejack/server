@@ -23,6 +23,12 @@ form[is="edit-status"] {
 	color: white;
 }
 
+[is="edit-status"] span.unicode {
+	position:relative;
+	top:-0.1em;
+}
+
 .tiled > div {
 	flex: 1 0 auto;
 }
+
