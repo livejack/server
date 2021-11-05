@@ -9,14 +9,11 @@ import {
 import { undo, redo } from "/node_modules/prosemirror-history";
 import { undoInputRule } from "/node_modules/prosemirror-inputrules";
 import { canSplit } from "/node_modules/prosemirror-transform";
+import { splitListItem } from "/node_modules/prosemirror-schema-list";
+
 
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
-// :: (Schema, ?Object) → Object
-//
-// You can suppress or map these bindings by passing a `mapKeys`
-// argument, which maps key names (say `"Mod-B"` to either `false`, to
-// remove the binding, or a new key name string.
 export function buildKeymap(schema, mapKeys) {
 	const keys = {};
 	let type;
@@ -51,59 +48,56 @@ export function buildKeymap(schema, mapKeys) {
 
 	if ((type = schema.nodes.hard_break)) {
 		bind("Enter", chainCommands(
-			removeHardBreakAndInsertParagraph(type, schema.nodes.paragraph),
-			insertHardBreak(type, schema.nodes.paragraph)
+			splitListItem(schema.nodes.list_item),
+			hardBreakHotel(type)
 		));
 	}
-	// if ((type = schema.nodes.list_item)) {
-	// 	bind("Enter", splitListItem(type));
-	// }
 
 	return keys;
 }
 
 
-function removeHardBreakAndInsertParagraph(hardBreak, paragraph) {
+function hardBreakHotel(hardBreak) {
 	return (state, dispatch) => {
-		const { $from } = state.selection;
+		const { $from: {
+			nodeBefore, parent, pos, depth
+		} } = state.selection;
 
-		if (!$from.parent.isTextblock) {
+		let insert = false;
+
+		if (!parent.isTextblock) {
 			return false;
 		}
 
-		if ($from.parent.type !== paragraph) {
-			return false;
+		if (nodeBefore && nodeBefore.type !== hardBreak) {
+			insert = true;
 		}
+		const { tr } = state;
 
-		if ($from.nodeBefore && $from.nodeBefore.type !== hardBreak) {
-			return false;
-		}
-		if (!canSplit(state.tr.doc, $from.pos)) {
-			return false;
+		if (!canSplit(tr.doc, pos)) {
+			insert = true;
 		}
 
 		if (dispatch) {
-			dispatch(
-				state.tr
-					.delete($from.pos - $from.nodeBefore.nodeSize, $from.pos)
-					.split($from.pos)
-					.scrollIntoView()
-			);
+			if (insert) {
+				tr.replaceSelectionWith(hardBreak.create());
+			} else {
+				const size = nodeBefore ? nodeBefore.nodeSize : 0;
+				tr.delete(pos - size, pos);
+				tr.split(pos - size, depth);
+			}
+			dispatch(tr.scrollIntoView());
 		}
 
 		return true;
 	};
 }
 
-function insertHardBreak(hardBreak, paragraph) {
+function insertHardBreak(hardBreak) {
 	return (state, dispatch) => {
 		const { $from } = state.selection;
 
 		if (!$from.parent.isTextblock) {
-			return false;
-		}
-
-		if ($from.parent.type !== paragraph) {
 			return false;
 		}
 
