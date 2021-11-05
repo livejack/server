@@ -2,11 +2,13 @@
 
 @import "/node_modules/flatpickr";
 
-@import "/node_modules/@livejack/prosemirror/style/default.css";
+@import "/node_modules/prosemirror-view/style/prosemirror.css";
 
-@import "/node_modules/@livejack/prosemirror/style/gapcursor.css";
+@import "/node_modules/prosemirror-menu/style/menu.css";
 
-@import "/node_modules/@livejack/prosemirror/style/tables.css";
+@import "/node_modules/prosemirror-gapcursor/style/gapcursor.css";
+
+@import "/node_modules/prosemirror-tables/style/tables.css";
 
 @import "./resources.css";
 

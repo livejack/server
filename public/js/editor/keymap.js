@@ -1,15 +1,14 @@
 import {
 	chainCommands,
 	toggleMark,
-	exitCode,
 	joinUp,
 	joinDown,
 	lift,
-	selectParentNode,
-	splitListItem,
-	undo, redo,
-	undoInputRule
-} from "/node_modules/@livejack/prosemirror";
+	selectParentNode
+} from "/node_modules/prosemirror-commands";
+import { undo, redo } from "/node_modules/prosemirror-history";
+import { undoInputRule } from "/node_modules/prosemirror-inputrules";
+import { canSplit } from "/node_modules/prosemirror-transform";
 
 const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
@@ -51,17 +50,67 @@ export function buildKeymap(schema, mapKeys) {
 	}
 
 	if ((type = schema.nodes.hard_break)) {
-		const br = type, cmd = chainCommands(exitCode, (state, dispatch) => {
-			dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
-			return true;
-		});
-		bind("Mod-Enter", cmd);
-		bind("Shift-Enter", cmd);
-		if (mac) bind("Ctrl-Enter", cmd);
+		bind("Enter", chainCommands(
+			removeHardBreakAndInsertParagraph(type, schema.nodes.paragraph),
+			insertHardBreak(type, schema.nodes.paragraph)
+		));
 	}
-	if ((type = schema.nodes.list_item)) {
-		bind("Enter", splitListItem(type));
-	}
+	// if ((type = schema.nodes.list_item)) {
+	// 	bind("Enter", splitListItem(type));
+	// }
 
 	return keys;
+}
+
+
+function removeHardBreakAndInsertParagraph(hardBreak, paragraph) {
+	return (state, dispatch) => {
+		const { $from } = state.selection;
+
+		if (!$from.parent.isTextblock) {
+			return false;
+		}
+
+		if ($from.parent.type !== paragraph) {
+			return false;
+		}
+
+		if ($from.nodeBefore && $from.nodeBefore.type !== hardBreak) {
+			return false;
+		}
+		if (!canSplit(state.tr.doc, $from.pos)) {
+			return false;
+		}
+
+		if (dispatch) {
+			dispatch(
+				state.tr
+					.delete($from.pos - $from.nodeBefore.nodeSize, $from.pos)
+					.split($from.pos)
+					.scrollIntoView()
+			);
+		}
+
+		return true;
+	};
+}
+
+function insertHardBreak(hardBreak, paragraph) {
+	return (state, dispatch) => {
+		const { $from } = state.selection;
+
+		if (!$from.parent.isTextblock) {
+			return false;
+		}
+
+		if ($from.parent.type !== paragraph) {
+			return false;
+		}
+
+		if (dispatch) {
+			dispatch(state.tr.replaceSelectionWith(hardBreak.create()).scrollIntoView());
+		}
+
+		return true;
+	};
 }

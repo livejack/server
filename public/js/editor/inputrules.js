@@ -1,7 +1,7 @@
 import {
-	inputRules, wrappingInputRule,
-	emDash, ellipsis, InputRule
-} from "/node_modules/@livejack/prosemirror";
+	InputRule, inputRules, wrappingInputRule,
+	emDash, ellipsis
+} from "/node_modules/prosemirror-inputrules";
 
 export function blockQuoteRule(nodeType) {
 	return wrappingInputRule(/^\s*>\s$/, nodeType);

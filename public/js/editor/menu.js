@@ -1,13 +1,12 @@
 import {
-	undo,
-	redo,
-	crel,
 	joinUp,
 	lift,
 	selectParentNode,
 	wrapIn,
 	setBlockType
-} from "/node_modules/@livejack/prosemirror";
+} from "/node_modules/prosemirror-commands";
+import { undo, redo } from "/node_modules/prosemirror-history";
+import { default as crel } from "/node_modules/crelt";
 
 import { getIcon } from "./icons.js";
 

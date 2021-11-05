@@ -1,16 +1,15 @@
+import { keymap } from "/node_modules/prosemirror-keymap";
+import { history } from "/node_modules/prosemirror-history";
+import { baseKeymap } from "/node_modules/prosemirror-commands";
 import {
-	keymap,
-	history,
-	baseKeymap,
-	EditorState,
-	dropCursor,
-	gapCursor,
-	EditorView,
-	Schema, DOMParser, DOMSerializer,
-	addListNodes,
-	Selection, TextSelection, NodeSelection,
-	tableNodes, tableEditing
-} from "/node_modules/@livejack/prosemirror";
+	EditorState, NodeSelection, TextSelection, Selection
+} from "/node_modules/prosemirror-state";
+import { dropCursor } from "/node_modules/prosemirror-dropcursor";
+import { gapCursor } from "/node_modules/prosemirror-gapcursor";
+import { tableNodes, tableEditing } from "/node_modules/prosemirror-tables";
+import { EditorView } from "/node_modules/prosemirror-view";
+import { Schema, DOMParser, DOMSerializer } from "/node_modules/prosemirror-model";
+import { addListNodes } from "/node_modules/prosemirror-schema-list";
 
 import { HTML as parseHTML } from "/node_modules/matchdom";
 

@@ -1,7 +1,5 @@
-import {
-	toggleMark,
-	wrapInList
-} from "/node_modules/@livejack/prosemirror";
+import { toggleMark } from "/node_modules/prosemirror-commands";
+import { wrapInList } from "/node_modules/prosemirror-schema-list";
 
 import {
 	blockTypeItem, insertTypeItem, icons, MenuItem, liftItem, wrapItem

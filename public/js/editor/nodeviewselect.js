@@ -1,4 +1,6 @@
-import { Plugin, NodeSelection } from "/node_modules/@livejack/prosemirror";
+import {
+	Plugin, NodeSelection
+} from "/node_modules/prosemirror-state";
 
 export default function nodeViewSelect() {
 	return new Plugin({
