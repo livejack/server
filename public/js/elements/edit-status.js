@@ -2,7 +2,6 @@ import req from "../req.js";
 
 export default class EditStatus extends HTMLFormElement {
 	#fieldset
-	#button
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-status');
@@ -17,16 +16,15 @@ export default class EditStatus extends HTMLFormElement {
 		this.removeEventListener('submit', this);
 	}
 	async handleEvent(e) {
-		if (e.type == "click") {
-			if (e.target.name == "action") this.#button = e.target;
-		} else {
-			e.preventDefault();
-			this.#fieldset.disabled = true;
-			try {
-				await req("./page", "put", { action: this.#button.value });
-			} finally {
-				this.#fieldset.disabled = false;
-			}
+		e.preventDefault();
+		if (e.type == "submit") return;
+		const btn = e.target.closest('button');
+		if (btn?.name != "action") return;
+		this.#fieldset.disabled = true;
+		try {
+			await req("./page", "put", { action: btn.value });
+		} finally {
+			this.#fieldset.disabled = false;
 		}
 	}
 }

@@ -17,10 +17,21 @@ form[is="edit-status"] {
 [is="edit-status"] .stop {
 	text-align: right;
 }
-[is="edit-status"] .active {
-	background-color: var(--warn-rgb);
+[is="edit-status"] button > div {
+	border-bottom: 1px solid;
 	opacity:100%;
 	color: white;
+	padding: 1em 1rem;
+	margin-bottom: 0.5rem;
+}
+form[is="edit-status"] .buttons 
+ button {
+ 	margin:0;
+ 	padding:0;
+	padding-bottom:0.5em;
+}
+[is="edit-status"] button.active > div {
+	background-color: var(--warn-rgb) !important;
 }
 
 [is="edit-status"] span.unicode {
@@ -31,4 +42,5 @@ form[is="edit-status"] {
 .tiled > div {
 	flex: 1 0 auto;
 }
+
 

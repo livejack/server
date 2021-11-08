@@ -172,12 +172,15 @@ form[is] .buttons {
 	border: none;
 	margin: 0;
 	padding: 0;
+	opacity: 100%;
 }
 
 form[is] .buttons button {
 	flex: 1 1 auto;
-	color: var(--btncolor);
-	padding: 0.4em 0;
+	color: var(--bg);
+	padding: 0.5em 1rem;
+	background-color: var(--middle-color);
+	cursor: pointer;
 }
 
 form[is] .buttons button:hover {
