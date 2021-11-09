@@ -82,14 +82,17 @@ export class LiveAsset extends HTMLElement {
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}
-		if (script && !doc.head.querySelector(`script[src="${script}"]`)) {
+
+		if (script) {
 			const copy = doc.createElement('script');
 			copy.setAttribute('src', script);
 			copy.setAttribute('defer', '');
 			copy.onload = copy.onerror = () => {
 				doc.head.removeChild(copy);
 			};
-			doc.head.appendChild(copy);
+			const prev = doc.querySelector(`script[src="${script}"]`);
+			if (prev) prev.replaceWith(copy);
+			else doc.head.appendChild(copy);
 		}
 	}
 }
