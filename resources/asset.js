@@ -56,7 +56,7 @@ async function tryInspect(url) {
 		file: false,
 		providers
 	}).catch((ex) => {
-		if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Cannot process URL");
+		if (typeof ex == "number" && ex >= 400) throw new HttpError[ex]("Cannot process url: \n" + url);
 		else throw ex;
 	});
 }
