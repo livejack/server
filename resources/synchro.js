@@ -1,70 +1,69 @@
-const {Models} = require('objection');
-const {Page} = Models;
+const { Page } = require('objection').Models;
 const DiffList = require('diff-list');
 const got = require('got');
 
-exports.GET = async (req, res, next) => {
-	const {domain, key} = req.params;
-	await Page.have({
-		domain, key,
-		view: req.domain.view
-	});
-
-	await exports.syncAssets(req, req.domain.export, 'image');
-	res.sendStatus(200);
+exports.GET = async (req) => {
+	const page = await Page.have(req.params);
+	const data = await fetchExport(req.domain.export, page.key);
+	await exports.syncAssets(page, data, 'image');
+	return 200;
 };
 
-exports.pictos = async (req, res, next) => {
-	await exports.syncAssets(req, req.domain.pictos, 'picto');
-	res.sendStatus(200);
+exports.pictos = async (req) => {
+	const page = await Page.have(req.params);
+	const data = await fetchExport(req.domain.pictos, page.key);
+	await exports.syncAssets(page, data, 'picto');
+	return 200;
 };
 
-// TODO rate limit this ?
-exports.syncAssets = async (req, remoteUrl, type) => {
-	const {domain, key} = req.params;
-	const page = await Page.have({ domain, key, view: req.domain.view });
-	let obj = req.body;
-	if (obj && Object.keys(obj).length > 0) {
-		// use obj
-	} else if (remoteUrl) {
-		obj = await got(remoteUrl.replace('%s', page.key)).json();
-	}
+exports.syncAssets = async (page, body, type) => {
+	if (!body || Object.keys(body).length == 0) return;
 	const npage = {};
-	if (obj.titre != null && page.title != obj.titre) {
-		npage.title = obj.titre;
+	if (body.titre != null && page.title != body.titre) {
+		npage.title = body.titre;
 	}
-	if (obj.url != null && page.backtrack != obj.url) {
-		npage.backtrack = obj.url;
+	if (body.url != null && page.backtrack != body.url) {
+		npage.backtrack = body.url;
 	}
 	if (Object.keys(npage).length > 0) {
 		await page.$query().patch(npage);
 	}
 
 	let nassets = [];
-	if (obj.categorie) {
-		obj.categorie.forEach((categorie) => {
+	if (body.categorie) {
+		body.categorie.forEach((categorie) => {
 			const titre = categorie.titre ? categorie.titre.toString() : null;
 			if (categorie.media) categorie.media.forEach((asset) => {
 				if (titre && !asset.tags) asset.tags = [titre];
 				nassets.push(asset);
 			});
 		});
-	} else if (obj.media && Array.isArray(obj.media)) {
-		nassets.push(...obj.media);
+	} else if (body.media) {
+		const media = body.media;
+		if (Array.isArray(media)) nassets.push(...media);
+		else nassets.push(media);
 	} else {
 		return;
 	}
 
-	nassets = nassets.map((item) => {
+	nassets = nassets.filter((item) => {
+		return item && typeof item.url == "string";
+	}).map((item) => {
 		const asset = {
 			url: item.url,
 			origin: 'external',
 			type: type,
 			meta: {}
 		};
-		if (item.legende) asset.meta.title = item.legende;
-		if (item.credits) asset.meta.author = item.credits;
-		if (item.tags) asset.meta.keywords = item.tags;
+		if (item.legende) {
+			asset.meta.description = item.legende;
+		}
+		if (item.credits || item.credit) {
+			asset.meta.author = item.credits || item.credit;
+		}
+		if (item.tags) {
+			asset.meta.keywords = item.tags;
+		}
 		return asset;
 	});
 
@@ -100,3 +99,11 @@ exports.all = function(req, res, next) {
 	next(200);
 };
 
+async function fetchExport(remote, key) {
+	if (!remote) return;
+	try {
+		return got(remote.replace('%s', key)).json();
+	} catch (err) {
+		if (err && err.code != 404) console.error(err);
+	}
+}
