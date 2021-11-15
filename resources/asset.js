@@ -63,7 +63,6 @@ async function tryInspect(url) {
 
 async function prepare(url) {
 	if (!url) throw new HttpError.BadRequest("Missing url");
-	url = normalizeUrl(url);
 	const item = { url };
 	const meta = await tryInspect(url);
 
@@ -92,18 +91,6 @@ async function prepare(url) {
 	return item;
 }
 exports.prepareAsset = prepare;
-
-function normalizeUrl(url) {
-	if (url.indexOf("/media/_uploaded/orig/") >= 0) {
-		// TODO replace orig by [width] and do lazy-loading on client
-		url = url.replace("/media/_uploaded/orig/", "/media/_uploaded/804x/");
-	}
-	if (url.startsWith('http://')) {
-		url = 'https' + url.slice(4);
-	}
-	return url;
-}
-exports.normalizeUrl = normalizeUrl;
 
 exports.PUT = (req) => {
 	const { domain, key } = req.params;
