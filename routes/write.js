@@ -14,7 +14,7 @@ exports.GET = async function(req, res, next) {
 
 exports.PUT = async function (req) {
 	const page = await Page.have(req.params);
-	await exports.syncAssets(page, req.body, 'image');
+	await require('../resources/synchro').syncAssets(page, req.body, 'image');
 	return 200;
 };
 
