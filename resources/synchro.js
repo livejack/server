@@ -1,6 +1,7 @@
 const { Page } = require('objection').Models;
 const DiffList = require('diff-list');
 const got = require('got');
+const { prepareAsset } = require('./asset');
 
 exports.GET = async (req) => {
 	const page = await Page.have(req.params);
@@ -81,8 +82,14 @@ exports.syncAssets = async (page, body, type) => {
 	for (const asset of diff.put) {
 		await page.$relatedQuery('hrefs').patchById(asset.id, asset);
 	}
-	for (const asset of diff.post) {
-		await page.$relatedQuery('hrefs').insert(asset);
+	for (const item of diff.post) {
+		if (type != "picto") {
+			const asset = await prepareAsset(item.url);
+			asset.origin = item.origin;
+			await page.$relatedQuery('hrefs').insert(asset);
+		} else {
+			await page.$relatedQuery('hrefs').insert(item);
+		}
 	}
 	for (const asset of diff.del) {
 		await page.$relatedQuery('hrefs').deleteById(asset.id);
