@@ -1,55 +1,35 @@
-const {Models} = require('objection');
+const { Page } = require('objection').Models;
 
 // ouverture de la page
 exports.GET = async function(req, res, next) {
 	const { domain, key } = req.params;
 	try {
 		if (!domain) throw new HttpError.BadRequest("No domain");
-		await Models.Page.query().findOne({ domain, key }).throwIfNotFound();
+		await Page.query().findOne({ domain, key }).throwIfNotFound();
 		res.prerender('write.html', { render: false });
 	} catch (err) {
 		next(err);
 	}
 };
 
-// TODO: move this to pages collection resource
-// création de la page à partir de l'URL
-exports.PUT = async function(req, res, next) {
-	const { domain, key } = req.params;
-	if (!req.domain) throw new HttpError.BadRequest("No domain");
-	const page = await Models.Page.have({
-		domain, key,
-		view: req.domain.view
-	});
-	await page.$query().patch(req.body);
-	try {
-		await require('../resources/synchro').syncAssets(
-			req,
-			req.domain.export,
-			'image'
-		);
-	} catch(err) {
-		if (err && err.code != 503) {
-			console.error(err);
-		}
-	}
-	res.sendStatus(200);
+exports.PUT = async function (req) {
+	const page = await Page.have(req.params);
+	await exports.syncAssets(page, req.body, 'image');
+	return 200;
 };
 
-// TODO: move this to pages collection resource
-// suppression de la page, 200, ou 405 + nombre de messages dans le body
-exports.DELETE = async function(req, res, next) {
+exports.DELETE = async function(req) {
 	const {domain, key} = req.params;
 
-	const count = await Models.Page.relatedQuery('messages')
-		.for(Models.Page.findOne({ domain, key }).throwIfNotFound())
+	const count = await Page.relatedQuery('messages')
+		.for(Page.findOne({ domain, key }).throwIfNotFound())
 		.resultSize();
 
 	if (count > 0) {
-		res.status(405).send(count.toString());
+		console.error("Cannot delete page with messages:", count);
+		return 405;
 	} else {
-		await Models.Page.findOne({ domain, key }).throwIfNotFound().delete();
-		res.send(200);
+		await Page.findOne({ domain, key }).throwIfNotFound().delete();
+		return 200;
 	}
 };
-
