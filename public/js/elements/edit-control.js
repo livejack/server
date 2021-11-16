@@ -38,7 +38,7 @@ export default class EditControl extends HTMLDivElement {
 		if (name == null) name = "default";
 		this.dataset.mode = name;
 		if (name == "link") {
-			this.querySelector('form[is="edit-paste"] input').focus();
+			this.querySelector('form[is="edit-link"] input').focus();
 		}
 	}
 	async start(view, name) {

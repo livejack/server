@@ -1,7 +1,7 @@
 import EditError from './edit-error.js';
 import EditFilter from './edit-filter.js';
 import EditControl from './edit-control.js';
-import EditPaste from './edit-paste.js';
+import EditLink from './edit-link.js';
 import EditUpload from './edit-upload.js';
 import EditStatus from './edit-status.js';
 import EditArticle from './edit-article.js';
@@ -32,7 +32,7 @@ export default function register(live) {
 	ce.define('edit-text', EditText, { extends: 'div' });
 	ce.define('edit-select', EditSelect, { extends: 'select' });
 	ce.define('edit-mark', EditMark, { extends: 'div' });
-	ce.define('edit-paste', EditPaste, { extends: 'form' });
+	ce.define('edit-link', EditLink, { extends: 'form' });
 	ce.define('edit-upload', EditUpload, { extends: 'form' });
 	ce.define('edit-status', EditStatus, { extends: 'form' });
 	ce.define('edit-control', EditControl, { extends: 'div' });

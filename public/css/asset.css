@@ -337,13 +337,13 @@ live-asset > .meta > p > em {
 	transition-property: opacity;
 }
 
-#control[data-mode="link"] > [is="edit-paste"],
+#control[data-mode="link"] > [is="edit-link"],
 #control[data-mode="link"] live-asset > .header {
 	--tilebg: var(--text-low-color);
 	--btncolor: var(--back-low-color);
 }
 
-#control[data-mode="link"] > [is="edit-paste"]:hover,
+#control[data-mode="link"] > [is="edit-link"]:hover,
 #control[data-mode="link"] live-asset:hover > .header {
 	--btncolor: var(--bgselcolor);
 	--bg: var(--selcolor);

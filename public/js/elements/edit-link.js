@@ -1,11 +1,11 @@
 import req from "../req.js";
 
-export default class EditPaste extends HTMLFormElement {
+export default class EditLink extends HTMLFormElement {
 	#input
 	#anchor
 	constructor() {
 		super();
-		this.setAttribute('is', 'edit-paste');
+		this.setAttribute('is', 'edit-link');
 	}
 	connectedCallback() {
 		this.addEventListener('submit', this);

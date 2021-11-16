@@ -179,7 +179,7 @@ export class EditAsset extends LiveAsset {
 			this.textContent = '';
 			this.appendChild(this.live.merge(searchTemplate, {url}));
 			try {
-				asset = await document.querySelector('form[is="edit-paste"]').create(url);
+				asset = await document.querySelector('form[is="edit-link"]').create(url);
 				this.live.set(asset);
 			} catch (err) {
 				console.error(err);

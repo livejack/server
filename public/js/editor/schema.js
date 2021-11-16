@@ -124,7 +124,7 @@ export const nodes = {
 		toDOM() { return ["br"]; }
 	}
 };
-const linkTpl = `<form is="edit-paste" method="post" action="assets" class="asset">
+const linkTpl = `<form is="edit-link" method="post" action="assets" class="asset">
 <label>
 	<input class="tiled" placeholder="Coller une URL..." value="[url]">
 </label>
