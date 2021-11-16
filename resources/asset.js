@@ -85,8 +85,7 @@ async function prepare(url) {
 		if (meta[name] != null) item.meta[name] = meta[name];
 	});
 	Object.keys(Href.jsonSchema.properties).forEach((name) => {
-		// do not change original url with the discovered url
-		if (name != "url" && meta[name] != null) item[name] = meta[name];
+		if (meta[name] != null) item[name] = meta[name];
 	});
 	return item;
 }
