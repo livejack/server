@@ -1,5 +1,6 @@
 const { Model, AjvValidator } = require('objection');
 const AjvKeywords = require('ajv-keywords');
+const AjvFormats = require('ajv-formats');
 
 class BaseQueryBuilder extends Model.QueryBuilder {
 	sortBy(list) {
@@ -48,6 +49,7 @@ module.exports = class BaseModel extends Model {
 	static createValidator() {
 		return new AjvValidator({
 			onCreateAjv: (ajv) => {
+				AjvFormats(ajv);
 				AjvKeywords(ajv);
 			},
 			options: {
@@ -57,7 +59,6 @@ module.exports = class BaseModel extends Model {
 				ownProperties: true,
 				coerceTypes: 'array',
 				removeAdditional: "all",
-				nullable: true,
 				formats: {
 					singleline: /^[^\n\r]*$/,
 					pathname: /^(\/[\w-.]*)+$/,
