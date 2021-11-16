@@ -58,7 +58,7 @@ module.exports = class BaseModel extends Model {
 				validateSchema: false,
 				ownProperties: true,
 				coerceTypes: 'array',
-				removeAdditional: "all",
+				removeAdditional: "failing",
 				formats: {
 					singleline: /^[^\n\r]*$/,
 					pathname: /^(\/[\w-.]*)+$/,
