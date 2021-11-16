@@ -92,8 +92,11 @@ export default class EditLink extends HTMLFormElement {
 		if (this.#input) this.#input.value = url;
 	}
 	update() {
-		if (this.#input) this.querySelector('.buttons')
-			.classList.toggle('hide', document.activeElement != this.#input && !this.#input.value || this.classList.contains('error'));
+		if (!this.#input) return;
+		this.querySelector('.buttons').classList.toggle(
+			'hide',
+			document.activeElement != this.#input && this.#input.value == this.#input.defaultValue || this.classList.contains('error')
+		);
 	}
 	change(url) {
 		// do nothing
