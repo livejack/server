@@ -117,7 +117,7 @@ if (config.cache === false && !apiCall) {
 
 	app.get("/favicons/:base64url", tag.app.for('1y'), require('./lib/favicons'));
 
-	app.route(/\/js|css|img|dist\//).get(
+	app.route(/\/js|css|dist\//).get(
 		tag.app,
 		serveStatic(app.get('views'), {
 			index: false,
@@ -135,7 +135,12 @@ if (config.cache === false && !apiCall) {
 
 	app.param('domain', (req, res, next, domain) => {
 		req.domain = req.app.settings.domains[req.params.domain];
-		if (req.domain) req.params.view = req.domain.view;
+		if (req.domain) {
+			req.params.view = req.domain.view;
+			if (req.domain.icon) {
+				req.params.icon = "/favicons/" + Buffer.from(req.domain.icon).toString('base64').replace(/=*$/, '');
+			}
+		}
 		next();
 	});
 
