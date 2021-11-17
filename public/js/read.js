@@ -200,11 +200,22 @@ class LiveRead extends LiveJack {
 	handleEvent(e) {
 		const node = e.target;
 		const root = node.closest('.live-messages');
+		let ok = false;
 		if (node.name == "filter") {
-			root.classList.toggle("essentiel", node.value == "essentiel");
+			ok = node.value == "essentiel";
+			root.classList.toggle("essentiel", ok);
 		} else if (node.name == "reverse") {
-			root.classList.toggle("reverse", node.checked);
+			ok = node.checked;
+			root.classList.toggle("reverse", ok);
+		} else {
+			return;
 		}
+		window.dataLayer?.push({
+			customCategorie: "navigation",
+			customAction: "LiveTextButton",
+			customLabel: `${node.name}=${ok}`,
+			event: "customEventSPE"
+		});
 	}
 }
 
