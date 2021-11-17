@@ -19,24 +19,35 @@ export function bulletListRule(nodeType) {
 	return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
 }
 
-function buildSmartQuotes([apostrophe, singleOpen, singleClose, doubleOpen, doubleClose]) {
+function buildSmartQuotes({ apostrophe, open, close }) {
 	return [
 		new InputRule(
-			/(?:\p{Letter})(')\p{Letter}$/u, apostrophe
+			// single quote between letters is an apostrophe
+			new RegExp("\\p{Letter}(')\\p{Letter}$", "u"), apostrophe
 		),
 		new InputRule(
-			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(")$`),
-			doubleOpen
+			// starting single quote after opening is left alone
+			new RegExp(`(?:^|\\s)${open}[^${close}]*\\s(')$`), "'"
 		),
 		new InputRule(
-			/"$/, doubleClose
+			// ending single quote after single quote is left alone
+			new RegExp(`(?:^|\\s)'.*\\p{Letter}(')$`, "u"), "'"
 		),
 		new InputRule(
-			new RegExp(`(?:^|[\\s{[(<'"${singleOpen}${doubleOpen}])(')$`),
-			singleOpen
+			// starting double quote after opening is left alone
+			new RegExp(`(?:^|\\s)${open}[^${close}]*\\s(")$`), '"'
 		),
 		new InputRule(
-			/(?:\p{Letter})(')[^\p{Letter}]$/u, singleClose
+			// ending double quote after starting double quote is left alone
+			new RegExp(`(?:^|\\s|${open}|\\()"[^"]*\\p{Letter}(")$`, "u"), '"'
+		),
+		new InputRule(
+			// starting double quote becomes an opening quote
+			new RegExp(`(?:^|\\s)(")$`), open
+		),
+		new InputRule(
+			// ending double quote becomes a closing quote
+			new RegExp(`(?:^|\\s)${open}[^${open}]*(?:\\p{Letter}|'|"|\\))(")$`, "u"), close
 		)
 	];
 }
