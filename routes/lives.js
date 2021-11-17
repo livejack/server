@@ -20,9 +20,10 @@ exports.GET = async (req, res, next) => {
 	if (domains.length) pages.whereIn('domain', domains);
 	const items = pages.map((page) => {
 		// keep legacy API
-		page.last = page.updated_at;
-		delete page.updated_at;
-		return page;
+		const item = Object.assign({}, page);
+		item.last = page.updated_at;
+		item.when = page.when;
+		return item;
 	});
 
 	res.json({

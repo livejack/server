@@ -6,5 +6,8 @@ exports.GET = async (req, res) => {
 		.findOne({ domain, key }).select()
 		.throwIfNotFound();
 	res.header('Last-Modified', new Date(page.updated_at).toUTCString());
-	return page;
+	const item = Object.assign({}, page);
+	item.last = page.updated_at;
+	item.when = page.when;
+	return item;
 };
