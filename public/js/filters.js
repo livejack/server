@@ -19,7 +19,7 @@ export default {
 		const list = cursor.parentNode;
 		const old = list.querySelector(`[data-id="${item.id}"]`);
 		const date = item.date || item.created_at;
-		const refTime = Date.parse(date) || 0;
+		const refTime = new Date(date).getTime() || 0;
 		const refPin = item.style == "pinned";
 		const next = (() => {
 			if (!refTime) return null;
@@ -30,7 +30,7 @@ export default {
 				if (!time) {
 					return (old || first);
 				}
-				time = Date.parse(time.getAttribute('datetime'));
+				time = new Date(time.getAttribute('datetime')).getTime();
 				const pin = child.classList.contains('pinned');
 				if (refPin && (!pin || refTime > time) || !pin && (refTime > time)) {
 					return child;
@@ -60,8 +60,8 @@ export default {
 	},
 	when(ctx, page, param) {
 		const now = Date.now();
-		const start = page.start && Date.parse(page.start);
-		const stop = page.stop && Date.parse(page.stop);
+		const start = page.start && new Date(page.start).getTime();
+		const stop = page.stop && new Date(page.stop).getTime();
 		let when = '';
 		if (!start || now < start) when = 'before';
 		else if (!stop || now <= stop) when = 'during';
