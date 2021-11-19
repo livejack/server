@@ -74,14 +74,14 @@ export default class EditLink extends HTMLFormElement {
 		const url = this.#input.value;
 		try {
 			item = await req("./assets", "post", { url });
-			this.#input.value = "";
+			if (this.#input) this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");
 			setTimeout(() => {
 				throw err;
 			});
 		} finally {
-			this.#input.disabled = false;
+			if (this.#input) this.#input.disabled = false;
 			this.classList.remove('infinite', 'loading');
 			this.update();
 			if (item) this.change(item.url);
