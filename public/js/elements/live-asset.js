@@ -88,7 +88,7 @@ export class LiveAsset extends HTMLElement {
 			copy.setAttribute('src', script);
 			copy.setAttribute('defer', '');
 			copy.onload = copy.onerror = () => {
-				doc.head.removeChild(copy);
+				copy.parentNode?.removeChild(copy);
 			};
 			const prev = doc.querySelector(`script[src="${script}"]`);
 			if (prev) prev.replaceWith(copy);
