@@ -80,7 +80,7 @@ export default class EditTime extends HTMLTimeElement {
 			time_24hr: true,
 			defaultDate: this.value || new Date().toISOString(),
 			onClose: () => {
-				this.stop();
+				setTimeout(() => this.stop());
 			},
 			onChange: (sel, dateStr) => {
 				this.#changed = true;
