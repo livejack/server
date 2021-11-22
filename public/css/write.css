@@ -120,3 +120,8 @@ body {
 button {
 	line-height: 1.3;
 }
+
+
+.live-list {
+	padding-bottom: 3rem;
+}
