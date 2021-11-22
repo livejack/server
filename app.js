@@ -19,11 +19,18 @@ global.HttpError = require('http-errors');
 
 const express = require('express');
 const upload = require('./lib/upload');
+
 const app = require('./lib/express-async')(express)();
 const jsonParser = express.json({
 	limit: "100kb"
 });
 const config = ini(app);
+
+if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
+config.site = new URL(config.site);
+
+app.post('/.well-known/reports', jsonParser, require('./lib/report'));
+
 const apiCall = process.argv.length == 3 ? process.argv[2] : null;
 
 config.live.version = require('@livejack/client/package.json').version;
@@ -46,9 +53,6 @@ if (config.cache === false && !apiCall) {
 		console.error(err);
 		process.exit(1);
 	});
-
-	if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
-	config.site = new URL(config.site);
 
 	global.livejack = new LiveJack({
 		servers: config.live.servers.split(' '),

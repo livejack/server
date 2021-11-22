@@ -1,3 +1,5 @@
+import { reportError } from "../reports.js";
+
 export default class EditError extends HTMLDivElement {
 	#tob
 	constructor() {
@@ -23,24 +25,28 @@ export default class EditError extends HTMLDivElement {
 			this.hidden = true;
 		} else if (e.type == "unhandledrejection" || e.type == "error") {
 			this.hidden = false;
-			let error = e.error?.message ?? e.reason?.message ?? e.message;
-			const code = Number.parseInt(e.error?.statusCode ?? error);
+			const err = e.error ?? e.reason ?? e;
+			let msg = err.message;
+			const code = Number.parseInt(err.statusCode ?? msg);
 			if (Number.isInteger(code)) {
 				if (code >= 500 && code < 600) {
-					error = this.dataset.server.replace('%d', code);
+					msg = this.dataset.server.replace('%d', code);
 				} else if (code == 401 || code == 403) {
-					error = this.dataset.auth;
+					msg = this.dataset.auth;
 				} else if (code == 404) {
-					error = this.dataset.notfound;
+					msg = this.dataset.notfound;
 				} else if (code == 409) {
-					error = this.dataset.conflict;
+					msg = this.dataset.conflict;
 				} else if (code == 413) {
-					error = `${this.dataset.toolarge} (${error})`;
+					msg = `${this.dataset.toolarge} (${msg})`;
 				} else {
-					error = this.dataset.other.replace('%d', code);
+					reportError(e.error ?? e.reason);
+					msg = this.dataset.other.replace('%d', code);
 				}
+			} else {
+				reportError(err);
 			}
-			this.live.merge(this, { error });
+			this.live.merge(this, { error: msg });
 		} else if (e.type == "ioerror") {
 			this.hidden = false;
 			const msg = e.detail?.message;
