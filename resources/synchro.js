@@ -80,7 +80,7 @@ exports.syncAssets = async (page, body, type) => {
 		}
 	});
 	for (const asset of diff.put) {
-		await page.$relatedQuery('hrefs').patchById(asset.id, asset);
+		await page.$relatedQuery('hrefs').findById(asset.id).patch(asset);
 	}
 	for (const item of diff.post) {
 		if (type != "picto") {
@@ -92,7 +92,7 @@ exports.syncAssets = async (page, body, type) => {
 		}
 	}
 	for (const asset of diff.del) {
-		await page.$relatedQuery('hrefs').deleteById(asset.id);
+		await page.$relatedQuery('hrefs').findById(asset.id).delete();
 	}
 };
 
