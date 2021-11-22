@@ -40,7 +40,7 @@ export default class EditError extends HTMLDivElement {
 				} else if (code == 413) {
 					msg = `${this.dataset.toolarge} (${msg})`;
 				} else {
-					reportError(e.error ?? e.reason);
+					reportError(err);
 					msg = this.dataset.other.replace('%d', code);
 				}
 			} else {
