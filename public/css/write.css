@@ -56,7 +56,7 @@ body {
 	padding: 1em 1rem;
 	border: var(--border);
 	background-color: var(--tilebg);
-	display: flex;
+	display: block;
 	color: var(--btncolorhover);
 	background-position:center right;
 	background-repeat:no-repeat;
