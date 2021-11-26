@@ -46,18 +46,17 @@ if (config.cache === false && !apiCall) {
 	tag.app = tag.page = tag.domain = tag.all = Upcache.tag.disable();
 }
 
-(async () => {
+async function start(objection) {
+	global.livejack = new LiveJack({
+		servers: config.live.servers.split(' '),
+		namespace: config.live.namespace,
+		token: config.live.token
+	});
 
 	process.title = config.name + '-' + config.version;
 	process.on('uncaughtException', (err) => {
 		console.error(err);
 		process.exit(1);
-	});
-
-	global.livejack = new LiveJack({
-		servers: config.live.servers.split(' '),
-		namespace: config.live.namespace,
-		token: config.live.token
 	});
 
 	app.set('views', Path.resolve('public'));
@@ -68,15 +67,6 @@ if (config.cache === false && !apiCall) {
 	express.response.prerender = function (path, opts) {
 		prerender(path, opts)(this.req, this, this.req.next);
 	};
-
-	const objection = require('./models')(app);
-
-	if (apiCall == "migrate") {
-		await objection.BaseModel.knex().migrate.latest({
-			directory: "migrations/"
-		});
-		return;
-	}
 
 	const resources = require('./resources/*');
 	const routes = require('./routes/*');
@@ -103,6 +93,7 @@ if (config.cache === false && !apiCall) {
 	});
 
 	const auth = require('./lib/auth');
+	await auth.keygen(config);
 	const domainLock = auth.lock('write-:domain');
 
 	app.route("/robots.txt").get(
@@ -231,21 +222,6 @@ if (config.cache === false && !apiCall) {
 	if (config.cron) require('./lib/cron')(config.cron);
 	if (config.autoExpire) require('./lib/expiration')(config);
 
-	await ini.async(config);
-
-	if (apiCall == "populate") {
-		await objection.Models.User.populate(
-			Object.entries(config.domains).map(([domain, obj]) => {
-				return { domain, token: obj.password };
-			})
-		);
-		return;
-	}
-	await auth.keygen(config);
-	if (apiCall) {
-		throw new Error(`Unknown api call: ${apiCall}`);
-	}
-
 	const server = require('http').createServer(app).listen(config.listen);
 	await once(server, 'listening');
 	console.info("Listening on port", config.listen);
@@ -262,11 +238,32 @@ if (config.cache === false && !apiCall) {
 	} catch (err) {
 		console.error(upcacheUrl.href, err);
 	}
-})().then(() => {
-	if (apiCall) {
-		process.exit(0);
+}
+
+(async () => {
+	await ini.async(config);
+	const objection = require('./models')(app);
+
+	switch (apiCall) {
+		case "migrate":
+			await objection.BaseModel.knex().migrate.latest({
+				directory: "migrations/"
+			});
+			break;
+		case "populate":
+			await objection.Models.User.populate(
+				Object.entries(config.domains).map(([domain, obj]) => {
+					return { domain, token: obj.password };
+				})
+			);
+			break;
+		case null:
+			await start(objection);
+			break;
+		default:
+			throw new Error(`Unknown api call: ${apiCall}`);
 	}
-}).catch((err) => {
+})().catch(err => {
 	console.error(err);
 	process.exit(1);
 });
