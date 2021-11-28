@@ -35,6 +35,9 @@ exports.up = async function (knex) {
 	await knex.schema.table('messages', (table) => {
 		table.renameColumn('date', 'date_noz');
 	});
+	await knex.schema.table('messages', (table) => {
+		table.timestamp('date', { useTz: true });
+	});
 	await knex('messages').update('date', knex.ref('date_noz'));
 	await knex.schema.table('messages', (table) => {
 		table.dropColumn('date_noz');
