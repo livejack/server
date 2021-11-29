@@ -240,9 +240,9 @@ async function start(objection) {
 	}
 }
 
+const objection = require('./models')(config.database);
 (async () => {
 	await ini.async(config);
-	const objection = require('./models')(app);
 
 	switch (apiCall) {
 		case "migrate":

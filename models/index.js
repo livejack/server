@@ -26,10 +26,10 @@ const BaseModel = require('./base');
 const Knex = require('knex');
 const Path = require('path');
 
-module.exports = function (app) {
+module.exports = function (connStr) {
 	const knex = Knex({
 		client: 'pg',
-		connection: app.settings.database,
+		connection: connStr,
 		pool: {
 			min: 2,
 			max: 10
