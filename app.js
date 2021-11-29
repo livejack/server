@@ -266,4 +266,6 @@ const objection = require('./models')(config.database);
 })().catch(err => {
 	console.error(err);
 	process.exit(1);
+}).finally(async () => {
+	await objection.BaseModel.knex().destroy();
 });
