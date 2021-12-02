@@ -1,10 +1,10 @@
 const pg = require('pg');
 
 // convert SQL timestamp to ISO8601 timestamp
-// 2004-10-19 10:23:54.210+02 becomes 2004-10-19T10:23:54.210+0200
+// 2004-10-19 10:23:54.210+02 becomes 2004-10-19T10:23:54.210+02:00
 pg.types.setTypeParser(
 	pg.types.builtins.TIMESTAMPTZ,
-	str => str.split(' ').join('T') + "00"
+	str => str.split(' ').join('T') + ":00"
 );
 
 const objection = require('objection');
