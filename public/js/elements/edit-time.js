@@ -85,6 +85,9 @@ export default class EditTime extends HTMLTimeElement {
 			onChange: (sel, dateStr) => {
 				this.#changed = true;
 				this.value = dateStr;
+				if (this.#changed) {
+					this.article.dispatchEvent(new Event("change"));
+				}
 			}
 		});
 		this.picker.open();
