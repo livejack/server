@@ -143,8 +143,6 @@ async function start(objection) {
 		res.prerender("index.html", { render: false });
 	});
 
-	// envoi des notifications de mise à jour vers BO-site qui en retour appelle Front-Live
-	app.get('/:domain/synchro/now', auth.lock('admin'), resources.synchro.now);
 	// appelé par BO site pour synchroniser les pictos
 	app.get('/:domain/:key(pictos)/synchro', resources.synchro.pictos);
 	// appelé par BO site pour synchroniser un live
