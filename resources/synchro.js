@@ -4,6 +4,7 @@ const got = require('got');
 const { prepareAsset } = require('./asset');
 
 exports.GET = async (req) => {
+	if (!req.domain) throw new HttpError.BadRequest("No domain");
 	const page = await Page.have(req.params);
 	const data = await fetchExport(req.domain.export, page.key);
 	await exports.syncAssets(page, data, 'image');
@@ -11,6 +12,7 @@ exports.GET = async (req) => {
 };
 
 exports.pictos = async (req) => {
+	if (!req.domain) throw new HttpError.BadRequest("No domain");
 	const page = await Page.have(req.params);
 	const data = await fetchExport(req.domain.pictos, page.key);
 	await exports.syncAssets(page, data, 'picto');
