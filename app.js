@@ -249,6 +249,7 @@ const objection = require('./models')(config.database);
 			await objection.BaseModel.knex().migrate.latest({
 				directory: "migrations/"
 			});
+			await objection.BaseModel.knex().destroy();
 			break;
 		case "populate":
 			await objection.Models.User.populate(
@@ -256,6 +257,7 @@ const objection = require('./models')(config.database);
 					return { domain, token: obj.password };
 				})
 			);
+			await objection.BaseModel.knex().destroy();
 			break;
 		case null:
 			await start(objection);
@@ -266,6 +268,4 @@ const objection = require('./models')(config.database);
 })().catch(err => {
 	console.error(err);
 	process.exit(1);
-}).finally(async () => {
-	await objection.BaseModel.knex().destroy();
 });
