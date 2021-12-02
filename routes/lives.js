@@ -8,7 +8,7 @@ exports.GET = async (req, res, next) => {
 	const now = new Date();
 
 	const pages = await Models.Page.query()
-		.select('domain', 'key', 'updated_at', 'title', 'backtrack')
+		.select('domain', 'key', 'updated_at AS last', 'title', 'backtrack', 'start', 'stop')
 		.orderBy('updated_at', 'desc')
 		.whereNotNull('title')
 		.whereNotNull('backtrack')
@@ -18,16 +18,13 @@ exports.GET = async (req, res, next) => {
 		})
 		.whereRaw('length(title) > 0');
 	if (domains.length) pages.whereIn('domain', domains);
-	const items = pages.map((page) => {
-		// keep legacy API
+	const items = pages.map(page => {
 		const item = Object.assign({}, page);
-		item.last = page.updated_at;
+		delete item.start;
+		delete item.stop;
 		item.when = page.when;
 		return item;
 	});
 
-	res.json({
-		domains: domains,
-		items: items
-	});
+	res.json({ domains, items });
 };
