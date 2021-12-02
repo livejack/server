@@ -144,7 +144,17 @@ async function start(objection) {
 	});
 
 	// appelé par BO site pour synchroniser les pictos
-	app.get('/:domain/:key(pictos)/synchro', resources.synchro.pictos);
+	app.get('/:domain/:key(pictos)/synchro', async (req) => {
+		// do an internal post
+		if (!req.domain) throw new HttpError.BadRequest("No domain");
+		const sameUrl = new URL(config.site);
+		sameUrl.pathname = req.path;
+		await got.post(sameUrl, {
+			retry: 0
+		});
+		return 200;
+	});
+	app.post('/:domain/:key(pictos)/synchro', tag.page, resources.synchro.pictos);
 	// appelé par BO site pour synchroniser un live
 	app.get('/:domain/:key/synchro', resources.synchro.GET);
 
