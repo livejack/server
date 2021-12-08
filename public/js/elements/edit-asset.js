@@ -19,8 +19,7 @@ const codeTemplate = `<div class="header">
 <button name="del"></button>
 </div>
 <code class="content">
-	<textarea class="content" spellcheck="false" placeholder="Coller un embed + script">[html|as:text]
-<script src="[script|else:prune:13+-+11]"></script></textarea>
+<textarea class="content" spellcheck="false" placeholder="Coller un embed + script">[html|as:text][script|pre:%0A<script src="|post:"></script>]</textarea>
 </code>
 <input name="html" type="hidden"><input name="script" type="hidden">`;
 
@@ -283,7 +282,7 @@ export class EditAsset extends LiveAsset {
 			htmlInput.dispatchEvent(new Event('paste', { bubbles: true }));
 			setTimeout(() => {
 				const scriptInput = this.querySelector('input[name="script"]');
-				scriptInput.value = src;
+				scriptInput.value = src || "";
 				scriptInput.dispatchEvent(new Event('paste', { bubbles: true }));
 			});
 		}
