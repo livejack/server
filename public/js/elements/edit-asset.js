@@ -59,15 +59,6 @@ const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 </div>
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 
-const docTemplate = `<html>
-	<head>
-		<style>html,body {margin:0;overflow:hidden;}</style>
-	</head>
-	<body>
-		<div class="live-messages live-message"></div>
-	</body>
-</html>`;
-
 export class EditAsset extends LiveAsset {
 	#editable
 	#watchFrame
