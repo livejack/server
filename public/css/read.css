@@ -81,7 +81,7 @@ div.fig-article-body {
 	font-size:20px;
 	line-height:25px;
 	margin-top:0;
-	margin-bottom: 0;
+	margin-bottom: 2px;
 	font-family:"MuseoSlab500", "Trebuchet MS", Arial, Helvetica, sans-serif;
 }
 
@@ -364,8 +364,6 @@ live-asset > img {
 		text-align:center;
 		line-height: 1.6em;
 		position: relative;
-		margin-top: -1px;
-		margin-bottom: -1px;
 	}
 
 	.live-messages .live-title {
