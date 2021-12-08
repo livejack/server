@@ -292,10 +292,6 @@ export class EditAsset extends LiveAsset {
 		const iframe = this.lastElementChild;
 		iframe.onload = () => {
 			const doc = iframe.contentDocument;
-			// get read.css
-			doc.head.appendChild(
-				doc.importNode(document.head.querySelector('link[rel="stylesheet"]'))
-			);
 			const liveAsset = doc.importNode(document.createElement('live-asset'));
 			Object.assign(liveAsset.dataset, this.dataset);
 			doc.body.firstElementChild.appendChild(liveAsset);
@@ -314,6 +310,6 @@ export class EditAsset extends LiveAsset {
 				}
 			}, 100);
 		};
-		iframe.srcdoc = docTemplate;
+		iframe.src = "/frame";
 	}
 }

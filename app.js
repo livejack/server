@@ -142,6 +142,9 @@ async function start(objection) {
 	app.get('/', tag.app, (req, res, next) => {
 		res.prerender("index.html", { render: false });
 	});
+	app.get('/frame', tag.app, (req, res, next) => {
+		res.prerender("frame.html", { render: false });
+	});
 
 	// appelé par BO site pour synchroniser les pictos
 	app.get('/:domain/:key(pictos)/synchro', async (req) => {
