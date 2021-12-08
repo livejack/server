@@ -275,6 +275,10 @@ export class EditAsset extends LiveAsset {
 				src = script.getAttribute('src');
 				script.remove();
 			}
+			if (this.live.vars.opta && dom.querySelector('opta')) {
+				dom.insertAdjacentHTML('beforeEnd', `\n<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />\n<script>window._optaParams = {\ncustID: "${this.live.vars.opta}",\nlanguage: "fr_FR",\ntimezone: 1\n};\n</script>`);
+				src = "https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js";
+			}
 			const htmlInput = this.querySelector('input[name="html"]');
 			htmlInput.value = Array.from(dom.children).map(
 				(child) => child.outerHTML
