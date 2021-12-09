@@ -266,14 +266,16 @@ export class EditAsset extends LiveAsset {
 				src = script.getAttribute('src');
 				script.remove();
 			}
-			if (this.live.vars.opta && dom.querySelector('opta')) {
-				dom.insertAdjacentHTML('beforeEnd', `\n<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />\n<script>window._optaParams = {\ncustID: "${this.live.vars.opta}",\nlanguage: "fr_FR",\ntimezone: 1\n};\n</script>`);
-				src = "https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js";
-			}
 			const htmlInput = this.querySelector('input[name="html"]');
-			htmlInput.value = Array.from(dom.children).map(
-				(child) => child.outerHTML
-			).join('\n');
+			const opta = this.live.vars.opta ? dom.querySelector('opta') : null;
+			if (opta) {
+				htmlInput.value = opta.outerHTML + `\n<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />\n<script>window._optaParams = { custID: "${this.live.vars.opta}", language: "fr_FR", timezone: 1 };</script>`;
+				src = "https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js";
+			} else {
+				htmlInput.value = Array.from(dom.children).map(
+					(child) => child.outerHTML
+				).join('\n');
+			}
 			htmlInput.dispatchEvent(new Event('paste', { bubbles: true }));
 			setTimeout(() => {
 				const scriptInput = this.querySelector('input[name="script"]');
