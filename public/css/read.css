@@ -48,6 +48,7 @@ div.fig-article-body {
 	background:inherit; /* hides dashes from article */
 	text-align: center;
 	background-color: white;
+	z-index: 1;
 }
 .live-messages .live-icons img {
 	display:block;
@@ -59,6 +60,8 @@ div.fig-article-body {
 .live-messages .live-time {
 	display:inline-block;
 	padding:3px 5px;
+	display:block;
+	float:left;
 	font-size:11px;
 	color:#323232;
 	background-color:#f1f1f1;
@@ -357,9 +360,7 @@ live-asset > img {
 	}
 
 	.live-messages .live-time {
-		display:block;
 		padding: 0.5em 0;
-		float:left;
 		width: 87px;
 		text-align:center;
 		line-height: 1.6em;
