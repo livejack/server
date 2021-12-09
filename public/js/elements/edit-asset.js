@@ -1,8 +1,7 @@
 import req from "../req.js";
 import { LiveAsset } from "./live-asset.js";
 
-const searchTemplate = `<div class="header">
-	<span class="favicon loading"></span>
+const searchTemplate = `<div class="header infinite loading">
 	<a href="url" class="title">[url]</a>
 </div>`;
 const iframeTemplate = `<div class="header">
