@@ -161,17 +161,7 @@ div.fig-article-body {
 	display:block;
 }
 .live-messages figure > figcaption {
-	font-size:0.8em;
-	line-height:1.2;
-	color:#666;
-	display: flex;
-	justify-content: center;
-}
-.live-messages figure > figcaption > em {
-	margin-left:0.5em;
-}
-.live-messages figure > figcaption > * {
-	display: block;
+	text-align: center;
 }
 .live-messages figure > div > * {
 	max-width:100%;
