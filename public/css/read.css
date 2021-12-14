@@ -247,6 +247,9 @@ live-asset > img,
 live-asset > iframe:not([height]) {
 	height: auto;
 }
+live-asset[data-ratio] > * {
+	height:100%;
+}
 .live-messages .live-article strong {
 	font-weight:bold;
 }
