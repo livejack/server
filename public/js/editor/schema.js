@@ -89,18 +89,17 @@ export const nodes = {
 				const attrs = {
 					url: srcNode.src
 				};
-				const caption = dom.querySelector('figcaption');
+				let caption = dom.querySelector('figcaption');
 				if (caption) {
-					const title = caption.firstChild;
-					const author = caption.lastChild;
-					if (title) {
-						if (title.nodeType == Node.TEXT_NODE) attrs.title = title.nodeValue;
-						else attrs.title = title.textContent;
+					let author = caption.lastElementChild;
+					if (author) {
+						caption = caption.cloneNode(true);
+						caption.removeChild(author);
+						author = author.textContent.trim();
 					}
-					if (author && author != title) {
-						if (author.nodeType == Node.TEXT_NODE) attrs.author = author.nodeValue;
-						else attrs.author = author.textContent;
-					}
+					const title = caption.textContent.trim();
+					if (title) attrs.title = title;
+					if (title != author) attrs.author = author;
 				}
 				return attrs;
 			}
