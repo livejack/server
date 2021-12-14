@@ -239,10 +239,14 @@ live-asset > figure,
 live-asset > iframe,
 live-asset > img {
 	max-width: 100%;
-	height: auto;
 	margin: 0 auto;
 	display: block;
 	border-width: 0;
+}
+live-asset > figure,
+live-asset > img,
+live-asset > iframe:not([height]) {
+	height: auto;
 }
 .live-messages .live-article strong {
 	font-weight:bold;
@@ -404,7 +408,6 @@ live-asset > img {
 
 .live-message live-asset > * {
 	width: 100%;
-	height:100%;
 }
 
 .live-article blockquote {
