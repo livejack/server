@@ -74,25 +74,23 @@ export class LiveAsset extends HTMLElement {
 		if (html) {
 			this.textContent = '';
 			this.appendChild(this.live.merge(html.trim()));
-			for (const node of this.querySelectorAll('script:not([src])')) {
-				const copy = doc.createElement('script');
-				copy.textContent = node.textContent;
-				node.parentNode.replaceChild(copy, node);
-			}
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}
-
 		if (script) {
+			this.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
+			this.lastElementChild.setAttribute('src', script);
+		}
+		for (const node of this.querySelectorAll('script')) {
 			const copy = doc.createElement('script');
-			copy.setAttribute('src', script);
-			copy.setAttribute('defer', '');
-			copy.onload = copy.onerror = () => {
+			copy.textContent = node.textContent;
+			for (const att of node.attributes) {
+				copy.setAttribute(att.name, att.value);
+			}
+			copy.onerror = () => {
 				copy.parentNode?.removeChild(copy);
 			};
-			const prev = doc.querySelector(`script[src="${script}"]`);
-			if (prev) prev.replaceWith(copy);
-			else doc.head.appendChild(copy);
+			node.parentNode.replaceChild(copy, node);
 		}
 	}
 }

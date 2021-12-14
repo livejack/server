@@ -261,7 +261,7 @@ export class EditAsset extends LiveAsset {
 			this.#replace(Array.from(blockquote.querySelectorAll('a[href]')).pop()?.href);
 		} else {
 			let src;
-			if (script) {
+			if (script && dom.children.length > 1) {
 				src = script.getAttribute('src');
 				script.remove();
 			}
