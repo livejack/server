@@ -43,7 +43,7 @@ export class LiveAsset extends HTMLElement {
 		} = Object.assign(url && this.live.get(url) || {}, this.dataset);
 
 		if (type == "image") {
-			this.appendChild(this.live.merge(`<figure itemscope="" itemprop="associatedMedia image" itemtype="http://schema.org/ImageObject">
+			this.appendChild(this.live.merge(`<figure class="fig-media" itemscope="" itemprop="associatedMedia image" itemtype="http://schema.org/ImageObject">
 				<meta itemprop="width" content="[width]">
 				<meta itemprop="height" content="[height]">
 				<meta itemprop="url" content="[url]">
