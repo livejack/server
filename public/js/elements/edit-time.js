@@ -18,7 +18,6 @@ export default class EditTime extends HTMLTimeElement {
 		if (this.dateTime) {
 			const date = new Date(this.dateTime);
 			date.setMilliseconds(0);
-			date.setSeconds(0);
 			if (Number.isNaN(date.getTime())) return "";
 			else return date.toISOString();
 		} else {
