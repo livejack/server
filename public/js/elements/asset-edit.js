@@ -196,10 +196,10 @@ export class EditAsset extends LiveAsset {
 				}
 			} else {
 				Object.assign(data, asset);
-			}
-			if (asset.type == "picto") {
-				this.dataset.type = "picto";
-				return super.update();
+				if (asset.type == "picto") {
+					this.dataset.type = "picto";
+					return super.update();
+				}
 			}
 		}
 		Object.assign(data, this.dataset);
