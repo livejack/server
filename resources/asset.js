@@ -66,8 +66,14 @@ async function prepare(url) {
 	const item = { url };
 	const meta = await tryInspect(url);
 
-	if (meta.type == "image" && meta.mime != "text/html" && !meta.thumbnail) {
-		meta.thumbnail = meta.url;
+	if (meta.type == "image" && meta.mime != "text/html") {
+		if (meta.width >= 128) {
+			if (!meta.thumbnail) {
+				meta.thumbnail = meta.url;
+			}
+		} else {
+			meta.type = 'picto';
+		}
 	}
 	if (meta.icon && meta.icon.startsWith('data:') && meta.icon.length < 64) delete meta.icon;
 	if (meta.thumbnail) try {

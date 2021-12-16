@@ -285,19 +285,25 @@ live-asset > .meta > p > em {
 	padding:1em;
 }
 
-#control[data-mode="mark"] > #assets,
 #control > #icons {
+	display:none;
+}
+#control[data-mode="mark"] > #assets > form[is="edit-link"],
+#control[data-mode="mark"] > #assets > form[is="edit-filter"],
+#control:not([data-mode="mark"]) > #assets > .list > live-asset[data-type="picto"] {
 	display:none;
 }
 #control[data-mode="mark"] > #icons {
 	display:block;
 }
-#control[data-mode="mark"] > #icons > .list {
+#control[data-mode="mark"] > #icons > .list,
+#control[data-mode="mark"] > #assets > .list {
 	display:flex;
 	flex-flow: row wrap;
 	user-select:none;
 }
-#control live-icon {
+#control live-icon,
+#control live-asset[data-type="picto"] {
 	display: flex;
 	width: calc(20% - 0.2rem);
 	border: 1px solid var(--middle-color);

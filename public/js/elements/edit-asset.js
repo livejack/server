@@ -197,6 +197,10 @@ export class EditAsset extends LiveAsset {
 			} else {
 				Object.assign(data, asset);
 			}
+			if (asset.type == "picto") {
+				this.dataset.type = "picto";
+				return super.update();
+			}
 		}
 		Object.assign(data, this.dataset);
 		let tpl;
@@ -284,6 +288,7 @@ export class EditAsset extends LiveAsset {
 		}
 	}
 	reveal() {
+		if (this.dataset.type == "picto") return super.reveal();
 		if (!this.#preview) return;
 		const iframe = this.lastElementChild;
 		iframe.onload = () => {

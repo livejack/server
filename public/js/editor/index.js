@@ -96,7 +96,11 @@ export class Editor extends EditorView {
 	convertAsset(dom) {
 		const sel = this.state.selection;
 		if (this.#content == "inline") {
-			if (dom.favicon) {
+			if (dom.dataset.type == "picto") {
+				const icon = document.createElement('live-icon');
+				Object.assign(icon.dataset, dom.dataset);
+				dom = icon;
+			} else if (dom.favicon) {
 				dom = parseHTML(
 					`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`
 				);
