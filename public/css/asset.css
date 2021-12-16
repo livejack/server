@@ -290,7 +290,8 @@ live-asset > .meta > p > em {
 }
 #control[data-mode="mark"] > #assets > form[is="edit-link"],
 #control[data-mode="mark"] > #assets > form[is="edit-filter"],
-#control:not([data-mode="mark"]) > #assets > .list > live-asset[data-type="picto"] {
+#control:not([data-mode="mark"]) > #assets > .list > live-asset[data-type="picto"],
+#control[data-mode="mark"] > #assets > .list > live-asset:not([data-type="picto"]) {
 	display:none;
 }
 #control[data-mode="mark"] > #icons {
