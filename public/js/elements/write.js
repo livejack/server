@@ -1,14 +1,14 @@
-import EditError from './edit-error.js';
-import EditFilter from './edit-filter.js';
-import EditControl from './edit-control.js';
-import EditLink from './edit-link.js';
-import EditUpload from './edit-upload.js';
-import EditStatus from './edit-status.js';
-import EditArticle from './edit-article.js';
-import EditTime from './edit-time.js';
-import EditSelect from './edit-select.js';
-import { EditTitle, EditMark, EditText } from './edit-html.js';
-import { EditAsset } from './edit-asset.js';
+import EditError from './error.js';
+import EditFilter from './filter.js';
+import EditControl from './control.js';
+import EditLink from './link.js';
+import EditUpload from './upload.js';
+import EditStatus from './status.js';
+import EditArticle from './article.js';
+import EditTime from './time.js';
+import EditSelect from './select.js';
+import { EditTitle, EditMark, EditText } from './html.js';
+import { EditAsset } from './asset-edit.js';
 import { DiffDOM } from "/node_modules/diff-dom";
 
 export default function register(live) {

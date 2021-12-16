@@ -1,5 +1,5 @@
 import req from "../req.js";
-import { LiveAsset } from "./live-asset.js";
+import { LiveAsset } from "./asset.js";
 
 const searchTemplate = `<div class="header infinite loading">
 	<a href="url" class="title">[url]</a>

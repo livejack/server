@@ -8,7 +8,7 @@ import * as DatePlugin from "./date-plugin.js";
 import "./array-like.js";
 import '/node_modules/@ungap/custom-elements';
 
-import { LiveAsset, LiveIcon } from "./elements/live-asset.js";
+import { LiveAsset, LiveIcon } from "./elements/asset.js";
 
 import filters from "./filters.js";
 
