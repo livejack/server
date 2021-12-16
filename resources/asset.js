@@ -67,7 +67,7 @@ async function prepare(url) {
 	const meta = await tryInspect(url);
 
 	if (meta.type == "image" && meta.mime != "text/html") {
-		if (meta.width >= 128) {
+		if (meta.width >= 256) {
 			if (!meta.thumbnail) {
 				meta.thumbnail = meta.url;
 			}
