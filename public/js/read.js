@@ -106,7 +106,8 @@ class LiveRead extends LiveJack {
 			this.set(data.assets.hrefs);
 		}
 		if (data.page) {
-			for (const key of Object.keys(this.page)) {
+			// mutate this.page with changes in data.page
+			for (const key of ['start', 'stop', 'updated_at']) {
 				if (data.page[key] !== undefined) this.page[key] = data.page[key];
 				else data.page[key] = this.page[key];
 			}
