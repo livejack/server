@@ -29,6 +29,11 @@ const config = ini(app);
 if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
 config.site = new URL(config.site);
 
+if (config.proxy) {
+	process.env.all_proxy = config.proxy;
+	console.info("inspector proxy", new URL(config.proxy).hostname);
+}
+
 app.post('/.well-known/reports', jsonParser, require('./lib/report'));
 
 const apiCall = process.argv.length == 3 ? process.argv[2] : null;
