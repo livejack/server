@@ -59,12 +59,12 @@ export default {
 		return item;
 	},
 	when(ctx, page, param) {
-		const now = Date.now();
-		const start = page.start && new Date(page.start).getTime();
-		const stop = page.stop && new Date(page.stop).getTime();
+		const now = new Date(page.updated_at).getTime();
+		const start = new Date(page.start).getTime();
+		const stop = new Date(page.stop).getTime();
 		let when = '';
-		if (!start || now < start) when = 'before';
-		else if (!stop || now <= stop) when = 'during';
+		if (!start || !now || now < start) when = 'before';
+		else if (!stop || now < stop) when = 'during';
 		else when = 'after';
 		return when == param;
 	}

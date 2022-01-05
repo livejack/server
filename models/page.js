@@ -75,12 +75,12 @@ class Page extends BaseModel {
 	}
 
 	get when() {
-		const now = Date.now();
+		const now = Date.parse(this.updated_at);
 		const start = Date.parse(this.start);
-		if (!start || now < start) return 'before';
+		if (!start || !now || now < start) return 'before';
 		// start is defined and now >= start
 		const stop = Date.parse(this.stop);
-		if (!stop || now <= stop) return 'during';
+		if (!stop || now < stop) return 'during';
 		// stop is defined and now > stop
 		return 'after';
 	}
