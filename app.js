@@ -235,8 +235,8 @@ async function start(objection) {
 		res.status(code).send(err.toString());
 	});
 
-	if (config.cron) require('./lib/cron')(config.cron);
 	if (config.autoExpire) require('./lib/expiration')(config);
+	require('./lib/cron')(config.cron);
 
 	const server = require('http').createServer(app).listen(config.listen);
 	await once(server, 'listening');
