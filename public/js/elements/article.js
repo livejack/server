@@ -1,7 +1,8 @@
 import req from "../req.js";
 export default class EditArticle extends HTMLElement {
-	#active
-	#unsaved
+	#active;
+	#unsaved;
+	#submit;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-article');
@@ -82,8 +83,9 @@ export default class EditArticle extends HTMLElement {
 			this.#active = true;
 			this.classList.add('active');
 			this.toolbar = document.querySelector('#gui > .toolbar').cloneNode(true);
-			this.unsaved = false;
 			this.appendChild(this.toolbar);
+			this.#submit = this.toolbar.querySelector('[type="submit"]');
+			this.unsaved = false;
 		}
 		return true;
 	}
@@ -109,12 +111,11 @@ export default class EditArticle extends HTMLElement {
 	}
 	set unsaved(val) {
 		if (this.toolbar) {
-			const submit = this.toolbar.querySelector('[type="submit"]');
-			submit.disabled = !val;
-			if (submit.disabled) {
-				submit.tabIndex = "";
+			this.#submit.disabled = !val;
+			if (val) {
+				this.#submit.tabIndex = (this.dataset.id || '') + "9";
 			} else {
-				submit.tabIndex = (this.dataset.id || '') + "9";
+				this.#submit.tabIndex = "";
 			}
 		}
 		this.classList.toggle('unsaved', val);
