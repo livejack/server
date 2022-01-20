@@ -70,12 +70,8 @@
 	width: 79px;
 }
 
-.live-message.unsaved {
-	--focus-color: #DDD;
-}
-
-.live-message.unsaved.blink {
-	--focus-color: #b80000;
+.live-message.unsaved:not(.active) {
+	background-color: #FDD;
 }
 
 .live-message > [is] {

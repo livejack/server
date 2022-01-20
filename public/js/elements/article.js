@@ -71,10 +71,7 @@ export default class EditArticle extends HTMLElement {
 	start() {
 		const prev = EditArticle.current;
 		if (prev && prev != this) {
-			if (prev.unsaved) {
-				prev.blink();
-				return false;
-			} else if (prev.active) {
+			if (prev.active) {
 				prev.stop();
 			}
 		}
@@ -90,7 +87,7 @@ export default class EditArticle extends HTMLElement {
 		return true;
 	}
 	stop(reset) {
-		this.unsaved = false;
+		if (reset) this.unsaved = false;
 		this.classList.remove('active');
 		this.#active = false;
 		for (const node of this.editables) {
@@ -120,12 +117,5 @@ export default class EditArticle extends HTMLElement {
 		}
 		this.classList.toggle('unsaved', val);
 		this.#unsaved = val;
-	}
-	blink() {
-		this.scrollIntoView({ behavior: 'smooth' });
-		this.classList.add('blink');
-		setTimeout(() => {
-			this.classList.remove('blink');
-		}, 1000);
 	}
 }
