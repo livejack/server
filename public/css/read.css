@@ -245,9 +245,7 @@ live-asset > img,
 live-asset > iframe:not([height]) {
 	height: auto;
 }
-live-asset[data-ratio] > * {
-	height:100%;
-}
+
 .live-messages .live-article strong {
 	font-weight:bold;
 }
@@ -431,6 +429,7 @@ live-asset[data-ratio] > * {
 	position:absolute;
 	left:0;
 	top:0;
+	height:100%;
 }
 live-asset[data-ratio="21-9"]::before {
 	padding-top: calc(9 / 21 * 100%);
