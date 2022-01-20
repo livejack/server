@@ -34,17 +34,6 @@ class LiveRead extends LiveJack {
 		this.adopt(LiveAsset);
 
 		this.channels = {};
-		this.matchdom.extend({
-			filters: {
-				unhide(ctx, val) {
-					const node = ctx.dest.node;
-					setTimeout(() => {
-						node.classList.remove('hidden');
-					});
-					return 'hidden';
-				}
-			}
-		});
 	}
 
 	get(url) {

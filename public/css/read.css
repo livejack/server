@@ -15,14 +15,25 @@ div.fig-article-body {
 	padding:0 !important;
 	border:0 !important;
 }
+
+@keyframes fadein {
+	from {
+		opacity: 0%;
+	}
+	to {
+		opacity: 100%;
+	}
+}
+
 .live-messages .live-message {
 	position:relative;
 	border-top:1px solid #CCC;
 	padding-top:1em;
 	padding-bottom:1em;
 	zoom:1;
-	transition:opacity 1s;
+	animation: fadein 1s;
 }
+
 .live-messages .live-message::after {
 	content:"";
 	display:block;
@@ -31,9 +42,6 @@ div.fig-article-body {
 .live-messages .live-list .live-message:first-of-type {
 	border-top:0px;
 	clear:left;
-}
-.live-messages .live-message.hidden {
-	opacity:0%;
 }
 .live-messages .live-article {
 	padding-left:21px;
