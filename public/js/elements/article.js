@@ -82,7 +82,7 @@ export default class EditArticle extends HTMLElement {
 			this.toolbar = document.querySelector('#gui > .toolbar').cloneNode(true);
 			this.appendChild(this.toolbar);
 			this.#submit = this.toolbar.querySelector('[type="submit"]');
-			this.unsaved = false;
+			this.unsaved = this.#unsaved; // refresh
 		}
 		return true;
 	}
@@ -106,7 +106,7 @@ export default class EditArticle extends HTMLElement {
 	get unsaved() {
 		return this.#unsaved;
 	}
-	set unsaved(val) {
+	set unsaved(val = false) {
 		if (this.toolbar) {
 			this.#submit.disabled = !val;
 			if (val) {
