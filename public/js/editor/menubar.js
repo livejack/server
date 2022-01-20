@@ -5,8 +5,8 @@ import { renderGrouped } from "./menu.js";
 import { buildMenuItems } from "./menuitems.js";
 
 class MenuBarView {
-	#ticking = false
-	#keep = false
+	#ticking = false;
+	#keep = false;
 	#left;
 	constructor(view, schema) {
 		this.view = view;

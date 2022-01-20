@@ -1,8 +1,8 @@
 import req from "../req.js";
 
 export default class EditLink extends HTMLFormElement {
-	#input
-	#anchor
+	#input;
+	#anchor;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-link');

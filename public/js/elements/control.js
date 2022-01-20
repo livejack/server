@@ -1,9 +1,9 @@
 import req from "../req.js";
 
 export default class EditControl extends HTMLDivElement {
-	#view
-	#icons
-	#loaded
+	#view;
+	#icons;
+	#loaded;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-control');

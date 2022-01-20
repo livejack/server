@@ -59,10 +59,10 @@ const assetPreviewTemplate = `<div class="header" title="[meta.site]">
 <iframe class="content" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>`;
 
 export class EditAsset extends LiveAsset {
-	#editable
-	#watchFrame
-	#added
-	#preview
+	#editable;
+	#watchFrame;
+	#added;
+	#preview;
 	connectedCallback() {
 		super.connectedCallback();
 		this.addEventListener('click', this);

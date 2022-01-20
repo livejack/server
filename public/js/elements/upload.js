@@ -1,6 +1,6 @@
 export default class EditUpload extends HTMLFormElement {
-	#input
-	#preview
+	#input;
+	#preview;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-upload');

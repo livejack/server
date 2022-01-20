@@ -4,9 +4,9 @@ import flatLocale from "/node_modules/flatpickr/dist/l10n/fr";
 flatpickr.localize(flatLocale.French);
 
 export default class EditTime extends HTMLTimeElement {
-	#defaultValue
-	#tick
-	#changed
+	#defaultValue;
+	#tick;
+	#changed;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-time');

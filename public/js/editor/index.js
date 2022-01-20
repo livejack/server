@@ -41,8 +41,8 @@ function getPlugins({ schema, menu, table, quotes }) {
 }
 
 export class Editor extends EditorView {
-	#parser
-	#content
+	#parser;
+	#content;
 	constructor(place, { nodes, marks, list, menu, table, quotes, assets = [] }) {
 		const nodeViews = {};
 		if (nodes) for (const [name, node] of Object.entries(nodes)) {

@@ -1,5 +1,5 @@
 export default class EditFilter extends HTMLFormElement {
-	#mode
+	#mode;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-filter');

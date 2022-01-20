@@ -1,7 +1,7 @@
 import { reportError } from "../reports.js";
 
 export default class EditError extends HTMLDivElement {
-	#tob
+	#tob;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-error');

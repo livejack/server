@@ -1,7 +1,7 @@
 import req from "../req.js";
 
 export default class EditStatus extends HTMLFormElement {
-	#fieldset
+	#fieldset;
 	constructor() {
 		super();
 		this.setAttribute('is', 'edit-status');

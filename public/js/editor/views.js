@@ -1,7 +1,7 @@
 export function createView(tag, is) {
 	return class CustomView {
-		#attrs
-		#type
+		#attrs;
+		#type;
 		constructor(node, view, getPos) {
 			this.#type = node.type.name;
 			this.#attrs = Object.assign({}, node.attrs);

@@ -13,7 +13,7 @@ class HtmlEditor extends Editor {
 class EditHtml {
 	static options = {
 		quotes: { apostrophe: `’`, open: `«`, close: `»` }
-	}
+	};
 	connectedCallback() {
 		this.defaultValue = this.value;
 		this.addEventListener('click', this, true);
@@ -151,6 +151,6 @@ export class EditText extends HTMLDivElement {
 		marks: BaseSpec.marks,
 		list: true,
 		menu: true
-	}
+	};
 }
 extend(EditText, EditHtml);
