@@ -74,8 +74,11 @@ div.fig-article-body {
 	background-color:#f1f1f1;
 	border:1px solid #cecece;
 	text-decoration:none;
+	text-align:center;
 	border-radius:3px;
 	text-shadow:0px 0px 1px #ccc;
+	margin-right:5px;
+	margin-bottom:3px;
 }
 .live-messages.essentiel .live-message:not(.essentiel) {
 	display:none;
@@ -364,7 +367,6 @@ live-asset > iframe:not([height]) {
 	.live-messages .live-time {
 		padding: 0.5em 0;
 		width: 87px;
-		text-align:center;
 		line-height: 1.6em;
 		position: relative;
 	}
