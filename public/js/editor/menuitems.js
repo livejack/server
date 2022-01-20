@@ -42,33 +42,6 @@ function wrapListItem(nodeType, options) {
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
 }
 
-function canInsert(state, type) {
-	const sel = state.selection;
-	if (!sel.empty) return false;
-	const $from = state.selection.$from;
-	for (let d = $from.depth; d >= 0; d--) {
-		const index = $from.index(d);
-		if ($from.node(d).canReplaceWith(index, index, type)) return true;
-	}
-	return false;
-}
-
-function assetItem(nodeType) {
-	return new MenuItem({
-		title: "Insert asset",
-		icon: icons[nodeType.name],
-		select(state) {
-			return state.selection.empty;
-		},
-		enable(state) {
-			return canInsert(state, nodeType);
-		},
-		run(state, dispatch, view) {
-			view.dom.queryAssets('link');
-		}
-	});
-}
-
 export function buildMenuItems(schema) {
 	const r = {};
 	let type;
