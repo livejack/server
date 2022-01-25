@@ -18,6 +18,14 @@ export default function register(live) {
 		const dd = new DiffDOM();
 		dd.apply(from, dd.diff(from, to));
 	};
+	live.errorHandler = (detail) => {
+		for (const node of document.querySelectorAll('div[is="edit-error"]')) {
+			node.handleEvent({
+				type: 'ioerror',
+				detail
+			});
+		}
+	};
 	live.adopt(EditError);
 	live.adopt(EditText);
 	live.adopt(EditFilter);

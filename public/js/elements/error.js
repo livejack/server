@@ -8,14 +8,12 @@ export default class EditError extends HTMLDivElement {
 	}
 	connectedCallback() {
 		this.addEventListener('click', this);
-		this.live?.addEventListener('ioerror', this);
 		window.addEventListener('error', this);
 		window.addEventListener('unhandledrejection', this);
 		this.hidden = true;
 	}
 	disconnectedCallback() {
 		this.removeEventListener('click', this);
-		this.live?.removeEventListener('ioerror', this);
 		window.removeEventListener('error', this);
 		window.removeEventListener('unhandledrejection', this);
 	}
