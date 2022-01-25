@@ -19,6 +19,7 @@ global.HttpError = require('http-errors');
 
 const express = require('express');
 const upload = require('./lib/upload');
+const purge = require('./lib/purge');
 
 const app = require('./lib/express-async')(express)();
 const jsonParser = express.json({
@@ -195,11 +196,25 @@ async function start(objection) {
 
 	app.get('/:domain/:key/read', tag.page, routes.read.GET);
 
-	app.get('/:domain/:key/status', tag.page, resources.status.GET);
+	app.get('/:domain/:key/status', tag.page, (req, res, next) => {
+		// see put ./page, see below
+		res.set('xkey', `live-texte|${req.params.key}`);
+		next();
+	}, resources.status.GET);
 
 	app.route('/:domain/:key/page')
 		.get(tag.page, resources.page.GET)
-		.put(tag.page, tag.domain, tag.all, domainLock, jsonParser, resources.page.PUT)
+		.put(tag.page, (req, res, next) => {
+			next();
+			const domain = config.domains[req.params.domain];
+			if (domain && domain.purge) {
+				purge(domain.purge
+					.replace('%h', config.site.hostname)
+					.replace('%d', req.params.domain)
+					.replace('%k', req.params.key)
+				);
+			}
+		}, tag.domain, tag.all, domainLock, jsonParser, resources.page.PUT)
 		.delete(domainLock, tag.page, tag.domain, tag.all, jsonParser, resources.page.DELETE);
 
 	app.route('/:domain/:key/messages/:id?')
