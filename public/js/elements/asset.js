@@ -1,17 +1,19 @@
-const observer = new IntersectionObserver((entries, observer) => {
-	for (const entry of entries) {
-		const target = entry.target;
-		const ratio = entry.intersectionRatio || 0;
-		if (ratio <= 0) continue;
-		observer.unobserve(target);
-		target.reveal();
-	}
-}, {
-	threshold: [0.0001, 0.2],
-	rootMargin: "30px"
-});
-
 export class LiveAsset extends HTMLElement {
+	static observer;
+	static async init() {
+		LiveAsset.observer = new IntersectionObserver((entries, observer) => {
+			for (const entry of entries) {
+				const target = entry.target;
+				const ratio = entry.intersectionRatio || 0;
+				if (ratio <= 0) continue;
+				observer.unobserve(target);
+				target.reveal();
+			}
+		}, {
+			threshold: [0.0001, 0.2],
+			rootMargin: "30px"
+		});
+	}
 	static ratio(w, h) {
 		const width = parseInt(w);
 		const height = parseInt(h);
@@ -29,10 +31,10 @@ export class LiveAsset extends HTMLElement {
 	}
 	connectedCallback() {
 		this.update();
-		observer.observe(this);
+		LiveAsset.observer.observe(this);
 	}
 	disconnectedCallback() {
-		observer.unobserve(this);
+		LiveAsset.observer.unobserve(this);
 	}
 	update() {
 		if (this.children.length) return;
@@ -98,10 +100,10 @@ export class LiveAsset extends HTMLElement {
 export class LiveIcon extends HTMLElement {
 	connectedCallback() {
 		this.update();
-		observer.observe(this);
+		LiveAsset.observer.observe(this);
 	}
 	disconnectedCallback() {
-		observer.unobserve(this);
+		LiveAsset.observer.unobserve(this);
 	}
 	update() {
 		if (this.children.length) return;

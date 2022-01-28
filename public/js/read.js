@@ -1,7 +1,7 @@
 import req from "./req.js";
 import { ready, visible } from './doc-events.js';
 import { fromScript, toScript } from "./template.js";
-import { LiveJack } from "/node_modules/@livejack/client";
+import { LiveJack, ScriptLoader } from "/node_modules/@livejack/client";
 
 import { Matchdom } from "/node_modules/matchdom";
 import * as DatePlugin from "./date-plugin.js";
@@ -53,6 +53,19 @@ class LiveRead extends LiveJack {
 
 	roomName(room) {
 		return room.split('/').pop();
+	}
+
+	async preinit() {
+		await this.LiveAsset.init();
+		if (!window.customElements.get('live-asset')) {
+			window.customElements.define('live-asset', this.LiveAsset);
+		}
+		if (!window.customElements.get('live-icon')) {
+			window.customElements.define('live-icon', LiveIcon);
+		}
+		await this.build();
+		await visible();
+		this.setup();
 	}
 
 	adopt(Class) {
@@ -215,15 +228,10 @@ live.LiveAsset = LiveAsset;
 export default live;
 
 ready(async () => {
-	if (!window.customElements.get('live-asset')) {
-		window.customElements.define('live-asset', live.LiveAsset);
+	if (!window.IntersectionObserver) {
+		await ScriptLoader('https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver|always', { crossorigin: 'anonymous' });
 	}
-	if (!window.customElements.get('live-icon')) {
-		window.customElements.define('live-icon', LiveIcon);
-	}
-	await live.build();
-	await visible();
-	live.setup();
-}).catch((err) => {
+	await live.preinit();
+}).catch(err => {
 	console.error(err);
 });
