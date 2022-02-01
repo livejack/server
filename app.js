@@ -116,7 +116,7 @@ async function start(objection) {
 
 	app.use("/node_modules/", tag.app, serveModule());
 
-	app.get("/favicons/:base64url", tag.app.for('1y'), require('./lib/favicons'));
+	app.get("/favicons/:base64url([a-zA-Z0-9/+]+)", tag.app.for('1y'), require('./lib/favicons'));
 
 	app.route(/\/js|css|dist\//).get(
 		tag.app,
