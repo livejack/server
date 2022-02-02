@@ -8,7 +8,7 @@ exports.up = async function (knex) {
 		});
 		table.timestamps(true, true);
 		table.string('url', 4096).notNullable().index();
-		table.string('html', 4096);
+		table.string('html', 16384);
 		table.string('script', 4096);
 		table.string('type', 32);
 		table.integer('width');
