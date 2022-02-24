@@ -109,7 +109,7 @@ class LiveRead extends LiveJack {
 		}
 		if (data.page) {
 			// mutate this.page with changes in data.page
-			for (const key of ['start', 'stop', 'updated_at']) {
+			for (const key of ['start', 'stop', 'updated_at', 'title']) {
 				if (data.page[key] !== undefined) this.page[key] = data.page[key];
 				else data.page[key] = this.page[key];
 			}
