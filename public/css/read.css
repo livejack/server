@@ -25,6 +25,15 @@ div.fig-article-body {
 	}
 }
 
+@keyframes fadeout {
+	from {
+		opacity: 100%;
+	}
+	to {
+		opacity: 0%;
+	}
+}
+
 .live-messages .live-message {
 	position:relative;
 	border-top:1px solid #CCC;
@@ -32,6 +41,9 @@ div.fig-article-body {
 	padding-bottom:1em;
 	zoom:1;
 	animation: fadein 1s;
+}
+.live-messages .live-message.fadeout {
+	animation: fadeout 0.3s;
 }
 
 .live-messages .live-message::after {

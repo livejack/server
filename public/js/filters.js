@@ -53,8 +53,12 @@ export default {
 			if (old.nextElementSibling == next && refTime) {
 				old.parentNode.replaceChild(node, old);
 			} else {
-				old.classList.add('hidden');
+				old.classList.add('fadeout');
+				old.addEventListener('animationend', () => {
+					if (old.parentNode == list) list.removeChild(old);
+				});
 				setTimeout(() => {
+					// safeguard in case animation event is not caught
 					if (old.parentNode == list) list.removeChild(old);
 				}, 500);
 				if (date) list.insertBefore(node, next);
