@@ -22,22 +22,28 @@ export default {
 		const refTime = new Date(date).getTime() || 0;
 		const refPin = item.style == "pinned";
 		const next = (() => {
-			if (!refTime) return null;
+			if (!refTime) {
+				// no date, just append post
+				return null;
+			}
 			const first = list.firstElementChild;
 			let child = first;
 			while (child) {
 				let time = child.querySelector('time');
 				if (!time) {
-					return (old || first);
+					// not a post, stop
+					return child;
 				}
 				time = new Date(time.getAttribute('datetime')).getTime();
 				const pin = child.classList.contains('pinned');
+				// correctly place in a pinned list or a non-pinned list
 				if (refPin && (!pin || refTime > time) || !pin && (refTime > time)) {
 					return child;
 				}
 				child = child.nextElementSibling;
 			}
-			return (old || first);
+			// no child found
+			return first;
 		})();
 		const node = frag.firstElementChild;
 		if (!item.id) {
