@@ -285,7 +285,10 @@ const objection = require('./models')(config.database);
 		case "populate":
 			await objection.Models.User.populate(
 				Object.entries(config.domains).map(([domain, obj]) => {
-					return { domain, token: obj.password };
+					return {
+						domain,
+						tokens: obj.passwords || [obj.password]
+					};
 				})
 			);
 			await objection.BaseModel.knex().destroy();
