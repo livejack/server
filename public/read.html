@@ -66,7 +66,7 @@
 					<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack|else:at:*]" />
 					<time is="live-time" itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>
-					<h2 itemprop="headline" class="live-title">[msg.title]</h2>
+					<h2 itemprop="headline" class="live-title">[msg.title|as:html]</h2>
 					<div class="live-icons">[msg.mark|as:html]</div>
 					<div class="live-article" itemprop="articleBody">[msg.text|as:html]</div>
 				</article>
