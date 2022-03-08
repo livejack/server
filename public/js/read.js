@@ -110,6 +110,7 @@ class LiveRead extends LiveJack {
 		if (data.page) {
 			// update cached copy
 			Object.assign(this.page, data.page);
+			delete this.page.messages;
 			// update received data
 			Object.assign(data.page, this.page);
 		} else {
