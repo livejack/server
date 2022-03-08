@@ -47,6 +47,11 @@ div.toolbar > div:last-child {
 div.toolbar > div > button[name="del"] {
 	margin-right:2em;
 }
+
+.live-messages .pinned.no-live-icons div.toolbar {
+	margin-left:0;
+}
+
 .ProseMirror-icon {
 	cursor:default;
 }
