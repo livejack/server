@@ -241,7 +241,7 @@ async function start(objection) {
 		} else {
 			code = objection.errorStatus(err);
 		}
-		if (typeof code != 'number' || code == 500) {
+		if (typeof code != 'number' || code == 500 || code < 100 || code >= 600) {
 			console.error(err);
 			code = 500;
 		} else if (process.env.NODE_ENV != "production") {
