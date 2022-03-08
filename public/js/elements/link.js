@@ -73,7 +73,8 @@ export default class EditLink extends HTMLFormElement {
 		let item;
 		const url = this.#input.value;
 		try {
-			item = await req("./assets", "post", { url });
+			item = this.live.get(url);
+			if (!item) item = await req("./assets", "post", { url });
 			if (this.#input) this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");

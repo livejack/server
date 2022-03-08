@@ -31,6 +31,7 @@ export default function register(live) {
 	live.adopt(EditFilter);
 	live.adopt(EditAsset);
 	live.adopt(EditTime);
+	live.adopt(EditLink);
 	live.adopt(EditControl);
 
 	ce.define('edit-error', EditError, { extends: 'div' });
