@@ -27,13 +27,21 @@ const jsonParser = express.json({
 });
 const config = ini(app);
 
-if (!config.site.startsWith('https://')) config.site = 'https://' + config.site;
+if (!config.site.startsWith('https://')) {
+	config.site = 'https://' + config.site;
+}
 config.site = new URL(config.site);
 
 if (config.proxy) {
 	process.env.all_proxy = config.proxy;
 	console.info("inspector proxy", new URL(config.proxy).hostname);
 }
+
+Object.entries(config.domains).map(([domain, obj]) => {
+	obj.tokens = obj.passwords || (obj.password ? [obj.password] : []);
+	delete obj.passwords;
+	delete obj.password;
+});
 
 app.post('/.well-known/reports', jsonParser, require('./lib/report'));
 
@@ -287,7 +295,7 @@ const objection = require('./models')(config.database);
 				Object.entries(config.domains).map(([domain, obj]) => {
 					return {
 						domain,
-						tokens: obj.passwords || [obj.password]
+						tokens: obj.tokens
 					};
 				})
 			);
