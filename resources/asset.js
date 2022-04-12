@@ -61,6 +61,20 @@ async function tryInspect(url) {
 	});
 }
 
+exports.prepareUrl = function (url) {
+	try {
+		return inspector.prepare(url, {
+			nofavicon: true,
+			nosource: true,
+			file: false,
+			providers
+		}).href;
+	} catch (ex) {
+		console.error("prepareUrl caught", url, ex);
+		return url;
+	}
+};
+
 async function prepare(url) {
 	if (!url) throw new HttpError.BadRequest("Missing url");
 	const item = { url };

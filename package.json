@@ -32,7 +32,7 @@
     "sharp": "^0.29.3",
     "toml": "^3.0.0",
     "upcache": "^2.4.1",
-    "url-inspector": "^4.2.3",
+    "url-inspector": "^4.3.0",
     "webkitgtk": "^4.14.1",
     "xbytes": "^1.7.0",
     "xdg-basedir": "^4.0.0"

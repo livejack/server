@@ -1,7 +1,7 @@
 const { Page } = require('objection').Models;
 const DiffList = require('diff-list');
 const got = require('got');
-const { prepareAsset } = require('./asset');
+const { prepareAsset, prepareUrl } = require('./asset');
 
 exports.GET = async (req) => {
 	if (!req.domain) throw new HttpError.BadRequest("No domain");
@@ -53,7 +53,7 @@ exports.syncAssets = async (page, body, type) => {
 		return item && typeof item.url == "string";
 	}).map((item) => {
 		const asset = {
-			url: item.url,
+			url: prepareUrl(item.url),
 			origin: 'external',
 			type: type,
 			meta: {}
@@ -81,6 +81,7 @@ exports.syncAssets = async (page, body, type) => {
 			return isEqual;
 		}
 	});
+
 	for (const asset of diff.put) {
 		await page.$relatedQuery('hrefs').findById(asset.id).patch(asset);
 	}
