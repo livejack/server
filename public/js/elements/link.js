@@ -59,22 +59,22 @@ export default class EditLink extends HTMLFormElement {
 			this.update();
 		}
 	}
-	async create(url) {
+	async create(url, width, height) {
 		this.#input.value = url;
 		if (this.validateUrl(url)) {
-			return this.submit();
+			return this.submit(null, width, height);
 		} else {
 			throw new Error("Invalid url");
 		}
 	}
-	async submit() {
+	async submit(e, width, height) {
 		this.classList.add('infinite', 'loading');
 		this.#input.disabled = true;
 		let item;
 		const url = this.#input.value;
 		try {
 			item = this.live.get(url);
-			if (!item) item = await req("./assets", "post", { url });
+			if (!item) item = await req("./assets", "post", { url, width, height });
 			if (this.#input) this.#input.value = "";
 		} catch (err) {
 			this.classList.add("error");

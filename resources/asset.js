@@ -32,6 +32,8 @@ exports.POST = (req) => {
 				.patchAndFetchById(asset.id, item)
 				.throwIfNotFound();
 		} else {
+			if (req.body.width && !item.width) item.width = req.body.width;
+			if (req.body.height && !item.height) item.height = req.body.height;
 			asset = await page.$relatedQuery('hrefs').insertAndFetch(item);
 		}
 		await page.$query(trx).patch({

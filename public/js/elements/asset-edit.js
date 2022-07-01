@@ -160,7 +160,7 @@ export class EditAsset extends LiveAsset {
 		else return null;
 	}
 
-	async add(url) {
+	async add(url, width, height) {
 		if (this.#added) return;
 		let asset = this.live.get(url);
 		if (!asset) {
@@ -168,7 +168,8 @@ export class EditAsset extends LiveAsset {
 			this.textContent = '';
 			this.appendChild(this.live.merge(searchTemplate, {url}));
 			try {
-				asset = await document.querySelector('form[is="edit-link"]').create(url);
+				asset = await document.querySelector('form[is="edit-link"]')
+					.create(url, width, height);
 				this.live.set(asset);
 			} catch (err) {
 				console.error(err);
@@ -186,13 +187,13 @@ export class EditAsset extends LiveAsset {
 	}
 
 	update() {
-		const { url, type } = this.dataset;
+		const { url, type, width, height } = this.dataset;
 		const data = {};
 		if (url) {
 			const asset = this.live.get(url);
 			if (!asset) {
 				if (this.parentNode && this.parentNode.isContentEditable) {
-					return this.add(url);
+					return this.add(url, width, height);
 				}
 			} else {
 				Object.assign(data, asset);
