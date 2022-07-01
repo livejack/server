@@ -251,8 +251,14 @@ export class EditAsset extends LiveAsset {
 		delete this.dataset.type;
 		const asset = this.cloneNode();
 		asset.dataset.url = url;
-		if (width) asset.dataset.width = width;
-		if (height) asset.dataset.height = height;
+		const w = parseInt(width);
+		if (width && !width.endsWidth('%') && !Number.isNaN(w)) {
+			asset.dataset.width = w;
+		}
+		const h = parseInt(height);
+		if (height && !height.endsWidth('%') && !Number.isNaN(h)) {
+			asset.dataset.height = h;
+		}
 		this.replaceWith(asset);
 	}
 

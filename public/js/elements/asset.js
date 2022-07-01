@@ -19,7 +19,6 @@ export class LiveAsset extends HTMLElement {
 		const height = parseInt(h);
 
 		if (Number.isNaN(width) || Number.isNaN(height)) return null;
-		if (w.endsWith('%')) return false;
 		const ratio = 100 * width / height;
 
 		const pair = [[21, 9], [2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
@@ -65,7 +64,7 @@ export class LiveAsset extends HTMLElement {
 			if (html) {
 				this.dataset.html = html;
 			} else {
-				if (ratio == null) ratio = "16-9";
+				if (!ratio && !height) ratio = "16-9";
 				this.insertAdjacentHTML('afterbegin', '<iframe />');
 			}
 			if (ratio) this.dataset.ratio = ratio;
