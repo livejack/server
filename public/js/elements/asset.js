@@ -71,7 +71,7 @@ export class LiveAsset extends HTMLElement {
 		}
 	}
 	reveal() {
-		const { url, script, html } = this.dataset;
+		const { url, script, html, width, height } = this.dataset;
 		const doc = this.ownerDocument;
 		if (html) {
 			this.textContent = '';
@@ -83,6 +83,11 @@ export class LiveAsset extends HTMLElement {
 			this.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
 			this.lastElementChild.setAttribute('src', script);
 		}
+		if (!width && height && !this.dataset.ratio) {
+			const iframe = this.querySelector('iframe');
+			if (iframe) iframe.height = height;
+		}
+
 		for (const node of this.querySelectorAll('script')) {
 			const copy = doc.createElement('script');
 			copy.textContent = node.textContent;
