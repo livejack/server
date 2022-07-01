@@ -242,13 +242,16 @@ export class EditAsset extends LiveAsset {
 	autosize(ta) {
 		ta.parentNode.dataset.replicatedValue = ta.value;
 	}
-	#replace(url) {
+	#replace(url, width, height) {
 		if (!url) return;
+		if (url.startsWith('//')) url = 'https:' + url;
 		delete this.dataset.html;
 		delete this.dataset.script;
 		delete this.dataset.type;
 		const asset = this.cloneNode();
 		asset.dataset.url = url;
+		if (width) asset.dataset.width = width;
+		if (height) asset.dataset.height = height;
 		this.replaceWith(asset);
 	}
 
@@ -260,7 +263,7 @@ export class EditAsset extends LiveAsset {
 		const iframe = dom.querySelector('iframe');
 		const blockquote = dom.querySelector('blockquote.twitter-tweet');
 		if (iframe && !script) {
-			this.#replace(iframe.getAttribute('src'));
+			this.#replace(iframe.getAttribute('src'), iframe.getAttribute('width'), iframe.getAttribute('height'));
 		} else if (blockquote) {
 			this.#replace(Array.from(blockquote.querySelectorAll('a[href]')).pop()?.href);
 		} else {

@@ -62,9 +62,11 @@ export const nodes = {
 		}, {
 			tag: 'iframe[src]',
 			getAttrs(dom) {
-				return {
-					url: dom.src
-				};
+				let url = dom.getAttribute('src');
+				if (url && url.startsWith('//')) url = 'https:' + url;
+				const width = dom.getAttribute('width');
+				const height = dom.getAttribute('height');
+				return { url, width, height };
 			}
 		}, {
 			tag: 'blockquote.twitter-tweet',
