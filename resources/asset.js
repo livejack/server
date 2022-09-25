@@ -24,9 +24,9 @@ exports.GET = (req) => {
 exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
-		const page = await Page.query().findOne({ domain, key }).throwIfNotFound();
+		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
 		const item = await prepare(req.body.url);
-		let asset = await page.$relatedQuery('hrefs').findOne({ url: item.url });
+		let asset = await page.$relatedQuery('hrefs', trx).findOne({ url: item.url });
 		if (asset) {
 			asset = await page.$relatedQuery('hrefs', trx)
 				.patchAndFetchById(asset.id, item)
@@ -34,7 +34,7 @@ exports.POST = (req) => {
 		} else {
 			if (req.body.width && !item.width) item.width = req.body.width;
 			if (req.body.height && !item.height) item.height = req.body.height;
-			asset = await page.$relatedQuery('hrefs').insertAndFetch(item);
+			asset = await page.$relatedQuery('hrefs', trx).insertAndFetch(item);
 		}
 		await page.$query(trx).patch({
 			updated_at: asset.updated_at
