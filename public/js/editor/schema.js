@@ -77,7 +77,7 @@ export const nodes = {
 				};
 			}
 		}, {
-			tag: 'opta',
+			tag: 'opta-widget,opta',
 			getAttrs(dom) {
 				return {
 					html: dom.outerHTML

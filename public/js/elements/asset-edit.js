@@ -280,10 +280,10 @@ export class EditAsset extends LiveAsset {
 				script.remove();
 			}
 			const htmlInput = this.querySelector('input[name="html"]');
-			const opta = this.live.vars.opta ? dom.querySelector('opta') : null;
+			const opta = this.#fixOpta(dom);
 			if (opta) {
-				htmlInput.value = opta.outerHTML + `\n<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />\n<script>window._optaParams = { custID: "${this.live.vars.opta}", language: "fr_FR", timezone: 1 };</script>`;
-				src = "https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js";
+				htmlInput.value = opta.html;
+				src = opta.src;
 			} else {
 				htmlInput.value = Array.from(dom.children).map(
 					(child) => child.outerHTML
@@ -296,6 +296,28 @@ export class EditAsset extends LiveAsset {
 				scriptInput.dispatchEvent(new Event('paste', { bubbles: true }));
 			});
 		}
+	}
+	#fixOpta(dom) {
+		if (!this.live.vars.opta) return false;
+		let opta = dom.querySelector('opta');
+		if (opta) return {
+			html: [
+				opta.outerHTML,
+				'<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />',
+				`<script>window._optaParams = { custID: "${this.live.vars.opta}", language: "fr_FR", timezone: 1 };</script>`
+			].join('\n'),
+			src: 'https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js'
+		};
+		opta = dom.querySelector('opta-widget');
+		if (opta) return {
+			html: [
+				opta.outerHTML,
+				'<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/v3/css/v3.all.opta-widgets.css" />',
+				`<script>window.opta_settings = { subscription_id: "${this.live.vars.opta}", language: "fr_FR", timezone: "Europe/Paris" }</script>`
+			].join('\n'),
+			src: 'https://secure.widget.cloud.opta.net/v3/v3.opta-widgets.js'
+		};
+		return false;
 	}
 	reveal() {
 		if (this.dataset.type == "picto") return super.reveal();
