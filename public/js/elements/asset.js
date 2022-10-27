@@ -79,20 +79,10 @@ export class LiveAsset extends HTMLElement {
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
 		}
-		if (script) {
-			const once = html && html.startsWith('<') && /^<\w+-\w+/.test(html);
-			const target = once ? doc.head : this;
-
-			if (!once || !doc.querySelector(`script[src="${script}"]`)) {
-				target.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
-				target.lastElementChild.setAttribute('src', script);
-			}
-		}
 		if (!width && height && !this.dataset.ratio) {
 			const iframe = this.querySelector('iframe');
 			if (iframe) iframe.height = height;
 		}
-
 		for (const node of this.querySelectorAll('script')) {
 			const copy = doc.createElement('script');
 			copy.textContent = node.textContent;
@@ -103,6 +93,16 @@ export class LiveAsset extends HTMLElement {
 				copy.parentNode?.removeChild(copy);
 			};
 			node.parentNode.replaceChild(copy, node);
+		}
+		if (script) {
+			const once = html && html.startsWith('<') && /^<\w+-\w+/.test(html);
+			const target = once ? doc.head : this;
+
+			if (!once || !doc.querySelector(`script[src="${script}"]`)) {
+				const node = target.appendChild(doc.createElement('script'));
+				node.setAttribute('defer', '');
+				node.setAttribute('src', script);
+			}
 		}
 	}
 }
