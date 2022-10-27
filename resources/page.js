@@ -12,8 +12,9 @@ exports.GET = async (req, res) => {
 exports.PUT = async (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
-		const data = req.body;
-		switch (data.action) {
+		const data = {};
+		const { action } = req.body;
+		switch (action) {
 			case 'reset':
 				data.start = null;
 				data.stop = null;
@@ -31,23 +32,27 @@ exports.PUT = async (req) => {
 				data.updated_at = data.stop;
 				break;
 			default:
-				throw new HttpError.BadRequest("Bad action parameter");
+				if (req.body.backtrack) {
+					data.backtrack = req.body.backtrack;
+				} else {
+					throw new HttpError.BadRequest("Bad action parameter");
+				}
+				break;
 		}
-		delete data.action;
 
 		const page = await Page.query(trx)
 			.findOne({ domain, key })
 			.throwIfNotFound()
 			.patch(data)
 			.returning('*');
+		data.start = page.start;
+		data.stop = page.stop;
+		data.updated_at = page.updated_at;
+
 		global.livejack.send({
 			room: `/${domain}/${key}/page`,
 			mtime: page.updated_at,
-			data: {
-				start: page.start,
-				updated_at: page.updated_at,
-				stop: page.stop
-			}
+			data: data
 		});
 		return page;
 	});
