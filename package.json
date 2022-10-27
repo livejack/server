@@ -1,6 +1,6 @@
 {
   "name": "@livejack/server",
-  "version": "2.1.16",
+  "version": "2.2.0",
   "dependencies": {
     "@livejack/client": "^2.1.0",
     "@livejack/prosemirror": "^1.4.4",
@@ -20,7 +20,7 @@
     "got": "^11.8.3",
     "http-errors": "^2.0.0",
     "knex": "^0.95.15",
-    "matchdom": "^8.1.0",
+    "matchdom": "^9.1.0",
     "method-override": "^3.0.0",
     "modern-normalize": "^1.1.0",
     "morgan": "^1.10.0",
