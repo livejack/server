@@ -81,9 +81,11 @@ export class LiveAsset extends HTMLElement {
 		}
 		if (script) {
 			const once = html && html.startsWith('<') && /^<\w+-\w+/.test(html);
+			const target = once ? doc.head : this;
+
 			if (!once || !doc.querySelector(`script[src="${script}"]`)) {
-				this.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
-				this.lastElementChild.setAttribute('src', script);
+				target.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
+				target.lastElementChild.setAttribute('src', script);
 			}
 		}
 		if (!width && height && !this.dataset.ratio) {
