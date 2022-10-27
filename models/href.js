@@ -70,6 +70,9 @@ class Href extends BaseModel {
 						description: {
 							type: 'string'
 						},
+						what: {
+							type: 'string'
+						},
 						author: {
 							type: 'string'
 						},

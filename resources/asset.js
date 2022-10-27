@@ -82,6 +82,7 @@ async function prepare(url) {
 	const item = { url };
 	const meta = await tryInspect(url);
 
+	// second condition is no longer necessary with url-inspector 5
 	if (meta.type == "image" && meta.mime != "text/html") {
 		if (meta.width > 256) {
 			if (!meta.thumbnail) {
