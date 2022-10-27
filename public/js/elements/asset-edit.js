@@ -304,7 +304,7 @@ export class EditAsset extends LiveAsset {
 			html: [
 				opta.outerHTML,
 				'<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/2.0/css/widgets.opta.css" />',
-				`<script>window._optaParams = { custID: "${this.live.vars.opta}", language: "fr_FR", timezone: 1 };</script>`
+				`<script>window._optaParams ||= { custID: "${this.live.vars.opta}", language: "fr_FR", timezone: 1 };</script>`
 			].join('\n'),
 			src: 'https://secure.widget.cloud.opta.net/2.0/js/widgets.opta.js'
 		};
@@ -313,7 +313,7 @@ export class EditAsset extends LiveAsset {
 			html: [
 				opta.outerHTML,
 				'<link rel="stylesheet" href="https://secure.widget.cloud.opta.net/v3/css/v3.all.opta-widgets.css" />',
-				`<script>window.opta_settings = { subscription_id: "${this.live.vars.opta}", language: "fr_FR", timezone: "Europe/Paris" }</script>`
+				`<script>window.opta_settings ||= { subscription_id: "${this.live.vars.opta}", language: "fr_FR", timezone: "Europe/Paris" }</script>`
 			].join('\n'),
 			src: 'https://secure.widget.cloud.opta.net/v3/v3.opta-widgets.js'
 		};

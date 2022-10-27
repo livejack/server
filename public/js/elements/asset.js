@@ -80,8 +80,11 @@ export class LiveAsset extends HTMLElement {
 			this.querySelector('img,iframe').src = url;
 		}
 		if (script) {
-			this.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
-			this.lastElementChild.setAttribute('src', script);
+			const once = html && html.startsWith('<') && /^<\w+-\w+/.test(html);
+			if (!once || !doc.querySelector(`script[src="${script}"]`)) {
+				this.insertAdjacentHTML('beforeEnd', '<script defer=""></script>');
+				this.lastElementChild.setAttribute('src', script);
+			}
 		}
 		if (!width && height && !this.dataset.ratio) {
 			const iframe = this.querySelector('iframe');
