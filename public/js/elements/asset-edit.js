@@ -22,7 +22,7 @@ const codeTemplate = `<div class="header">
 </code>
 <input name="html" type="hidden"><input name="script" type="hidden">`;
 
-const assetTemplate = `<div class="header" title="[meta|else:at:*+2|.site]">
+const assetTemplate = `<div class="header" title="[meta|else:at:*::div|.site]">
 	<img src="[meta.icon|then:proxy:/favicons:url|else:at:*]" class="favicon" />
 	<a href="[url|else:at:-]" class="title">[meta.title]</a>
 	<button name="save">🗘</button>
@@ -31,7 +31,7 @@ const assetTemplate = `<div class="header" title="[meta|else:at:*+2|.site]">
 </div>
 <div class="meta">
 	<p>
-		<strong>[humanType]</strong>
+		<strong>[type|switch:image:photo:link:lien]</strong>
 		<em>[meta.date|else:get:date|date:date]</em>
 		<span><br>[meta.author|or:&nbsp;]</span>
 	</p>

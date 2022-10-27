@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta prerender name="live-servers" content="[servers]">
@@ -38,9 +38,9 @@
 			</div>
 			<div class="live-status">
 				<template data-mode="[template:replace]" data-live="page">
-					<p class="before [page|when:before|prune:*]">À VENIR<span> : Début du direct : </span><time class="stamp" datetime="[page.start|date:iso]">[page.start|then:date:cal|else:prune:+*]</time></p>
-					<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-					<p class="after [page|when:after|prune:*]">TERMINÉ : Fin du direct <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
+					<p class="before [page|when:before|prune:*]">À VENIR<time class="stamp" datetime="[page.start|date:iso]">: Début du direct le [page.start|date:cal|else:prune:*]</time></p>
+					<p class="during [page|when:during|prune:*]">EN COURS<time class="stamp" datetime="[page.updated_at|date:iso]">: Mis à jour le [page.updated_at|date:cal]</time></p>
+					<p class="after [page|when:after|prune:*]">TERMINÉ<time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">: Fin du direct le [page.stop|date:cal]</time></p>
 				</template>
 			</div>
 			<div class="hide">
@@ -58,14 +58,14 @@
 			<template data-mode="[template:insert]" data-live="page">
 				<article
 				data-id="[page.messages|repeat:msg:place|.id]"
-				id="t[msg.date|date:time]"
+				id="t[msg.date|date:hms]"
 				class="live-message [msg.style] [msg.mark|and:|or:no-live-icons]"
 				itemprop="liveBlogUpdate" itemscope
 				itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-					<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
+					<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:hms]" />
 					<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
 					<meta itemprop="mainEntityOfPage" content="[page.backtrack|else:at:*]" />
-					<time is="live-time" itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel|as:text]</time>
+					<time is="live-time" itemprop="datePublished" class="live-time" datetime="[msg.date|date:iso]">[msg.date|date:rel]</time>
 					<h2 itemprop="headline" class="live-title">[msg.title|as:html]</h2>
 					<div class="live-icons">[msg.mark|as:html]</div>
 					<div class="live-article" itemprop="articleBody">[msg.text|as:html]</div>

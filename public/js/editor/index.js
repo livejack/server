@@ -12,8 +12,6 @@ import {
 	tableNodes, tableEditing
 } from "/node_modules/@livejack/prosemirror";
 
-import { HTML as parseHTML } from "/node_modules/matchdom";
-
 import { menuBar } from "./menubar.js";
 import { buildKeymap } from "./keymap.js";
 import { buildInputRules } from "./inputrules.js";
@@ -99,22 +97,19 @@ export class Editor extends EditorView {
 			if (dom.dataset.type == "picto") {
 				const icon = document.createElement('live-icon');
 				Object.assign(icon.dataset, dom.dataset);
-				dom = icon;
+				return icon;
 			} else if (dom.favicon) {
-				dom = parseHTML(
-					`<img data-url="${dom.favicon}" alt="${dom.dataset.title || ''}" />`
-				);
+				return this.dom.live.md.merge(`<img data-url="[favicon]" alt="[dataset.title|or:]" />`, dom);
 			}
 		} else if (this.#content == "text" && dom.dataset.title) {
-			dom = parseHTML(
-				`<span>${dom.dataset.title}</span>`
-			);
+			return this.dom.live.md.merge(`<span>[dataset.title]</span>`, dom);
 		} else if (dom.dataset.type == "link" || !sel.empty && !sel.node) {
-			dom = parseHTML(
-				`<a href="${dom.dataset.url}">${dom.dataset.title}</a>`
+			return this.dom.live.md.merge(
+				`<a href="[dataset.url]">[dataset.title]</a>`, dom
 			);
+		} else {
+			return dom;
 		}
-		return dom;
 	}
 	insertAsset(dom) {
 		const frag = dom.ownerDocument.createDocumentFragment();

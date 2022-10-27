@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,9 +21,9 @@
 				<tr class="live-messages">
 					<td><a href="/[page.domain]/[page.key]/write">[pages|at:tr|repeat:page|.title|else:get:page.key]</a></td>
 					<td><div class="live-status">
-						<p class="before [page|when:before|prune:*]">A VENIR : Début du direct : <time class="stamp" datetime="[page.start|date:iso]">[page.start|date:cal]</time></p>
-						<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp" datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-						<p class="after [page|when:after|prune:*]">TERMINE : Fin du direct : <time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
+						<p class="before [page|when:before|prune:*]">À VENIR<time class="stamp" datetime="[page.start|date:iso]">: Début du direct le [page.start|date:cal|else:at:*]</time></p>
+						<p class="during [page|when:during|prune:*]">EN COURS<time class="stamp" datetime="[page.updated_at|date:iso]">: Mis à jour le [page.updated_at|date:cal]</time></p>
+						<p class="after [page|when:after|prune:*]">TERMINÉ<time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">: Fin du direct le [page.stop|date:cal]</time></p>
 					</div></td>
 					<td>
 						<form is="element-form" data-method="delete" action="/[page.domain]/[page.key]/page[page.backtrack|not:prune:*]">

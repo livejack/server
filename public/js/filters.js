@@ -3,11 +3,11 @@ export default {
 		const { node } = ctx.dest;
 		const parent = node.parentNode;
 		if (mode == "replace") {
-			const frag = ctx.matchdom.merge(node.content.cloneNode(true), data, ctx.scope);
+			const frag = ctx.md.merge(node.content.cloneNode(true), data, ctx.scope);
 			while (node.nextSibling) parent.removeChild(node.nextSibling);
 			parent.appendChild(frag);
 		} else if (mode == "insert") {
-			ctx.matchdom.merge(
+			ctx.md.merge(
 				node.content.cloneNode(true),
 				data,
 				{ template: node }

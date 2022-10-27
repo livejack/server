@@ -3,8 +3,8 @@ import { ready, visible } from './doc-events.js';
 import { fromScript, toScript } from "./template.js";
 import { LiveJack, ScriptLoader } from "/node_modules/@livejack/client";
 
-import { Matchdom } from "/node_modules/matchdom";
-import * as DatePlugin from "./date-plugin.js";
+import { Matchdom, DomPlugin, DatePlugin } from "/node_modules/matchdom";
+import * as DateFormats from "./date-formats.js";
 import "./array-like.js";
 import '/node_modules/@ungap/custom-elements';
 
@@ -20,7 +20,7 @@ class LiveRead extends LiveJack {
 	constructor() {
 		super();
 		this.hrefs = {};
-		this.matchdom = new Matchdom({
+		this.md = new Matchdom({
 			hooks: {
 				beforeEach: (ctx, val) => {
 					if (val && val.hrefs && Array.isArray(val.hrefs)) {
@@ -29,8 +29,9 @@ class LiveRead extends LiveJack {
 					}
 					return val;
 				}
-			}
-		}).extend([DatePlugin, { filters }]);
+			},
+			filters
+		}, DomPlugin, DatePlugin, DateFormats);
 		this.adopt(LiveAsset);
 
 		this.channels = {};
@@ -116,7 +117,7 @@ class LiveRead extends LiveJack {
 		} else {
 			data = Object.assign({}, data, { page: this.page });
 		}
-		return this.matchdom.merge(node, data, { live: this });
+		return this.md.merge(node, data, { live: this });
 	}
 
 	async fetch(name) {

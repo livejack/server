@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,12 +50,9 @@
 				</div>
 				<div class="live-status">
 					<template data-mode="[template:replace]" data-live="page">
-						<p class="before [page|when:before|prune:*]">À VENIR<span> : Début du direct : </span><time class="stamp"
-								datetime="[page.start|date:iso]">[page.start|then:date:cal|else:prune:+*]</time></p>
-						<p class="during [page|when:during|prune:*]">EN COURS : Mis à jour <time class="stamp"
-								datetime="[page.updated_at|date:iso]">[page.updated_at|date:cal]</time></p>
-						<p class="after [page|when:after|prune:*]">TERMINÉ : Fin du direct <time class="stamp"
-								itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">[page.stop|date:cal]</time></p>
+						<p class="before [page|when:before|prune:*]">À VENIR<time class="stamp" datetime="[page.start|date:iso]">: Début du direct le [page.start|date:cal|else:prune:*]</time></p>
+						<p class="during [page|when:during|prune:*]">EN COURS<time class="stamp" datetime="[page.updated_at|date:iso]">: Mis à jour le [page.updated_at|date:cal]</time></p>
+						<p class="after [page|when:after|prune:*]">TERMINÉ<time class="stamp" itemprop="[page|when:after|and:coverageEndTime]" datetime="[page.stop|date:iso]">: Fin du direct le [page.stop|date:cal]</time></p>
 					</template>
 				</div>
 				<div class="hide">
@@ -74,14 +71,14 @@
 					<article
 					is="edit-article"
 					data-id="[page.messages|blank:push:date=now|repeat:msg:place|.id]"
-					id="t[msg.date|date:time]"
+					id="t[msg.date|date:hms]"
 					class="live-message [msg.style] [msg.mark|and:|or:no-live-icons]" itemprop="liveBlogUpdate" itemscope
 					itemtype="https://schema.org/BlogPosting" itemref="blogPublisher blogAuthor">
-						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:time]" />
+						<meta itemprop="url" content="[page.backtrack|or:]#t[msg.date|date:hms]" />
 						<meta itemprop="dateModified" content="[msg.updated_at|date:iso]" />
 						<meta itemprop="mainEntityOfPage" content="[page.backtrack|else:at:*]" />
 						<time name="date" is="edit-time" itemprop="datePublished" class="live-time"
-							datetime="[msg.date|date:iso]" tabindex="[msg.id]1">[msg.date|date:rel|as:text]</time>
+							datetime="[msg.date|date:iso]" tabindex="[msg.id]1">[msg.date|date:rel]</time>
 						<h2 name="title" is="edit-title" itemprop="headline" class="live-title" tabindex="[msg.id]2" data-placeholder="Titre">[msg.title|as:html]</h2>
 						<div name="mark" is="edit-mark" class="live-icons" data-placeholder="Pictos">[msg.mark|as:html]</div>
 						<div name="text" is="edit-text" class="live-article" itemprop="articleBody" tabindex="[msg.id]4" data-placeholder="Corps">[msg.text|as:html]</div>
@@ -122,15 +119,15 @@
 							Lancer le live <span class="unicode">▶</span>
 						</button>
 						<button type="submit" name="action" value="reset">
-							<div>Commencé<br>[page.start|then:date:cal]</div>
+							<div>Commencé<br>le [page.start|then:date:cal]</div>
 							<span class="unicode">◀</span> Réinitialiser[page|when:after|prune:button]
 						</button>
 						<button type="submit" name="action" value="continue">
-							<div>Terminé<br>[page.stop|then:date:cal]</div>
+							<div>Terminé<br>le [page.stop|then:date:cal]</div>
 							Poursuivre <span class="unicode">▶</span>[page|when:after|prune:button]
 						</button>
 						<button type="submit" name="action" value="stop" class="[page|when:during|and:active]">
-							<div>Commencé<br>[page.start|then:date:cal]</div>
+							<div>Commencé<br>le [page.start|then:date:cal]</div>
 							<span class="unicode">◼</span> Terminer le live[page|when:during|prune:button]
 						</button>
 					</fieldset>

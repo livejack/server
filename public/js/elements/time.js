@@ -27,7 +27,7 @@ export default class EditTime extends HTMLTimeElement {
 	set value(val) {
 		if (val == this.#defaultValue) this.#changed = false;
 		this.dateTime = val;
-		this.innerHTML = '[date|date:rel|as:text]';
+		this.innerHTML = '[date|date:rel]';
 		this.live.merge(this, { date: val });
 	}
 	get defaultValue() {

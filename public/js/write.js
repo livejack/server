@@ -6,6 +6,7 @@ registerWrite(liveRead);
 import { ready, visible } from './doc-events.js';
 
 import xbytes from '/node_modules/xbytes';
+import { TextPlugin, OpsPlugin } from "/node_modules/matchdom";
 
 let blanked = false;
 
@@ -46,7 +47,10 @@ const assetPlugin = {
 	}
 };
 
-liveRead.matchdom.extend(assetPlugin);
+liveRead.md.extend(OpsPlugin);
+liveRead.md.extend(TextPlugin);
+liveRead.md.extend(assetPlugin);
+
 
 ready(async () => {
 	await visible();
