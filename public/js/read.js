@@ -43,8 +43,16 @@ class LiveRead extends LiveJack {
 	set(list) {
 		if (!Array.isArray(list)) list = [list];
 		for (const item of list) {
-			if (refs[item.url]) Object.assign(refs[item.url], item);
-			else refs[item.url] = item;
+			if (item.url == null) {
+				if (item.id != null) {
+					const ref = Object.values(refs).find(ref => ref.id == item.id);
+					if (ref) delete refs[ref.url];
+				}
+			} else if (refs[item.url]) {
+				Object.assign(refs[item.url], item);
+			} else {
+				refs[item.url] = item;
+			}
 		}
 	}
 
