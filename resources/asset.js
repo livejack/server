@@ -65,14 +65,15 @@ async function tryInspect(url) {
 	});
 }
 
-exports.prepareUrl = function (url) {
+exports.prepareUrl = async function (url) {
 	try {
-		return inspector.prepare(url, {
+		const obj = await inspector.prepare(url, {
 			nofavicon: true,
 			nosource: true,
 			file: false,
 			providers
-		}).href;
+		});
+		return obj.href;
 	} catch (ex) {
 		console.error("prepareUrl caught", url, ex);
 		return url;

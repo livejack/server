@@ -49,11 +49,11 @@ exports.syncAssets = async (page, body, type) => {
 		return;
 	}
 
-	nassets = nassets.filter((item) => {
+	nassets = nassets.filter(item => {
 		return item && typeof item.url == "string";
-	}).map((item) => {
+	}).map(async item => {
 		const asset = {
-			url: prepareUrl(item.url),
+			url: await prepareUrl(item.url),
 			origin: 'external',
 			type: type,
 			meta: {}
