@@ -1,4 +1,5 @@
 const { Page } = require('objection').Models;
+const { syncAssets } = require('../resources/synchro');
 
 // ouverture de la page
 exports.GET = async function(req, res, next) {
@@ -14,7 +15,7 @@ exports.GET = async function(req, res, next) {
 
 exports.PUT = async function (req) {
 	const page = await Page.have(req.params);
-	await require('../resources/synchro').syncAssets(page, req.body, 'image');
+	await syncAssets(page, req.body, 'image');
 	return 200;
 };
 
