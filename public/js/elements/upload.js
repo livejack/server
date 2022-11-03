@@ -1,3 +1,5 @@
+import { Deferred } from "/node_modules/class-deferred";
+
 export default class EditUpload extends HTMLFormElement {
 	#input;
 	#preview;
@@ -72,7 +74,7 @@ export default class EditUpload extends HTMLFormElement {
 async function upload(form, track) {
 	const xhr = new XMLHttpRequest();
 	const inputs = form.querySelectorAll('input[type="file"]');
-	const { defer, resolve, reject } = Deferred(() => toggleDisable(false));
+	const defer = new Deferred();
 
 	function toggleDisable(val) {
 		for (const node of inputs) node.disabled = val;
@@ -82,7 +84,7 @@ async function upload(form, track) {
 		const msg = xhr.statusText || xhr.responseText || "Connection error";
 		const err = new Error(msg);
 		err.statusCode = xhr.status;
-		reject(err);
+		defer.reject(err);
 	}
 
 	xhr.upload.addEventListener("progress", (e) => {
@@ -97,9 +99,9 @@ async function upload(form, track) {
 		track(100);
 		if (xhr.status >= 400) return handleError();
 		try {
-			resolve(JSON.parse(xhr.responseText));
+			defer.resolve(JSON.parse(xhr.responseText));
 		} catch(ex) {
-			reject(ex);
+			defer.reject(ex);
 		}
 	});
 
@@ -111,22 +113,7 @@ async function upload(form, track) {
 		xhr.send(new FormData(form));
 		toggleDisable(true);
 	} catch (err) {
-		reject(err);
+		defer.reject(err);
 	}
-	return defer;
-}
-
-function Deferred(final) {
-	let resolve, reject;
-	const defer = new Promise((pass, fail) => {
-		resolve = function (obj) {
-			final();
-			pass(obj);
-		};
-		reject = function (err) {
-			final();
-			fail(err);
-		};
-	});
-	return { defer, resolve, reject };
+	return defer.finally(() => toggleDisable(false));
 }
