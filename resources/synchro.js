@@ -50,7 +50,7 @@ exports.syncAssets = async (page, body, type) => {
 	}
 
 	nassets = nassets.filter(item => {
-		return item && typeof item.url == "string";
+		return item && typeof item.url == "string" && item.url;
 	}).map(async item => {
 		const asset = {
 			url: await prepareUrl(item.url),
