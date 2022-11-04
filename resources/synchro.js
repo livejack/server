@@ -1,7 +1,7 @@
 const { Page } = require('objection').Models;
 const DiffList = require('diff-list');
 const got = require('got');
-const { prepareAsset } = require('./asset');
+const { prepareAsset, prepareUrl } = require('./asset');
 
 exports.GET = async (req) => {
 	if (!req.domain) throw new HttpError.BadRequest("No domain");
@@ -52,18 +52,21 @@ exports.syncAssets = async (page, body, type) => {
 	nassets = await Promise.all(nassets.filter(item => {
 		return item && typeof item.url == "string" && item.url;
 	}).map(async item => {
-		const extras = {};
+		const asset = {
+			url: await prepareUrl(item.url),
+			origin: 'external',
+			type: type,
+			meta: {}
+		};
 		if (item.legende) {
-			extras.description = item.legende;
+			asset.meta.description = item.legende;
 		}
 		if (item.credits || item.credit) {
-			extras.author = item.credits || item.credit;
+			asset.meta.author = item.credits || item.credit;
 		}
-		if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
-			extras.keywords = item.tags;
+		if (item.tags) {
+			asset.meta.keywords = item.tags;
 		}
-		const asset = await prepareAsset(item.url, extras);
-		asset.origin = 'external';
 		return asset;
 	}));
 
