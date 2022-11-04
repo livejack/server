@@ -51,11 +51,10 @@ exports.POST = (req) => {
 	});
 };
 
-async function tryInspect(url) {
+async function tryInspect(url, extras) {
 	return inspector(url, {
-		nofavicon: false,
+		meta: extras,
 		nosource: true,
-		file: false,
 		providers
 	}).catch(err => {
 		if (err.statusCode && err.statusCode >= 400) {
@@ -65,25 +64,10 @@ async function tryInspect(url) {
 	});
 }
 
-exports.prepareUrl = async function (url) {
-	try {
-		const obj = await inspector.prepare(url, {
-			nofavicon: true,
-			nosource: true,
-			file: false,
-			providers
-		});
-		return obj.href;
-	} catch (ex) {
-		console.error("prepareUrl caught", url, ex);
-		return url;
-	}
-};
-
-async function prepare(url) {
+async function prepare(url, extras) {
 	if (!url) throw new HttpError.BadRequest("Missing url");
 	const item = { url };
-	const meta = await tryInspect(url);
+	const meta = await tryInspect(url, extras);
 
 	// second condition is no longer necessary with url-inspector 5
 	if (meta.type == "image" && meta.mime != "text/html") {
