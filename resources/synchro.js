@@ -87,7 +87,7 @@ exports.syncAssets = async (page, body, type) => {
 	}
 	for (const item of diff.post) {
 		if (type != "picto") {
-			const asset = await prepareAsset(item.url);
+			const asset = await prepareAsset(item.url, item.meta);
 			asset.origin = item.origin;
 			await page.$relatedQuery('hrefs').insert(asset);
 		} else {
