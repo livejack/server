@@ -49,7 +49,7 @@ exports.syncAssets = async (page, body, type) => {
 		return;
 	}
 
-	nassets = nassets.filter(item => {
+	nassets = await Promise.all(nassets.filter(item => {
 		return item && typeof item.url == "string" && item.url;
 	}).map(async item => {
 		const asset = {
@@ -68,7 +68,7 @@ exports.syncAssets = async (page, body, type) => {
 			asset.meta.keywords = item.tags;
 		}
 		return asset;
-	});
+	}));
 
 	const assets = await page.$relatedQuery('hrefs').where({
 		origin: 'external'
