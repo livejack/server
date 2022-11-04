@@ -1,7 +1,7 @@
 const { Page } = require('objection').Models;
 const DiffList = require('diff-list');
 const got = require('got');
-const { prepareAsset, prepareUrl } = require('./asset');
+const { prepareAsset, normalizeMeta } = require('./asset');
 
 exports.GET = async (req) => {
 	if (!req.domain) throw new HttpError.BadRequest("No domain");
@@ -49,35 +49,46 @@ exports.syncAssets = async (page, body, type) => {
 		return;
 	}
 
-	nassets = await Promise.all(nassets.filter(item => {
+	nassets = nassets.filter(item => {
 		return item && typeof item.url == "string" && item.url;
-	}).map(async item => {
-		const asset = {
-			url: await prepareUrl(item.url),
-			origin: 'external',
-			type: type,
-			meta: {}
+	}).map(item => {
+		const meta = {
+			url: item.url
 		};
 		if (item.legende) {
-			asset.meta.description = item.legende;
+			meta.description = item.legende;
 		}
 		if (item.credits || item.credit) {
-			asset.meta.author = item.credits || item.credit;
+			meta.author = item.credits || item.credit;
 		}
 		if (item.tags) {
-			asset.meta.keywords = item.tags;
+			meta.keywords = item.tags;
 		}
+		normalizeMeta(meta);
+		const asset = {
+			url: meta.url,
+			origin: 'external',
+			type,
+			meta
+		};
+		delete meta.url;
 		return asset;
-	}));
+	});
 
 	const assets = await page.$relatedQuery('hrefs').where({
 		origin: 'external'
 	});
 	const diff = DiffList(assets, nassets, {
 		key: 'url',
-		equal: function(a, b) {
-			const isEqual = a.meta.title == b.meta.title && a.meta.author == b.meta.author && a.type == b.type;
-			b.id = a.id; // we compared on url, but id is missing
+		equal: function (a, b) {
+			let isEqual = true;
+			for (const key in ['description', 'author', 'keywords']) {
+				if (b.meta[key] != a.meta[key]) {
+					a.meta[key] = b.meta[key];
+					isEqual = false;
+				}
+			}
+			Object.assign(b, a);
 			return isEqual;
 		}
 	});
@@ -87,7 +98,7 @@ exports.syncAssets = async (page, body, type) => {
 	}
 	for (const item of diff.post) {
 		if (type != "picto") {
-			const asset = await prepareAsset(item.url, item.meta);
+			const asset = await prepareAsset(item.url);
 			asset.origin = item.origin;
 			await page.$relatedQuery('hrefs').insert(asset);
 		} else {
