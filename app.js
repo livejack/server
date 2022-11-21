@@ -52,6 +52,7 @@ config.live.version = require('@livejack/client/package.json').version;
 const tag = {
 	app: Upcache.tag('app'),
 	page: Upcache.tag('app', 'data-:domain-:key'),
+	picto: Upcache.tag('picto-:domain'),
 	domain: Upcache.tag('app', 'data-:domain'),
 	all: Upcache.tag('app', 'data')
 };
@@ -160,18 +161,6 @@ async function start(objection) {
 		res.prerender("frame.html", { render: false });
 	});
 
-	// appelé par BO site pour synchroniser les pictos
-	app.get('/:domain/:key(pictos)/synchro', async (req) => {
-		// do an internal post
-		if (!req.domain) throw new HttpError.BadRequest("No domain");
-		const sameUrl = new URL(config.site);
-		sameUrl.pathname = req.path;
-		await got.post(sameUrl, {
-			retry: 0
-		});
-		return 200;
-	});
-	app.post('/:domain/:key(pictos)/synchro', tag.page, resources.synchro.pictos);
 	// appelé par BO site pour synchroniser un live
 	app.get('/:domain/:key/synchro', resources.synchro.GET);
 
@@ -231,11 +220,13 @@ async function start(objection) {
 		.post(domainLock, tag.page, jsonParser, resources.message.POST)
 		.delete(domainLock, tag.page, jsonParser, resources.message.DELETE);
 
+	app.use('/:domain/:key(pictos)/assets/:id?', tag.picto);
+
 	app.route('/:domain/:key/assets/:id?')
-		.get(domainLock, tag.page, resources.asset.GET)
-		.put(domainLock, tag.page, jsonParser, resources.asset.PUT)
-		.post(domainLock, tag.page, upload, jsonParser, resources.asset.POST)
-		.delete(domainLock, tag.page, jsonParser, resources.asset.DELETE);
+		.get(domainLock, tag.page, tag.asset, resources.asset.GET)
+		.put(domainLock, tag.page, tag.asset, jsonParser, resources.asset.PUT)
+		.post(domainLock, tag.page, tag.asset, upload, jsonParser, resources.asset.POST)
+		.delete(domainLock, tag.page, tag.asset, jsonParser, resources.asset.DELETE);
 
 	app.route('/:domain/:key/write')
 		.get(domainLock, tag.page, routes.write.GET)

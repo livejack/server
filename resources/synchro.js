@@ -11,14 +11,6 @@ exports.GET = async (req) => {
 	return 200;
 };
 
-exports.pictos = async (req) => {
-	if (!req.domain) throw new HttpError.BadRequest("No domain");
-	const page = await Page.have(req.params);
-	const data = await fetchExport(req.domain.pictos, page.key);
-	await exports.syncAssets(page, data, 'picto');
-	return 200;
-};
-
 exports.syncAssets = async (page, body, type) => {
 	if (!body || Object.keys(body).length == 0) return;
 	const npage = {};
