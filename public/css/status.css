@@ -7,7 +7,7 @@ form[is="edit-status"] {
 }
 
 [is="edit-status"] > .tiled {
-	opacity:70%;
+	opacity:0.7;
 	border-bottom:0;
 }
 [is="edit-status"] > .tiled > div {
@@ -19,15 +19,14 @@ form[is="edit-status"] {
 }
 [is="edit-status"] button > div {
 	border-bottom: 1px solid;
-	opacity:100%;
+	opacity:1;
 	color: white;
 	padding: 1em 1rem;
 	margin-bottom: 0.5rem;
 }
-form[is="edit-status"] .buttons 
- button {
- 	margin:0;
- 	padding:0;
+form[is="edit-status"] .buttons button {
+	margin:0;
+	padding:0;
 	padding-bottom:0.5em;
 }
 [is="edit-status"] button.active > div {

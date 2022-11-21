@@ -2,7 +2,7 @@ form[is] {
 	font-size: 0.8em;
 	margin: 0.3rem 0;
 	transition-property: opacity;
-	opacity:100%;
+	opacity:1;
 	transition-duration: 0.25s;
 	background-color: var(--tilebg);
 }
@@ -85,7 +85,7 @@ form[is="edit-upload"] > label:hover::after {
 	margin-top: 0.3em;
 }
 #control[data-mode="link"] form[is="edit-upload"] {
-	opacity: 0%;
+	opacity: 0;
 	pointer-events: none;
 	display: none;
 }
@@ -149,7 +149,7 @@ form[is="edit-filter"] {
 	margin-left:0;
 }
 [is="edit-filter"] label > input[disabled] + span {
-	opacity:50%;
+	opacity:0.5;
 }
 [is="edit-filter"] label:hover > input:not([disabled]) + span {
 	color:var(--btncolorhover);
@@ -172,7 +172,7 @@ form[is] .buttons {
 	border: none;
 	margin: 0;
 	padding: 0;
-	opacity: 100%;
+	opacity: 1;
 }
 
 form[is] .buttons button {
