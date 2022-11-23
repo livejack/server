@@ -255,9 +255,9 @@ live-asset > img {
 	display: block;
 	border-width: 0;
 }
-live-asset > figure,
-live-asset > img,
-live-asset > iframe:not([height]) {
+live-asset:not([data-ratio]) > figure,
+live-asset:not([data-ratio]) > img,
+live-asset:not([data-ratio]) > iframe:not([height]) {
 	height: auto;
 }
 
