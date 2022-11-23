@@ -223,10 +223,10 @@ async function start(objection) {
 	app.use('/:domain/:key(pictos)/assets/:id?', tag.picto);
 
 	app.route('/:domain/:key/assets/:id?')
-		.get(domainLock, tag.page, tag.asset, resources.asset.GET)
-		.put(domainLock, tag.page, tag.asset, jsonParser, resources.asset.PUT)
-		.post(domainLock, tag.page, tag.asset, upload, jsonParser, resources.asset.POST)
-		.delete(domainLock, tag.page, tag.asset, jsonParser, resources.asset.DELETE);
+		.get(domainLock, tag.page, resources.asset.GET)
+		.put(domainLock, tag.page, jsonParser, resources.asset.PUT)
+		.post(domainLock, tag.page, upload, jsonParser, resources.asset.POST)
+		.delete(domainLock, tag.page, jsonParser, resources.asset.DELETE);
 
 	app.route('/:domain/:key/write')
 		.get(domainLock, tag.page, routes.write.GET)
