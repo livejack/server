@@ -132,7 +132,7 @@ live-asset button[name="save"] {
 }
 .live-message live-asset button[name="del"] {
 	cursor: default;
-	opacity:50%;
+	opacity:0.5;
 }
 .live-message .ProseMirror live-asset button[name="del"],
 #control[data-mode="default"] live-asset button[name="del"] {
@@ -272,13 +272,13 @@ live-asset > .meta > p > em {
 }
 
 .dragging {
-	opacity:30%;
+	opacity:0.3;
 }
 
 .handle {
 	position:absolute;
 	background: #4165A0;
-	opacity:70%;
+	opacity:0.7;
 	border:none;
 	color:white;
 	font-size:0.8em;
@@ -339,7 +339,7 @@ live-asset > .meta > p > em {
 }
 
 #control[data-mode="link"] > [is="edit-upload"] {
-	opacity: 0%;
+	opacity: 0;
 	pointer-events: none;
 	transition-property: opacity;
 }

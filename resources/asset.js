@@ -1,8 +1,10 @@
 const { Models } = require('objection');
 const { Page, Href } = Models;
-const inspector = require('url-inspector');
 const thumbnailer = require('../lib/thumbnailer');
+const Inspector = require('url-inspector');
 const providers = require('../lib/providers');
+
+const inspector = new Inspector({ providers, nosource: true });
 
 exports.GET = (req) => {
 	const { domain, key } = req.params;
@@ -25,7 +27,7 @@ exports.POST = (req) => {
 	const { domain, key } = req.params;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		const item = await prepare(req.body.url);
+		const item = await exports.prepareAsset(req.body.url);
 		let asset = await page.$relatedQuery('hrefs', trx).findOne({ url: item.url });
 		if (asset) {
 			asset = await page.$relatedQuery('hrefs', trx)
@@ -51,78 +53,54 @@ exports.POST = (req) => {
 	});
 };
 
-async function tryInspect(url) {
-	return inspector(url, {
-		nofavicon: false,
-		nosource: true,
-		file: false,
-		providers
-	}).catch(err => {
-		if (err.statusCode && err.statusCode >= 400) {
-			err.message = "Cannot process url: \n" + url;
-		}
-		throw err;
-	});
-}
-
-exports.prepareUrl = async function (url) {
+exports.normalizeMeta = function (meta) {
 	try {
-		const obj = await inspector.prepare(url, {
-			nofavicon: true,
-			nosource: true,
-			file: false,
-			providers
-		});
-		return obj.href;
+		return inspector.norm(meta);
 	} catch (ex) {
-		console.error("prepareUrl caught", url, ex);
-		return url;
+		console.error("normalizeMeta error", meta, ex);
 	}
 };
 
-async function prepare(url) {
+exports.prepareAsset = async function(url) {
 	if (!url) throw new HttpError.BadRequest("Missing url");
-	const item = { url };
-	const meta = await tryInspect(url);
-
-	// second condition is no longer necessary with url-inspector 5
-	if (meta.type == "image" && meta.mime != "text/html") {
-		if (meta.width > 256) {
-			if (!meta.thumbnail) {
-				meta.thumbnail = meta.url;
+	const item = { url, meta: {} };
+	try {
+		const meta = await inspector.look(url);
+		// second condition is no longer necessary with url-inspector 5
+		if (meta.type == "image") {
+			if (meta.width > 256) {
+				if (!meta.thumbnail) {
+					meta.thumbnail = meta.url;
+				}
+			} else {
+				meta.type = 'picto';
 			}
-		} else {
-			meta.type = 'picto';
 		}
-	}
-	if (meta.icon && meta.icon.startsWith('data:') && meta.icon.length < 64) delete meta.icon;
-	if (meta.thumbnail) try {
-		meta.thumbnail = await thumbnailer(meta.thumbnail);
+		if (meta.icon && meta.icon.startsWith('data:') && meta.icon.length < 64) {
+			delete meta.icon;
+		}
+		if (meta.thumbnail) {
+			meta.thumbnail = await thumbnailer(meta.thumbnail);
+		}
+
+		Object.keys(Href.jsonSchema.properties.meta.properties).forEach((name) => {
+			if (meta[name] != null) item.meta[name] = meta[name];
+		});
+		Object.keys(Href.jsonSchema.properties).forEach((name) => {
+			if (meta[name] != null) item[name] = meta[name];
+		});
 	} catch (err) {
-		console.group(url);
-		console.error("Impossible to generate thumbnail from");
-		console.error(meta.thumbnail);
-		console.error(err.toString());
-		console.groupEnd();
-		delete meta.thumbnail;
+		console.error("Error inspecting url: " + url);
 	}
-	if (!item.meta) item.meta = {};
-	Object.keys(Href.jsonSchema.properties.meta.properties).forEach((name) => {
-		if (meta[name] != null) item.meta[name] = meta[name];
-	});
-	Object.keys(Href.jsonSchema.properties).forEach((name) => {
-		if (meta[name] != null) item[name] = meta[name];
-	});
 	return item;
-}
-exports.prepareAsset = prepare;
+};
 
 exports.PUT = (req) => {
 	const { domain, key } = req.params;
 	const id = req.params.id || req.body.id;
 	return Page.transaction(async trx => {
 		const page = await Page.query(trx).findOne({ domain, key }).throwIfNotFound();
-		const item = await prepare(req.body.url);
+		const item = await exports.prepareAsset(req.body.url);
 		const asset = await page.$relatedQuery('hrefs', trx)
 			.patchAndFetchById(id, item)
 			.throwIfNotFound();

@@ -18,19 +18,19 @@ div.fig-article-body {
 
 @keyframes fadein {
 	from {
-		opacity: 0%;
+		opacity: 0;
 	}
 	to {
-		opacity: 100%;
+		opacity: 1;
 	}
 }
 
 @keyframes fadeout {
 	from {
-		opacity: 100%;
+		opacity: 1;
 	}
 	to {
-		opacity: 0%;
+		opacity: 0;
 	}
 }
 
@@ -238,7 +238,7 @@ div.fig-article-body {
 	display:block;
 	width:1px;
 	height:1px;
-	opacity:0%;
+	opacity:0;
 }
 
 /* stylelint-disable-next-line selector-type-no-unknown */
@@ -255,9 +255,9 @@ live-asset > img {
 	display: block;
 	border-width: 0;
 }
-live-asset > figure,
-live-asset > img,
-live-asset > iframe:not([height]) {
+live-asset:not([data-ratio]) > figure,
+live-asset:not([data-ratio]) > img,
+live-asset:not([data-ratio]) > iframe:not([height]) {
 	height: auto;
 }
 

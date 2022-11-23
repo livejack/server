@@ -23,11 +23,11 @@
 	border-bottom:1px solid #CCC;
 }
 .live-message:not([data-id]):not(.active) > [is] {
-	opacity:50%;
+	opacity:0.5;
 }
 
 .live-message:not([data-id]):not(.active):hover > [is] {
-	opacity:100%;
+	opacity:1;
 }
 
 .live-message:not([data-id]):not(.active) {
@@ -58,7 +58,7 @@
 
 .live-messages .lazy {
 	width:100% !important;
-	opacity:100% !important;
+	opacity:1 !important;
 	background:#EEE;
 }
 
@@ -126,7 +126,7 @@
 .live-message:not([data-id]) > [data-placeholder][is]:empty::before {
 	content: attr(data-placeholder);
 	font-style: italic;
-	opacity: 50%;
+	opacity: 0.5;
 }
 
 .live-messages header .live-controls {

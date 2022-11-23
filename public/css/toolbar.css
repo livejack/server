@@ -76,7 +76,7 @@ div.toolbar > div > button[name="del"] {
 	width: 100%;
 }
 .prosemirror-menu.disabled {
-	opacity:50%;
+	opacity:0.5;
 	pointer-events:none;
 }
 
