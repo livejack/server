@@ -39,7 +39,7 @@ export class LiveAsset extends HTMLElement {
 			</figure>`, data));
 		} else if (type == "picto") {
 			this.appendChild(
-				this.live.merge('<img width="[width]" height="[height]" style="max-width:[width|else:at:-]px" />', data)
+				this.live.merge('<img width="[width|or:64]" height="[height|or:64]" />', data)
 			);
 		} else {
 			if (script) this.dataset.script = script;
@@ -103,7 +103,7 @@ export class LiveIcon extends HTMLElement {
 	update() {
 		if (this.children.length) return;
 		this.appendChild(
-			this.live.merge('<img width="[width]" height="[height]" />', this.dataset)
+			this.live.merge('<img width="[width|or:64]" height="[height|or:64]" />', this.dataset)
 		);
 	}
 	reveal() {
