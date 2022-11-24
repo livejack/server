@@ -14,21 +14,6 @@ export class LiveAsset extends HTMLElement {
 			rootMargin: "30px"
 		});
 	}
-	static ratio(w, h) {
-		const width = parseInt(w);
-		const height = parseInt(h);
-
-		if (Number.isNaN(width) || Number.isNaN(height)) return null;
-		const ratio = 100 * width / height;
-
-		const pair = [[21, 9], [2, 1], [16, 9], [16, 10], [3, 2], [4, 3], [1, 1], [9, 16]]
-			.find(([a, b]) => {
-				const r = ratio / a * b;
-				return r >= 99;
-			});
-		if (!pair) return null;
-		return `${pair[0]}-${pair[1]}`;
-	}
 	connectedCallback() {
 		this.update();
 		LiveAsset.observer.observe(this);
@@ -39,10 +24,10 @@ export class LiveAsset extends HTMLElement {
 	update() {
 		if (this.children.length) return;
 		const { url } = this.dataset;
+		const data = Object.assign(url && this.live.get(url) || {}, this.dataset);
 		const {
-			type, html, script,
-			width, height
-		} = Object.assign(url && this.live.get(url) || {}, this.dataset);
+			type, html, script, width, height
+		} = data;
 
 		if (type == "image") {
 			this.appendChild(this.live.merge(`<figure class="fig-media" itemscope="" itemprop="associatedMedia image" itemtype="http://schema.org/ImageObject">
@@ -51,23 +36,22 @@ export class LiveAsset extends HTMLElement {
 				<meta itemprop="url" content="[url]">
 				<img width="[width]" height="[height]" style="max-width:[width|else:at:-]px" />
 				<figcaption class="fig-media__legend">[title] <span class="fig-media__credits">[author|else:at:*]</span></figcaption>
-			</figure>`, Object.assign({}, { width, height }, this.dataset)));
+			</figure>`, data));
 		} else if (type == "picto") {
-			this.dataset.ratio = '1-1';
-			this.insertAdjacentHTML('afterbegin', `<img />`);
+			this.appendChild(
+				this.live.merge('<img width="[width]" height="[height]" style="max-width:[width|else:at:-]px" />', data)
+			);
 		} else {
-			let ratio;
-			if (width && height) {
-				ratio = LiveAsset.ratio(width, height);
-			}
 			if (script) this.dataset.script = script;
 			if (html) {
 				this.dataset.html = html;
+				if (width) this.dataset.width = width;
+				if (height) this.dataset.height = height;
 			} else {
-				if (!ratio && !height) ratio = "16-9";
-				this.insertAdjacentHTML('afterbegin', '<iframe />');
+				this.appendChild(
+					this.live.merge('<iframe width="[width]" height="[height]" />', data)
+				);
 			}
-			if (ratio) this.dataset.ratio = ratio;
 		}
 	}
 	reveal() {
@@ -76,12 +60,13 @@ export class LiveAsset extends HTMLElement {
 		if (html) {
 			this.textContent = '';
 			this.appendChild(this.live.merge(html.trim()));
+			const iframe = this.querySelector('iframe');
+			if (iframe) {
+				if (width) iframe.width = width;
+				if (height) iframe.height = height;
+			}
 		} else if (url) {
 			this.querySelector('img,iframe').src = url;
-		}
-		if (!width && height && !this.dataset.ratio) {
-			const iframe = this.querySelector('iframe');
-			if (iframe) iframe.height = height;
 		}
 		for (const node of this.querySelectorAll('script')) {
 			const copy = doc.createElement('script');
@@ -117,8 +102,9 @@ export class LiveIcon extends HTMLElement {
 	}
 	update() {
 		if (this.children.length) return;
-		this.dataset.ratio = '1-1';
-		this.insertAdjacentHTML('afterbegin', `<img />`);
+		this.appendChild(
+			this.live.merge('<img width="[width]" height="[height]" />', this.dataset)
+		);
 	}
 	reveal() {
 		this.querySelector('img').src = this.dataset.url;

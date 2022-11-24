@@ -13,6 +13,7 @@ live-asset {
 	margin-top: 0.4rem;
 }
 
+/* compatibility with data-ratio generated before 2.3.0 */
 live-asset[data-ratio]::before,
 live-asset[data-ratio]::after {
 	content:none !important;

@@ -33,6 +33,7 @@ class LiveRead extends LiveJack {
 			filters
 		}, DomPlugin, DatePlugin, DateFormats);
 		this.adopt(LiveAsset);
+		this.adopt(LiveIcon);
 
 		this.channels = {};
 	}

@@ -194,6 +194,8 @@ div.fig-article-body {
 	height:auto;
 	margin: 0 auto;
 }
+
+/* compatibility with old .ratio-x-x generated before 1.0.0 */
 .live-messages figure > div.ratio-16-9 {
 	padding-bottom:56.25%;
 }
@@ -255,6 +257,8 @@ live-asset > img {
 	display: block;
 	border-width: 0;
 }
+/* compatibility with data-ratio generated before 2.3.0 */
+/* here `not` could be removed */
 live-asset:not([data-ratio]) > figure,
 live-asset:not([data-ratio]) > img,
 live-asset:not([data-ratio]) > iframe:not([height]) {
@@ -437,6 +441,7 @@ live-asset:not([data-ratio]) > iframe:not([height]) {
 	padding-left: 1em;
 	margin-left: 0;
 }
+/* compatibility with data-ratio generated before 2.3.0 */
 live-asset[data-ratio] {
 	position:relative;
 }
